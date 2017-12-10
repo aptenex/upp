@@ -1,0 +1,26 @@
+{
+    "name": "aptenex/upp",
+    "description": "Ultimate Property Pricing",
+    "minimum-stability": "dev",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "": "src/",
+            "Aptenex\\Upp\\" : "src/"
+        }
+    },
+    "require": {
+        "solaris/php-moon-phase": "1.1.*",
+        "symfony/validator": "3.0.*"
+    },
+    "authors": [
+        {
+            "name": "Sam vaughton",
+            "email": "sam@rentivo.com"
+        },
+        {
+            "name": "Chris Atkinson",
+            "email": "chris@rentivo.com"
+        }
+    ]
+}

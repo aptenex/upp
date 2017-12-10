@@ -1,0 +1,743 @@
+[
+  {
+    "name": "Standard Test 01",
+    "description": "testing out the standard modifiers and that they work",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "defaults": {
+            "damageDeposit": 100,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 0,
+            "balanceDaysBeforeArrival": 42,
+            "depositSplitPercentage": 50,
+            "daysRequiredInAdvanceForBooking": 0,
+            "extraNightAlterationStrategyUseGlobalNights": true,
+            "damageDepositSplitMethod": "ON_ARRIVAL"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "1",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2017-01-01",
+                  "endDate": "2017-01-31",
+                  "arrivalDays": [
+                    "monday",
+                    "tuesday"
+                  ],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 100,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "15-30",
+                        "amount": 50,
+                        "days": [],
+                        "matchAmount": 0
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "2",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2017-02-01",
+                  "endDate": "2018-02-28",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 100,
+                "damageDeposit": 50,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "minimumWeekCount": 1,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 100,
+                        "days": [],
+                        "matchAmount": 0
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_ARRIVAL",
+              "description": "On Arrival Tax",
+              "conditionOperand": "AND",
+              "conditions": [],
+              "rate": {
+                "type": "adjustment",
+                "amount": 50,
+                "calculationMethod": "fixed",
+                "calculationOperand": "addition",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "description": "10% discount",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "nights",
+                  "modifyRatePerUnit": false,
+                  "minimum": 5
+                },
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2017-10-01",
+                  "endDate": "2017-12-31",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 0.1,
+                "calculationMethod": "percentage",
+                "calculationOperand": "subtraction",
+                "applicableTaxes": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": {
+      "example-mixin": {}
+    },
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2017-07-01",
+          "departureDate": "2017-07-07",
+          "bookingDate": "2017-06-25",
+          "guests": 7,
+          "currency": "GBP"
+        },
+        "tests": {
+          "noNights": 6,
+          "finalPrice": 8574,
+          "basePrice": 8574,
+          "damageDeposit": 0,
+          "adjustmentCount": 2,
+          "split": {
+            "deposit": 4287,
+            "balance": 4287
+          },
+          "nightPrices": {
+            "2017-07-01": 1429,
+            "2017-07-02": 1429,
+            "2017-07-03": 1429,
+            "2017-07-04": 1429,
+            "2017-07-05": 1429,
+            "2017-07-06": 1429,
+            "2017-07-07": 1429
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Standard Test 02",
+    "description": "",
+    "config": {
+      "name": "Pricing Example Structure",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "taxes": [
+            {
+              "name": "GST",
+              "calculationMethod": "percentage",
+              "amount": 0.05
+            }
+          ],
+          "periods": [
+            {
+              "description": "April '16",
+              "priority": 2,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "startDate": "2016-04-05",
+                  "endDate": "2016-04-30"
+                }
+              ],
+              "rate": {
+                "type": "weekly",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "calculationMethod": "fixed",
+                    "brackets": {
+                      "1": 0.4,
+                      "2": 0.5,
+                      "3": 300,
+                      "4": 0.7,
+                      "5": 0.8,
+                      "6": 0.9
+                    },
+                    "minimumWeekCount": 0,
+                    "maximumWeekCount": null
+                  },
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "calculationMethod": "fixed",
+                    "makePreviousDaysSameRate": true,
+                    "brackets": {
+                      "1": 50,
+                      "2": 40,
+                      "3-7": 38,
+                      "8+": 35
+                    }
+                  }
+                },
+                "amount": 350
+              }
+            },
+            {
+              "description": "May '16",
+              "priority": 1,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "startDate": "2016-05-01",
+                  "endDate": "2016-05-31"
+                }
+              ],
+              "rate": {
+                "type": "weekly",
+                "amount": 350
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "description": "April Special Discount",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "startDate": "2016-04-05",
+                  "endDate": "2016-04-20"
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "method": "percentage",
+                "amount": 0.15,
+                "calculationMethod": "subtraction"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2016-04-05",
+          "departureDate": "2016-04-15",
+          "bookingDate": "2016-02-22",
+          "guests": 6,
+          "currency": "GBP"
+        },
+        "tests": {
+          "noNights": 10,
+          "finalPrice": 52500,
+          "nightPrices": {
+            "2016-04-05": 5000,
+            "2016-04-06": 5000,
+            "2016-04-07": 5000,
+            "2016-04-08": 5000,
+            "2016-04-09": 5000,
+            "2016-04-10": 5000,
+            "2016-04-11": 5000,
+            "2016-04-12": 5000,
+            "2016-04-13": 5000,
+            "2016-04-14": 5000
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Specific Tax Test 01",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "defaults": {
+            "damageDeposit": 100,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 3,
+            "balanceDaysBeforeArrival": 0,
+            "depositSplitPercentage": 30,
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_DEPOSIT"
+          },
+          "taxes": [
+            {
+              "name": "People Tax",
+              "uuid": "example-people-tax-uuid",
+              "amount": 0.1,
+              "calculationMethod": "percentage"
+            }
+          ],
+          "periods": [
+            {
+              "description": "Standard",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2017-06-26",
+                  "endDate": "2020-06-30",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "rate": {
+                "type": "nightly",
+                "amount": 100,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals"
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "description": "Per Guest",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "guests",
+                  "modifyRatePerUnit": true
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 10,
+                "calculationMethod": "fixed",
+                "calculationOperand": "addition"
+              }
+            },
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "description": "Cleaning",
+              "conditionOperand": "AND",
+              "conditions": [],
+              "rate": {
+                "type": "adjustment",
+                "amount": 100,
+                "calculationMethod": "fixed",
+                "calculationOperand": "addition",
+                "taxable": true,
+                "applicableTaxes": [
+                  "example-people-tax-uuid"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2017-06-26",
+          "departureDate": "2017-06-30",
+          "bookingDate": "2017-05-01",
+          "guests": 3,
+          "currency": "GBP"
+        },
+        "tests": {
+          "noNights": 4,
+          "finalPrice": 69000,
+          "nightPrices": {
+            "2017-06-26": 10000,
+            "2017-06-27": 10000,
+            "2017-06-28": 10000,
+            "2017-06-29": 10000
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Conditional Per Unit Rate With Date Based Modifier",
+    "description": "Makes sure to only apply the per rate unit on the matched dates of the condition, not the total nights",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "defaults": {
+            "damageDeposit": 100,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 0,
+            "balanceDaysBeforeArrival": 42,
+            "depositSplitPercentage": 50,
+            "daysRequiredInAdvanceForBooking": 0,
+            "extraNightAlterationStrategyUseGlobalNights": true,
+            "damageDepositSplitMethod": "ON_ARRIVAL"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "1",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2017-01-01",
+                  "endDate": "2017-01-31",
+                  "arrivalDays": [
+                    "monday",
+                    "tuesday"
+                  ],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 100,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "15-30",
+                        "amount": 50,
+                        "days": [],
+                        "matchAmount": 0
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "2",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2017-02-01",
+                  "endDate": "2018-02-28",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 100,
+                "damageDeposit": 50,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "minimumWeekCount": 1,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 100,
+                        "days": [],
+                        "matchAmount": 0
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "description": "On Arrival Tax",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "guests",
+                  "modifyRatePerUnit": true
+                },
+                {
+                  "type": "weeks",
+                  "modifyRatePerUnit": true,
+                  "minimum": 0
+                },
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2017-11-04",
+                  "endDate": "2017-11-11",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 50,
+                "calculationMethod": "fixed",
+                "calculationOperand": "addition",
+                "applicableTaxes": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2017-11-11",
+          "departureDate": "2017-11-25",
+          "bookingDate": "2017-11-08",
+          "guests": 3,
+          "currency": "GBP"
+        },
+        "tests": {
+          "noNights": 14,
+          "finalPrice": 40000,
+          "nightPrices": {
+            "2017-11-11": 1429,
+            "2017-11-12": 1429,
+            "2017-11-13": 1429,
+            "2017-11-14": 1429,
+            "2017-11-15": 1428,
+            "2017-11-16": 1428,
+            "2017-11-17": 1428,
+            "2017-11-18": 1429,
+            "2017-11-19": 1429,
+            "2017-11-20": 1429,
+            "2017-11-21": 1429,
+            "2017-11-22": 1428,
+            "2017-11-23": 1428,
+            "2017-11-24": 1428
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Mixin Tax Test",
+    "description": "Tests that the mixin is working for taxes",
+    "config": {
+      "name": "Pricing Example Structure",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "taxes": "@test-mixin",
+          "periods": [
+            {
+              "description": "April '16",
+              "priority": 2,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "startDate": "2016-04-05",
+                  "endDate": "2016-04-30"
+                }
+              ],
+              "rate": {
+                "type": "weekly",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "calculationMethod": "fixed",
+                    "brackets": {
+                      "1": 0.4,
+                      "2": 0.5,
+                      "3": 300,
+                      "4": 0.7,
+                      "5": 0.8,
+                      "6": 0.9
+                    },
+                    "minimumWeekCount": 0,
+                    "maximumWeekCount": null
+                  },
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "calculationMethod": "fixed",
+                    "makePreviousDaysSameRate": true,
+                    "brackets": {
+                      "1": 50,
+                      "2": 40,
+                      "3-7": 38,
+                      "8+": 35
+                    }
+                  }
+                },
+                "amount": 350
+              }
+            },
+            {
+              "description": "May '16",
+              "priority": 1,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "startDate": "2016-05-01",
+                  "endDate": "2016-05-31"
+                }
+              ],
+              "rate": {
+                "type": "weekly",
+                "amount": 350
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "description": "April Special Discount",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "startDate": "2016-04-05",
+                  "endDate": "2016-04-20"
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "method": "percentage",
+                "amount": 0.15,
+                "calculationMethod": "subtraction"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": {
+      "test-mixin": [
+        {
+          "name": "GST",
+          "calculationMethod": "percentage",
+          "amount": 0.05
+        }
+      ]
+    },
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2016-04-05",
+          "departureDate": "2016-04-15",
+          "bookingDate": "2016-02-22",
+          "guests": 6,
+          "currency": "GBP"
+        },
+        "tests": {
+          "noNights": 10,
+          "finalPrice": 52500,
+          "nightPrices": {
+            "2016-04-05": 5000,
+            "2016-04-06": 5000,
+            "2016-04-07": 5000,
+            "2016-04-08": 5000,
+            "2016-04-09": 5000,
+            "2016-04-10": 5000,
+            "2016-04-11": 5000,
+            "2016-04-12": 5000,
+            "2016-04-13": 5000,
+            "2016-04-14": 5000
+          }
+        }
+      }
+    ]
+  }
+]
