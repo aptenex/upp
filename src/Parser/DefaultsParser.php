@@ -3,7 +3,6 @@
 namespace Aptenex\Upp\Parser;
 
 use Aptenex\Upp\Helper\ArrayAccess;
-use Aptenex\Upp\Parser\Structure\Condition;
 use Aptenex\Upp\Parser\Structure\Defaults;
 use Aptenex\Upp\Parser\Structure\Period;
 use Aptenex\Upp\Parser\Structure\Rate;

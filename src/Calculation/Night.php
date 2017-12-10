@@ -4,7 +4,6 @@ namespace Aptenex\Upp\Calculation;
 
 use Aptenex\Upp\Util\MoneyUtils;
 use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
-use Aptenex\Upp\Calculation\ControlItem\Modifier;
 use Money\Money;
 
 /**

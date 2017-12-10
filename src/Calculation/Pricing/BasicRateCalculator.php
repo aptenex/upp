@@ -5,7 +5,6 @@ namespace Aptenex\Upp\Calculation\Pricing;
 use Aptenex\Upp\Util\MoneyUtils;
 use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Calculation\Night;
-use Aptenex\Upp\Helper\MoneyTools;
 use Aptenex\Upp\Parser\Structure\Rate;
 use Money\Money;
 

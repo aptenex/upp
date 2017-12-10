@@ -5,7 +5,6 @@ namespace Aptenex\Upp\Calculation\Condition;
 use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
 use Aptenex\Upp\Calculation\ControlItem\Modifier;
 use Aptenex\Upp\Context\PricingContext;
-use Aptenex\Upp\Parser\Structure\Condition\NightsCondition;
 use Aptenex\Upp\Parser\Structure\Condition\WeeksCondition;
 
 class WeeksConditionEvaluator implements ConditionEvaluationInterface

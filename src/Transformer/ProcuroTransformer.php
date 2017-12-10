@@ -4,12 +4,10 @@ namespace Aptenex\Upp\Transformer;
 
 use Aptenex\QTransform\QTransform;
 use Aptenex\Upp\Exception\InvalidPricingConfigException;
-use Aptenex\Upp\Parser\Structure\CurrencyConfig;
 use Aptenex\Upp\Parser\Structure\Defaults;
 use Aptenex\Upp\Parser\Structure\Modifier;
 use Aptenex\Upp\Parser\Structure\Period;
 use Aptenex\Upp\Parser\Structure\PricingConfig;
-use Aptenex\Upp\Parser\Structure\Rate;
 use Aptenex\Upp\Parser\Structure\Tax;
 
 /**
@@ -86,7 +84,7 @@ class ProcuroTransformer implements TransformerInterface
 
         $t = [];
 
-        foreach($taxes as $tax) {
+        foreach ($taxes as $tax) {
             $t[] = $this->transformTax($tax);
         }
 
@@ -124,7 +122,7 @@ class ProcuroTransformer implements TransformerInterface
 
         $p = [];
 
-        foreach($periods as $period) {
+        foreach ($periods as $period) {
             $p[] = $this->transformPeriod($period);
         }
 
@@ -162,7 +160,7 @@ class ProcuroTransformer implements TransformerInterface
 
         $m = [];
 
-        foreach($modifiers as $modifier) {
+        foreach ($modifiers as $modifier) {
             $m[] = $this->transformModifier($modifier);
         }
 
