@@ -59,6 +59,14 @@ abstract class AbstractControlItem implements ControlItemInterface
     }
 
     /**
+     * @param $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * @return string
      */
     public function getDescription()
