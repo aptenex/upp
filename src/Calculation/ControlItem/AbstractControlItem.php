@@ -5,6 +5,7 @@ namespace Aptenex\Upp\Calculation\ControlItem;
 use Aptenex\Upp\Calculation\Condition\ConditionCollection;
 use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Calculation\Night;
+use Aptenex\Upp\Calculation\Pricing\Rate;
 
 class AbstractControlItem implements ControlItemInterface
 {
@@ -40,6 +41,11 @@ class AbstractControlItem implements ControlItemInterface
     protected $finalPrice;
 
     /**
+     * @var Rate
+     */
+    protected $rate;
+
+    /**
      * @var \Aptenex\Upp\Parser\Structure\ControlItemInterface
      */
     protected $controlItemConfig;
@@ -63,6 +69,7 @@ class AbstractControlItem implements ControlItemInterface
 
         $this->id = self::$idCounter;
         $this->finalPrice = $finalPrice;
+        $this->rate = new Rate($this);
     }
 
     /**
@@ -231,6 +238,14 @@ class AbstractControlItem implements ControlItemInterface
     public function setConditions($conditions)
     {
         $this->conditions = $conditions;
+    }
+
+    /**
+     * @return Rate
+     */
+    public function getRate(): Rate
+    {
+        return $this->rate;
     }
 
     /**

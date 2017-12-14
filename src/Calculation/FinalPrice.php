@@ -174,6 +174,22 @@ class FinalPrice
     }
 
     /**
+     * @param $adjustmentType
+     *
+     * @return bool
+     */
+    public function hasAdjustmentByType($adjustmentType)
+    {
+        foreach($this->adjustments as $adj) {
+            if ($adj->getType() === $adjustmentType) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param AdjustmentAmount $adjustment
      */
     public function addAdjustment(AdjustmentAmount $adjustment)

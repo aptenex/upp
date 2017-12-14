@@ -16,6 +16,11 @@ class RateStrategy
     private $extraNightsAlteration;
 
     /**
+     * @var ExtraMonthsAlteration
+     */
+    private $extraMonthsAlteration;
+
+    /**
      * @var DaysOfWeekAlteration
      */
     private $daysOfWeekAlteration;
@@ -69,6 +74,22 @@ class RateStrategy
     }
 
     /**
+     * @return ExtraMonthsAlteration
+     */
+    public function getExtraMonthsAlteration()
+    {
+        return $this->extraMonthsAlteration;
+    }
+
+    /**
+     * @param ExtraMonthsAlteration $extraMonthsAlteration
+     */
+    public function setExtraMonthsAlteration($extraMonthsAlteration)
+    {
+        $this->extraMonthsAlteration = $extraMonthsAlteration;
+    }
+
+    /**
      * @return array
      */
     public function __toArray()
@@ -81,6 +102,10 @@ class RateStrategy
 
         if ($this->getExtraNightsAlteration() instanceof ExtraNightsAlteration) {
             $s['extraNightsAlteration'] = $this->getExtraNightsAlteration()->__toArray();
+        }
+
+        if ($this->getExtraMonthsAlteration() instanceof ExtraMonthsAlteration) {
+            $s['extraMonthsAlteration'] = $this->getExtraMonthsAlteration()->__toArray();
         }
 
         if ($this->getPartialWeekAlteration() instanceof PartialWeekAlteration) {

@@ -107,6 +107,27 @@ class RatePerConditionalUnitCalculator
             $cur->setUnits($extraWeeks);
             $cur->setUnitDescription('WEEK_UNIT');
 
+        } else if ($config instanceof Condition\MonthsCondition) {
+
+            $noNights = $context->getNoNights();
+            if ($modifier->getConditions()->hasDateBasedCondition()) {
+                // We need to get the matched nights from this condition instead
+                $noNights = count($modifier->getMatchedNights());
+            }
+
+            $noMonths = (int) (floor($noNights / 30));
+
+            // Same principal as above
+            // Make it inclusive
+            if ($noMonths === ((int) $config->getMinimum())) {
+                $noMonths = 1;
+            } else {
+                $noMonths = $noMonths - $config->getMinimum();
+            }
+
+            $cur->setUnits($noMonths);
+            $cur->setUnitDescription('MONTH_UNIT');
+
         }
 
         return $cur;

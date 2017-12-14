@@ -12,6 +12,7 @@ class Rate
 
     const TYPE_WEEKLY = 'weekly';
     const TYPE_NIGHTLY = 'nightly';
+    const TYPE_MONTHLY = 'monthly';
     const TYPE_ADJUSTMENT = 'adjustment';
 
     /**

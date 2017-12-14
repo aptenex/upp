@@ -57,6 +57,15 @@ class ConditionsParser
 
                 break;
 
+            case Condition::TYPE_MONTHS:
+
+                $c = new Condition\MonthsCondition();
+
+                $c->setMinimum(ArrayAccess::get('minimum', $conditionData, null));
+                $c->setMaximum(ArrayAccess::get('maximum', $conditionData, null));
+
+                break;
+
             case Condition::TYPE_GUESTS:
 
                 $c = new Condition\GuestsCondition();

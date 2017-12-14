@@ -119,17 +119,18 @@ class BracketsEvaluator
 
     /**
      * @param array $brackets
-     * @param int $nights
+     * @param int   $nights
+     * @param bool  $includeAllData
      *
      * @return array
      */
-    private function expandBrackets(array $brackets, $nights)
+    public function expandBrackets(array $brackets, $nights, $includeAllData = false)
     {
         $en = [];
 
         foreach($brackets as $item) {
             $bracket = $item['night'];
-            $value = $item['amount'];
+            $value = $includeAllData ? $item : $item['amount'];
 
             if (strpos($bracket, '+') !== false) {
                 preg_match("/\d*/", $bracket, $output);

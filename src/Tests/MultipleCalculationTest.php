@@ -2,12 +2,12 @@
 
 namespace Aptenex\Upp\Tests;
 
-use App\Manager\Property\HashMapPricingResolver;
-use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Upp;
+use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Parser\Structure\StructureOptions;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
 
 class MultipleCalculationTest extends WebTestCase
 {

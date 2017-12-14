@@ -4,6 +4,7 @@ namespace Aptenex\Upp\Calculation\ControlItem;
 
 use Aptenex\Upp\Calculation\Condition\ConditionCollection;
 use Aptenex\Upp\Calculation\FinalPrice;
+use Aptenex\Upp\Calculation\Pricing\Rate;
 
 interface ControlItemInterface
 {
@@ -96,6 +97,11 @@ interface ControlItemInterface
      * @return FinalPrice
      */
     public function getFinalPrice();
+
+    /**
+     * @return Rate
+     */
+    public function getRate();
 
     /**
      * @return int

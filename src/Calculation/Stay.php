@@ -3,6 +3,7 @@
 namespace Aptenex\Upp\Calculation;
 
 use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
+use Aptenex\Upp\Calculation\ControlItem\Period;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Helper\DateTools;
 
@@ -144,6 +145,20 @@ class Stay
     public function getBookingDate()
     {
         return $this->bookingDate;
+    }
+
+    /**
+     * @return ControlItemInterface|Period|null
+     */
+    public function getPeriodWithArrivalDay()
+    {
+        foreach ($this->getPeriodsUsed() as $period) {
+            if ($period->containsArrivalDayInMatchedNights()) {
+                return $period;
+            }
+        }
+
+        return null;
     }
 
     /**

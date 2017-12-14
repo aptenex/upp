@@ -22,6 +22,7 @@ class Evaluator
             Structure\Condition::TYPE_GUESTS        => new GuestsConditionEvaluator(),
             Structure\Condition::TYPE_NIGHTS        => new NightsConditionEvaluator(),
             Structure\Condition::TYPE_WEEKS         => new WeeksConditionEvaluator(),
+            Structure\Condition::TYPE_MONTHS        => new MonthsConditionEvaluator(),
             Structure\Condition::TYPE_WEEKDAYS      => new WeekdaysConditionEvaluator(),
             Structure\Condition::TYPE_LUNAR_PHASE   => new LunarPhaseConditionEvaluator(),
             Structure\Condition::TYPE_BOOKING_DAYS  => new BookingDaysEvaluator(),

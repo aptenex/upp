@@ -27,4 +27,17 @@ interface PriceAlterationInterface
      */
     public function alterPrice(PricingContext $context, ControlItemInterface $controlItem, FinalPrice $fp);
 
+    /**
+     * This is used for any other strategy fields that COULD apply even if the brackets don't match
+     *
+     * WARNING: YOU NEED TO CHECK IF THE STRATEGY EXISTS
+     *
+     * @param PricingContext       $context
+     * @param ControlItemInterface $controlItem
+     * @param FinalPrice           $fp
+     *
+     * @return null
+     */
+    public function postAlter(PricingContext $context, ControlItemInterface $controlItem, FinalPrice $fp);
+
 }

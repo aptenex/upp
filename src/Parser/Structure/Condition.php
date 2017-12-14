@@ -8,6 +8,7 @@ class Condition
     const TYPE_DATE = 'date';
     const TYPE_NIGHTS = 'nights';
     const TYPE_WEEKS = 'weeks';
+    const TYPE_MONTHS = 'months';
     const TYPE_WEEKDAYS = 'weekdays';
     const TYPE_BOOKING_DAYS = 'booking_days';
     const TYPE_LUNAR_PHASE = 'lunar_phase';
@@ -22,6 +23,7 @@ class Condition
         self::TYPE_GUESTS,
         self::TYPE_NIGHTS,
         self::TYPE_WEEKS,
+        self::TYPE_MONTHS,
         self::TYPE_BOOKING_DAYS
     ];
 

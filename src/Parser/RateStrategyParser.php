@@ -23,6 +23,7 @@ class RateStrategyParser
 
         $r->setPartialWeekAlteration((new RateStrategyParser\PartialWeekAlterationParser)->parse(ArrayAccess::get('partialWeekAlteration', $data, [])));
         $r->setExtraNightsAlteration((new RateStrategyParser\ExtraNightsAllocationParser())->parse(ArrayAccess::get('extraNightsAlteration', $data, [])));
+        $r->setExtraMonthsAlteration((new RateStrategyParser\ExtraMonthsAllocationParser())->parse(ArrayAccess::get('extraMonthsAlteration', $data, [])));
         $r->setDaysOfWeekAlteration((new RateStrategyParser\DaysOfWeekAlterationParser())->parse(ArrayAccess::get('daysOfWeekAlteration', $data, [])));
 
         return $r;

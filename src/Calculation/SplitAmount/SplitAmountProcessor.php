@@ -2,12 +2,26 @@
 
 namespace Aptenex\Upp\Calculation\SplitAmount;
 
-use Aptenex\Upp\Parser\Structure\DamageDeposit;
-use Aptenex\Upp\Util\MoneyUtils;
 use Money\Money;
+use Aptenex\Upp\Util\MoneyUtils;
+use Aptenex\Upp\Calculation\FinalPrice;
+use Aptenex\Upp\Parser\Structure\DamageDeposit;
 
 class SplitAmountProcessor
 {
+
+    /**
+     * @var FinalPrice
+     */
+    private $fp;
+
+    /**
+     * @param FinalPrice $fp
+     */
+    public function __construct(FinalPrice $fp)
+    {
+        $this->fp = $fp;
+    }
 
     /**
      * @param Money      $total

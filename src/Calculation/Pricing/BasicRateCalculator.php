@@ -25,15 +25,14 @@ class BasicRateCalculator
 
             $rateAmount = \Aptenex\Upp\Util\MoneyUtils::fromString($rateConfig->getAmount(), $fp->getCurrency());
 
-            $rateConvertedWeekly = MoneyUtils::getConvertedAmount($rateAmount) / 7;
-
-            $nightlyFromWeekly = \Aptenex\Upp\Util\MoneyUtils::fromString($rateConvertedWeekly, $fp->getCurrency());
-
             if ($rateAmount->getAmount() === 0 || $nightsMatched === 0) {
                 continue;
             }
 
             if ($rateConfig->getType() === Rate::TYPE_WEEKLY) {
+
+                $rateConvertedWeekly = MoneyUtils::getConvertedAmount($rateAmount) / 7;
+                $nightlyFromWeekly = \Aptenex\Upp\Util\MoneyUtils::fromString($rateConvertedWeekly, $fp->getCurrency());
 
                 // Since a partial week alteration can modify the extra days - we
                 // need to allocate the weeks nightly rate for each set of 7 days.
@@ -54,6 +53,27 @@ class BasicRateCalculator
                         $night->setCost($nightlyFromWeekly);
                     } else {
                         $night->setCost($singleWeekAllocation[$i % 7]);
+                    }
+                }
+
+            } else if ($rateConfig->getType() === Rate::TYPE_MONTHLY) {
+
+                $rateConvertedMonthly = MoneyUtils::getConvertedAmount($rateAmount) / 30;
+                $nightlyFromMonthly = \Aptenex\Upp\Util\MoneyUtils::fromString($rateConvertedMonthly, $fp->getCurrency());
+
+                $monthsMatched = floor($nightsMatched / 30);
+                $singleMonthAllocation = $rateAmount->allocateTo(30);
+
+                $nights = array_values($period->getMatchedNights());
+
+                for ($i = 0; $i < count($nights); $i++) {
+                    /** @var Night $night */
+                    $night = $nights[$i];
+
+                    if ($i > $monthsMatched * 30) {
+                        $night->setCost($nightlyFromMonthly);
+                    } else {
+                        $night->setCost($singleMonthAllocation[$i % 30]);
                     }
                 }
 

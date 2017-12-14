@@ -10,6 +10,7 @@ use Aptenex\Upp\Calculation\Pricing\DamageDepositCalculator;
 use Aptenex\Upp\Calculation\Pricing\ExtraAmountCalculator;
 use Aptenex\Upp\Calculation\Pricing\ModifierRateCalculator;
 use Aptenex\Upp\Calculation\Pricing\Strategy\DaysOfWeekAlterationStrategy;
+use Aptenex\Upp\Calculation\Pricing\Strategy\ExtraMonthsAlterationStrategy;
 use Aptenex\Upp\Calculation\Pricing\Strategy\ExtraNightsAlterationStrategy;
 use Aptenex\Upp\Calculation\Pricing\Strategy\PartialWeekAlterationStrategy;
 use Aptenex\Upp\Calculation\Pricing\Strategy\PriceAlterationInterface;
@@ -119,16 +120,17 @@ class PricingGenerator
         $alterationStrategies = [
             new PartialWeekAlterationStrategy(),
             new ExtraNightsAlterationStrategy(),
+            new ExtraMonthsAlterationStrategy(),
             new DaysOfWeekAlterationStrategy(),
         ];
 
         foreach($fp->getStay()->getPeriodsUsed() as $period) {
             foreach($alterationStrategies as $aS) {
-                if (!$aS->canAlter($context, $period, $fp)) {
-                    continue;
+                if ($aS->canAlter($context, $period, $fp)) {
+                    $aS->alterPrice($context, $period, $fp);
                 }
 
-                $aS->alterPrice($context, $period, $fp);
+                $aS->postAlter($context, $period, $fp);
             }
         }
     }
@@ -400,21 +402,27 @@ class PricingGenerator
     private function calculateSplitAmounts(FinalPrice $fp)
     {
         $defaults = $fp->getCurrencyConfigUsed()->getDefaults();
+        $arrivalPeriodRate = $fp->getStay()->getPeriodWithArrivalDay()->getRate();
 
-        if (!$defaults->hasDepositSplitPercentage()) {
+        $depositFixed = 0;
+        if ($arrivalPeriodRate->hasDepositOverride()) {
+            $depositFixed = MoneyUtils::getConvertedAmount($arrivalPeriodRate->getDepositOverride());
+        }
+
+        if (!$defaults->hasDepositSplitPercentage() && $depositFixed == 0) {
             $fp->disableSplitDetails();
 
             return; // Stop execution
         }
 
-        $sap = new SplitAmountProcessor();
+        $sap = new SplitAmountProcessor($fp);
 
         $spr = $sap->computeSplitAmount(
             $fp->getTotal(),
             $defaults->getDepositSplitPercentage(),
             $fp->getDamageDeposit(),
             $defaults->getDamageDepositSplitMethod(),
-            0
+            $depositFixed
         );
 
         $ratio = [0, 100];

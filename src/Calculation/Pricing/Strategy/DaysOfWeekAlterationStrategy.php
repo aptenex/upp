@@ -131,4 +131,9 @@ class DaysOfWeekAlterationStrategy implements PriceAlterationInterface
         }
     }
 
+    public function postAlter(PricingContext $context, ControlItemInterface $controlItem, FinalPrice $fp)
+    {
+        // Do nothing
+    }
+
 }

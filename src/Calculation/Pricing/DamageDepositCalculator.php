@@ -7,6 +7,7 @@ use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Helper\MoneyTools;
 use Aptenex\Upp\Parser\Structure\Operand;
 use Aptenex\Upp\Parser\Structure\SplitMethod;
+use Aptenex\Upp\Util\MoneyUtils;
 
 class DamageDepositCalculator
 {
@@ -18,7 +19,6 @@ class DamageDepositCalculator
         $amountOrPercentage = $defaults->getDamageDeposit();
 
         foreach ($fp->getStay()->getPeriodsUsed() as $period) {
-
             if ($period->containsArrivalDayInMatchedNights()) {
 
                 $rate = $period->getControlItemConfig()->getRate();
@@ -26,8 +26,11 @@ class DamageDepositCalculator
                     $amountOrPercentage = $rate->getDamageDeposit();
                 }
 
+                // This will override everything else
+                if ($period->getRate()->hasDamageDepositOverride()) {
+                    $amountOrPercentage = MoneyUtils::getConvertedAmount($period->getRate()->getDamageDepositOverride());
+                }
             }
-
         }
 
         if ($defaults->getDamageDepositSplitMethod() === SplitMethod::ON_ARRIVAL) {
