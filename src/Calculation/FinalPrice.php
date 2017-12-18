@@ -2,7 +2,8 @@
 
 namespace Aptenex\Upp\Calculation;
 
-use Aptenex\Upp\Calculation\Base\Price;
+
+use Aptenex\Upp\Models\Price;
 use Money\Money;
 use Aptenex\Upp\Helper\LanguageTools;
 use Aptenex\Upp\Context\PricingContext;

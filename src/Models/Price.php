@@ -1,6 +1,6 @@
 <?php
 
-namespace Aptenex\Upp\Calculation\Base;
+namespace Aptenex\Upp\Models;
 
 use Aptenex\Upp\Calculation\AdjustmentAmount;
 use Aptenex\Upp\Calculation\Stay;
@@ -56,7 +56,7 @@ class Price
     /**
      * @var string
      */
-    protected $bookableType = Period::BOOKABLE_TYPE_DEFAULT;
+    protected $bookableType = Period::BOOKABLE_TYPE_ENQUIRY_ONLY;
 
     /**
      * FinalPrice constructor.
@@ -236,6 +236,7 @@ class Price
      */
     public function __toArray()
     {
+    	
         return [
             'currency'      => $this->getCurrency(),
             'description'   => !empty($this->getContextUsed()->getDescription()) ? $this->getContextUsed()->getDescription() : null,

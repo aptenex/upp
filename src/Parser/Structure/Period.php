@@ -26,6 +26,11 @@ class Period extends AbstractControlItem implements ControlItemInterface
      * @var string
      */
     const BOOKABLE_TYPE_ENQUIRY_WITH_PRICE = 'enquiry_with_price';
+	
+	/**
+	 * @var string
+	 */
+	const BOOKABLE_TYPE_REQUEST_TO_BOOK = 'request_to_book';
 
     /**
      * @var array
@@ -35,6 +40,7 @@ class Period extends AbstractControlItem implements ControlItemInterface
         self::BOOKABLE_TYPE_INSTANT_BOOKABLE => 'Instant Bookable',
         self::BOOKABLE_TYPE_ENQUIRY_ONLY => 'Enquiry Only (no price)',
         self::BOOKABLE_TYPE_ENQUIRY_WITH_PRICE => 'Enquiry with Price Shown',
+		self::BOOKABLE_TYPE_REQUEST_TO_BOOK => 'Request to book',
     ];
 
     /**
@@ -45,7 +51,8 @@ class Period extends AbstractControlItem implements ControlItemInterface
     public static $bookableTypePriorityMap = [
         self::BOOKABLE_TYPE_INSTANT_BOOKABLE => 1,
         self::BOOKABLE_TYPE_ENQUIRY_ONLY => 3,
-        self::BOOKABLE_TYPE_ENQUIRY_WITH_PRICE => 2
+        self::BOOKABLE_TYPE_ENQUIRY_WITH_PRICE => 2,
+		self::BOOKABLE_TYPE_REQUEST_TO_BOOK => 4
     ];
 
     /**

@@ -13,6 +13,9 @@
         "php": ">=7.0",
         "solaris/php-moon-phase": "1.1.*",
         "symfony/validator": "2.8.*",
+        "symfony/event-dispatcher" : "2.8.*"
+    },
+    "require-dev" : {
         "phpunit/phpunit": "^6.2"
     },
     "authors": [
