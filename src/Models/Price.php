@@ -60,6 +60,7 @@ class Price
 
     /**
      * FinalPrice constructor.
+     *
      * @param PricingContext $contextUsed
      */
     public function __construct(PricingContext $contextUsed)
@@ -71,7 +72,6 @@ class Price
         $this->basePrice = MoneyUtils::newMoney(0, $this->getCurrency());
         $this->damageDeposit = MoneyUtils::newMoney(0, $this->getCurrency());
         $this->splitDetails = new GuestSplitOverview();
-      
     }
 
     /**
@@ -153,7 +153,7 @@ class Price
      */
     public function hasAdjustmentByType($adjustmentType)
     {
-        foreach($this->adjustments as $adj) {
+        foreach ($this->adjustments as $adj) {
             if ($adj->getType() === $adjustmentType) {
                 return true;
             }
@@ -178,7 +178,6 @@ class Price
         return $this->contextUsed;
     }
 
-   
 
     /**
      * @return Stay
@@ -224,7 +223,7 @@ class Price
     {
         $d = [];
 
-        foreach($this->getAdjustments() as $a) {
+        foreach ($this->getAdjustments() as $a) {
             $d[] = $a->__toArray();
         }
 
@@ -236,7 +235,6 @@ class Price
      */
     public function __toArray()
     {
-    	
         return [
             'currency'      => $this->getCurrency(),
             'description'   => !empty($this->getContextUsed()->getDescription()) ? $this->getContextUsed()->getDescription() : null,
@@ -249,47 +247,50 @@ class Price
             'splitDetails'  => !is_null($this->splitDetails) ? $this->splitDetails->__toArray() : null
         ];
     }
-    
-    public function fromArray($data){
-    
-		$this->setTotal(MoneyUtils::fromString( $data['total'],  $data['currency'] ));
-		$this->setBasePrice(MoneyUtils::fromString( $data['basePrice'], $data['currency'] ));
-		$this->setBookableType($data['bookableType']);
-		$adjustments = [];
-		foreach($data['adjustments'] as $a){
-			$money = MoneyUtils::fromString( $a['amount'],  $data['currency'] );
-			$adjustments[] = new AdjustmentAmount(
-				$money,
-				$a['identifier'],
-				$a['description'],
-				$a['calculationOperand'],
-				$a['type'],
-				$a['priceGroup'],
-				$a['guestSplitMethod']
-			);
-		}
-		$this->setAdjustments($adjustments);
-		$this->setDamageDeposit(MoneyUtils::fromString( $data['damageDeposit'], $data['currency'] ));
-	
-		$this->stay = new Stay($this->getContextUsed());
-	
-		$this->splitDetails = new GuestSplitOverview();
-		if(!isset($data['splitDetails'], $data['splitDetails']['deposit'])){
-			$this->disableSplitDetails();
-		} else {
-		
-		
-			$this->getSplitDetails()->setDeposit( MoneyUtils::fromString( $data['splitDetails']['deposit']['amount'], $data['currency'] ) );
-			$this->getSplitDetails()->setBalance( MoneyUtils::fromString( $data['splitDetails']['balance']['amount'], $data['currency'] ) );
-			$this->getSplitDetails()->setDepositDueDate( new \DateTime($data['splitDetails']['deposit']['dueDate']) );
-			$this->getSplitDetails()->setBalanceDueDate( new \DateTime($data['splitDetails']['balance']['dueDate']) );
-			$this->getSplitDetails()->setDamageDepositSplitMethod( $data['splitDetails']['damageDepositSplitMethod']);
-		}
-	
-	
-		// TODO - We need to reverse populate the Stay.... as well.
-		return $this;
-	
-	}
+
+    /**
+     * @param $data
+     *
+     * @return $this
+     */
+    public function fromArray($data)
+    {
+        $this->setTotal(MoneyUtils::fromString($data['total'], $data['currency']));
+        $this->setBasePrice(MoneyUtils::fromString($data['basePrice'], $data['currency']));
+        $this->setBookableType($data['bookableType']);
+        $adjustments = [];
+        foreach ($data['adjustments'] as $a) {
+            $money = MoneyUtils::fromString($a['amount'], $data['currency']);
+            $adjustments[] = new AdjustmentAmount(
+                $money,
+                $a['identifier'],
+                $a['description'],
+                $a['calculationOperand'],
+                $a['type'],
+                $a['priceGroup'],
+                $a['guestSplitMethod']
+            );
+        }
+        $this->setAdjustments($adjustments);
+        $this->setDamageDeposit(MoneyUtils::fromString($data['damageDeposit'], $data['currency']));
+
+        $this->stay = new Stay($this->getContextUsed());
+
+        $this->splitDetails = new GuestSplitOverview();
+        if (!isset($data['splitDetails'], $data['splitDetails']['deposit'])) {
+            $this->disableSplitDetails();
+        } else {
+
+
+            $this->getSplitDetails()->setDeposit(MoneyUtils::fromString($data['splitDetails']['deposit']['amount'], $data['currency']));
+            $this->getSplitDetails()->setBalance(MoneyUtils::fromString($data['splitDetails']['balance']['amount'], $data['currency']));
+            $this->getSplitDetails()->setDepositDueDate(new \DateTime($data['splitDetails']['deposit']['dueDate']));
+            $this->getSplitDetails()->setBalanceDueDate(new \DateTime($data['splitDetails']['balance']['dueDate']));
+            $this->getSplitDetails()->setDamageDepositSplitMethod($data['splitDetails']['damageDepositSplitMethod']);
+        }
+
+        // TODO - We need to reverse populate the Stay.... as well.
+        return $this;
+    }
 
 }
