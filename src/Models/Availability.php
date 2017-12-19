@@ -136,5 +136,19 @@ class Availability extends Price
 		]);
 	}
 	
+	public function fromArray($data){
+		
+		parent::fromArray($data);
+		
+		if(isset($data['bookable'])){
+			$this->setIsAvailable($data['bookable']);
+		}
+		
+		if(isset($data['bookable'])){
+			$this->setIsPriced($data['bookable']);
+		}
+		
+	}
+	
 
 }

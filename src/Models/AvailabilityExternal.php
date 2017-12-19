@@ -43,5 +43,12 @@ class AvailabilityExternal extends Availability
 			'origin' => $this->getOrigin()
 		]);
 	}
+	
+	public function fromArray($data){
+		
+		parent::fromArray($data);
+		
+	}
+	
 
 }
