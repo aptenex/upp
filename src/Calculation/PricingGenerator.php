@@ -84,7 +84,37 @@ class PricingGenerator
          */
         $this->determineBookableTypeAndFields($fp);
 
+        /*
+         * The final check, just to make sure this isn't a messed up price
+         */
+        $this->performSanityChecks($context, $fp);
+
         return $fp;
+    }
+
+    /**
+     * @param PricingContext $context
+     * @param FinalPrice     $fp
+     *
+     * @throws CannotBookDatesException
+     */
+    private function performSanityChecks(PricingContext $context, FinalPrice $fp)
+    {
+        if ($fp->getTotal()->isNegative()) {
+            throw new CannotBookDatesException(LanguageTools::trans('INVALID_PRICE'));
+        }
+
+        if (!is_null($fp->getSplitDetails())) {
+
+            if ($fp->getSplitDetails()->getDeposit()->isNegative()) {
+                throw new CannotBookDatesException(LanguageTools::trans('INVALID_PRICE'));
+            }
+
+            if ($fp->getSplitDetails()->getBalance()->isNegative()) {
+                throw new CannotBookDatesException(LanguageTools::trans('INVALID_PRICE'));
+            }
+
+        }
     }
 
     private function determineIfBookable(PricingContext $context, FinalPrice $fp)
