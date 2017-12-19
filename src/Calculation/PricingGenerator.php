@@ -19,6 +19,7 @@ use Aptenex\Upp\Calculation\SplitAmount\SplitAmountProcessor;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Exception\CannotBookDatesException;
 use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
+use Aptenex\Upp\Exception\InvalidPriceException;
 use Aptenex\Upp\Helper\LanguageTools;
 use Aptenex\Upp\Helper\MoneyTools;
 use Aptenex\Upp\Parser\Structure\Operand;
@@ -96,22 +97,22 @@ class PricingGenerator
      * @param PricingContext $context
      * @param FinalPrice     $fp
      *
-     * @throws CannotBookDatesException
+     * @throws InvalidPriceException
      */
     private function performSanityChecks(PricingContext $context, FinalPrice $fp)
     {
         if ($fp->getTotal()->isNegative()) {
-            throw new CannotBookDatesException(LanguageTools::trans('INVALID_PRICE'));
+            throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
         }
 
         if (!is_null($fp->getSplitDetails())) {
 
             if ($fp->getSplitDetails()->getDeposit()->isNegative()) {
-                throw new CannotBookDatesException(LanguageTools::trans('INVALID_PRICE'));
+                throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
             }
 
             if ($fp->getSplitDetails()->getBalance()->isNegative()) {
-                throw new CannotBookDatesException(LanguageTools::trans('INVALID_PRICE'));
+                throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
             }
 
         }
