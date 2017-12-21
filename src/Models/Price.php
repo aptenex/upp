@@ -288,7 +288,11 @@ class Price
             $this->getSplitDetails()->setBalanceDueDate(new \DateTime($data['splitDetails']['balance']['dueDate']));
             $this->getSplitDetails()->setDamageDepositSplitMethod($data['splitDetails']['damageDepositSplitMethod']);
         }
-
+		
+        if($data['currency']){
+        	$this->currency = $data['currency'];
+		}
+        
         // TODO - We need to reverse populate the Stay.... as well.
         return $this;
     }
