@@ -95,7 +95,7 @@ class Rate
     /**
      * @return array
      */
-    public function getStrategyData(): array
+    public function getStrategyData()
     {
         return $this->strategyData;
     }
@@ -103,7 +103,7 @@ class Rate
     /**
      * @param array $strategyData
      */
-    public function setStrategyData(array $strategyData)
+    public function setStrategyData($strategyData)
     {
         $this->strategyData = $strategyData;
     }

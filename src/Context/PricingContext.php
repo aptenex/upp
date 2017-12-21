@@ -145,12 +145,18 @@ class PricingContext
             ;
         }
 
-        if ($canValidateDates && $this->getDepartureDateObj() <= $this->getArrivalDateObj()) {
-            $context
-                ->buildViolation('The departure date cannot be before the arrival date')
-                ->atPath('departureDate')
-                ->addViolation()
-            ;
+        if ($canValidateDates) {
+            if ($this->getArrivalDateObj()->format("Y-m-d") === $this->getDepartureDateObj()->format("Y-m-d")) {
+                $context
+                    ->buildViolation('The departure date cannot be on the same day as the arrival date')
+                    ->atPath('departureDate')
+                    ->addViolation();
+            } else if ($this->getDepartureDateObj() <= $this->getArrivalDateObj()) {
+                $context
+                    ->buildViolation('The departure date cannot be before the arrival date')
+                    ->atPath('departureDate')
+                    ->addViolation();
+            }
         }
     }
 

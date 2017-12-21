@@ -1,10 +1,9 @@
 <?php
 
-namespace Aptenex\Upp\Models;
+namespace Aptenex\Upp\Calculation\Base;
 
 use Aptenex\Upp\Calculation\AdjustmentAmount;
 use Aptenex\Upp\Calculation\Stay;
-use Aptenex\Upp\Util\ArrayUtils;
 use Money\Money;
 use Aptenex\Upp\Util\MoneyUtils;
 use Aptenex\Upp\Context\PricingContext;
@@ -57,11 +56,10 @@ class Price
     /**
      * @var string
      */
-    protected $bookableType = Period::BOOKABLE_TYPE_ENQUIRY_ONLY;
+    protected $bookableType = Period::BOOKABLE_TYPE_DEFAULT;
 
     /**
      * FinalPrice constructor.
-     *
      * @param PricingContext $contextUsed
      */
     public function __construct(PricingContext $contextUsed)
@@ -73,6 +71,7 @@ class Price
         $this->basePrice = MoneyUtils::newMoney(0, $this->getCurrency());
         $this->damageDeposit = MoneyUtils::newMoney(0, $this->getCurrency());
         $this->splitDetails = new GuestSplitOverview();
+      
     }
 
     /**
@@ -154,7 +153,7 @@ class Price
      */
     public function hasAdjustmentByType($adjustmentType)
     {
-        foreach ($this->adjustments as $adj) {
+        foreach($this->adjustments as $adj) {
             if ($adj->getType() === $adjustmentType) {
                 return true;
             }
@@ -179,6 +178,7 @@ class Price
         return $this->contextUsed;
     }
 
+   
 
     /**
      * @return Stay
@@ -224,7 +224,7 @@ class Price
     {
         $d = [];
 
-        foreach ($this->getAdjustments() as $a) {
+        foreach($this->getAdjustments() as $a) {
             $d[] = $a->__toArray();
         }
 
@@ -247,71 +247,6 @@ class Price
             'stayBreakdown' => $this->getStay()->__toArray(),
             'splitDetails'  => !is_null($this->splitDetails) ? $this->splitDetails->__toArray() : null
         ];
-    }
-
-    /**
-     * This will not parse the stay breakdown field as it is usually not required.
-     *
-     * @param array $data
-     *
-     * @return Price
-     */
-    public function fromArray($data)
-    {
-        $this->setTotal(MoneyUtils::fromString($data['total'], $data['currency']));
-        $this->setBasePrice(MoneyUtils::fromString($data['basePrice'], $data['currency']));
-        $this->setBookableType($data['bookableType']);
-
-        $adjustments = [];
-
-        foreach ($data['adjustments'] as $a) {
-            $money = MoneyUtils::fromString($a['amount'], $data['currency']);
-            $adjustments[] = new AdjustmentAmount(
-                $money,
-                $a['identifier'],
-                $a['description'],
-                $a['calculationOperand'],
-                $a['type'],
-                $a['priceGroup'],
-                $a['guestSplitMethod']
-            );
-        }
-
-        $this->setAdjustments($adjustments);
-        $this->setDamageDeposit(MoneyUtils::fromString($data['damageDeposit'], $data['currency']));
-
-        $this->stay = new Stay($this->getContextUsed());
-
-        $this->splitDetails = new GuestSplitOverview();
-        if (ArrayUtils::hasNestedArrayValue('splitDetails.deposit', $data)) {
-            $sdData = $data['splitDetails'];
-
-            $sdObject = $this->getSplitDetails();
-
-            $sdObject->setDeposit(MoneyUtils::fromString($sdData['deposit']['amount'], $data['currency']));
-
-            $sdObject->setDepositCalculationType(ArrayUtils::getNestedArrayValue(
-                'deposit.calculationType',
-                $sdData,
-                GuestSplitOverview::DEPOSIT_CALCULATION_TYPE_DEFAULT
-            ));
-
-            $sdObject->setDepositDueDate(new \DateTime($sdData['deposit']['dueDate']));
-
-            $sdObject->setBalance(MoneyUtils::fromString($sdData['balance']['amount'], $data['currency']));
-            $sdObject->setBalanceDueDate(new \DateTime($sdData['balance']['dueDate']));
-
-            $sdObject->setDamageDepositSplitMethod($sdData['damageDepositSplitMethod']);
-        } else {
-            $this->disableSplitDetails(); // Does not exist, disable
-        }
-		
-        if($data['currency']){
-        	$this->currency = $data['currency'];
-		}
-        
-        // TODO - We need to reverse populate the Stay.... as well.
-        return $this;
     }
 
 }

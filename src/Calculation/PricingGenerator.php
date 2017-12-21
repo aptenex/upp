@@ -15,10 +15,12 @@ use Aptenex\Upp\Calculation\Pricing\Strategy\ExtraNightsAlterationStrategy;
 use Aptenex\Upp\Calculation\Pricing\Strategy\PartialWeekAlterationStrategy;
 use Aptenex\Upp\Calculation\Pricing\Strategy\PriceAlterationInterface;
 use Aptenex\Upp\Calculation\Pricing\TaxesCalculator;
+use Aptenex\Upp\Calculation\SplitAmount\GuestSplitOverview;
 use Aptenex\Upp\Calculation\SplitAmount\SplitAmountProcessor;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Exception\CannotBookDatesException;
 use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
+use Aptenex\Upp\Exception\InvalidPriceException;
 use Aptenex\Upp\Helper\LanguageTools;
 use Aptenex\Upp\Helper\MoneyTools;
 use Aptenex\Upp\Parser\Structure\Operand;
@@ -96,22 +98,21 @@ class PricingGenerator
      * @param PricingContext $context
      * @param FinalPrice     $fp
      *
-     * @throws CannotBookDatesException
+     * @throws InvalidPriceException
      */
     private function performSanityChecks(PricingContext $context, FinalPrice $fp)
     {
         if ($fp->getTotal()->isNegative()) {
-            throw new CannotBookDatesException(LanguageTools::trans('INVALID_PRICE'));
+            throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
         }
 
         if (!is_null($fp->getSplitDetails())) {
-
             if ($fp->getSplitDetails()->getDeposit()->isNegative()) {
-                throw new CannotBookDatesException(LanguageTools::trans('INVALID_PRICE'));
+                throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
             }
 
             if ($fp->getSplitDetails()->getBalance()->isNegative()) {
-                throw new CannotBookDatesException(LanguageTools::trans('INVALID_PRICE'));
+                throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
             }
 
         }
@@ -524,6 +525,12 @@ class PricingGenerator
 
 
         $fp->getSplitDetails()->setDeposit($spr->getDeposit());
+
+        if ($depositFixed > 0) {
+            // We need to fix this if the deposit has had some special calculations involved.
+            $fp->getSplitDetails()->setDepositCalculationType(GuestSplitOverview::DEPOSIT_CALCULATION_TYPE_FIXED);
+        }
+
         $fp->getSplitDetails()->setBalance($spr->getBalance());
 
         $fp->getSplitDetails()->setDepositDueDate($this->calculateDepositDueDate());
