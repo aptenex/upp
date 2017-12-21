@@ -8,10 +8,19 @@ use Money\Money;
 class GuestSplitOverview
 {
 
+    const DEPOSIT_CALCULATION_TYPE_DEFAULT = 'AUTOMATIC';
+    const DEPOSIT_CALCULATION_TYPE_AUTOMATIC = 'AUTOMATIC';
+    const DEPOSIT_CALCULATION_TYPE_FIXED = 'FIXED';
+
     /**
      * @var Money
      */
     private $deposit;
+
+    /**
+     * @var string
+     */
+    private $depositCalculationType = self::DEPOSIT_CALCULATION_TYPE_AUTOMATIC;
 
     /**
      * @var \DateTime
@@ -122,6 +131,22 @@ class GuestSplitOverview
     }
 
     /**
+     * @return string
+     */
+    public function getDepositCalculationType()
+    {
+        return $this->depositCalculationType;
+    }
+
+    /**
+     * @param string $depositCalculationType
+     */
+    public function setDepositCalculationType($depositCalculationType)
+    {
+        $this->depositCalculationType = $depositCalculationType;
+    }
+
+    /**
      * @return array
      */
     public function __toArray()
@@ -129,6 +154,7 @@ class GuestSplitOverview
         return [
             'deposit' => [
                 'amount' => MoneyUtils::getConvertedAmount($this->getDeposit()),
+                'calculationTpe' => $this->getDepositCalculationType(),
                 'dueDate' => $this->getDepositDueDate()->format("Y-m-d"),
                 'dueNow'  => $this->getNowDate() >= $this->getDepositDueDate()
             ],

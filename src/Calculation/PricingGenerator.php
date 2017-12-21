@@ -15,6 +15,7 @@ use Aptenex\Upp\Calculation\Pricing\Strategy\ExtraNightsAlterationStrategy;
 use Aptenex\Upp\Calculation\Pricing\Strategy\PartialWeekAlterationStrategy;
 use Aptenex\Upp\Calculation\Pricing\Strategy\PriceAlterationInterface;
 use Aptenex\Upp\Calculation\Pricing\TaxesCalculator;
+use Aptenex\Upp\Calculation\SplitAmount\GuestSplitOverview;
 use Aptenex\Upp\Calculation\SplitAmount\SplitAmountProcessor;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Exception\CannotBookDatesException;
@@ -525,6 +526,12 @@ class PricingGenerator
 
 
         $fp->getSplitDetails()->setDeposit($spr->getDeposit());
+
+        if ($depositFixed > 0) {
+            // We need to fix this if the deposit has had some special calculations involved.
+            $fp->getSplitDetails()->setDepositCalculationType(GuestSplitOverview::DEPOSIT_CALCULATION_TYPE_FIXED);
+        }
+
         $fp->getSplitDetails()->setBalance($spr->getBalance());
 
         $fp->getSplitDetails()->setDepositDueDate($this->calculateDepositDueDate());
