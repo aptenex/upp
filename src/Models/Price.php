@@ -4,6 +4,7 @@ namespace Aptenex\Upp\Models;
 
 use Aptenex\Upp\Calculation\AdjustmentAmount;
 use Aptenex\Upp\Calculation\Stay;
+use Aptenex\Upp\Util\ArrayUtils;
 use Money\Money;
 use Aptenex\Upp\Util\MoneyUtils;
 use Aptenex\Upp\Context\PricingContext;
@@ -249,16 +250,20 @@ class Price
     }
 
     /**
-     * @param $data
+     * This will not parse the stay breakdown field as it is usually not required.
      *
-     * @return $this
+     * @param array $data
+     *
+     * @return Price
      */
     public function fromArray($data)
     {
         $this->setTotal(MoneyUtils::fromString($data['total'], $data['currency']));
         $this->setBasePrice(MoneyUtils::fromString($data['basePrice'], $data['currency']));
         $this->setBookableType($data['bookableType']);
+
         $adjustments = [];
+
         foreach ($data['adjustments'] as $a) {
             $money = MoneyUtils::fromString($a['amount'], $data['currency']);
             $adjustments[] = new AdjustmentAmount(
@@ -271,25 +276,36 @@ class Price
                 $a['guestSplitMethod']
             );
         }
+
         $this->setAdjustments($adjustments);
         $this->setDamageDeposit(MoneyUtils::fromString($data['damageDeposit'], $data['currency']));
 
         $this->stay = new Stay($this->getContextUsed());
 
         $this->splitDetails = new GuestSplitOverview();
-        if (!isset($data['splitDetails'], $data['splitDetails']['deposit'])) {
-            $this->disableSplitDetails();
+        if (!ArrayUtils::hasNestedArrayValue('splitDetails.deposit', $data)) {
+            $sdData = $data['splitDetails'];
+
+            $sdObject = $this->getSplitDetails();
+
+            $sdObject->setDeposit(MoneyUtils::fromString($sdData['deposit']['amount'], $data['currency']));
+
+            $sdObject->setDepositCalculationType(ArrayUtils::getNestedArrayValue(
+                'deposit.calculationType',
+                $sdData,
+                GuestSplitOverview::DEPOSIT_CALCULATION_TYPE_DEFAULT
+            ));
+
+            $sdObject->setDepositDueDate(new \DateTime($sdData['deposit']['dueDate']));
+
+            $sdObject->setBalance(MoneyUtils::fromString($sdData['balance']['amount'], $data['currency']));
+            $sdObject->setBalanceDueDate(new \DateTime($sdData['balance']['dueDate']));
+
+            $sdObject->setDamageDepositSplitMethod($sdData['damageDepositSplitMethod']);
         } else {
-
-
-            $this->getSplitDetails()->setDeposit(MoneyUtils::fromString($data['splitDetails']['deposit']['amount'], $data['currency']));
-            $this->getSplitDetails()->setBalance(MoneyUtils::fromString($data['splitDetails']['balance']['amount'], $data['currency']));
-            $this->getSplitDetails()->setDepositDueDate(new \DateTime($data['splitDetails']['deposit']['dueDate']));
-            $this->getSplitDetails()->setBalanceDueDate(new \DateTime($data['splitDetails']['balance']['dueDate']));
-            $this->getSplitDetails()->setDamageDepositSplitMethod($data['splitDetails']['damageDepositSplitMethod']);
+            $this->disableSplitDetails(); // Does not exist, disable
         }
 
-        // TODO - We need to reverse populate the Stay.... as well.
         return $this;
     }
 
