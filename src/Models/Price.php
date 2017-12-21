@@ -283,7 +283,7 @@ class Price
         $this->stay = new Stay($this->getContextUsed());
 
         $this->splitDetails = new GuestSplitOverview();
-        if (!ArrayUtils::hasNestedArrayValue('splitDetails.deposit', $data)) {
+        if (ArrayUtils::hasNestedArrayValue('splitDetails.deposit', $data)) {
             $sdData = $data['splitDetails'];
 
             $sdObject = $this->getSplitDetails();

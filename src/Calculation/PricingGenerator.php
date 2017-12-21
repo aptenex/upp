@@ -107,7 +107,6 @@ class PricingGenerator
         }
 
         if (!is_null($fp->getSplitDetails())) {
-
             if ($fp->getSplitDetails()->getDeposit()->isNegative()) {
                 throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
             }
