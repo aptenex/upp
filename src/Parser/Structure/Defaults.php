@@ -239,7 +239,7 @@ class Defaults
             'daysRequiredInAdvanceForBooking' => $this->getDaysRequiredInAdvanceForBooking(),
             'extraNightAlterationStrategyUseGlobalNights' => $this->isExtraNightAlterationStrategyUseGlobalNights(),
             'balanceDaysBeforeArrival' => $this->getBalanceDaysBeforeArrival(),
-            'depositSplitPercentage' => $this->getDamageDeposit(),
+            'depositSplitPercentage' => $this->getDepositSplitPercentage(),
         ];
     }
 
