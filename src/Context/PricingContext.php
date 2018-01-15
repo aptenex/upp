@@ -100,6 +100,20 @@ class PricingContext
     private $testMode = false;
 
     /**
+     * If enabled, this will attempt to generate a price no matter the errors
+     *
+     * @var bool
+     */
+    private $forceGeneration = false;
+
+    /**
+     * If passed, then it will be used to validate certain parameters
+     *
+     * @var array
+     */
+    private $rentalSchemaData;
+
+    /**
      * @var array
      */
     private $configOverride;
@@ -433,6 +447,46 @@ class PricingContext
     }
 
     /**
+     * @return bool
+     */
+    public function isForceGeneration(): bool
+    {
+        return $this->forceGeneration;
+    }
+
+    /**
+     * @param bool $forceGeneration
+     */
+    public function setForceGeneration(bool $forceGeneration)
+    {
+        $this->forceGeneration = $forceGeneration;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRentalSchemaData()
+    {
+        return $this->rentalSchemaData;
+    }
+
+    /**
+     * @param array $rentalSchemaData
+     */
+    public function setRentalSchemaData($rentalSchemaData)
+    {
+        $this->rentalSchemaData = $rentalSchemaData;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasRentalSchemaData()
+    {
+        return !empty($this->rentalSchemaData);
+    }
+
+    /**
      * @return array
      */
     public function __toArray()
@@ -445,7 +499,9 @@ class PricingContext
             'adults'            => $this->getAdults(),
             'children'          => $this->getChildren(),
             'infants'           => $this->getInfants(),
-            'locale'            => $this->getLocale()
+            'locale'            => $this->getLocale(),
+            'forceGeneration'   => $this->isForceGeneration(),
+            'testMode'          => $this->isTestMode()
         ];
     }
 

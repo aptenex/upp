@@ -6,6 +6,7 @@ use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\Defaults;
 use Aptenex\Upp\Parser\Structure\Period;
 use Aptenex\Upp\Parser\Structure\Rate;
+use Aptenex\Upp\Parser\Structure\SplitMethod;
 
 class DefaultsParser
 {
@@ -19,8 +20,12 @@ class DefaultsParser
         $d = new Defaults();
 
         $d->setDamageDeposit(ArrayAccess::get('damageDeposit', $defaults, null));
-        $d->setDamageDepositSplitMethod(ArrayAccess::get('damageDepositSplitMethod', $defaults, null));
+        $d->setDamageDepositSplitMethod(ArrayAccess::get('damageDepositSplitMethod', $defaults, SplitMethod::ON_DEPOSIT));
         $d->setDamageDepositCalculationMethod(ArrayAccess::get('damageDepositCalculationMethod', $defaults, Rate::METHOD_FIXED));
+
+        if ($d->getDamageDepositCalculationMethod() === Rate::METHOD_PERCENTAGE && $d->getDamageDeposit() > 1) {
+            $d->setDamageDeposit($d->getDamageDeposit() / 100); // Turn it into 0 - 100
+        }
 
         $d->setMinimumNights(ArrayAccess::get('minimumNights', $defaults, null));
         $d->setBalanceDaysBeforeArrival(ArrayAccess::get('balanceDaysBeforeArrival', $defaults, null));

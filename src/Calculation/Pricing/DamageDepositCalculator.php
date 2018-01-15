@@ -33,19 +33,14 @@ class DamageDepositCalculator
             }
         }
 
-        if ($defaults->getDamageDepositSplitMethod() === SplitMethod::ON_ARRIVAL) {
-            // This will turn into a 'note' anyway
-            $this->applyAdjustment($fp);
-        } else {
-            $fp->setDamageDeposit(MoneyTools::applyCalculationMethodToAmount(
-                $amountOrPercentage,
-                $defaults->getDamageDepositCalculationMethod(),
-                $fp->getBasePrice()
-            ));
+        $fp->setDamageDeposit(MoneyTools::applyCalculationMethodToAmount(
+            $amountOrPercentage,
+            $defaults->getDamageDepositCalculationMethod(),
+            $fp->getBasePrice()
+        ));
 
-            if ($fp->getDamageDeposit()->getAmount() > 0) {
-                $this->applyAdjustment($fp);
-            }
+        if ($fp->getDamageDeposit()->getAmount() > 0) {
+            $this->applyAdjustment($fp);
         }
     }
 
@@ -61,7 +56,7 @@ class DamageDepositCalculator
             sprintf('Damage Deposit%s', $isOnArrival ? ' (On Arrival)': ''),
             Operand::OP_ADDITION,
             AdjustmentAmount::TYPE_DAMAGE_DEPOSIT,
-            AdjustmentAmount::PRICE_GROUP_TOTAL,
+            $isOnArrival ? AdjustmentAmount::PRICE_GROUP_ARRIVAL : AdjustmentAmount::PRICE_GROUP_TOTAL,
             $fp->getSplitDetails()->getDamageDepositSplitMethod(),
             false
         );

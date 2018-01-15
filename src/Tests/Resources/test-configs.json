@@ -169,7 +169,7 @@
           "noNights": 6,
           "finalPrice": 8574,
           "basePrice": 8574,
-          "damageDeposit": 0,
+          "damageDeposit": 5000,
           "adjustmentCount": 2,
           "split": {
             "deposit": 4287,

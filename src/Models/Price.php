@@ -4,6 +4,8 @@ namespace Aptenex\Upp\Models;
 
 use Aptenex\Upp\Calculation\AdjustmentAmount;
 use Aptenex\Upp\Calculation\Stay;
+use Aptenex\Upp\Exception\Error;
+use Aptenex\Upp\Exception\ErrorHandler;
 use Aptenex\Upp\Util\ArrayUtils;
 use Money\Money;
 use Aptenex\Upp\Util\MoneyUtils;
@@ -45,6 +47,11 @@ class Price
     protected $adjustments = [];
 
     /**
+     * @var ErrorHandler
+     */
+    protected $errors;
+
+    /**
      * @var Stay
      */
     protected $stay;
@@ -73,6 +80,7 @@ class Price
         $this->basePrice = MoneyUtils::newMoney(0, $this->getCurrency());
         $this->damageDeposit = MoneyUtils::newMoney(0, $this->getCurrency());
         $this->splitDetails = new GuestSplitOverview();
+        $this->errors = new ErrorHandler();
     }
 
     /**
@@ -232,6 +240,14 @@ class Price
     }
 
     /**
+     * @return ErrorHandler
+     */
+    public function getErrors(): ErrorHandler
+    {
+        return $this->errors;
+    }
+
+    /**
      * @return array
      */
     public function __toArray()
@@ -245,7 +261,8 @@ class Price
             'bookableType'  => $this->getBookableType(),
             'adjustments'   => $this->getAdjustmentsArray(),
             'stayBreakdown' => $this->getStay()->__toArray(),
-            'splitDetails'  => !is_null($this->splitDetails) ? $this->splitDetails->__toArray() : null
+            'splitDetails'  => !is_null($this->splitDetails) ? $this->splitDetails->__toArray() : null,
+            'errors'        => $this->getErrors()->__toArray()
         ];
     }
 
@@ -305,12 +322,21 @@ class Price
         } else {
             $this->disableSplitDetails(); // Does not exist, disable
         }
-		
+
         if($data['currency']){
-        	$this->currency = $data['currency'];
-		}
-        
-        // TODO - We need to reverse populate the Stay.... as well.
+            $this->currency = $data['currency'];
+        }
+
+        if (isset($data['errors']) && is_array($data['errors'])) {
+           foreach($data['errors'] as $errorData) {
+               if (!isset($errorData['type'])) {
+                   continue; // Type is ALWAYS required
+               }
+
+               $this->errors->addError(Error::fromArrayData($errorData));
+           }
+        }
+
         return $this;
     }
 

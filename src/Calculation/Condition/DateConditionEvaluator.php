@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Calculation\Condition;
 
+use Aptenex\Upp\Exception\ErrorHandler;
 use Aptenex\Upp\Helper\DateTools;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Helper\LanguageTools;
@@ -54,6 +55,8 @@ class DateConditionEvaluator extends BaseEvaluator implements ConditionEvaluatio
         /** @var DateCondition $config */
         $config = $condition->getConditionConfig();
 
+        $errorHandler = $controlItem->getFinalPrice()->getErrors();
+
         if (!empty($config->getArrivalDays()) && $controlItem->containsArrivalDayInMatchedNights()) {
             $arrivalDay = strtolower($context->getArrivalDateObj()->format('l'));
 
@@ -61,6 +64,12 @@ class DateConditionEvaluator extends BaseEvaluator implements ConditionEvaluatio
                 $controlItem->addFailureIfMatched(LanguageTools::trans('REQUIRED_ARRIVAL_DAY', [
                     '%list%' => LanguageTools::humanReadableList(LanguageTools::translateDaysOfWeek($config->getArrivalDays())),
                 ]));
+
+                $errorHandler->addErrorFromRaw(
+                    ErrorHandler::TYPE_START_DAY_MISMATCH,
+                    LanguageTools::humanReadableList($config->getArrivalDays()),
+                    LanguageTools::humanReadableList(LanguageTools::translateDaysOfWeek($config->getArrivalDays()))
+                );
             }
         }
 
@@ -71,6 +80,12 @@ class DateConditionEvaluator extends BaseEvaluator implements ConditionEvaluatio
                 $controlItem->addFailureIfMatched(LanguageTools::trans('REQUIRED_DEPARTURE_DAY', [
                     '%list%' => LanguageTools::humanReadableList(LanguageTools::translateDaysOfWeek($config->getDepartureDays())),
                 ]));
+
+                $errorHandler->addErrorFromRaw(
+                    ErrorHandler::TYPE_END_DAY_MISMATCH,
+                    LanguageTools::humanReadableList($config->getDepartureDays()),
+                    LanguageTools::humanReadableList(LanguageTools::translateDaysOfWeek($config->getDepartureDays()))
+                );
             }
         }
     }

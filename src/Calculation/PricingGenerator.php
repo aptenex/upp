@@ -20,12 +20,15 @@ use Aptenex\Upp\Calculation\SplitAmount\SplitAmountProcessor;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Exception\CannotBookDatesException;
 use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
+use Aptenex\Upp\Exception\ErrorHandler;
 use Aptenex\Upp\Exception\InvalidPriceException;
 use Aptenex\Upp\Helper\LanguageTools;
 use Aptenex\Upp\Helper\MoneyTools;
 use Aptenex\Upp\Parser\Structure\Operand;
 use Aptenex\Upp\Parser\Structure\PricingConfig;
 use Aptenex\Upp\Parser\Structure\SplitMethod;
+use Aptenex\Upp\Util\ArrayUtils;
+use Aptenex\Upp\Util\ExceptionUtils;
 use Aptenex\Upp\Util\MoneyUtils;
 
 class PricingGenerator
@@ -136,7 +139,25 @@ class PricingGenerator
 
             // If the day is later than arrival date - reject
             if ($earliestBookableDay > $arrivalDate) {
-                throw new CannotBookDatesException(LanguageTools::trans('CANNOT_BOOK_TOO_CLOSE_TO_ARRIVAL'));
+                ExceptionUtils::handleErrorException(
+                    new CannotBookDatesException(LanguageTools::trans('CANNOT_BOOK_TOO_CLOSE_TO_ARRIVAL')),
+                    $fp,
+                    ErrorHandler::TYPE_MIN_ADVANCED_NOTICE_NOT_MET,
+                    $defaults->getDaysRequiredInAdvanceForBooking()
+                );
+            }
+        }
+
+        if ($context->hasRentalSchemaData()) {
+            $schema = $context->getRentalSchemaData();
+            $listingKey = 'listing.maxOccupancy';
+            if (ArrayUtils::hasNestedArrayValue($listingKey, $schema)) {
+
+                $maxOccupancy = (int) ArrayUtils::getNestedArrayValue($listingKey, $schema);
+                if ($context->getGuests() > $maxOccupancy) {
+                    ExceptionUtils::handleError($fp, ErrorHandler::TYPE_EXCEEDS_MAX_OCCUPANCY, $maxOccupancy);
+                }
+
             }
         }
     }
@@ -413,10 +434,12 @@ class PricingGenerator
                 }
 
                 if (!empty($minimumNights) && $minimumNights > $fp->getStay()->getNoNights()) {
-                    throw new CannotMatchRequestedDatesException(LanguageTools::trans('MINIMUM_NIGHTS', [
+                    $cmEx = new CannotMatchRequestedDatesException(LanguageTools::trans('MINIMUM_NIGHTS', [
                         '%minimumNights%' => $minimumNights,
                         '%selectedNights%' => $fp->getStay()->getNoNights()
                     ]));
+
+                    ExceptionUtils::handleErrorException($cmEx, $fp, ErrorHandler::TYPE_MIN_STAY_NOT_MET, $minimumNights);
                 }
 
             }
@@ -425,7 +448,9 @@ class PricingGenerator
             $e->evaluatePostConditions($fp->getContextUsed(), $period);
 
             if (!empty($period->getFailuresIfMatched())) {
-                throw new CannotMatchRequestedDatesException(implode(' ', $period->getFailuresIfMatched()));
+                $cmEx = new CannotMatchRequestedDatesException(implode(' ', $period->getFailuresIfMatched()));
+
+                ExceptionUtils::handleException($cmEx, $fp);
             }
         }
     }

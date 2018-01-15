@@ -72,7 +72,7 @@ class LanguageTools
                 $lastChoice = $item;
             } else if  ($index === ($len - 2)) {
                 // second last - no comma
-                $choices .= $item . ' ';
+                $choices .= $item . '';
             } else {
                 $choices .= $item . ', ';
             }
