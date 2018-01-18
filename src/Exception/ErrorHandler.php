@@ -5,57 +5,68 @@ namespace Aptenex\Upp\Exception;
 class ErrorHandler
 {
 
-    const TYPE_EXCEEDS_MAX_OCCUPANCY = 'EXCEEDS_MAX_OCCUPANCY';
-    const TYPE_MIN_STAY_NOT_MET = 'MIN_STAY_NOT_MET';
-    const TYPE_CHANGE_OVER_DAY_MISMATCH = 'CHANGE_OVER_DAY_MISMATCH';
-    const TYPE_START_DAY_MISMATCH = 'START_DAY_MISMATCH';
-    const TYPE_END_DAY_MISMATCH = 'END_DAY_MISMATCH';
-    const TYPE_MIN_ADVANCED_NOTICE_NOT_MET = 'MIN_ADVANCED_NOTICE_NOT_MET';
-    const TYPE_STAY_NIGHT_INCREMENT_MISMATCH = 'STAY_NIGHT_INCREMENT_MISMATCH';
-
     const ERROR_MAP = [
-        self::TYPE_EXCEEDS_MAX_OCCUPANCY => [
+        Error::TYPE_EXCEEDS_MAX_OCCUPANCY => [
             'parameterKey' => 'count',
             'parameterUnit' => 'Travelers',
             'simple' => 'This property cannot accommodate the number of travelers selected.',
             'parameterized' => 'This property can only accommodate %s travelers.'
         ],
-        self::TYPE_MIN_STAY_NOT_MET => [
+		Error::TYPE_MIN_STAY_NOT_MET => [
             'parameterKey' => 'count',
             'parameterUnit' => 'Days',
             'simple' => 'This property requires a longer stay.',
             'parameterized' => 'This property requires a minimum stay of %s days.'
         ],
-        self::TYPE_CHANGE_OVER_DAY_MISMATCH => [
+		Error::TYPE_CHANGE_OVER_DAY_MISMATCH => [
             'parameterKey' => 'dayOfWeek',
             'parameterUnit' => null,
             'simple' => 'This property requires your stay to begin and end on the same day of the week.',
             'parameterized' => 'This property requires your stay to begin and end on a %s.'
         ],
-        self::TYPE_START_DAY_MISMATCH => [
+		Error::TYPE_START_DAY_MISMATCH => [
             'parameterKey' => 'dayOfWeek',
             'parameterUnit' => null,
             'simple' => 'This property requires your stay to begin on a different day.',
             'parameterized' => 'This property requires your stay to begin on a %s.'
         ],
-        self::TYPE_END_DAY_MISMATCH => [
+		Error::TYPE_END_DAY_MISMATCH => [
             'parameterKey' => 'dayOfWeek',
             'parameterUnit' => null,
             'simple' => 'This property requires your stay to end on a different day.',
             'parameterized' => 'This property requires your stay to end on a %s.'
         ],
-        self::TYPE_MIN_ADVANCED_NOTICE_NOT_MET => [
+		Error::TYPE_MIN_ADVANCED_NOTICE_NOT_MET => [
             'parameterKey' => 'count',
             'parameterUnit' => 'Days',
             'simple' => 'This property requires more advance notice to book.',
             'parameterized' => 'This property requires %s days advance notice to book.'
         ],
-        self::TYPE_STAY_NIGHT_INCREMENT_MISMATCH => [
+		Error::TYPE_STAY_NIGHT_INCREMENT_MISMATCH => [
             'parameterKey' => 'count',
             'parameterUnit' => 'Days',
             'simple' => 'This property requires stays to be booked in specific increments.',
             'parameterized' => 'This property requires stays to be booked in increments of "x" days.'
-        ]
+        ],
+		Error::TYPE_OTHER => [
+			'parameterKey' => null,
+			'parameterUnit' => null,
+			'simple' => 'Unknown error',
+			'parameterized' => null // When null, Error will use internalMessage if exists.
+		],
+		Error::TYPE_UNKNOWN_PROPERTY => [
+			'parameterKey' => null,
+			'parameterUnit' => null,
+			'simple' => 'Property has been discontinued',
+			'parameterized' => null // When null, Error will use internalMessage if exists.
+		],
+		Error::TYPE_EXCEEDS_MAX_STAY => [
+			'parameterKey' => 'count',
+			'parameterUnit' => 'Days',
+			'simple' => 'This property has a maximum stay length.',
+			'parameterized' => 'This property has a maximum stay %s days.'
+		]
+		
     ];
 
     private $errors = [];
@@ -79,11 +90,11 @@ class ErrorHandler
     /**
      * @param string $type
      * @param null|mixed $unit
-     * @param string|null $procuroMessage
+     * @param string|null $internalMessage
      */
-    public function addErrorFromRaw($type, $unit = null, string $procuroMessage = null)
+    public function addErrorFromRaw($type, $unit = null, string $internalMessage = null)
     {
-        $this->addError(new Error($type, $unit, $procuroMessage));
+        $this->addError(new Error($type, $unit, $internalMessage));
     }
 
     /**

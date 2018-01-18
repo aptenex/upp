@@ -238,7 +238,7 @@ class Price
 
         return $d;
     }
-
+	
     /**
      * @return ErrorHandler
      */
@@ -246,6 +246,22 @@ class Price
     {
         return $this->errors;
     }
+	
+	/**
+	 * @param $error
+	 */
+	public function addError(Error $error)
+	{
+		$this->errors->addError( $error );
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function hasErrors()
+	{
+		return $this->errors->hasErrors();
+	}
 
     /**
      * @return array

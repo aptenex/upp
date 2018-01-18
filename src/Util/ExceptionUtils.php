@@ -24,11 +24,11 @@ class ExceptionUtils
      * @param Price $price
      * @param string $errorType
      * @param mixed|null $errorUnit
-     * @param string|null $procuroMessage
+     * @param string|null $internalMessage
      */
-    public static function handleError(Price $price, $errorType, $errorUnit = null, string $procuroMessage = null)
+    public static function handleError(Price $price, $errorType, $errorUnit = null, string $internalMessage = null)
     {
-        $price->getErrors()->addErrorFromRaw($errorType, $errorUnit, $procuroMessage);
+        $price->getErrors()->addErrorFromRaw($errorType, $errorUnit, $internalMessage);
     }
 
     /**
