@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Models;
 
+use Aptenex\Upp\Exception\ErrorHandler;
 use Money\Money;
 use Aptenex\Upp\Context\PricingContext;
 
@@ -93,7 +94,7 @@ class Availability extends Price
     /**
      * @return array
      */
-    public function getErrors()
+    public function getErrors() : ErrorHandler
     {
         return $this->errors;
     }
