@@ -20,6 +20,7 @@ use Aptenex\Upp\Calculation\SplitAmount\SplitAmountProcessor;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Exception\CannotBookDatesException;
 use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
+use Aptenex\Upp\Exception\Error;
 use Aptenex\Upp\Exception\ErrorHandler;
 use Aptenex\Upp\Exception\InvalidPriceException;
 use Aptenex\Upp\Helper\LanguageTools;
@@ -142,7 +143,7 @@ class PricingGenerator
                 ExceptionUtils::handleErrorException(
                     new CannotBookDatesException(LanguageTools::trans('CANNOT_BOOK_TOO_CLOSE_TO_ARRIVAL')),
                     $fp,
-                    ErrorHandler::TYPE_MIN_ADVANCED_NOTICE_NOT_MET,
+                    Error::TYPE_MIN_ADVANCED_NOTICE_NOT_MET,
                     $defaults->getDaysRequiredInAdvanceForBooking()
                 );
             }
@@ -155,7 +156,7 @@ class PricingGenerator
 
                 $maxOccupancy = (int) ArrayUtils::getNestedArrayValue($listingKey, $schema);
                 if ($context->getGuests() > $maxOccupancy) {
-                    ExceptionUtils::handleError($fp, ErrorHandler::TYPE_EXCEEDS_MAX_OCCUPANCY, $maxOccupancy);
+                    ExceptionUtils::handleError($fp, Error::TYPE_EXCEEDS_MAX_OCCUPANCY, $maxOccupancy);
                 }
 
             }
@@ -439,7 +440,7 @@ class PricingGenerator
                         '%selectedNights%' => $fp->getStay()->getNoNights()
                     ]));
 
-                    ExceptionUtils::handleErrorException($cmEx, $fp, ErrorHandler::TYPE_MIN_STAY_NOT_MET, $minimumNights);
+                    ExceptionUtils::handleErrorException($cmEx, $fp, Error::TYPE_MIN_STAY_NOT_MET, $minimumNights);
                 }
 
             }
