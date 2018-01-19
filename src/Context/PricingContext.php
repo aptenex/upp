@@ -76,8 +76,16 @@ class PricingContext
      * @var int
      */
     private $infants = null;
-
-    /**
+	
+	/**
+	 * @Type(type="integer")
+	 *
+	 * @var int
+	 */
+	private $pets = null;
+	
+	
+	/**
      * @Valid()
      *
      * @var array
@@ -317,6 +325,24 @@ class PricingContext
     {
         $this->adults = (int) $adults;
     }
+	
+	/**
+	 * @return int
+	 */
+	public function getPets()
+	{
+		return $this->pets;
+	}
+	
+	/**
+	 * @param int $pets
+	 */
+	public function setPets( $pets)
+	{
+		$this->pets = (int) $pets;
+	}
+    
+    
 
     /**
      * @return int
