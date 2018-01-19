@@ -154,7 +154,7 @@ class GuestSplitOverview
         return [
             'deposit' => [
                 'amount' => MoneyUtils::getConvertedAmount($this->getDeposit()),
-                'calculationTpe' => $this->getDepositCalculationType(),
+                'calculationType' => $this->getDepositCalculationType(),
                 'dueDate' => $this->getDepositDueDate()->format("Y-m-d"),
                 'dueNow'  => $this->getNowDate() >= $this->getDepositDueDate()
             ],

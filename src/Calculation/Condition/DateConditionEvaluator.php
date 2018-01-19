@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Calculation\Condition;
 
+use Aptenex\Upp\Exception\Error;
 use Aptenex\Upp\Exception\ErrorHandler;
 use Aptenex\Upp\Helper\DateTools;
 use Aptenex\Upp\Context\PricingContext;
@@ -66,7 +67,7 @@ class DateConditionEvaluator extends BaseEvaluator implements ConditionEvaluatio
                 ]));
 
                 $errorHandler->addErrorFromRaw(
-                    ErrorHandler::TYPE_START_DAY_MISMATCH,
+                    Error::TYPE_START_DAY_MISMATCH,
                     LanguageTools::humanReadableList($config->getArrivalDays()),
                     LanguageTools::humanReadableList(LanguageTools::translateDaysOfWeek($config->getArrivalDays()))
                 );
@@ -82,7 +83,7 @@ class DateConditionEvaluator extends BaseEvaluator implements ConditionEvaluatio
                 ]));
 
                 $errorHandler->addErrorFromRaw(
-                    ErrorHandler::TYPE_END_DAY_MISMATCH,
+                    Error::TYPE_END_DAY_MISMATCH,
                     LanguageTools::humanReadableList($config->getDepartureDays()),
                     LanguageTools::humanReadableList(LanguageTools::translateDaysOfWeek($config->getDepartureDays()))
                 );

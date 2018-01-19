@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Models;
 
+use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Exception\ErrorHandler;
 use Money\Money;
 use Aptenex\Upp\Context\PricingContext;
@@ -25,7 +26,7 @@ class Availability extends Price
     protected $messages = [];
 
     /**
-     * @var array
+     * @var ErrorHandler
      */
     protected $errors = [];
 
@@ -90,30 +91,8 @@ class Availability extends Price
     {
         $this->messages[] = $message;
     }
+	
 
-    /**
-     * @return array
-     */
-    public function getErrors() : ErrorHandler
-    {
-        return $this->errors;
-    }
-
-    /**
-     * @param array $errors
-     */
-    public function setErrors($errors)
-    {
-        $this->errors = $errors;
-    }
-
-    /**
-     * @param $error
-     */
-    public function addError($error)
-    {
-        $this->errors[] = $error;
-    }
 
     /**
      * @return bool
@@ -121,14 +100,6 @@ class Availability extends Price
     public function hasMessages()
     {
         return !empty($this->messages);
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasErrors()
-    {
-        return !empty($this->errors);
     }
 
     /**
@@ -141,14 +112,15 @@ class Availability extends Price
         return array_merge($data, [
             'isAvailable' => $this->isAvailable(),
             'isPriced'    => $this->isPriced(),
-            'errors'      => $this->getErrors(),
+            'errors'      => $this->getErrors()->__toArray(),
             'messages'    => $this->getMessages(),
         ]);
     }
-
-    /**
-     * @param $data
-     */
+	
+	/**
+	 * @param $data
+	 * @return Price|void
+	 */
     public function fromArray($data)
     {
         parent::fromArray($data);
@@ -160,6 +132,18 @@ class Availability extends Price
         if (isset($data['bookable'])) {
             $this->setIsPriced($data['bookable']);
         }
+        return $this;
     }
+	
+	/**
+	 * @param FinalPrice $price
+	 * @return Availability
+	 */
+    public static function fromFinalPrice(FinalPrice $price){
+		$so = serialize( $price );
+		$so = preg_replace('/^O:34:"Aptenex\\\\Upp\\\\Calculation\\\\FinalPrice":/','O:31:"Aptenex\Upp\Models\Availability":',$so);
+		// Because nothing can go wrong.
+		return unserialize($so);
+	}
 
 }
