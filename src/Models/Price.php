@@ -12,6 +12,7 @@ use Aptenex\Upp\Util\MoneyUtils;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Parser\Structure\Period;
 use Aptenex\Upp\Calculation\SplitAmount\GuestSplitOverview;
+use Symfony\Component\Validator\ConstraintViolationList;
 
 class Price
 {
@@ -238,6 +239,14 @@ class Price
 
         return $d;
     }
+    
+    public function addErrorsFromViolations( ConstraintViolationList $violations){
+    	foreach($violations as $violation){
+			$error = new Error( Error::TYPE_OTHER, null, "Request Error on '" . $violation->getPropertyPath(). "' : " . $violation->getMessage() );
+			$this->addError($error);
+		}
+  
+	}
 	
     /**
      * @return ErrorHandler
