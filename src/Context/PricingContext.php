@@ -523,6 +523,7 @@ class PricingContext
             'bookingDate'       => $this->getBookingDate(),
             'guests'            => $this->getGuests(),
             'adults'            => $this->getAdults(),
+			'pets'              => $this->getPets(),
             'children'          => $this->getChildren(),
             'infants'           => $this->getInfants(),
             'locale'            => $this->getLocale(),
