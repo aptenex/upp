@@ -131,6 +131,7 @@ class Availability extends Price
         if (isset($data['bookable'])) {
             $this->setIsPriced($data['bookable']);
         }
+        return $this;
     }
 
 }
