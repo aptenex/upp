@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Models;
 
+use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Exception\ErrorHandler;
 use Money\Money;
 use Aptenex\Upp\Context\PricingContext;
@@ -133,5 +134,16 @@ class Availability extends Price
         }
         return $this;
     }
+	
+	/**
+	 * @param FinalPrice $price
+	 * @return Availability
+	 */
+    public static function fromFinalPrice(FinalPrice $price){
+		$so = serialize( $price );
+		$so = preg_replace('/^O:34:"Aptenex\\\\Upp\\\\Calculation\\\\FinalPrice":/','O:31:"Aptenex\Upp\Models\Availability":',$so);
+		// Because nothing can go wrong.
+		return unserialize($so);
+	}
 
 }
