@@ -16,8 +16,9 @@ class Error
 	const TYPE_OTHER = 'OTHER';
 	const TYPE_NO_RATES_CONFIGURED = 'NO_RATES_CONFIGURED';
 	const TYPE_UNKNOWN_PROPERTY = 'UNKNOWN_PROPERTY';
+	const TYPE_PETS_NOT_ALLOWED = 'PETS_NOT_ALLOWED';
 	
-    private $type;
+	private $type;
     private $unit = null;
     private $message;
     private $parameterKey = null;
@@ -31,8 +32,13 @@ class Error
      */
     public function __construct(string $type, $unit = null, string $internalMessage = null)
     {
-    
-		if(!defined(sprintf('self::TYPE_%s', ltrim($type, "TYPE_")) )){
+	
+		if (substr($type, 0, strlen('TYPE_')) == 'TYPE_') {
+			$type = substr($type, strlen('TYPE_'));
+		}
+  
+	
+		if(!defined(sprintf('self::TYPE_%s', $type ) )){
 			throw new \RuntimeException(sprintf("Error Type '%s' is not supported in " . __CLASS__ , $type));
 		}
     	
@@ -40,8 +46,8 @@ class Error
         $this->unit = $unit;
         $this->internalMessage = $internalMessage;
 
-        $errorData = ErrorHandler::ERROR_MAP[$type];
-
+        $errorData = ErrorHandler::ERROR_MAP[$type] ?? ErrorHandler::ERROR_MAP[ 'UNSPECIFIED_TEMPLATE'];
+	
         $this->parameterKey = $errorData['parameterKey'];
         $this->parameterUnit = $errorData['parameterUnit'];
 		if(self::TYPE_OTHER === $type){
@@ -51,6 +57,7 @@ class Error
         } else {
             $this->message = sprintf($errorData['parameterized'], $unit);
         }
+       
 
     }
 

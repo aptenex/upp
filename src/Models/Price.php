@@ -242,7 +242,12 @@ class Price
     
     public function addErrorsFromViolations( ConstraintViolationList $violations){
     	foreach($violations as $violation){
-			$error = new Error( Error::TYPE_OTHER, null, "Request Error on '" . $violation->getPropertyPath(). "' : " . $violation->getMessage() );
+    		$type = Error::TYPE_OTHER;
+    		if(defined("Aptenex\Upp\Exception\Error::TYPE_" . $violation->getCode())){
+    			$type = constant( "Aptenex\Upp\Exception\Error::TYPE_" . $violation->getCode() );
+			}
+			
+			$error = new Error( $type, null, "Request Error on '" . $violation->getPropertyPath(). "' : " . $violation->getMessage() );
 			$this->addError($error);
 		}
   

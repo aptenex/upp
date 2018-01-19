@@ -6,6 +6,12 @@ class ErrorHandler
 {
 
     const ERROR_MAP = [
+    	'UNSPECIFIED_TEMPLATE' => [
+			'parameterKey' => null,
+			'parameterUnit' => null,
+			'simple' => null,
+			'parameterized' => null
+		],
         Error::TYPE_EXCEEDS_MAX_OCCUPANCY => [
             'parameterKey' => 'count',
             'parameterUnit' => 'Travelers',
