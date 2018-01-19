@@ -459,6 +459,12 @@ class PricingGenerator
     private function calculateSplitAmounts(FinalPrice $fp)
     {
         $defaults = $fp->getCurrencyConfigUsed()->getDefaults();
+        
+        // There is no arrival date set. Perhaps forceGeneration is enabled and arrival date is same date and departure?
+        if(!$fp->getStay()->getPeriodWithArrivalDay()){
+			$fp->disableSplitDetails();
+        	return;
+		}
         $arrivalPeriodRate = $fp->getStay()->getPeriodWithArrivalDay()->getRate();
 
         $depositFixed = 0;
