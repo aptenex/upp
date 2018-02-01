@@ -143,7 +143,7 @@ class Error
      */
     public static function fromArrayData($data)
     {
-        return new Error($data['type'], $data['unit'], $data['internalMessage']);
+        return new Error($data['type'], $data['unit'], $data['message']);
     }
 
 }
