@@ -524,6 +524,7 @@ class PricingContext
             'guests'            => $this->getGuests(),
             'adults'            => $this->getAdults(),
 			'pets'              => $this->getPets(),
+			'currency'          => $this->getCurrency(),
             'children'          => $this->getChildren(),
             'infants'           => $this->getInfants(),
             'locale'            => $this->getLocale(),
