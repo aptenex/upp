@@ -11,6 +11,9 @@ class AvailabilityExternal extends Availability
      * @var array
      */
     protected $__origin;
+    
+    protected $bookingUri;
+    
 
     /**
      * @return array
@@ -34,10 +37,13 @@ class AvailabilityExternal extends Availability
     public function __toArray()
     {
         $data = parent::__toArray();
-
-        return array_merge($data, [
-            'origin' => $this->getOrigin()
-        ]);
+		$external = [
+			'origin' => $this->getOrigin()
+		];
+		if($this->getBookingUri()){
+			$external['bookingUri'] = $this->getBookingUri();
+		}
+        return array_merge($data, $external);
     }
 
     /**
@@ -49,5 +55,23 @@ class AvailabilityExternal extends Availability
     {
         parent::fromArray($data);
     }
+	
+	/**
+	 * @return mixed
+	 */
+	public function getBookingUri()
+	{
+		return $this->bookingUri;
+	}
+	
+	/**
+	 * @param mixed $bookingUri
+	 */
+	public function setBookingUri($bookingUri)
+	{
+		$this->bookingUri = $bookingUri;
+	}
+ 
+ 
 
 }
