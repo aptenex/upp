@@ -12,6 +12,7 @@ class AvailabilityExternal extends Availability
      */
     protected $__origin;
     
+    /** @var  string */
     protected $bookingUri;
     
 
