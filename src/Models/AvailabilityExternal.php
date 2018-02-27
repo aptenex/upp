@@ -73,6 +73,5 @@ class AvailabilityExternal extends Availability
 		$this->bookingUri = $bookingUri;
 	}
  
- 
 
 }
