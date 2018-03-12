@@ -3,15 +3,17 @@
 namespace Aptenex\Upp\Tests;
 
 use Aptenex\Upp\Upp;
-use App\Entity\Organization;
-use Aptenex\Upp\Calculation\FinalPrice;
+use PHPUnit\Framework\TestCase;
+use Translation\TestTranslator;
 use Aptenex\Upp\Context\PricingContext;
+use Aptenex\Upp\Calculation\FinalPrice;
+use Aptenex\Upp\Parser\Structure\Defaults;
+use Parser\ExternalConfig\ConfigOverrideCommand;
 use Aptenex\Upp\Parser\Structure\StructureOptions;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
 use Aptenex\Upp\Parser\ExternalConfig\ExternalCommandDirector;
-use App\Library\Upp\Parser\ExternalConfig\OrganizationGlobalSettingsCommand;
 
-class ArrivalTooCloseTest extends WebTestCase
+class ArrivalTooCloseTest extends TestCase
 {
 
     private static $json1 = '{
@@ -71,12 +73,20 @@ class ArrivalTooCloseTest extends WebTestCase
 
     public function testSettingActiveNoError()
     {
-        $client = static::createClient();
-
         $upp = new Upp(
-            $client->getContainer()->get('app.property_manager_factory')->getDoctrinePricingResolver(),
-            $client->getContainer()->get('translator')
+            new HashMapPricingResolver(),
+            new TestTranslator()
         );
+
+        $defaults = new Defaults();
+        $defaults->setDaysRequiredInAdvanceForBooking(1);
+
+        $options = new StructureOptions();
+        $options->setExternalCommandDirector(new ExternalCommandDirector([
+            new ConfigOverrideCommand([
+                'defaults' => $defaults
+            ])
+        ]));
 
         $context = new PricingContext();
         $context->setCurrency('GBP');
@@ -84,14 +94,6 @@ class ArrivalTooCloseTest extends WebTestCase
         $context->setArrivalDate('2017-06-26');
         $context->setDepartureDate('2017-06-30');
         $context->setGuests(3);
-
-        $newOrg = new Organization();
-        $newOrg->setDaysRequiredInAdvanceForBooking(1);
-
-        $options = new StructureOptions();
-        $options->setExternalCommandDirector(new ExternalCommandDirector([
-            new OrganizationGlobalSettingsCommand($newOrg)
-        ]));
 
         $config = $upp->parsePricingConfig(json_decode(self::$json1, true), $options);
 
@@ -105,12 +107,20 @@ class ArrivalTooCloseTest extends WebTestCase
      */
     public function testTwoDaysNotAllowed()
     {
-        $client = static::createClient();
-
         $upp = new Upp(
-            $client->getContainer()->get('app.property_manager_factory')->getDoctrinePricingResolver(),
-            $client->getContainer()->get('translator')
+            new HashMapPricingResolver(),
+            new TestTranslator()
         );
+
+        $defaults = new Defaults();
+        $defaults->setDaysRequiredInAdvanceForBooking(2);
+
+        $options = new StructureOptions();
+        $options->setExternalCommandDirector(new ExternalCommandDirector([
+            new ConfigOverrideCommand([
+                'defaults' => $defaults
+            ])
+        ]));
 
         $context = new PricingContext();
         $context->setCurrency('GBP');
@@ -119,27 +129,27 @@ class ArrivalTooCloseTest extends WebTestCase
         $context->setDepartureDate('2017-06-30');
         $context->setGuests(3);
 
-        $newOrg = new Organization();
-        $newOrg->setDaysRequiredInAdvanceForBooking(2);
-
-        $options = new StructureOptions();
-        $options->setExternalCommandDirector(new ExternalCommandDirector([
-            new OrganizationGlobalSettingsCommand($newOrg)
-        ]));
-
         $config = $upp->parsePricingConfig(json_decode(self::$json1, true), $options);
 
-        $pricing = $upp->generatePrice($context, $config);
+        $upp->generatePrice($context, $config);
     }
 
     public function testNextDayAllowed()
     {
-        $client = static::createClient();
-
         $upp = new Upp(
-            $client->getContainer()->get('app.property_manager_factory')->getDoctrinePricingResolver(),
-            $client->getContainer()->get('translator')
+            new HashMapPricingResolver(),
+            new TestTranslator()
         );
+
+        $defaults = new Defaults();
+        $defaults->setDaysRequiredInAdvanceForBooking(1);
+
+        $options = new StructureOptions();
+        $options->setExternalCommandDirector(new ExternalCommandDirector([
+            new ConfigOverrideCommand([
+                'defaults' => $defaults
+            ])
+        ]));
 
         $context = new PricingContext();
         $context->setCurrency('GBP');
@@ -147,14 +157,6 @@ class ArrivalTooCloseTest extends WebTestCase
         $context->setArrivalDate('2017-06-27');
         $context->setDepartureDate('2017-06-30');
         $context->setGuests(3);
-
-        $newOrg = new Organization();
-        $newOrg->setDaysRequiredInAdvanceForBooking(1);
-
-        $options = new StructureOptions();
-        $options->setExternalCommandDirector(new ExternalCommandDirector([
-            new OrganizationGlobalSettingsCommand($newOrg)
-        ]));
 
         $config = $upp->parsePricingConfig(json_decode(self::$json1, true), $options);
 

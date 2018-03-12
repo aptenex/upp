@@ -2,12 +2,14 @@
 
 namespace Aptenex\Upp\Tests;
 
+use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
+use Aptenex\Upp\Upp;
+use PHPUnit\Framework\TestCase;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Parser\Structure\Period;
-use Aptenex\Upp\Upp;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Translation\TestTranslator;
 
-class BookableTypeTest extends WebTestCase
+class BookableTypeTest extends TestCase
 {
 
     public function testBookableDefaultType()
@@ -67,11 +69,9 @@ class BookableTypeTest extends WebTestCase
           ]
         }';
 
-        $client = static::createClient();
-
         $upp = new Upp(
-            $client->getContainer()->get('app.property_manager_factory')->getDoctrinePricingResolver(),
-            $client->getContainer()->get('translator')
+            new HashMapPricingResolver(),
+            new TestTranslator()
         );
 
         $context = new PricingContext();
@@ -145,11 +145,9 @@ class BookableTypeTest extends WebTestCase
           ]
         }';
 
-        $client = static::createClient();
-
         $upp = new Upp(
-            $client->getContainer()->get('app.property_manager_factory')->getDoctrinePricingResolver(),
-            $client->getContainer()->get('translator')
+            new HashMapPricingResolver(),
+            new TestTranslator()
         );
 
         $context = new PricingContext();
@@ -223,11 +221,9 @@ class BookableTypeTest extends WebTestCase
           ]
         }';
 
-        $client = static::createClient();
-
         $upp = new Upp(
-            $client->getContainer()->get('app.property_manager_factory')->getDoctrinePricingResolver(),
-            $client->getContainer()->get('translator')
+            new HashMapPricingResolver(),
+            new TestTranslator()
         );
 
         $context = new PricingContext();
@@ -345,11 +341,9 @@ class BookableTypeTest extends WebTestCase
           ]
         }';
 
-        $client = static::createClient();
-
         $upp = new Upp(
-            $client->getContainer()->get('app.property_manager_factory')->getDoctrinePricingResolver(),
-            $client->getContainer()->get('translator')
+            new HashMapPricingResolver(),
+            new TestTranslator()
         );
 
         $context = new PricingContext();

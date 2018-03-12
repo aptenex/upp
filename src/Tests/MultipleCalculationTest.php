@@ -3,13 +3,14 @@
 namespace Aptenex\Upp\Tests;
 
 use Aptenex\Upp\Upp;
+use Translation\TestTranslator;
+use PHPUnit\Framework\TestCase;
 use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Parser\Structure\StructureOptions;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
 
-class MultipleCalculationTest extends WebTestCase
+class MultipleCalculationTest extends TestCase
 {
 
     private function getCurrentTestName($priceConfig, $testIndex, $testKey)
@@ -26,17 +27,13 @@ class MultipleCalculationTest extends WebTestCase
 
     public function testConfigs()
     {
-        $client = static::createClient();
-        $kernel = $client->getContainer()->get('kernel');
-
         $priceConfigs = json_decode(file_get_contents(__DIR__ . '/Resources/test-configs.json'), true);
-
         $structureOptions = new StructureOptions();
 
         foreach($priceConfigs as $priceConfig) {
             $upp = new Upp(
                 new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $priceConfig, [])),
-                $client->getContainer()->get('translator')
+                new TestTranslator()
             );
 
             $parsedConfig = $upp->parsePricingConfig($priceConfig['config'], $structureOptions);
@@ -99,8 +96,6 @@ class MultipleCalculationTest extends WebTestCase
                 }
             }
         }
-
-
     }
 
 }
