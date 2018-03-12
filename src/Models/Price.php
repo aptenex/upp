@@ -2,17 +2,17 @@
 
 namespace Aptenex\Upp\Models;
 
-use Aptenex\Upp\Calculation\AdjustmentAmount;
-use Aptenex\Upp\Calculation\Stay;
-use Aptenex\Upp\Exception\Error;
-use Aptenex\Upp\Exception\ErrorHandler;
-use Aptenex\Upp\Util\ArrayUtils;
 use Money\Money;
+use Aptenex\Upp\Exception\Error;
+use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Util\MoneyUtils;
+use Aptenex\Upp\Calculation\Stay;
+use Aptenex\Upp\Exception\ErrorHandler;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Parser\Structure\Period;
-use Aptenex\Upp\Calculation\SplitAmount\GuestSplitOverview;
+use Aptenex\Upp\Calculation\AdjustmentAmount;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Aptenex\Upp\Calculation\SplitAmount\GuestSplitOverview;
 
 class Price
 {

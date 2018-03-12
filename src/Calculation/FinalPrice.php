@@ -4,7 +4,6 @@ namespace Aptenex\Upp\Calculation;
 
 
 use Aptenex\Upp\Models\Price;
-use Money\Money;
 use Aptenex\Upp\Helper\LanguageTools;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Parser\Structure\PricingConfig;
