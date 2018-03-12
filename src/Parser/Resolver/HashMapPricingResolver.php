@@ -19,7 +19,7 @@ class HashMapPricingResolver extends BasePricingResolver implements ResolverInte
     /**
      * @param array $hashMap
      */
-    public function __construct(array $hashMap)
+    public function __construct(array $hashMap = [])
     {
         $this->hashMap = $hashMap;
     }
