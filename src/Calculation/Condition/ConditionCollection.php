@@ -55,6 +55,22 @@ class ConditionCollection
     /**
      * @return bool
      */
+    public function hasOnlyNonUnitBasedConditions()
+    {
+        $result = true;
+
+        foreach($this->getConditions() as $con) {
+            if (in_array($con->getConditionConfig()->getType(), Structure\Condition::$unitBasedConditions, true)) {
+                $result = false; // Single one will set this to false
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return bool
+     */
     public function hasDateCondition()
     {
         return $this->getDateCondition() instanceof Condition;

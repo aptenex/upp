@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Context;
 
+use Aptenex\Upp\Parser\Structure\Condition\DistributionCondition;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Currency;
@@ -83,7 +84,13 @@ class PricingContext
 	 * @var int
 	 */
 	private $pets = null;
-	
+
+    /**
+     * @Type(type="string")
+     *
+     * @var string
+     */
+    private $distributionChannel = DistributionCondition::CHANNEL_RENTIVO;
 	
 	/**
      * @Valid()
@@ -513,6 +520,22 @@ class PricingContext
     }
 
     /**
+     * @return string
+     */
+    public function getDistributionChannel()
+    {
+        return $this->distributionChannel;
+    }
+
+    /**
+     * @param string $distributionChannel
+     */
+    public function setDistributionChannel($distributionChannel)
+    {
+        $this->distributionChannel = $distributionChannel;
+    }
+
+    /**
      * @return array
      */
     public function __toArray()
@@ -524,7 +547,6 @@ class PricingContext
             'guests'            => $this->getGuests(),
             'adults'            => $this->getAdults(),
 			'pets'              => $this->getPets(),
-			'currency'          => $this->getCurrency(),
             'children'          => $this->getChildren(),
             'infants'           => $this->getInfants(),
             'locale'            => $this->getLocale(),

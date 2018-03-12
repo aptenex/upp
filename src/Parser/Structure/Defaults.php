@@ -55,7 +55,7 @@ class Defaults
      */
     public function hasDamageDeposit()
     {
-        return !is_null($this->getDamageDeposit());
+        return ((float) $this->getDamageDeposit()) > 0;
     }
 
     /**

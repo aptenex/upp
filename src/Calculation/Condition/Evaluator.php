@@ -26,6 +26,7 @@ class Evaluator
             Structure\Condition::TYPE_WEEKDAYS      => new WeekdaysConditionEvaluator(),
             Structure\Condition::TYPE_LUNAR_PHASE   => new LunarPhaseConditionEvaluator(),
             Structure\Condition::TYPE_BOOKING_DAYS  => new BookingDaysEvaluator(),
+            Structure\Condition::TYPE_DISTRIBUTION  => new DistributionConditionEvaluator(),
         ];
     }
 
@@ -56,6 +57,13 @@ class Evaluator
         // Unit Based
         foreach ($conditions as $condition) {
             if (in_array($condition->getType(), Structure\Condition::$unitBasedConditions)) {
+                $collection->addCondition($this->evaluateCondition($context, $condition, $controlItem, $collection));
+            }
+        }
+
+        // Other Based
+        foreach ($conditions as $condition) {
+            if (in_array($condition->getType(), Structure\Condition::$otherBasedConditions)) {
                 $collection->addCondition($this->evaluateCondition($context, $condition, $controlItem, $collection));
             }
         }

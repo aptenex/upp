@@ -236,6 +236,8 @@ class RatePerConditionalUnitCalculator
             $finalAdjustmentAmount =  $amount->multiply($nightUnits);
         } else if ($totalConditions > $applyPerUnitConditions) {
             $finalAdjustmentAmount = $amount;
+        } else if ($modifier->getConditions()->hasOnlyNonUnitBasedConditions()) {
+            $finalAdjustmentAmount = $amount;
         }
 
         if (!is_null($finalAdjustmentAmount)) {

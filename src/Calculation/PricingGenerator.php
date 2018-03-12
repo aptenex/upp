@@ -37,9 +37,11 @@ class PricingGenerator
 
     /**
      * @param PricingContext $context
-     * @param PricingConfig $config
+     * @param PricingConfig  $config
+     *
      * @return FinalPrice
      * @throws CannotMatchRequestedDatesException
+     * @throws InvalidPriceException
      */
     public function generate(PricingContext $context, PricingConfig $config)
     {
@@ -133,7 +135,7 @@ class PricingGenerator
         if ($defaults->hasDaysRequiredInAdvanceForBooking()) {
             // There is a limit now that we need to evaluate
 
-            $daysInterval = sprintf("P%sD", (int) $defaults->getDaysRequiredInAdvanceForBooking());
+            $daysInterval = sprintf("P%sD", (int)$defaults->getDaysRequiredInAdvanceForBooking());
             $earliestBookableDay = (clone $context->getBookingDateObj())->add(new \DateInterval($daysInterval));
 
             $arrivalDate = (clone $context->getArrivalDateObj());
@@ -154,7 +156,7 @@ class PricingGenerator
             $listingKey = 'listing.maxOccupancy';
             if (ArrayUtils::hasNestedArrayValue($listingKey, $schema)) {
 
-                $maxOccupancy = (int) ArrayUtils::getNestedArrayValue($listingKey, $schema);
+                $maxOccupancy = (int)ArrayUtils::getNestedArrayValue($listingKey, $schema);
                 if ($context->getGuests() > $maxOccupancy) {
                     ExceptionUtils::handleError($fp, Error::TYPE_EXCEEDS_MAX_OCCUPANCY, $maxOccupancy);
                 }
@@ -165,7 +167,7 @@ class PricingGenerator
 
     /**
      * @param PricingContext $context
-     * @param FinalPrice $fp
+     * @param FinalPrice     $fp
      */
     private function applyPeriodStrategyAlterations($context, $fp)
     {
@@ -177,8 +179,8 @@ class PricingGenerator
             new DaysOfWeekAlterationStrategy(),
         ];
 
-        foreach($fp->getStay()->getPeriodsUsed() as $period) {
-            foreach($alterationStrategies as $aS) {
+        foreach ($fp->getStay()->getPeriodsUsed() as $period) {
+            foreach ($alterationStrategies as $aS) {
                 if ($aS->canAlter($context, $period, $fp)) {
                     $aS->alterPrice($context, $period, $fp);
                 }
@@ -231,11 +233,11 @@ class PricingGenerator
     {
         $fp->setBasePrice(MoneyUtils::newMoney(0, $fp->getBasePrice()->getCurrency()));
 
-        foreach($fp->getStay()->getNights() as $day) {
+        foreach ($fp->getStay()->getNights() as $day) {
             $fp->setBasePrice($fp->getBasePrice()->add($day->getCost()));
         }
 
-        foreach($fp->getAdjustments() as $adjustment) {
+        foreach ($fp->getAdjustments() as $adjustment) {
             switch ($adjustment->getPriceGroup()) {
                 case AdjustmentAmount::PRICE_GROUP_BASE:
                     $fp->setBasePrice(MoneyTools::applyMonetaryOperand($fp->getBasePrice(), $adjustment->getAmount(), $adjustment->getOperand()));
@@ -250,7 +252,7 @@ class PricingGenerator
 
         $new = $new->add($fp->getBasePrice());
 
-        foreach($fp->getAdjustments() as $adjustment) {
+        foreach ($fp->getAdjustments() as $adjustment) {
             switch ($adjustment->getPriceGroup()) {
                 case AdjustmentAmount::PRICE_GROUP_HIDDEN_ON_BASE:
                     $new = MoneyTools::applyMonetaryOperand($new, $adjustment->getAmount(), $adjustment->getOperand());
@@ -267,7 +269,7 @@ class PricingGenerator
 
         $new = $new->add($fp->getBasePrice());
 
-        foreach($fp->getAdjustments() as $adjustment) {
+        foreach ($fp->getAdjustments() as $adjustment) {
             switch ($adjustment->getPriceGroup()) {
                 case AdjustmentAmount::PRICE_GROUP_TOTAL:
                     $new = MoneyTools::applyMonetaryOperand($new, $adjustment->getAmount(), $adjustment->getOperand());
@@ -290,11 +292,11 @@ class PricingGenerator
 
     /**
      * @param PricingContext $context
-     * @param FinalPrice $fp
+     * @param FinalPrice     $fp
      */
     private function evaluatePeriods(PricingContext $context, FinalPrice $fp)
     {
-        foreach($fp->getCurrencyConfigUsed()->getPeriods() as $period) {
+        foreach ($fp->getCurrencyConfigUsed()->getPeriods() as $period) {
 
             $cp = new Period($fp);
             $cp->setControlItemConfig($period);
@@ -318,7 +320,7 @@ class PricingGenerator
                 // If all days have been taken up then cancel the period condition evaluation as we have
                 // all that we need
 
-                foreach($fp->getStay()->getNights() as $date => $day) {
+                foreach ($fp->getStay()->getNights() as $date => $day) {
                     if ($day->hasPeriodControlItem()) {
                         continue;
                     }
@@ -340,11 +342,11 @@ class PricingGenerator
 
     /**
      * @param PricingContext $context
-     * @param FinalPrice $fp
+     * @param FinalPrice     $fp
      */
     private function evaluateModifiers(PricingContext $context, FinalPrice $fp)
     {
-        foreach($fp->getCurrencyConfigUsed()->getModifiers() as $modifier) {
+        foreach ($fp->getCurrencyConfigUsed()->getModifiers() as $modifier) {
 
             $cm = new Modifier($fp);
             $cm->setControlItemConfig($modifier);
@@ -356,6 +358,8 @@ class PricingGenerator
 
             // We will handle any 'global' modifiers as an addition that can be displayed
             if ($conSet->isValidConditionSet()) {
+
+                $cm->setMatched(true);
 
                 if ($cm->isGlobal()) {
 
@@ -391,13 +395,14 @@ class PricingGenerator
 
     /**
      * @param FinalPrice $fp
+     *
      * @throws CannotMatchRequestedDatesException
      */
     private function validateDaysMatched(FinalPrice $fp)
     {
         $notMatched = [];
 
-        foreach($fp->getStay()->getNights() as $day) {
+        foreach ($fp->getStay()->getNights() as $day) {
             if (!$day->hasPeriodControlItem()) {
                 $notMatched[] = $day->getDate()->format("Y-m-d");
             }
@@ -410,41 +415,13 @@ class PricingGenerator
 
     /**
      * @param FinalPrice $fp
-     *
-     * @throws CannotMatchRequestedDatesException
      */
     private function runPostEvaluationOnValidPeriods(FinalPrice $fp)
     {
-        $defaults = $fp->getCurrencyConfigUsed()->getDefaults();
+        $this->performMinimumNightsCheck($fp);
 
         // Loop through any failures and report back
-        foreach($fp->getStay()->getPeriodsUsed() as $period) {
-
-            if ($period->containsArrivalDayInMatchedNights()) {
-
-                // Minimum Nights
-
-                $minimumNights = null;
-
-                if ($defaults->hasMinimumNights()) {
-                    $minimumNights = $defaults->getMinimumNights();
-                }
-
-                if ($period->getControlItemConfig()->hasMinimumNights()) {
-                    $minimumNights = $period->getControlItemConfig()->getMinimumNights();
-                }
-
-                if (!empty($minimumNights) && $minimumNights > $fp->getStay()->getNoNights()) {
-                    $cmEx = new CannotMatchRequestedDatesException(LanguageTools::trans('MINIMUM_NIGHTS', [
-                        '%minimumNights%' => $minimumNights,
-                        '%selectedNights%' => $fp->getStay()->getNoNights()
-                    ]));
-
-                    ExceptionUtils::handleErrorException($cmEx, $fp, Error::TYPE_MIN_STAY_NOT_MET, $minimumNights);
-                }
-
-            }
-
+        foreach ($fp->getStay()->getPeriodsUsed() as $period) {
             $e = new Evaluator();
             $e->evaluatePostConditions($fp->getContextUsed(), $period);
 
@@ -456,20 +433,88 @@ class PricingGenerator
         }
     }
 
+    /**
+     * @param FinalPrice $fp
+     */
+    private function performMinimumNightsCheck(FinalPrice $fp)
+    {
+        $defaults = $fp->getCurrencyConfigUsed()->getDefaults();
+
+        // The previous functionality was to get the arrival day period and use that minimum nights
+        // to either error or continue. The new functionality will error out if the period with the
+        // highest minimum nights is matched and not met.
+
+        $useHighestMinimumNights = true;
+        if ($useHighestMinimumNights) {
+            $minimumNights = 0;
+            if ($defaults->hasMinimumNights() && $minimumNights < $defaults->getMinimumNights()) {
+                $minimumNights = $defaults->getMinimumNights();
+            }
+
+            foreach ($fp->getStay()->getPeriodsUsed() as $period) {
+                $config = $period->getControlItemConfig();
+                if ($config->hasMinimumNights() && $config->getMinimumNights() > $minimumNights) {
+                    $minimumNights = $config->getMinimumNights();
+                }
+            }
+
+            if ($minimumNights > 0 && $minimumNights > $fp->getStay()->getNoNights()) {
+                $cmEx = new CannotMatchRequestedDatesException(LanguageTools::trans('MINIMUM_NIGHTS', [
+                    '%minimumNights%'  => $minimumNights,
+                    '%selectedNights%' => $fp->getStay()->getNoNights()
+                ]));
+
+                ExceptionUtils::handleErrorException($cmEx, $fp, Error::TYPE_MIN_STAY_NOT_MET, $minimumNights);
+            }
+        } else {
+            foreach ($fp->getStay()->getPeriodsUsed() as $period) {
+                if ($period->containsArrivalDayInMatchedNights()) {
+
+                    // Minimum Nights
+
+                    $minimumNights = null;
+
+                    if ($defaults->hasMinimumNights()) {
+                        $minimumNights = $defaults->getMinimumNights();
+                    }
+
+                    if ($period->getControlItemConfig()->hasMinimumNights()) {
+                        $minimumNights = $period->getControlItemConfig()->getMinimumNights();
+                    }
+
+                    if (!empty($minimumNights) && $minimumNights > $fp->getStay()->getNoNights()) {
+                        $cmEx = new CannotMatchRequestedDatesException(LanguageTools::trans('MINIMUM_NIGHTS', [
+                            '%minimumNights%'  => $minimumNights,
+                            '%selectedNights%' => $fp->getStay()->getNoNights()
+                        ]));
+
+                        ExceptionUtils::handleErrorException($cmEx, $fp, Error::TYPE_MIN_STAY_NOT_MET, $minimumNights);
+                    }
+
+                }
+            }
+        }
+    }
+
     private function calculateSplitAmounts(FinalPrice $fp)
     {
         $defaults = $fp->getCurrencyConfigUsed()->getDefaults();
-        
+
         // There is no arrival date set. Perhaps forceGeneration is enabled and arrival date is same date and departure?
-        if(!$fp->getStay()->getPeriodWithArrivalDay()){
-			$fp->disableSplitDetails();
-        	return;
-		}
+        if (!$fp->getStay()->getPeriodWithArrivalDay()) {
+            $fp->disableSplitDetails();
+
+            return;
+        }
+
         $arrivalPeriodRate = $fp->getStay()->getPeriodWithArrivalDay()->getRate();
 
         $depositFixed = 0;
+        $depositSplitPercentage = $defaults->getDepositSplitPercentage();
+
         if ($arrivalPeriodRate->hasDepositOverride()) {
             $depositFixed = MoneyUtils::getConvertedAmount($arrivalPeriodRate->getDepositOverride());
+            $depositSplitPercentage = 0; // This needs to be overridden
         }
 
         if (!$defaults->hasDepositSplitPercentage() && $depositFixed == 0) {
@@ -482,7 +527,7 @@ class PricingGenerator
 
         $spr = $sap->computeSplitAmount(
             $fp->getTotal(),
-            $defaults->getDepositSplitPercentage(),
+            $depositSplitPercentage,
             $fp->getDamageDeposit(),
             $defaults->getDamageDepositSplitMethod(),
             $depositFixed
@@ -494,7 +539,7 @@ class PricingGenerator
         }
 
         // Now we need to go through the adjustments and see if we need to adjust the split
-        foreach($fp->getAdjustments() as $adjustment) {
+        foreach ($fp->getAdjustments() as $adjustment) {
 
             if ($adjustment->getOperand() === Operand::OP_ADDITION) {
                 $negate = Operand::OP_SUBTRACTION;
@@ -571,7 +616,9 @@ class PricingGenerator
             $fp->getStay()->getArrival()
         ));
 
-        $fp->getSplitDetails()->setDamageDepositSplitMethod($defaults->getDamageDepositSplitMethod());
+        if ($defaults->hasDamageDeposit()) {
+            $fp->getSplitDetails()->setDamageDepositSplitMethod($defaults->getDamageDepositSplitMethod());
+        }
     }
 
     /**
@@ -586,7 +633,7 @@ class PricingGenerator
         $current = null; // So first bookable type will always work
         $currentPriority = -1;
 
-        foreach($fp->getStay()->getPeriodsUsed() as $pUsed) {
+        foreach ($fp->getStay()->getPeriodsUsed() as $pUsed) {
             $pCurrent = $pUsed->getControlItemConfig()->getBookableType();
 
             if (is_null($pCurrent) || empty($pCurrent)) {
@@ -624,10 +671,11 @@ class PricingGenerator
     }
 
     /**
-     * @param int $balanceDaysBeforeArrival
+     * @param int       $balanceDaysBeforeArrival
      * @param \DateTime $arrivalDate
      *
      * @return \DateTime
+     * @throws \Exception
      */
     public function calculateBalanceDueDate($balanceDaysBeforeArrival, $arrivalDate)
     {

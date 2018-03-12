@@ -35,11 +35,11 @@ class SplitAmountProcessor
     public function computeSplitAmount(Money $total, $depositPercentage, Money $damageDeposit, $damageDepositSplitMethod, $depositFixed = null)
     {
         $spr = new SplitAmountResult();
+
         $spr->setDamageDeposit($damageDeposit);
         $spr->setDamageDepositSplitMethod($damageDepositSplitMethod);
 
         $depositFixed = (float) $depositFixed;
-
         $splitFixed = MoneyUtils::newMoney(0, $total->getCurrency()->getCode());
         $splitPercentage = $depositPercentage;
 
@@ -72,7 +72,7 @@ class SplitAmountProcessor
         $spr->setDeposit($depositAllocated);
         $spr->setBalance($balanceAllocated);
 
-        if (MoneyUtils::getConvertedAmount($damageDeposit) > 0) {
+        if (!$damageDeposit->isZero()) {
             list($ddDepositAllocated, $ddBalanceAllocated) = $damageDeposit->allocate($ratio);
 
             switch ($damageDepositSplitMethod) {
@@ -101,8 +101,7 @@ class SplitAmountProcessor
             }
         }
 
-        // Sort out the fixed deposit stuff here
-        if (MoneyUtils::getConvertedAmount($splitFixed) !== 0) {
+        if (!$splitFixed->isZero()) {
             $spr->setDeposit($spr->getDeposit()->add($splitFixed));
             $spr->setBalance($spr->getBalance()->subtract($splitFixed));
         }

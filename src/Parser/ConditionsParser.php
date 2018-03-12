@@ -92,6 +92,14 @@ class ConditionsParser
 
                 break;
 
+            case Condition::TYPE_DISTRIBUTION:
+
+                $c = new Condition\DistributionCondition();
+
+                $c->setChannels(ArrayAccess::get('distributionChannels', $conditionData, []));
+
+                break;
+
             case Condition::TYPE_BOOKING_DAYS:
 
                 $c = new Condition\BookingDaysCondition();

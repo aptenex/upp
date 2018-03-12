@@ -279,9 +279,9 @@
               ],
               "rate": {
                 "type": "adjustment",
-                "method": "percentage",
-                "amount": 0.15,
-                "calculationMethod": "subtraction"
+                "amount": 0.10,
+                "calculationMethod": "percentage",
+                "calculationOperand": "subtraction"
               }
             }
           ]
@@ -300,7 +300,7 @@
         },
         "tests": {
           "noNights": 10,
-          "finalPrice": 52500,
+          "finalPrice": 47500,
           "nightPrices": {
             "2016-04-05": 5000,
             "2016-04-06": 5000,
@@ -694,9 +694,9 @@
               ],
               "rate": {
                 "type": "adjustment",
-                "method": "percentage",
-                "amount": 0.15,
-                "calculationMethod": "subtraction"
+                "amount": 0.10,
+                "calculationMethod": "percentage",
+                "calculationOperand": "subtraction"
               }
             }
           ]
@@ -723,7 +723,7 @@
         },
         "tests": {
           "noNights": 10,
-          "finalPrice": 52500,
+          "finalPrice": 47500,
           "nightPrices": {
             "2016-04-05": 5000,
             "2016-04-06": 5000,
@@ -735,6 +735,134 @@
             "2016-04-12": 5000,
             "2016-04-13": 5000,
             "2016-04-14": 5000
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Monthly Damage Deposit Test",
+    "description": "Test that the monthly damage deposit system is working as intended. dep % should be overridden by the strategy",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "THB",
+          "defaults": {
+            "damageDeposit": null,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 30,
+            "balanceDaysBeforeArrival": 42,
+            "depositSplitPercentage": 10,
+            "daysRequiredInAdvanceForBooking": 0,
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_BALANCE"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "Long term rates 2018-2024",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2018-01-01",
+                  "endDate": "2025-01-01",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "monthly",
+                "amount": 55000,
+                "damageDeposit": 0,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraMonthsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousMonthsSameRate": true,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "extraNightsRate": 1833,
+                    "numberOfMonthsDeposit": 1,
+                    "brackets": [
+                      {
+                        "night": "1-6",
+                        "amount": 55000,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "7+",
+                        "amount": 55000,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "modifiers": []
+        }
+      ]
+    },
+    "mixins": {},
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2018-03-01",
+          "departureDate": "2018-03-31",
+          "bookingDate": "2018-01-01",
+          "guests": 4,
+          "currency": "THB"
+        },
+        "tests": {
+          "noNights": 30,
+          "finalPrice": 5500000,
+          "adjustmentCount": 0,
+          "nightPrices": {
+            "2018-03-01": 183334,
+            "2018-03-02": 183334,
+            "2018-03-03": 183334,
+            "2018-03-04": 183334,
+            "2018-03-05": 183334,
+            "2018-03-06": 183334,
+            "2018-03-07": 183334,
+            "2018-03-08": 183334,
+            "2018-03-09": 183334,
+            "2018-03-10": 183333,
+            "2018-03-11": 183333,
+            "2018-03-12": 183333,
+            "2018-03-13": 183333,
+            "2018-03-14": 183333,
+            "2018-03-15": 183333,
+            "2018-03-16": 183333,
+            "2018-03-17": 183333,
+            "2018-03-18": 183333,
+            "2018-03-19": 183333,
+            "2018-03-20": 183333,
+            "2018-03-21": 183333,
+            "2018-03-22": 183333,
+            "2018-03-23": 183333,
+            "2018-03-24": 183333,
+            "2018-03-25": 183333,
+            "2018-03-26": 183333,
+            "2018-03-27": 183333,
+            "2018-03-28": 183333,
+            "2018-03-29": 183333,
+            "2018-03-30": 183334
           }
         }
       }

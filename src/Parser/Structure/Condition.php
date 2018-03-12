@@ -13,10 +13,15 @@ class Condition
     const TYPE_BOOKING_DAYS = 'booking_days';
     const TYPE_LUNAR_PHASE = 'lunar_phase';
     const TYPE_GUESTS = 'guests';
+    const TYPE_DISTRIBUTION = 'distribution';
 
     public static $dateBasedConditions = [
         self::TYPE_DATE,
         self::TYPE_WEEKDAYS
+    ];
+
+    public static $otherBasedConditions = [
+        self::TYPE_DISTRIBUTION
     ];
 
     public static $unitBasedConditions = [

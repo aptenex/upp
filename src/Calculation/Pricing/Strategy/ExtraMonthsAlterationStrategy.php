@@ -204,7 +204,7 @@ class ExtraMonthsAlterationStrategy implements PriceAlterationInterface
         // Now we can deal with the deposit override
         if (
             !empty($extraMonthsAlteration->getNumberOfMonthsDeposit()) &&
-            (int)$extraMonthsAlteration->getNumberOfMonthsDeposit() > 0
+            ((int) $extraMonthsAlteration->getNumberOfMonthsDeposit()) > 0
         ) {
             // Ok, we want to override the deposit now - lets calculate the correct figure.
             // We need to find out the last matched bracket amount

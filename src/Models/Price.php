@@ -239,20 +239,21 @@ class Price
 
         return $d;
     }
-    
-    public function addErrorsFromViolations( ConstraintViolationList $violations){
-    	foreach($violations as $violation){
-    		$type = Error::TYPE_OTHER;
-    		if(defined("Aptenex\Upp\Exception\Error::TYPE_" . $violation->getCode())){
-    			$type = constant( "Aptenex\Upp\Exception\Error::TYPE_" . $violation->getCode() );
-			}
-			
-			$error = new Error( $type, null, "Request Error on '" . $violation->getPropertyPath(). "' : " . $violation->getMessage() );
-			$this->addError($error);
-		}
-  
-	}
-	
+
+    public function addErrorsFromViolations(ConstraintViolationList $violations)
+    {
+        foreach ($violations as $violation) {
+            $type = Error::TYPE_OTHER;
+            if (defined("Aptenex\Upp\Exception\Error::TYPE_" . $violation->getCode())) {
+                $type = constant("Aptenex\Upp\Exception\Error::TYPE_" . $violation->getCode());
+            }
+
+            $error = new Error($type, null, "Request Error on '" . $violation->getPropertyPath() . "' : " . $violation->getMessage());
+            $this->addError($error);
+        }
+
+    }
+
     /**
      * @return ErrorHandler
      */
@@ -260,22 +261,22 @@ class Price
     {
         return $this->errors;
     }
-	
-	/**
-	 * @param $error
-	 */
-	public function addError(Error $error)
-	{
-		$this->errors->addError( $error );
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function hasErrors()
-	{
-		return $this->errors->hasErrors();
-	}
+
+    /**
+     * @param $error
+     */
+    public function addError(Error $error)
+    {
+        $this->errors->addError($error);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasErrors()
+    {
+        return $this->errors->hasErrors();
+    }
 
     /**
      * @return array
@@ -353,18 +354,18 @@ class Price
             $this->disableSplitDetails(); // Does not exist, disable
         }
 
-        if($data['currency']){
+        if ($data['currency']) {
             $this->currency = $data['currency'];
         }
 
         if (isset($data['errors']) && is_array($data['errors'])) {
-           foreach($data['errors'] as $errorData) {
-               if (!isset($errorData['type'])) {
-                   continue; // Type is ALWAYS required
-               }
+            foreach ($data['errors'] as $errorData) {
+                if (!isset($errorData['type'])) {
+                    continue; // Type is ALWAYS required
+                }
 
-               $this->errors->addError(Error::fromArrayData($errorData));
-           }
+                $this->errors->addError(Error::fromArrayData($errorData));
+            }
         }
 
         return $this;

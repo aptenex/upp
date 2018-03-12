@@ -18,6 +18,10 @@ class DamageDepositCalculator
 
         $amountOrPercentage = $defaults->getDamageDeposit();
 
+        if (!$defaults->hasDamageDeposit()) {
+            return; // Nothing to calculate
+        }
+
         foreach ($fp->getStay()->getPeriodsUsed() as $period) {
             if ($period->containsArrivalDayInMatchedNights()) {
 
