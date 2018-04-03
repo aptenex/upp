@@ -42,6 +42,8 @@ class MultipleCalculationTest extends TestCase
                 $contextData = $pTest['context'];
                 $testAmounts = $pTest['tests'];
 
+                $this->setName($this->getCurrentTestName($priceConfig, $index, 'n/a'));
+
                 $context = new PricingContext();
                 $context->setCurrency($contextData['currency']);
                 $context->setBookingDate($contextData['bookingDate']);
