@@ -32,7 +32,7 @@ class SplitAmountProcessor
      *
      * @return SplitAmountResult
      */
-    public function computeSplitAmount(Money $total, $depositPercentage, Money $damageDeposit, $damageDepositSplitMethod, $depositFixed = null)
+    public function computeSplitAmount(Money $total, $depositPercentage, $depositFixed, Money $damageDeposit, $damageDepositSplitMethod)
     {
         $spr = new SplitAmountResult();
 

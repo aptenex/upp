@@ -9,6 +9,7 @@ use Aptenex\Upp\Calculation\Pricing\BasicRateCalculator;
 use Aptenex\Upp\Calculation\Pricing\DamageDepositCalculator;
 use Aptenex\Upp\Calculation\Pricing\ExtraAmountCalculator;
 use Aptenex\Upp\Calculation\Pricing\ModifierRateCalculator;
+use Aptenex\Upp\Calculation\Pricing\Rate;
 use Aptenex\Upp\Calculation\Pricing\Strategy\DaysOfWeekAlterationStrategy;
 use Aptenex\Upp\Calculation\Pricing\Strategy\ExtraMonthsAlterationStrategy;
 use Aptenex\Upp\Calculation\Pricing\Strategy\ExtraNightsAlterationStrategy;
@@ -528,9 +529,9 @@ class PricingGenerator
         $spr = $sap->computeSplitAmount(
             $fp->getTotal(),
             $depositSplitPercentage,
+            $depositFixed,
             $fp->getDamageDeposit(),
-            $defaults->getDamageDepositSplitMethod(),
-            $depositFixed
+            $defaults->getDamageDepositSplitMethod()
         );
 
         $ratio = [0, 100];
