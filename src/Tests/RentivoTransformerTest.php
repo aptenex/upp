@@ -2,14 +2,12 @@
 
 namespace Aptenex\Upp\Tests;
 
-use Aptenex\Upp\Exception\InvalidPricingConfigException;
-use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
-use Aptenex\Upp\Transformer\RentivoTransformer;
 use Aptenex\Upp\Upp;
-use PHPUnit\Framework\TestCase;
-use Aptenex\Upp\Context\PricingContext;
-use Aptenex\Upp\Parser\Structure\Period;
 use Translation\TestTranslator;
+use PHPUnit\Framework\TestCase;
+use Aptenex\Upp\Transformer\RentivoTransformer;
+use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
+use Aptenex\Upp\Exception\InvalidPricingConfigException;
 
 class RentivoTransformerTest extends TestCase
 {
