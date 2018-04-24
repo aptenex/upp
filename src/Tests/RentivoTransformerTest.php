@@ -112,8 +112,8 @@ class RentivoTransformerTest extends TestCase
         try {
             $transformed = $upp->transformPricingConfig($config, new RentivoTransformer());
 
-            $this->assertSame(30000, $transformed['summary']['pricingLow']);
-            $this->assertSame(30000, $transformed['summary']['pricingHigh']);
+            $this->assertEquals(1000.00, $transformed['summary']['pricingLow']);
+            $this->assertEquals(1000.00, $transformed['summary']['pricingHigh']);
         } catch (InvalidPricingConfigException $e) {
             $this->fail('Failed to transform: ' . $e->getMessage());
         }
