@@ -1486,5 +1486,109 @@
         }
       }
     ]
+  },
+  {
+    "name": "Dormoalonda Lycan Pricing Error",
+    "description": "Replicating error on Lycan",
+    "config":  {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "defaults": {
+            "damageDeposit": 0,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 2,
+            "balanceDaysBeforeArrival": 0,
+            "depositSplitPercentage": 0,
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_TOTAL"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "Normal price",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2017-05-16",
+                  "endDate": "2022-08-24",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "2",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 105,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            }
+          ],
+          "modifiers": []
+        },
+        {
+          "currency": "EUR",
+          "defaults": {
+            "damageDeposit": 0,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 0,
+            "balanceDaysBeforeArrival": 0,
+            "depositSplitPercentage": 0,
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_TOTAL"
+          },
+          "taxes": [],
+          "periods": [],
+          "modifiers": []
+        }
+      ]
+    },
+    "mixins": {},
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2018-04-13",
+          "departureDate": "2018-04-20",
+          "bookingDate": "2018-04-10",
+          "guests": 2,
+          "adults": null,
+          "pets": 0,
+          "currency": "GBP",
+          "children": null,
+          "infants": null,
+          "locale": "en",
+          "forceGeneration": true,
+          "testMode": false,
+          "property": "110dc734-8eea-4327-9792-3e0fe7779630",
+          "marketingReferenceId": "Amber Apartment - double",
+          "id": "2088c963-c6d0-4f7f-ac35-71658ac65a97",
+          "brand": "1af1b63b-5be3-41c4-ae89-70af603e5d74"
+        },
+        "tests": {
+          "noNights": 7,
+          "finalPrice": 73500,
+          "adjustmentCount": 0,
+          "nightPrices": {
+            "2018-04-13": 10500,
+            "2018-04-14": 10500,
+            "2018-04-15": 10500,
+            "2018-04-16": 10500,
+            "2018-04-17": 10500,
+            "2018-04-18": 10500,
+            "2018-04-19": 10500
+          }
+        }
+      }
+    ]
   }
 ]

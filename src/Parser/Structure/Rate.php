@@ -151,6 +151,8 @@ class Rate
     {
         if ($this->getType() === Rate::TYPE_WEEKLY) {
             return number_format($this->getAmount() / 7, 2, '.', '');
+        } else if ($this->getType() === Rate::TYPE_MONTHLY) {
+            return number_format($this->getAmount() / 30, 2, '.', '');
         }
 
         return $this->getAmount();

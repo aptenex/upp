@@ -45,13 +45,23 @@ class MultipleCalculationTest extends TestCase
                 $this->setName($this->getCurrentTestName($priceConfig, $index, 'n/a'));
 
                 $context = new PricingContext();
-                $context->setCurrency($contextData['currency']);
-                $context->setBookingDate($contextData['bookingDate']);
-                $context->setArrivalDate($contextData['arrivalDate']);
-                $context->setDepartureDate($contextData['departureDate']);
-                $context->setGuests($contextData['guests']);
+
+                foreach($contextData as $key => $value) {
+                    $setter = sprintf('set%s', ucfirst($key));
+                    if (method_exists($context, $setter)) {
+                        $context->$setter($value);
+                    }
+                }
 
                 $pricing = $upp->generatePrice($context, $parsedConfig);
+
+                if ($pricing->getErrors()->hasErrors()) {
+                    $this->setName($this->getCurrentTestName($priceConfig, $index, 'No Errors'));
+
+                    var_dump($pricing->getErrors()->getErrors());
+
+                    $this->assertFalse($pricing->getErrors()->hasErrors(), 'Pricing has errors');
+                }
 
                 if (isset($testAmounts['noNights'])) {
                     $this->setName($this->getCurrentTestName($priceConfig, $index, 'noNights'));
