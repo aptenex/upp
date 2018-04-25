@@ -30,6 +30,11 @@ class DaysOfWeekAlterationParser
         $p->setUnmatchedNightAmount(ArrayAccess::get('unmatchedNightAmount', $data, null));
         $p->setBrackets(ArrayAccess::assignHiddenId(ArrayAccess::get('brackets', $data, [])));
 
+        if (empty($p->getBrackets())) {
+            // This strategy does not apply if there are no brackets
+            return null;
+        }
+
         return $p;
     }
 

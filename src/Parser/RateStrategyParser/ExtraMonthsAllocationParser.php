@@ -31,6 +31,11 @@ class ExtraMonthsAllocationParser
         $p->setNumberOfMonthsDeposit(ArrayAccess::get('numberOfMonthsDeposit', $data, null));
         $p->setBrackets(ArrayAccess::get('brackets', $data, []));
 
+        if (empty($p->getBrackets())) {
+            // This strategy does not apply if there are no brackets
+            return null;
+        }
+
         return $p;
     }
 

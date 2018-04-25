@@ -29,6 +29,11 @@ class PartialWeekAlterationParser
         $p->setCalculationOperand(ArrayAccess::get('calculationOperand', $data, Operand::OP_EQUALS));
         $p->setBrackets(ArrayAccess::get('brackets', $data, []));
 
+        if (empty($p->getBrackets())) {
+            // This strategy does not apply if there are no brackets
+            return null;
+        }
+
         return $p;
     }
 
