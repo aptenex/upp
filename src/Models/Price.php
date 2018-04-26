@@ -321,7 +321,8 @@ class Price
                 $a['calculationOperand'],
                 $a['type'],
                 $a['priceGroup'],
-                $a['guestSplitMethod']
+                $a['guestSplitMethod'],
+				$a['hidden'] ?? true
             );
         }
 
