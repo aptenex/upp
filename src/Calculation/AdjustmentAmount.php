@@ -122,6 +122,8 @@ class AdjustmentAmount
             $this->priceGroup = self::PRICE_GROUP_ARRIVAL;
         }
     }
+    
+    
 
     /**
      * @return Money
@@ -235,5 +237,13 @@ class AdjustmentAmount
             'guestSplitMethod'        => $this->getSplitMethod(),
         ];
     }
-
+	
+	/**
+	 * @param Money $amount
+	 */
+	public function setAmount(Money $amount)
+	{
+		$this->amount = $amount;
+	}
+	
 }
