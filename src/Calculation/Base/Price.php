@@ -73,7 +73,16 @@ class Price
         $this->splitDetails = new GuestSplitOverview();
       
     }
-
+	
+	/**
+	 * This should never be needed with the exception of converting one rate response to another.
+	 * In this case, we will need to change the currency.
+	 * @param string $currency
+	 */
+	public function setCurrency(string $currency){
+    	$this->currency = strtoupper(trim($currency));
+	}
+    
     /**
      * @return string
      */
