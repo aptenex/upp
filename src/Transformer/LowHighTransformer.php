@@ -80,11 +80,11 @@ class LowHighTransformer implements TransformerInterface
             ];
 
             if (!is_null($lowPeriod) && $lowPeriod->getRate()->getRoughNightlyAmount() > 0) {
-                $returnData['summary']['pricingLow'] = $lowPeriod->getRate()->getRoughNightlyAmount();
+                $returnData['pricingLow'] = $lowPeriod->getRate()->getRoughNightlyAmount();
             }
 
             if (!is_null($highPeriod) && $highPeriod->getRate()->getRoughNightlyAmount() > 0) {
-                $returnData['summary']['pricingHigh'] = $highPeriod->getRate()->getRoughNightlyAmount();
+                $returnData['pricingHigh'] = $highPeriod->getRate()->getRoughNightlyAmount();
             }
 
             return $returnData;
