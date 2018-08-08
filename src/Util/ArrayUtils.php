@@ -33,6 +33,8 @@ class ArrayUtils
                     $items[] = $item->__toArray();
                 }
             }
+
+            return $items;
         }
 
         return $object;
