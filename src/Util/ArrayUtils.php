@@ -29,9 +29,12 @@ class ArrayUtils
             $items = [];
 
             foreach($object as $item) {
-                if (is_object($object) && method_exists($item, '__toArray')) {
+                if (is_object($item) && method_exists($item, '__toArray')) {
                     $items[] = $item->__toArray();
+                } else {
+                    $items[] = $item;
                 }
+
             }
 
             return $items;
