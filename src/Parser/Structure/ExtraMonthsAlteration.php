@@ -2,7 +2,7 @@
 
 namespace Aptenex\Upp\Parser\Structure;
 
-class ExtraMonthsAlteration
+class ExtraMonthsAlteration implements PeriodStrategy
 {
 
     /**

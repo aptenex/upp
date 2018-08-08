@@ -2,7 +2,7 @@
 
 namespace Aptenex\Upp\Parser\Structure;
 
-class DaysOfWeekAlteration
+class DaysOfWeekAlteration implements PeriodStrategy
 {
 
     /**

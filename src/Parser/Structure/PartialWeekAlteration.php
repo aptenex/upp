@@ -2,7 +2,7 @@
 
 namespace Aptenex\Upp\Parser\Structure;
 
-class PartialWeekAlteration
+class PartialWeekAlteration implements PeriodStrategy
 {
 
     /**
