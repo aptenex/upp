@@ -70,7 +70,7 @@ class CurrencyConfig
 
     /**
      * @param Period[] $periods
-     * @param bool     $reorder
+     * @param bool $reorder
      */
     public function setPeriods($periods, $reorder = true)
     {
@@ -181,6 +181,20 @@ class CurrencyConfig
     public function setTaxes($taxes)
     {
         $this->taxes = $taxes;
+    }
+
+    /**
+     * @return array
+     */
+    public function __toArray()
+    {
+        return [
+            'currency' => $this->getCurrency(),
+            'defaults' => $this->getDefaults()->__toArray(),
+            'taxes' => ArrayUtils::convertStructureObjectToArray($this->getTaxes()),
+            'periods' => ArrayUtils::convertStructureObjectToArray($this->getPeriods()),
+            'modifiers' => ArrayUtils::convertStructureObjectToArray($this->getModifiers())
+        ];
     }
 
 }
