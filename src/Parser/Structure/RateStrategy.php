@@ -90,6 +90,56 @@ class RateStrategy
     }
 
     /**
+     * @return PeriodStrategy|null
+     */
+    public function getActiveStrategy()
+    {
+        if ($this->getDaysOfWeekAlteration() instanceof DaysOfWeekAlteration) {
+            return $this->getDaysOfWeekAlteration();
+        }
+
+        if ($this->getExtraNightsAlteration() instanceof ExtraNightsAlteration) {
+            return $this->getExtraNightsAlteration();
+        }
+
+        if ($this->getExtraMonthsAlteration() instanceof ExtraMonthsAlteration) {
+            return $this->getExtraMonthsAlteration();
+        }
+
+        if ($this->getPartialWeekAlteration() instanceof PartialWeekAlteration) {
+            return $this->getPartialWeekAlteration();
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array
+     */
+    public function __toArrayOfObjects()
+    {
+        $s = [];
+
+        if ($this->getDaysOfWeekAlteration() instanceof DaysOfWeekAlteration) {
+            $s['daysOfWeekAlteration'] = $this->getDaysOfWeekAlteration();
+        }
+
+        if ($this->getExtraNightsAlteration() instanceof ExtraNightsAlteration) {
+            $s['extraNightsAlteration'] = $this->getExtraNightsAlteration();
+        }
+
+        if ($this->getExtraMonthsAlteration() instanceof ExtraMonthsAlteration) {
+            $s['extraMonthsAlteration'] = $this->getExtraMonthsAlteration();
+        }
+
+        if ($this->getPartialWeekAlteration() instanceof PartialWeekAlteration) {
+            $s['partialWeekAlteration'] = $this->getPartialWeekAlteration();
+        }
+
+        return $s;
+    }
+
+    /**
      * @return array
      */
     public function __toArray()
