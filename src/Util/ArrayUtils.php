@@ -475,7 +475,12 @@ class ArrayUtils
             "CHF" => "CHF - Swiss Franc",
             "THB" => 'THB - Thai Baht',
             "RUS" => 'RUS - Russian Ruble',
-            "HKD" => 'HKD - Hong Kong Dollar'
+            "HKD" => 'HKD - Hong Kong Dollar',
+            "MYR" => 'MYR - Malaysian Ringgit',
+            "VND" => 'VND - Vietnamese Dong',
+            "IDR" => 'IDR - Indonesian Rupiah',
+            "PHP" => 'PHP - Philippine Peso',
+            "SGD" => 'SGD - Singapore Dollar'
         ];
     }
 
