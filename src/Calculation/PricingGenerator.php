@@ -454,7 +454,7 @@ class PricingGenerator
 
             foreach ($fp->getStay()->getPeriodsUsed() as $period) {
                 $config = $period->getControlItemConfig();
-                if ($config->hasMinimumNights() && $config->getMinimumNights() > $minimumNights) {
+                if ($config->hasMinimumNights()) {
                     $minimumNights = $config->getMinimumNights();
                 }
             }

@@ -2,7 +2,7 @@
 
 namespace Aptenex\Upp\Parser\Structure;
 
-class ExtraNightsAlteration
+class ExtraNightsAlteration implements PeriodStrategy
 {
 
     /**

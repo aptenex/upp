@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Parser\Structure;
 
+use Aptenex\Upp\Util\ArrayUtils;
 use Symfony\Component\Validator\Constraints\Valid;
 
 abstract class AbstractControlItem implements ControlItemInterface
@@ -149,20 +150,6 @@ abstract class AbstractControlItem implements ControlItemInterface
     /**
      * @return array
      */
-    public function getConditionsToArray()
-    {
-        $c = [];
-
-        foreach($this->conditions as $condition) {
-            $c[] = $condition->__toArray();
-        }
-
-        return $c;
-    }
-
-    /**
-     * @return array
-     */
     public function __toArray()
     {
         return [
@@ -170,7 +157,7 @@ abstract class AbstractControlItem implements ControlItemInterface
             'description' => $this->getDescription(),
             'priority' => $this->getPriority(),
             'conditionOperand' => $this->getConditionOperand(),
-            'conditions' => $this->getConditionsToArray(),
+            'conditions' => ArrayUtils::convertStructureObjectToArray($this->getConditions()),
             'rate' => $this->getRate() ? $this->getRate()->__toArray() : null
         ];
     }

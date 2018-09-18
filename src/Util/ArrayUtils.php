@@ -14,6 +14,36 @@ class ArrayUtils
 {
 
     /**
+     * This is not recursive on purpose
+     *
+     * @param $object
+     * @return mixed
+     */
+    public static function convertStructureObjectToArray($object)
+    {
+        if (is_object($object) && method_exists($object, '__toArray')) {
+            return $object->__toArray();
+        }
+
+        if (is_array($object)) {
+            $items = [];
+
+            foreach($object as $item) {
+                if (is_object($item) && method_exists($item, '__toArray')) {
+                    $items[] = $item->__toArray();
+                } else {
+                    $items[] = $item;
+                }
+
+            }
+
+            return $items;
+        }
+
+        return $object;
+    }
+
+    /**
      * @param mixed $arrayLike
      *
      * @return array
@@ -445,7 +475,12 @@ class ArrayUtils
             "CHF" => "CHF - Swiss Franc",
             "THB" => 'THB - Thai Baht',
             "RUS" => 'RUS - Russian Ruble',
-            "HKD" => 'HKD - Hong Kong Dollar'
+            "HKD" => 'HKD - Hong Kong Dollar',
+            "MYR" => 'MYR - Malaysian Ringgit',
+            "VND" => 'VND - Vietnamese Dong',
+            "IDR" => 'IDR - Indonesian Rupiah',
+            "PHP" => 'PHP - Philippine Peso',
+            "SGD" => 'SGD - Singapore Dollar'
         ];
     }
 

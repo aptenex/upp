@@ -1490,7 +1490,7 @@
   {
     "name": "Dormoalonda Lycan Pricing Error",
     "description": "Replicating error on Lycan",
-    "config":  {
+    "config": {
       "name": "Pricing",
       "schema": "property-pricing",
       "version": "0.0.1",
@@ -1586,6 +1586,210 @@
             "2018-04-17": 10500,
             "2018-04-18": 10500,
             "2018-04-19": 10500
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Villa Elissa Price Test",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "EUR",
+          "defaults": {
+            "damageDeposit": 1000,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 7,
+            "balanceDaysBeforeArrival": 60,
+            "depositSplitPercentage": 30,
+            "daysRequiredInAdvanceForBooking": 4,
+            "bookableType": "instant_bookable",
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_ARRIVAL"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "2018",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2018-04-01",
+                  "endDate": "2018-05-31",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "5",
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 6726,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "2018",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2018-06-01",
+                  "endDate": "2018-06-30",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "5",
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 8489,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "2018",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2018-07-01",
+                  "endDate": "2018-07-31",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "",
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 12407,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "2018",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2018-08-01",
+                  "endDate": "2018-08-31",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "",
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 14693,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "2018",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2018-09-01",
+                  "endDate": "2018-09-30",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": 5,
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 8489,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "2018",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2018-10-01",
+                  "endDate": "2018-10-31",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "5",
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 6726,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            }
+          ],
+          "modifiers": []
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2018-09-01",
+          "departureDate": "2018-09-06",
+          "bookingDate": "2018-07-04",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 5,
+          "finalPrice": 606356,
+          "basePrice": 606356,
+          "damageDeposit": 100000,
+          "adjustmentCount": 1,
+          "split": {
+            "deposit": 181907,
+            "balance": 424449
+          },
+          "nightPrices": {
+            "2018-09-01": 121272,
+            "2018-09-02": 121271,
+            "2018-09-03": 121271,
+            "2018-09-04": 121271,
+            "2018-09-05": 121271
           }
         }
       }
