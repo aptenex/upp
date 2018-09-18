@@ -15,8 +15,14 @@ use Aptenex\Upp\Parser\Structure\Rate;
  */
 class LowHighTransformer implements TransformerInterface
 {
-
-    /**
+	private $includeExpiredPeriods = false;
+	public function __construct($includeExpiredPeriods = false)
+	{
+		
+		$this->includeExpiredPeriods = $includeExpiredPeriods;
+	}
+	
+	/**
      * @param PricingConfig $config
      *
      * @return array
@@ -48,8 +54,8 @@ class LowHighTransformer implements TransformerInterface
                 try {
                     $now = new \DateTime();
                     $endDate = new \DateTime($dCondition->getEndDate());
-
-                    if ($now > $endDate) {
+					
+                    if ($now > $endDate && !$this->includeExpiredPeriods) {
                         continue; // Don't send any period that is in the past
                     }
                 } catch (\Exception $ex) {
