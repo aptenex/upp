@@ -83,7 +83,7 @@ class PricingGenerator
 
         $this->calculateHiddenOnBase($fp);
 
-        $this->calculateTotal($fp);
+        $this->calculateTotalAndFinalBase($fp);
 
         $this->calculateSplitAmounts($fp);
 
@@ -264,21 +264,33 @@ class PricingGenerator
         $fp->setBasePrice($new);
     }
 
-    private function calculateTotal(FinalPrice $fp)
+    private function calculateTotalAndFinalBase(FinalPrice $fp)
     {
-        $new = MoneyUtils::newMoney(0, $fp->getCurrency());
+        $newTotal = MoneyUtils::newMoney(0, $fp->getCurrency());
+        $newBase = MoneyUtils::newMoney($fp->getBasePrice()->getAmount(), $fp->getCurrency());
 
-        $new = $new->add($fp->getBasePrice());
+        $newTotal = $newTotal->add($fp->getBasePrice());
 
         foreach ($fp->getAdjustments() as $adjustment) {
             switch ($adjustment->getPriceGroup()) {
                 case AdjustmentAmount::PRICE_GROUP_TOTAL:
-                    $new = MoneyTools::applyMonetaryOperand($new, $adjustment->getAmount(), $adjustment->getOperand());
+
+                    $newTotal = MoneyTools::applyMonetaryOperand($newTotal, $adjustment->getAmount(), $adjustment->getOperand());
+
+                    if (
+                        $adjustment->getType() === AdjustmentAmount::TYPE_MODIFIER &&
+                        $adjustment->getOperand() === Operand::OP_SUBTRACTION
+                    ) {
+                        // Here, since its a subtraction we've also got to modify the base too
+                        $newBase = MoneyTools::applyMonetaryOperand($newBase, $adjustment->getAmount(), $adjustment->getOperand());
+                    }
+
                     break;
             }
         }
 
-        $fp->setTotal($new);
+        $fp->setBasePrice($newBase);
+        $fp->setTotal($newTotal);
     }
 
     /**
