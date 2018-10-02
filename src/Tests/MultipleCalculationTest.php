@@ -13,6 +13,8 @@ use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
 class MultipleCalculationTest extends TestCase
 {
 
+    public static $currentTestName = null;
+
     private function getCurrentTestName($priceConfig, $testIndex, $testKey)
     {
         return vsprintf('testConfigs() // Name: %s %sTest Index: %s %sComparison: %s%s', [
@@ -31,6 +33,8 @@ class MultipleCalculationTest extends TestCase
         $structureOptions = new StructureOptions();
 
         foreach($priceConfigs as $priceConfig) {
+            self::$currentTestName = $priceConfig['name'];
+
             $upp = new Upp(
                 new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $priceConfig, [])),
                 new TestTranslator()
