@@ -1794,5 +1794,359 @@
         }
       }
     ]
+  },
+  {
+    "name": "MultiDate Condition Test",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "EUR",
+          "defaults": {
+            "damageDeposit": 0,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 7,
+            "balanceDaysBeforeArrival": 60,
+            "depositSplitPercentage": 30,
+            "daysRequiredInAdvanceForBooking": 1,
+            "bookableType": "instant_bookable",
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_ARRIVAL"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "2020",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-01-01",
+                  "endDate": "2020-12-31",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": 2,
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 100,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "description": "Early Bird",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "booking_days",
+                  "modifyRatePerUnit": false,
+                  "minimum": 0,
+                  "maximum": 7
+                },
+                {
+                  "type": "multi_date",
+                  "strategy": "STRATEGY_MATCH",
+                  "dates": [
+                    {"start": "2020-02-01", "end": "2020-02-28"},
+                    {"start": "2020-04-01", "end": "2020-04-30"}
+                  ]
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 0.05,
+                "calculationMethod": "percentage",
+                "calculationOperand": "subtraction",
+                "applicableTaxes": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2020-02-01",
+          "departureDate": "2020-02-08",
+          "bookingDate": "2020-01-31",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 7,
+          "finalPrice": 9500,
+          "basePrice": 9500,
+          "damageDeposit": 0,
+          "adjustmentCount": 1,
+          "split": {
+            "deposit": 2850,
+            "balance": 6650
+          },
+          "nightPrices": {
+            "2020-02-01": 1429,
+            "2020-02-02": 1429,
+            "2020-02-03": 1429,
+            "2020-02-04": 1429,
+            "2020-02-05": 1428,
+            "2020-02-06": 1428,
+            "2020-02-07": 1428
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "MultiDate Condition Test Not Matched",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "EUR",
+          "defaults": {
+            "damageDeposit": 0,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 7,
+            "balanceDaysBeforeArrival": 60,
+            "depositSplitPercentage": 30,
+            "daysRequiredInAdvanceForBooking": 1,
+            "bookableType": "instant_bookable",
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_ARRIVAL"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "2020",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-01-01",
+                  "endDate": "2020-12-31",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": 2,
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 100,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "description": "Early Bird",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "booking_days",
+                  "modifyRatePerUnit": false,
+                  "minimum": 0,
+                  "maximum": 7
+                },
+                {
+                  "type": "multi_date",
+                  "strategy": "STRATEGY_NOT_MATCH",
+                  "dates": [
+                    {"start": "2020-02-01", "end": "2020-02-28"},
+                    {"start": "2020-04-01", "end": "2020-04-30"}
+                  ]
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 0.05,
+                "calculationMethod": "percentage",
+                "calculationOperand": "subtraction",
+                "applicableTaxes": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2020-02-01",
+          "departureDate": "2020-02-08",
+          "bookingDate": "2020-01-31",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 7,
+          "finalPrice": 10000,
+          "basePrice": 10000,
+          "damageDeposit": 0,
+          "adjustmentCount": 0,
+          "split": {
+            "deposit": 3000,
+            "balance": 7000
+          },
+          "nightPrices": {
+            "2020-02-01": 1429,
+            "2020-02-02": 1429,
+            "2020-02-03": 1429,
+            "2020-02-04": 1429,
+            "2020-02-05": 1428,
+            "2020-02-06": 1428,
+            "2020-02-07": 1428
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Base Price > Total Price Bug",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "EUR",
+          "defaults": {
+            "damageDeposit": 100,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 7,
+            "balanceDaysBeforeArrival": 60,
+            "depositSplitPercentage": 30,
+            "daysRequiredInAdvanceForBooking": 1,
+            "bookableType": "instant_bookable",
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_DEPOSIT"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "2020",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-01-01",
+                  "endDate": "2020-12-31",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": 2,
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 100,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "description": "Early Bird",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "booking_days",
+                  "modifyRatePerUnit": false,
+                  "minimum": 0,
+                  "maximum": 7
+                },
+                {
+                  "type": "multi_date",
+                  "strategy": "STRATEGY_MATCH",
+                  "dates": [
+                    {"start": "2020-02-01", "end": "2020-02-28"},
+                    {"start": "2020-04-01", "end": "2020-04-30"}
+                  ]
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 0.05,
+                "calculationMethod": "percentage",
+                "calculationOperand": "subtraction",
+                "applicableTaxes": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2020-02-01",
+          "departureDate": "2020-02-11",
+          "bookingDate": "2020-01-31",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 10,
+          "finalPrice": 105000,
+          "basePrice": 95000,
+          "damageDeposit": 10000,
+          "adjustmentCount": 2,
+          "split": {
+            "deposit": 38500,
+            "balance": 66500
+          },
+          "nightPrices": {
+            "2020-02-01": 10000,
+            "2020-02-02": 10000,
+            "2020-02-03": 10000,
+            "2020-02-04": 10000,
+            "2020-02-05": 10000,
+            "2020-02-06": 10000,
+            "2020-02-07": 10000,
+            "2020-02-08": 10000,
+            "2020-02-09": 10000,
+            "2020-02-10": 10000
+          }
+        }
+      }
+    ]
   }
 ]
