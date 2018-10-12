@@ -77,13 +77,13 @@ class PricingContext
      * @var int
      */
     private $infants = null;
-	
-	/**
-	 * @Type(type="integer")
-	 *
-	 * @var int
-	 */
-	private $pets = null;
+
+    /**
+     * @Type(type="integer")
+     *
+     * @var int
+     */
+    private $pets = null;
 
     /**
      * @Type(type="string")
@@ -91,8 +91,8 @@ class PricingContext
      * @var string
      */
     private $distributionChannel = DistributionCondition::CHANNEL_RENTIVO;
-	
-	/**
+
+    /**
      * @Valid()
      *
      * @var array
@@ -152,8 +152,7 @@ class PricingContext
             $context
                 ->buildViolation('The booking date is required')
                 ->atPath('bookingDate')
-                ->addViolation()
-            ;
+                ->addViolation();
         }
 
         if (empty($this->getArrivalDate())) {
@@ -161,8 +160,7 @@ class PricingContext
             $context
                 ->buildViolation('The arrival date is required')
                 ->atPath('arrivalDate')
-                ->addViolation()
-            ;
+                ->addViolation();
         }
 
         if (empty($this->getDepartureDate())) {
@@ -170,8 +168,7 @@ class PricingContext
             $context
                 ->buildViolation('The departure date is required')
                 ->atPath('departureDate')
-                ->addViolation()
-            ;
+                ->addViolation();
         }
 
         if ($canValidateDates) {
@@ -332,24 +329,23 @@ class PricingContext
     {
         $this->adults = (int) $adults;
     }
-	
-	/**
-	 * @return int
-	 */
-	public function getPets()
-	{
-		return $this->pets;
-	}
-	
-	/**
-	 * @param int $pets
-	 */
-	public function setPets( $pets)
-	{
-		$this->pets = (int) $pets;
-	}
-    
-    
+
+    /**
+     * @return int
+     */
+    public function getPets()
+    {
+        return $this->pets;
+    }
+
+    /**
+     * @param int $pets
+     */
+    public function setPets($pets)
+    {
+        $this->pets = (int) $pets;
+    }
+
 
     /**
      * @return int
@@ -541,17 +537,18 @@ class PricingContext
     public function __toArray()
     {
         return [
-            'arrivalDate'       => $this->getArrivalDate(),
-            'departureDate'     => $this->getDepartureDate(),
-            'bookingDate'       => $this->getBookingDate(),
-            'guests'            => $this->getGuests(),
-            'adults'            => $this->getAdults(),
-			'pets'              => $this->getPets(),
-            'children'          => $this->getChildren(),
-            'infants'           => $this->getInfants(),
-            'locale'            => $this->getLocale(),
-            'forceGeneration'   => $this->isForceGeneration(),
-            'testMode'          => $this->isTestMode()
+            'arrivalDate'         => $this->getArrivalDate(),
+            'departureDate'       => $this->getDepartureDate(),
+            'bookingDate'         => $this->getBookingDate(),
+            'guests'              => $this->getGuests(),
+            'adults'              => $this->getAdults(),
+            'pets'                => $this->getPets(),
+            'children'            => $this->getChildren(),
+            'infants'             => $this->getInfants(),
+            'locale'              => $this->getLocale(),
+            'distributionChannel' => $this->getDistributionChannel(),
+            'forceGeneration'     => $this->isForceGeneration(),
+            'testMode'            => $this->isTestMode()
         ];
     }
 
@@ -571,7 +568,7 @@ class PricingContext
 
                 $adder = sprintf('add%s', ucfirst($key));
 
-                foreach($value as $dataItem) {
+                foreach ($value as $dataItem) {
                     $pc->$adder($dataItem);
                 }
 
