@@ -230,6 +230,14 @@ class Price
         return $this->splitDetails;
     }
 
+    /**
+     * @param GuestSplitOverview $splitDetails
+     */
+    public function setSplitDetails(GuestSplitOverview $splitDetails)
+    {
+        $this->splitDetails = $splitDetails;
+    }
+
     public function disableSplitDetails()
     {
         $this->splitDetails = null;
