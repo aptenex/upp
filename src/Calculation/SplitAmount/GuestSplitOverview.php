@@ -151,17 +151,31 @@ class GuestSplitOverview
      */
     public function __toArray()
     {
+        $dDueDate = null;
+        $dDueNow = true;
+        if ($this->getDepositDueDate() instanceof \DateTime) {
+            $dDueDate = $this->getDepositDueDate()->format("Y-m-d");
+            $dDueNow = $this->getNowDate() >= $this->getDepositDueDate();
+        }
+
+        $bDueDate = null;
+        $bDueNow = false;
+        if ($this->getBalanceDueDate() instanceof \DateTime) {
+            $bDueDate = $this->getBalanceDueDate()->format("Y-m-d");
+            $bDueNow = $this->getNowDate() >= $this->getBalanceDueDate();
+        }
+
         return [
             'deposit' => [
                 'amount' => MoneyUtils::getConvertedAmount($this->getDeposit()),
                 'calculationType' => $this->getDepositCalculationType(),
-                'dueDate' => $this->getDepositDueDate()->format("Y-m-d"),
-                'dueNow'  => $this->getNowDate() >= $this->getDepositDueDate()
+                'dueDate' => $dDueDate,
+                'dueNow'  => $dDueNow
             ],
             'balance' => [
                 'amount' => MoneyUtils::getConvertedAmount($this->getBalance()),
-                'dueDate' => $this->getBalanceDueDate()->format("Y-m-d"),
-                'dueNow'  => $this->getNowDate() >= $this->getBalanceDueDate()
+                'dueDate' => $bDueDate,
+                'dueNow'  => $bDueNow
             ],
             'damageDepositSplitMethod' => $this->getDamageDepositSplitMethod()
         ];
