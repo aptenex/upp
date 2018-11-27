@@ -38,6 +38,11 @@ class Price
     protected $damageDeposit;
 
     /**
+     * @var string
+     */
+    protected $damageDepositSplitMethod;
+
+    /**
      * @var GuestSplitOverview
      */
     protected $splitDetails;
@@ -83,15 +88,16 @@ class Price
         $this->splitDetails = new GuestSplitOverview();
         $this->errors = new ErrorHandler();
     }
-	
-	/**
-	 * This should never be needed with the exception of converting one rate response to another.
-	 * In this case, we will need to change the currency.
-	 * @param string $currency
-	 */
-	public function setCurrency(string $currency){
-		$this->currency = strtoupper(trim($currency));
-	}
+
+    /**
+     * This should never be needed with the exception of converting one rate response to another.
+     * In this case, we will need to change the currency.
+     * @param string $currency
+     */
+    public function setCurrency(string $currency)
+    {
+        $this->currency = strtoupper(trim($currency));
+    }
 
     /**
      * @return string
@@ -296,21 +302,38 @@ class Price
     }
 
     /**
+     * @return string
+     */
+    public function getDamageDepositSplitMethod()
+    {
+        return $this->damageDepositSplitMethod;
+    }
+
+    /**
+     * @param string $damageDepositSplitMethod
+     */
+    public function setDamageDepositSplitMethod($damageDepositSplitMethod)
+    {
+        $this->damageDepositSplitMethod = $damageDepositSplitMethod;
+    }
+
+    /**
      * @return array
      */
     public function __toArray()
     {
         return [
-            'currency'      => $this->getCurrency(),
-            'description'   => !empty($this->getContextUsed()->getDescription()) ? $this->getContextUsed()->getDescription() : null,
-            'total'         => MoneyUtils::getConvertedAmount($this->getTotal()),
-            'basePrice'     => MoneyUtils::getConvertedAmount($this->getBasePrice()),
-            'damageDeposit' => MoneyUtils::getConvertedAmount($this->getDamageDeposit()),
-            'bookableType'  => $this->getBookableType(),
-            'adjustments'   => $this->getAdjustmentsArray(),
-            'stayBreakdown' => $this->getStay()->__toArray(),
-            'splitDetails'  => !is_null($this->splitDetails) ? $this->splitDetails->__toArray() : null,
-            'errors'        => $this->getErrors()->__toArray()
+            'currency'                 => $this->getCurrency(),
+            'description'              => !empty($this->getContextUsed()->getDescription()) ? $this->getContextUsed()->getDescription() : null,
+            'total'                    => MoneyUtils::getConvertedAmount($this->getTotal()),
+            'basePrice'                => MoneyUtils::getConvertedAmount($this->getBasePrice()),
+            'damageDeposit'            => MoneyUtils::getConvertedAmount($this->getDamageDeposit()),
+            'damageDepositSplitMethod' => $this->getDamageDepositSplitMethod(),
+            'bookableType'             => $this->getBookableType(),
+            'adjustments'              => $this->getAdjustmentsArray(),
+            'stayBreakdown'            => $this->getStay()->__toArray(),
+            'splitDetails'             => !is_null($this->splitDetails) ? $this->splitDetails->__toArray() : null,
+            'errors'                   => $this->getErrors()->__toArray()
         ];
     }
 
@@ -339,12 +362,13 @@ class Price
                 $a['type'],
                 $a['priceGroup'],
                 $a['guestSplitMethod'],
-				$a['hidden'] ?? true
+                $a['hidden'] ?? true
             );
         }
 
         $this->setAdjustments($adjustments);
         $this->setDamageDeposit(MoneyUtils::fromString($data['damageDeposit'], $data['currency']));
+        $this->setDamageDepositSplitMethod($data['damageDepositSplitMethod'] ?? null);
 
         $this->stay = new Stay($this->getContextUsed());
 
