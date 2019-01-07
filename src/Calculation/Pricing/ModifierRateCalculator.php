@@ -2,8 +2,9 @@
 
 namespace Aptenex\Upp\Calculation\Pricing;
 
-use Aptenex\Upp\Calculation\FinalPrice;
+use Aptenex\Upp\Util\MoneyUtils;
 use Aptenex\Upp\Helper\MoneyTools;
+use Aptenex\Upp\Calculation\FinalPrice;
 
 class ModifierRateCalculator
 {
@@ -29,7 +30,7 @@ class ModifierRateCalculator
                         if ($rateConfig->getCalculationMethod() === \Aptenex\Upp\Parser\Structure\Rate::METHOD_PERCENTAGE) {
                             $value = $day->getCost()->multiply($rateConfig->getAmount());
                         } else {
-                            $value = \App\Util\MoneyUtils::fromString($rateConfig->getAmount(), $fp->getCurrency());
+                            $value = MoneyUtils::fromString($rateConfig->getAmount(), $fp->getCurrency());
                         }
 
                         $day->setCost(MoneyTools::applyMonetaryOperand(

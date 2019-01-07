@@ -6,6 +6,7 @@ class Condition
 {
 
     const TYPE_DATE = 'date';
+    const TYPE_MULTI_DATE = 'multi_date';
     const TYPE_NIGHTS = 'nights';
     const TYPE_WEEKS = 'weeks';
     const TYPE_MONTHS = 'months';
@@ -17,6 +18,7 @@ class Condition
 
     public static $dateBasedConditions = [
         self::TYPE_DATE,
+        self::TYPE_MULTI_DATE,
         self::TYPE_WEEKDAYS
     ];
 

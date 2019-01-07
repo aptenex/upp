@@ -19,6 +19,7 @@ class Evaluator
         /** @var ConditionEvaluationInterface[] $evaluationMap */
         $this->evaluationMap = [
             Structure\Condition::TYPE_DATE          => new DateConditionEvaluator(),
+            Structure\Condition::TYPE_MULTI_DATE    => new MultiDateConditionEvaluator(),
             Structure\Condition::TYPE_GUESTS        => new GuestsConditionEvaluator(),
             Structure\Condition::TYPE_NIGHTS        => new NightsConditionEvaluator(),
             Structure\Condition::TYPE_WEEKS         => new WeeksConditionEvaluator(),

@@ -39,6 +39,15 @@ class ConditionsParser
 
                 break;
 
+            case Condition::TYPE_MULTI_DATE:
+
+                $c = new Condition\MultiDateCondition();
+
+                $c->setStrategy(ArrayAccess::get('strategy', $conditionData, Condition\MultiDateCondition::STRATEGY_MATCH));
+                $c->setDates(ArrayAccess::get('dates', $conditionData, []));
+
+                break;
+
             case Condition::TYPE_NIGHTS:
 
                 $c = new Condition\NightsCondition();
