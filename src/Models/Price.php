@@ -11,6 +11,7 @@ use Aptenex\Upp\Exception\ErrorHandler;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Parser\Structure\Period;
 use Aptenex\Upp\Calculation\AdjustmentAmount;
+use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Aptenex\Upp\Calculation\SplitAmount\GuestSplitOverview;
 
@@ -265,13 +266,23 @@ class Price
 
     public function addErrorsFromViolations(ConstraintViolationList $violations)
     {
+        /** @var ConstraintViolation $violation */
         foreach ($violations as $violation) {
             $type = Error::TYPE_OTHER;
             if (defined("Aptenex\Upp\Exception\Error::TYPE_" . $violation->getCode())) {
                 $type = constant("Aptenex\Upp\Exception\Error::TYPE_" . $violation->getCode());
             }
-
+    
             $error = new Error($type, null, "Request Error on '" . $violation->getPropertyPath() . "' : " . $violation->getMessage());
+            
+            if($violation->getParameters()){
+                $params = $violation->getParameters();
+                if(isset($params['unit'])){
+                    $error->setUnit($params['unit']);
+                }
+            }
+
+            
             $this->addError($error);
         }
 
@@ -333,7 +344,7 @@ class Price
             'adjustments'              => $this->getAdjustmentsArray(),
             'stayBreakdown'            => $this->getStay()->__toArray(),
             'splitDetails'             => !is_null($this->splitDetails) ? $this->splitDetails->__toArray() : null,
-            'errors'                   => $this->getErrors()->__toArray()
+            'errors'                   => $this->getErrors()->__toArray(),
         ];
     }
 

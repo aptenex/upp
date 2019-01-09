@@ -33,7 +33,7 @@ class Error
     public function __construct(string $type, $unit = null, string $internalMessage = null)
     {
 	
-		if (substr($type, 0, strlen('TYPE_')) == 'TYPE_') {
+		if (substr($type, 0, strlen('TYPE_')) === 'TYPE_') {
 			$type = substr($type, strlen('TYPE_'));
 		}
   
@@ -145,5 +145,13 @@ class Error
     {
         return new Error($data['type'], $data['unit'], $data['message']);
     }
-
+    
+    /**
+     * @param mixed|null $unit
+     */
+    public function setUnit(?mixed $unit): void
+    {
+        $this->unit = $unit;
+    }
+    
 }
