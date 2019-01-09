@@ -272,15 +272,16 @@ class Price
             if (defined("Aptenex\Upp\Exception\Error::TYPE_" . $violation->getCode())) {
                 $type = constant("Aptenex\Upp\Exception\Error::TYPE_" . $violation->getCode());
             }
-    
-            $error = new Error($type, null, "Request Error on '" . $violation->getPropertyPath() . "' : " . $violation->getMessage());
-            
+            $unit = null;
             if($violation->getParameters()){
                 $params = $violation->getParameters();
                 if(isset($params['unit'])){
-                    $error->setUnit($params['unit']);
+                    $unit = $params['unit'];
                 }
             }
+            
+            $error = new Error($type, $unit, "Request Error on '" . $violation->getPropertyPath() . "' : " . $violation->getMessage());
+            
 
             
             $this->addError($error);
