@@ -149,7 +149,7 @@ class Error
     /**
      * @param mixed|null $unit
      */
-    public function setUnit(?mixed $unit): void
+    public function setUnit($unit): void
     {
         $this->unit = $unit;
     }
