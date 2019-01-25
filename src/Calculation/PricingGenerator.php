@@ -513,6 +513,10 @@ class PricingGenerator
     {
         $defaults = $fp->getCurrencyConfigUsed()->getDefaults();
 
+        if ($defaults->hasDamageDeposit()) {
+            $fp->setDamageDepositSplitMethod($defaults->getDamageDepositSplitMethod());
+        }
+
         // There is no arrival date set. Perhaps forceGeneration is enabled and arrival date is same date and departure?
         if (!$fp->getStay()->getPeriodWithArrivalDay()) {
             $fp->disableSplitDetails();

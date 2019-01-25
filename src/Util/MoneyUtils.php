@@ -26,16 +26,16 @@ class MoneyUtils
         if (is_null(self::$moneyParser)) {
             self::$moneyParser = new DecimalMoneyParser(new ISOCurrencies());
         }
-
-        if ($currency instanceof Currency) {
-            $currency = $currency->getCode();
+    
+        if (! $currency instanceof Currency) {
+            $currency = new Currency(strtoupper($currency));
         }
 
         if (empty($amount) || is_null($amount)) {
             $amount = 0;
         }
 
-        return self::$moneyParser->parse((string) $amount, strtoupper($currency));
+        return self::$moneyParser->parse((string) $amount, $currency);
     }
 
     /**
@@ -50,7 +50,7 @@ class MoneyUtils
             $amount = (int) $amount;
         }
 
-        if (!$currency instanceof \Money\Currency) {
+        if (! $currency instanceof Currency) {
             $currency = new Currency(strtoupper($currency));
         }
 
@@ -111,7 +111,7 @@ class MoneyUtils
      */
     public static function fromSmallestToNormalized($smallestCurrencyUnit, $currency)
     {
-        $money = \Aptenex\Upp\Util\MoneyUtils::newMoney($smallestCurrencyUnit, new Currency(strtoupper($currency)));
+        $money = self::newMoney($smallestCurrencyUnit, new Currency(strtoupper($currency)));
 
         return self::getConvertedAmount($money);
     }
