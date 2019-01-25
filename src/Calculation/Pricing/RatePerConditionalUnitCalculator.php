@@ -94,7 +94,7 @@ class RatePerConditionalUnitCalculator
                 $noNights = count($modifier->getMatchedNights());
             }
 
-            $noWeeks = (int) (floor($noNights / 7));
+            $noWeeks = (int) ceil($noNights / 7);
 
             // Same principal as above
             // Make it inclusive
@@ -115,7 +115,7 @@ class RatePerConditionalUnitCalculator
                 $noNights = count($modifier->getMatchedNights());
             }
 
-            $noMonths = (int) (floor($noNights / 30));
+            $noMonths = (int) floor($noNights / 30);
 
             // Same principal as above
             // Make it inclusive

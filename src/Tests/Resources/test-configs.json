@@ -2148,5 +2148,221 @@
         }
       }
     ]
+  },
+  {
+    "name": "Per Guest Per Week - 0 - 7 days = 1 week, 7 - 14 = 2 weeks etc",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "EUR",
+          "defaults": {
+            "damageDeposit": 0,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 7,
+            "balanceDaysBeforeArrival": 60,
+            "depositSplitPercentage": 30,
+            "daysRequiredInAdvanceForBooking": 0,
+            "bookableType": "instant_bookable",
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_ARRIVAL"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "Test",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-01-01",
+                  "endDate": "2024-01-31",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 100,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "description": "Weekly Per Guest",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "weeks",
+                  "modifyRatePerUnit": true,
+                  "minimum": 0
+                },
+                {
+                  "type": "guests",
+                  "modifyRatePerUnit": true,
+                  "minimum": 2
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 10,
+                "calculationMethod": "fixed",
+                "calculationOperand": "addition",
+                "applicableTaxes": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2019-01-04",
+          "departureDate": "2019-01-11",
+          "bookingDate": "2019-01-01",
+          "guests": 3,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 7,
+          "finalPrice": 72000,
+          "basePrice": 70000,
+          "damageDeposit": 0,
+          "adjustmentCount": 1,
+          "split": {
+            "deposit": 21600,
+            "balance": 50400
+          },
+          "nightPrices": {
+            "2019-01-04": 10000,
+            "2019-01-05": 10000,
+            "2019-01-06": 10000,
+            "2019-01-07": 10000,
+            "2019-01-08": 10000,
+            "2019-01-09": 10000,
+            "2019-01-10": 10000
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2019-01-04",
+          "departureDate": "2019-01-13",
+          "bookingDate": "2019-01-01",
+          "guests": 3,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 9,
+          "finalPrice": 94000,
+          "basePrice": 90000,
+          "damageDeposit": 0,
+          "adjustmentCount": 1,
+          "split": {
+            "deposit": 28200,
+            "balance": 65800
+          },
+          "nightPrices": {
+            "2019-01-04": 10000,
+            "2019-01-05": 10000,
+            "2019-01-06": 10000,
+            "2019-01-07": 10000,
+            "2019-01-08": 10000,
+            "2019-01-09": 10000,
+            "2019-01-10": 10000,
+            "2019-01-11": 10000,
+            "2019-01-12": 10000
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2019-01-04",
+          "departureDate": "2019-01-19",
+          "bookingDate": "2019-01-01",
+          "guests": 3,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 15,
+          "finalPrice": 156000,
+          "basePrice": 150000,
+          "damageDeposit": 0,
+          "adjustmentCount": 1,
+          "split": {
+            "deposit": 46800,
+            "balance": 109200
+          },
+          "nightPrices": {
+            "2019-01-04": 10000,
+            "2019-01-05": 10000,
+            "2019-01-06": 10000,
+            "2019-01-07": 10000,
+            "2019-01-08": 10000,
+            "2019-01-09": 10000,
+            "2019-01-10": 10000,
+            "2019-01-11": 10000,
+            "2019-01-12": 10000,
+            "2019-01-13": 10000,
+            "2019-01-14": 10000,
+            "2019-01-15": 10000,
+            "2019-01-16": 10000,
+            "2019-01-17": 10000,
+            "2019-01-18": 10000
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2019-01-04",
+          "departureDate": "2019-01-18",
+          "bookingDate": "2019-01-01",
+          "guests": 3,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 14,
+          "finalPrice": 144000,
+          "basePrice": 140000,
+          "damageDeposit": 0,
+          "adjustmentCount": 1,
+          "split": {
+            "deposit": 43200,
+            "balance": 100800
+          },
+          "nightPrices": {
+            "2019-01-04": 10000,
+            "2019-01-05": 10000,
+            "2019-01-06": 10000,
+            "2019-01-07": 10000,
+            "2019-01-08": 10000,
+            "2019-01-09": 10000,
+            "2019-01-10": 10000,
+            "2019-01-11": 10000,
+            "2019-01-12": 10000,
+            "2019-01-13": 10000,
+            "2019-01-14": 10000,
+            "2019-01-15": 10000,
+            "2019-01-16": 10000,
+            "2019-01-17": 10000
+          }
+        }
+      }
+    ]
   }
 ]
