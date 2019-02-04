@@ -2364,5 +2364,194 @@
         }
       }
     ]
+  },
+  {
+    "name": "Pet Test 01",
+    "description": "testing out pets",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "defaults": {
+            "damageDeposit": null,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 0,
+            "balanceDaysBeforeArrival": 42,
+            "depositSplitPercentage": 50,
+            "daysRequiredInAdvanceForBooking": 0,
+            "extraNightAlterationStrategyUseGlobalNights": true,
+            "damageDepositSplitMethod": "ON_ARRIVAL",
+            "perPetPerStay": 10,
+            "perPetPerNight": 2
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "2",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2017-02-01",
+                  "endDate": "2018-02-28",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 100,
+                "damageDeposit": null,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": null
+              }
+            }
+          ],
+          "modifiers": []
+        }
+      ]
+    },
+    "mixins": {
+      "example-mixin": {}
+    },
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2017-07-01",
+          "departureDate": "2017-07-11",
+          "bookingDate": "2017-06-25",
+          "guests": 7,
+          "pets": 1,
+          "currency": "GBP"
+        },
+        "tests": {
+          "noNights": 10,
+          "finalPrice": 103000,
+          "basePrice": 100000,
+          "damageDeposit": 0,
+          "adjustmentCount": 1,
+          "split": {
+            "deposit": 51500,
+            "balance": 51500
+          },
+          "nightPrices": {
+            "2017-07-01": 10000,
+            "2017-07-02": 10000,
+            "2017-07-03": 10000,
+            "2017-07-04": 10000,
+            "2017-07-05": 10000,
+            "2017-07-06": 10000,
+            "2017-07-07": 10000,
+            "2017-07-08": 10000,
+            "2017-07-09": 10000,
+            "2017-07-10": 10000
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Pet Test 02",
+    "description": "testing out pets - split method change",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "defaults": {
+            "damageDeposit": null,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 0,
+            "balanceDaysBeforeArrival": 42,
+            "depositSplitPercentage": 50,
+            "daysRequiredInAdvanceForBooking": 0,
+            "extraNightAlterationStrategyUseGlobalNights": true,
+            "damageDepositSplitMethod": "ON_ARRIVAL",
+            "perPetPerStay": 10,
+            "perPetPerNight": 2,
+            "perPetSplitMethod": "ON_BALANCE"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "2",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2017-02-01",
+                  "endDate": "2018-02-28",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 100,
+                "damageDeposit": null,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": null
+              }
+            }
+          ],
+          "modifiers": []
+        }
+      ]
+    },
+    "mixins": {
+      "example-mixin": {}
+    },
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2017-07-01",
+          "departureDate": "2017-07-11",
+          "bookingDate": "2017-06-25",
+          "guests": 7,
+          "pets": 2,
+          "currency": "GBP"
+        },
+        "tests": {
+          "noNights": 10,
+          "finalPrice": 106000,
+          "basePrice": 100000,
+          "damageDeposit": 0,
+          "adjustmentCount": 1,
+          "split": {
+            "deposit": 50000,
+            "balance": 56000
+          },
+          "nightPrices": {
+            "2017-07-01": 10000,
+            "2017-07-02": 10000,
+            "2017-07-03": 10000,
+            "2017-07-04": 10000,
+            "2017-07-05": 10000,
+            "2017-07-06": 10000,
+            "2017-07-07": 10000,
+            "2017-07-08": 10000,
+            "2017-07-09": 10000,
+            "2017-07-10": 10000
+          }
+        }
+      }
+    ]
   }
 ]
