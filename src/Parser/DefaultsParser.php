@@ -27,8 +27,9 @@ class DefaultsParser
             $d->setDamageDeposit($d->getDamageDeposit() / 100); // Turn it into 0 - 100
         }
 
-        $d->setPerPetPerStay(ArrayAccess::get('perPerPerStay', $defaults, 0));
-        $d->setPerPetPerNight(ArrayAccess::get('perPerPerNight', $defaults, 0));
+        $d->setPerPetPerStay(ArrayAccess::get('perPetPerStay', $defaults, 0));
+        $d->setPerPetPerNight(ArrayAccess::get('perPetPerNight', $defaults, 0));
+        $d->setPerPetSplitMethod(ArrayAccess::get('perPetSplitMethod', $defaults, SplitMethod::ON_TOTAL));
 
         $d->setMinimumNights(ArrayAccess::get('minimumNights', $defaults, null));
         $d->setBalanceDaysBeforeArrival(ArrayAccess::get('balanceDaysBeforeArrival', $defaults, null));

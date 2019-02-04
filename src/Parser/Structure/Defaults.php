@@ -61,6 +61,11 @@ class Defaults
     protected $perPetPerNight = null;
 
     /**
+     * @var string
+     */
+    protected $perPetSplitMethod = SplitMethod::ON_TOTAL;
+
+    /**
      * @return bool
      */
     public function hasDamageDeposit()
@@ -285,14 +290,31 @@ class Defaults
     }
 
     /**
+     * @return string
+     */
+    public function getPerPetSplitMethod()
+    {
+        return $this->perPetSplitMethod;
+    }
+
+    /**
+     * @param string $perPetSplitMethod
+     */
+    public function setPerPetSplitMethod($perPetSplitMethod)
+    {
+        $this->perPetSplitMethod = $perPetSplitMethod;
+    }
+
+    /**
      * @return array
      */
-    public function __toArray()
+    public function __toArray(): array
     {
         return [
             'minimumNights'                               => $this->getMinimumNights(),
             'perPetPerStay'                               => $this->getPerPetPerStay(),
             'perPetPerNight'                              => $this->getPerPetPerStay(),
+            'perPetSplitMethod'                           => $this->getPerPetSplitMethod(),
             'damageDeposit'                               => $this->getDamageDeposit(),
             'damageDepositCalculationMethod'              => $this->getDamageDepositCalculationMethod(),
             'damageDepositSplitMethod'                    => $this->getDamageDepositSplitMethod(),
