@@ -89,6 +89,21 @@ class Price
         $this->splitDetails = new GuestSplitOverview();
         $this->errors = new ErrorHandler();
     }
+    
+    /**
+     * Take extreme caution in using this method.
+     * Setting the context after constructing will not change any calculations.
+     * The only reason you would want to use this is if you know that you have manually ammended
+     * values on the price, and need to update the context to reflect the changes applied.
+     * For example, if you convert currencies, you may need the context to reflect the currencies.
+     * @param PricingContext $contextUsed
+     */
+    public function setContextUsed(PricingContext $contextUsed): void
+    {
+        $this->contextUsed = $contextUsed;
+    }
+    
+    
 
     /**
      * This should never be needed with the exception of converting one rate response to another.
