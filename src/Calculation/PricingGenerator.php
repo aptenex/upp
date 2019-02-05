@@ -9,6 +9,7 @@ use Aptenex\Upp\Calculation\Pricing\BasicRateCalculator;
 use Aptenex\Upp\Calculation\Pricing\DamageDepositCalculator;
 use Aptenex\Upp\Calculation\Pricing\ExtraAmountCalculator;
 use Aptenex\Upp\Calculation\Pricing\ModifierRateCalculator;
+use Aptenex\Upp\Calculation\Pricing\PetsCalculator;
 use Aptenex\Upp\Calculation\Pricing\Rate;
 use Aptenex\Upp\Calculation\Pricing\Strategy\DaysOfWeekAlterationStrategy;
 use Aptenex\Upp\Calculation\Pricing\Strategy\ExtraMonthsAlterationStrategy;
@@ -76,6 +77,8 @@ class PricingGenerator
         $this->calculateBasePrice($fp);
 
         $this->calculateExtras($fp);
+
+        $this->calculatePets($fp);
 
         $this->calculateTaxes($fp);
 
@@ -207,6 +210,14 @@ class PricingGenerator
     private function calculateExtras(FinalPrice $fp)
     {
         (new ExtraAmountCalculator())->calculateAndApplyAdjustments($fp);
+    }
+
+    /**
+     * @param FinalPrice $fp
+     */
+    private function calculatePets(FinalPrice $fp)
+    {
+        (new PetsCalculator())->calculateAndApplyAdjustments($fp);
     }
 
     /**

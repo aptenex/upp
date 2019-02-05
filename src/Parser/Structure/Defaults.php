@@ -51,6 +51,21 @@ class Defaults
     protected $daysRequiredInAdvanceForBooking = null;
 
     /**
+     * @var float|null
+     */
+    protected $perPetPerStay = null;
+
+    /**
+     * @var float|null
+     */
+    protected $perPetPerNight = null;
+
+    /**
+     * @var string
+     */
+    protected $perPetSplitMethod = SplitMethod::ON_TOTAL;
+
+    /**
      * @return bool
      */
     public function hasDamageDeposit()
@@ -227,19 +242,86 @@ class Defaults
     }
 
     /**
+     * @return float|null
+     */
+    public function getPerPetPerStay()
+    {
+        return $this->perPetPerStay;
+    }
+
+    /**
+     * @param float|null $perPetPerStay
+     */
+    public function setPerPetPerStay($perPetPerStay)
+    {
+        $this->perPetPerStay = (float) $perPetPerStay;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPerPetPerStay(): bool
+    {
+        return ((float) $this->perPetPerStay) > 0;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPerPetPerNight()
+    {
+        return $this->perPetPerNight;
+    }
+
+    /**
+     * @param float|null $perPetPerNight
+     */
+    public function setPerPetPerNight($perPetPerNight)
+    {
+        $this->perPetPerNight = (float) $perPetPerNight;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPerPetPerNight(): bool
+    {
+        return ((float) $this->perPetPerNight) > 0;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPerPetSplitMethod()
+    {
+        return $this->perPetSplitMethod;
+    }
+
+    /**
+     * @param string $perPetSplitMethod
+     */
+    public function setPerPetSplitMethod($perPetSplitMethod)
+    {
+        $this->perPetSplitMethod = $perPetSplitMethod;
+    }
+
+    /**
      * @return array
      */
-    public function __toArray()
+    public function __toArray(): array
     {
         return [
-            'minimumNights' => $this->getMinimumNights(),
-            'damageDeposit' => $this->getDamageDeposit(),
-            'damageDepositCalculationMethod' => $this->getDamageDepositCalculationMethod(),
-            'damageDepositSplitMethod' => $this->getDamageDepositSplitMethod(),
-            'daysRequiredInAdvanceForBooking' => $this->getDaysRequiredInAdvanceForBooking(),
-            'extraNightAlterationStrategyUseGlobalNights' => $this->isExtraNightAlterationStrategyUseGlobalNights(),
-            'balanceDaysBeforeArrival' => $this->getBalanceDaysBeforeArrival(),
-            'depositSplitPercentage' => $this->getDepositSplitPercentage(),
+            'minimumNights'                               => $this->getMinimumNights(),
+            'perPetPerStay'                               => $this->getPerPetPerStay(),
+            'perPetPerNight'                              => $this->getPerPetPerStay(),
+            'perPetSplitMethod'                           => $this->getPerPetSplitMethod(),
+            'damageDeposit'                               => $this->getDamageDeposit(),
+            'damageDepositCalculationMethod'              => $this->getDamageDepositCalculationMethod(),
+            'damageDepositSplitMethod'                    => $this->getDamageDepositSplitMethod(),
+            'daysRequiredInAdvanceForBooking'             => $this->getDaysRequiredInAdvanceForBooking(),
+            'balanceDaysBeforeArrival'                    => $this->getBalanceDaysBeforeArrival(),
+            'depositSplitPercentage'                      => $this->getDepositSplitPercentage(),
+            'extraNightAlterationStrategyUseGlobalNights' => $this->isExtraNightAlterationStrategyUseGlobalNights()
         ];
     }
 

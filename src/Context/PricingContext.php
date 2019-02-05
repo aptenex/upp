@@ -346,6 +346,13 @@ class PricingContext
         $this->pets = (int) $pets;
     }
 
+    /**
+     * @return bool
+     */
+    public function hasPets()
+    {
+        return $this->pets > 0;
+    }
 
     /**
      * @return int
