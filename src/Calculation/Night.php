@@ -39,7 +39,10 @@ class Night
     public function __construct(\DateTime $date, $currency)
     {
         $this->date = new \DateTime($date->format("Y-m-d 00:00:00")); // Make sure its just the date
-        $this->cost = \Aptenex\Upp\Util\MoneyUtils::newMoney(0, $currency);
+        // Only add if we have a currency known. // This might be wrong anyway, in occassions where we convert to a different currency.
+        if($currency !== null) {
+            $this->cost = \Aptenex\Upp\Util\MoneyUtils::newMoney(0, $currency);
+        }
     }
 
     /**
