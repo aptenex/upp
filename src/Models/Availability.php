@@ -107,7 +107,7 @@ class Availability extends Price
      */
     public function __toArray()
     {
-        $data = parent::__toArray();
+        $data = $this->getCurrency() ? parent::__toArray() : [];
 
         return array_merge($data, [
             'isAvailable' => $this->isAvailable(),
