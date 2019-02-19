@@ -44,8 +44,9 @@ class BasicRateCalculator
                 $singleWeekAllocation = $rateAmount->allocateTo(7);
 
                 $nights = array_values($period->getMatchedNights());
+                $nightCount = \count($nights);
 
-                for ($i = 0; $i < count($nights); $i++) {
+                for ($i = 0; $i < $nightCount; $i++) {
                     /** @var Night $night */
                     $night = $nights[$i];
 
