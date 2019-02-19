@@ -2553,5 +2553,160 @@
         }
       }
     ]
+  },
+  {
+    "name": "Nested Periods Test",
+    "description": "Make sure nested periods work correctly",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "defaults": {
+            "damageDeposit": null,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 0,
+            "balanceDaysBeforeArrival": 42,
+            "depositSplitPercentage": 50,
+            "daysRequiredInAdvanceForBooking": 0,
+            "extraNightAlterationStrategyUseGlobalNights": true,
+            "damageDepositSplitMethod": "ON_ARRIVAL",
+            "perPetPerStay": 10,
+            "perPetPerNight": 2,
+            "perPetSplitMethod": "ON_BALANCE"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "Base Period",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2017-01-01",
+                  "endDate": "2020-01-01",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 100,
+                "damageDeposit": null,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": null
+              }
+            },
+            {
+              "description": "Nested",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2018-01-01",
+                  "endDate": "2018-01-30",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 200,
+                "damageDeposit": null,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": null
+              }
+            }
+          ],
+          "modifiers": []
+        }
+      ]
+    },
+    "mixins": {
+      "example-mixin": {}
+    },
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2018-01-01",
+          "departureDate": "2018-01-11",
+          "bookingDate": "2017-06-25",
+          "guests": 3,
+          "pets": 0,
+          "currency": "GBP"
+        },
+        "tests": {
+          "noNights": 10,
+          "finalPrice": 200000,
+          "basePrice": 200000,
+          "damageDeposit": 0,
+          "adjustmentCount": 0,
+          "split": {
+            "deposit": 100000,
+            "balance": 100000
+          },
+          "nightPrices": {
+            "2018-01-01": 20000,
+            "2018-01-02": 20000,
+            "2018-01-03": 20000,
+            "2018-01-04": 20000,
+            "2018-01-05": 20000,
+            "2018-01-06": 20000,
+            "2018-01-07": 20000,
+            "2018-01-08": 20000,
+            "2018-01-09": 20000,
+            "2018-01-10": 20000
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2017-12-30",
+          "departureDate": "2018-01-11",
+          "bookingDate": "2017-06-25",
+          "guests": 3,
+          "pets": 0,
+          "currency": "GBP"
+        },
+        "tests": {
+          "noNights": 12,
+          "finalPrice": 220000,
+          "basePrice": 220000,
+          "damageDeposit": 0,
+          "adjustmentCount": 0,
+          "split": {
+            "deposit": 110000,
+            "balance": 110000
+          },
+          "nightPrices": {
+            "2017-12-30": 10000,
+            "2017-12-31": 10000,
+            "2018-01-01": 20000,
+            "2018-01-02": 20000,
+            "2018-01-03": 20000,
+            "2018-01-04": 20000,
+            "2018-01-05": 20000,
+            "2018-01-06": 20000,
+            "2018-01-07": 20000,
+            "2018-01-08": 20000,
+            "2018-01-09": 20000,
+            "2018-01-10": 20000
+          }
+        }
+      }
+    ]
   }
 ]
