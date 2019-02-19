@@ -16,18 +16,22 @@ class FinalPrice extends Price
      * @var PricingConfig
      */
     private $configUsed;
-
+    
     /**
      * FinalPrice constructor.
+     *
      * @param PricingContext $contextUsed
-     * @param PricingConfig $configUsed
+     * @param PricingConfig  $configUsed
+     * @param bool           $validateCurrency
+     * @throws InvalidPricingConfigException
      */
-    public function __construct(PricingContext $contextUsed, PricingConfig $configUsed)
+    public function __construct(PricingContext $contextUsed, PricingConfig $configUsed, $validateCurrency  = true)
     {
         parent::__construct($contextUsed);
         $this->configUsed = $configUsed;
-
-        $this->validateCurrency();
+        if($validateCurrency) {
+            $this->validateCurrency();
+        }
     }
 
     /**
