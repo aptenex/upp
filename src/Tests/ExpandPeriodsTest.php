@@ -30,7 +30,7 @@ class ExpandPeriodsTest extends TestCase
                     ]
                 ]
             ],
-            /*[
+            [
                 'conditions' => [
                     [
                         'type' => 'date',
@@ -47,7 +47,7 @@ class ExpandPeriodsTest extends TestCase
                         'endDate' => '2019-02-16'
                     ]
                 ]
-            ]*/
+            ]
         ];
 
         $expanded = DateUtils::expandPeriods($periods);
