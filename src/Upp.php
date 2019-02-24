@@ -85,16 +85,17 @@ class Upp
     }
 
     /**
-     * @param array                 $config
+     * @param array $config
      * @param StructureOptions|null $options
      *
      * @return PricingConfig|null
+     * @throws InvalidPricingConfigException
      */
     public function parsePricingConfig(array $config, StructureOptions $options = null)
     {
-        $parser = new PricingConfigParser($this->resolver);
+        $parser = new PricingConfigParser($this->resolver, $options);
 
-        $parsedConfig = $parser->parsePricingConfig($config, $options);
+        $parsedConfig = $parser->parsePricingConfig($config);
 
         if ($options instanceof StructureOptions) {
             if ($options->hasExternalCommandDirector() && $parsedConfig instanceof PricingConfig) {
