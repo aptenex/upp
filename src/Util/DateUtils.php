@@ -121,8 +121,6 @@ class DateUtils
         // if it does intersect COMPLETELY then we need to split it into 3 periods. If it half intersects
         // then split it into two
 
-        $newPeriodArray = [];
-
         // The method for expanding these periods is:
         // 1. Sort from longest to shortest into an array & take the total length of the period set
         // 2. Create an array of dates from start to end
@@ -133,23 +131,12 @@ class DateUtils
         // The reason we do high to low, is that low to high we will always have to loop to the end to check if any period exists for that date
         // whereas going from high to low, means that we can stop immediately after one has been found as it was sorted in the reverse order prior
 
+        $hasAnyNestedDates = false;
+
         // Set these as date times so we dont need to do a null check - only need comparisons
         $earliestDate = new \DateTime('2100-01-01');
         $latestDate = new \DateTime('2000-01-01');
 
-        usort($periods, function($a, $b) {
-            list($asd, $aed) = self::getStartEnd($a);
-            $aNights = $asd->diff($aed)->days;
-
-            list($bsd, $bed) = self::getStartEnd($b);
-            $bNights = $bsd->diff($bed)->days;
-
-            // Most nights at start of array
-            return $aNights < $bNights;
-        });
-
-        // Get start and end
-        $hasAnyNestedDates = false;
         foreach($periods as $index => $period) {
             $periods[$index]['_epId'] = $index; // Unique identifier
             list ($sd, $ed) = self::getStartEnd($period);
@@ -184,6 +171,17 @@ class DateUtils
             return $originalPeriods;
         }
 
+        usort($periods, function($a, $b) {
+            list($asd, $aed) = self::getStartEnd($a);
+            $aNights = $asd->diff($aed)->days;
+
+            list($bsd, $bed) = self::getStartEnd($b);
+            $bNights = $bsd->diff($bed)->days;
+
+            // Most nights at start of array
+            return $aNights < $bNights;
+        });
+
         // We now need to go through each period and convert them all into maps of the dates they contain in a 2 dimensional array
         // format is [ ['date' => period] ]
         $sortedExpandedPeriodMap = [];
@@ -202,6 +200,7 @@ class DateUtils
         // Now we look through expanded date array and then through the map from BACK to front and pull the earliest period that
         // has a mapping and use that. We take the dates at which this occurred and then use that to create the new periods
 
+        $newPeriodArray = [];
         $nestedCount = \count($sortedExpandedPeriodMap);
 
         self::getDateRangeInclusive($earliestDate, $latestDate, function ($date) use (&$newPeriodArray, $nestedCount, $sortedExpandedPeriodMap) {
