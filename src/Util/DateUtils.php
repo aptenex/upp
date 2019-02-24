@@ -99,12 +99,24 @@ class DateUtils
     }
 
     /**
+     * @param array $period
+     * @return \DateTime[]
+     */
+    public static function getStartEnd(array $period): array
+    {
+        $dc = $period['conditions'][0];
+        return [new \DateTime($dc['startDate']), new \DateTime($dc['endDate'])];
+    }
+    
+    /**
      * @param array $periods
      *
      * @return array
      */
     public static function expandPeriods(array $periods): array
     {
+        $originalPeriods = $periods;
+
         // Loop through each period and determine whether any other period intersects with it
         // if it does intersect COMPLETELY then we need to split it into 3 periods. If it half intersects
         // then split it into two
@@ -125,20 +137,11 @@ class DateUtils
         $earliestDate = new \DateTime('2100-01-01');
         $latestDate = new \DateTime('2000-01-01');
 
-        /**
-         * @param $period
-         * @return \DateTime[]
-         */
-        function getStartEnd($period) {
-            $dc = $period['conditions'][0];
-            return [new \DateTime($dc['startDate']), new \DateTime($dc['endDate'])];
-        }
-
         usort($periods, function($a, $b) {
-            list($asd, $aed) = getStartEnd($a);
+            list($asd, $aed) = self::getStartEnd($a);
             $aNights = $asd->diff($aed)->days;
 
-            list($bsd, $bed) = getStartEnd($b);
+            list($bsd, $bed) = self::getStartEnd($b);
             $bNights = $bsd->diff($bed)->days;
 
             // Most nights at start of array
@@ -146,9 +149,10 @@ class DateUtils
         });
 
         // Get start and end
+        $hasAnyNestedDates = false;
         foreach($periods as $index => $period) {
             $periods[$index]['_epId'] = $index; // Unique identifier
-            list ($sd, $ed) = getStartEnd($period);
+            list ($sd, $ed) = self::getStartEnd($period);
 
             if ($sd < $earliestDate) {
                 $earliestDate = $sd;
@@ -157,23 +161,40 @@ class DateUtils
             if ($ed > $latestDate) {
                 $latestDate = $ed;
             }
+
+            // Lets also check if there are no nested periods - if not then we can just return the original periods as they are
+            foreach($periods as $index2 => $period2) {
+                list ($sd2, $ed2) = self::getStartEnd($period2);
+
+                if ($sd == $sd2 && $ed == $ed2) {
+                    continue; // Skip as comparing the same dates with itself will always intersect
+                }
+
+                $sp1 = \Spatie\Period\Period::make($sd, $ed);
+                $sp2 = \Spatie\Period\Period::make($sd2, $ed2);
+
+                if ($sp1->overlapsWith($sp2)) {
+                    $hasAnyNestedDates = true;
+                    break; // Break this loop as we only need 1 nested to NOT skip the whole expansion
+                }
+            }
         }
 
-        // Expand the earliest and latest date into the main loop array
-        $expandedDateArray = DateUtils::getDateRangeInclusive($earliestDate, $latestDate);
+        if ($hasAnyNestedDates === false) {
+            return $originalPeriods;
+        }
 
         // We now need to go through each period and convert them all into maps of the dates they contain in a 2 dimensional array
         // format is [ ['date' => period] ]
         $sortedExpandedPeriodMap = [];
         foreach($periods as $period) {
-            list($sd, $end) = getStartEnd($period);
-
-            $expandedDates = DateUtils::getDateRangeInclusive($sd, $end);
+            list($sd, $end) = self::getStartEnd($period);
 
             $singlePeriodExpanded = [];
-            foreach($expandedDates as $date) {
+
+            self::getDateRangeInclusive($sd, $end, function ($date) use (&$singlePeriodExpanded, $period) {
                 $singlePeriodExpanded[$date] = $period;
-            }
+            });
 
             $sortedExpandedPeriodMap[] = $singlePeriodExpanded;
         }
@@ -182,18 +203,17 @@ class DateUtils
         // has a mapping and use that. We take the dates at which this occurred and then use that to create the new periods
 
         $nestedCount = \count($sortedExpandedPeriodMap);
-        foreach($expandedDateArray as $date) {
 
+        self::getDateRangeInclusive($earliestDate, $latestDate, function ($date) use (&$newPeriodArray, $nestedCount, $sortedExpandedPeriodMap) {
             for ($i = $nestedCount; $i >= 0; $i--) {
                 if (isset($sortedExpandedPeriodMap[$i][$date])) {
                     $newPeriodArray[$date] = $sortedExpandedPeriodMap[$i][$date];
                     break; // Break this loop as we've found it
-                } else {
-                    $newPeriodArray[$date] = null;
                 }
-            }
 
-        }
+                $newPeriodArray[$date] = null;
+            }
+        });
 
         // Now we need to normalize the periods, we need to find a way to identify each period (change in dates most likely)
         $normalizedPeriodArray = [];
@@ -212,6 +232,7 @@ class DateUtils
 
                 $newPeriod = $mergingData['period'];
 
+                unset($newPeriod['_epId']);
                 $newPeriod['conditions'][0]['startDate'] = $mergingData['startDate'];
                 $newPeriod['conditions'][0]['endDate'] = $mergingData['endDate'];
 
@@ -219,13 +240,14 @@ class DateUtils
                 $mergingData = null;
             } else if ($period !== null && $mergingData !== null) {
                 // Period exists see if we need to continue or not
-                if ($period['_epId'] == $mergingData['period']['_epId']) {
+                if ($period['_epId'] === $mergingData['period']['_epId']) {
                     // Same period so we need to update
                     $mergingData['endDate'] = $date;
                 } else {
                     // Different periods we need to re-initialize
                     $newPeriod = $mergingData['period'];
 
+                    unset($newPeriod['_epId']);
                     $newPeriod['conditions'][0]['startDate'] = $mergingData['startDate'];
                     $newPeriod['conditions'][0]['endDate'] = $mergingData['endDate'];
 
@@ -243,6 +265,7 @@ class DateUtils
         if ($mergingData !== null) {
             $newPeriod = $mergingData['period'];
 
+            unset($newPeriod['_epId']);
             $newPeriod['conditions'][0]['startDate'] = $mergingData['startDate'];
             $newPeriod['conditions'][0]['endDate'] = $mergingData['endDate'];
             $normalizedPeriodArray[] = $newPeriod;
@@ -394,13 +417,19 @@ class DateUtils
         ];
     }
 
-    public static function getDateRangeInclusive($startDate, $endDate)
+    /**
+     * @param $startDate
+     * @param $endDate
+     * @param callable|null $callback Only parameter is currentDate. Useful to reduce iterations
+     * @return array
+     */
+    public static function getDateRangeInclusive($startDate, $endDate, callable $callback = null)
     {
-        if ($startDate instanceof \DateTimeInterface || $startDate instanceof \DateTimeInterface) {
+        if ($startDate instanceof \DateTimeInterface) {
             $startDate = $startDate->format("Y-m-d");
         }
 
-        if ($endDate instanceof \DateTimeInterface || $endDate instanceof \DateTimeInterface) {
+        if ($endDate instanceof \DateTimeInterface) {
             $endDate = $endDate->format("Y-m-d");
         }
 
@@ -412,12 +441,22 @@ class DateUtils
             $dateArr = [];
 
             while ($endStamp >= $startStamp) {
-                $dateArr[] = date('Y-m-d', $startStamp);
+                $startDate = date('Y-m-d', $startStamp);
+
+                if (\is_callable($callback)) {
+                    $callback($startDate);
+                }
+
+                $dateArr[] = $startDate;
                 $startStamp = strtotime(' +1 day ', $startStamp);
             }
 
             return $dateArr;
         } else {
+            if (\is_callable($callback)) {
+                $callback($startDate);
+            }
+
             return [$startDate];
         }
     }
