@@ -94,7 +94,7 @@ class Upp
     {
         $parser = new PricingConfigParser($this->resolver);
 
-        $parsedConfig = $parser->parsePricingConfig($config);
+        $parsedConfig = $parser->parsePricingConfig($config, $options);
 
         if ($options instanceof StructureOptions) {
             if ($options->hasExternalCommandDirector() && $parsedConfig instanceof PricingConfig) {

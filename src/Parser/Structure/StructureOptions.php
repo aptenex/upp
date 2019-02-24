@@ -8,6 +8,13 @@ class StructureOptions
 {
 
     /**
+     * Not reccommended when running actual pricing calculations but useful when transforming the data
+     *
+     * @var bool
+     */
+    private $expandNestedPeriods = false;
+
+    /**
      * @var ExternalCommandDirector|null
      */
     private $externalCommandDirector;
@@ -31,9 +38,25 @@ class StructureOptions
     /**
      * @return bool
      */
-    public function hasExternalCommandDirector()
+    public function hasExternalCommandDirector(): bool
     {
         return $this->externalCommandDirector instanceof ExternalCommandDirector;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExpandNestedPeriods(): bool
+    {
+        return $this->expandNestedPeriods;
+    }
+
+    /**
+     * @param bool $expandNestedPeriods
+     */
+    public function setExpandNestedPeriods(bool $expandNestedPeriods)
+    {
+        $this->expandNestedPeriods = $expandNestedPeriods;
     }
 
 }

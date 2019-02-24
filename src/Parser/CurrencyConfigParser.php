@@ -6,6 +6,7 @@ use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\PricingConfig;
 use Aptenex\Upp\Parser\Structure\CurrencyConfig;
 use Aptenex\Upp\Exception\InvalidPricingConfigException;
+use Aptenex\Upp\Util\DateUtils;
 
 class CurrencyConfigParser
 {
@@ -26,7 +27,7 @@ class CurrencyConfigParser
     public function parse(PricingConfig $config, array $currencyConfigs)
     {
         if (!is_array($currencyConfigs)) {
-            throw new InvalidPricingConfigException("The property pricing config is invalid - data object should be an array");
+            throw new InvalidPricingConfigException('The property pricing config is invalid - data object should be an array');
         }
 
         $pc = [];
@@ -55,7 +56,12 @@ class CurrencyConfigParser
                 $c->setTaxes([]);
             }
 
-            $c->setPeriods((new PeriodsParser())->parse(ArrayAccess::get('periods', $rawConfig, [])));
+            $rawPeriods = ArrayAccess::get('periods', $rawConfig, []);
+            if ($this->pricingConfigParser->getOptions()->isExpandNestedPeriods()) {
+                $rawPeriods = DateUtils::expandPeriods($rawPeriods);
+            }
+
+            $c->setPeriods((new PeriodsParser())->parse($rawPeriods));
             $c->setModifiers((new ModifiersParser())->parse(ArrayAccess::get('modifiers', $rawConfig, [])));
 
             $pc[strtoupper($c->getCurrency())] = $c;

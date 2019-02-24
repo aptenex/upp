@@ -7,6 +7,7 @@ use Aptenex\Upp\Exception\InvalidPricingConfigException;
 use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Resolver\ResolverInterface;
 use Aptenex\Upp\Parser\Structure\PricingConfig;
+use Aptenex\Upp\Parser\Structure\StructureOptions;
 
 class PricingConfigParser
 {
@@ -17,24 +18,35 @@ class PricingConfigParser
     private $resolver;
 
     /**
-     * @param ResolverInterface $resolver
+     * @var StructureOptions|null
      */
-    public function __construct(ResolverInterface $resolver)
+    private $options;
+
+    /**
+     * @param ResolverInterface $resolver
+     * @param StructureOptions|null $options
+     */
+    public function __construct(ResolverInterface $resolver, StructureOptions $options = null)
     {
         $this->resolver = $resolver;
+
+        if ($options === null) {
+            $options = new StructureOptions();
+        }
+
+        $this->options = $options;
     }
 
     /**
      * @param array $data
      *
-     * @throws BaseException
-     *
      * @return PricingConfig|null
+     * @throws InvalidPricingConfigException
      */
     public function parsePricingConfig(array $data)
     {
-        if (is_null($data) || empty($data)) {
-            throw new InvalidPricingConfigException("No pricing configuration set for this property");
+        if ($data === null || empty($data)) {
+            throw new InvalidPricingConfigException('No pricing configuration set for this property');
         }
 
         $pc = new PricingConfig(
@@ -55,9 +67,17 @@ class PricingConfigParser
     /**
      * @return ResolverInterface
      */
-    public function getResolver()
+    public function getResolver(): ResolverInterface
     {
         return $this->resolver;
     }
-    
+
+    /**
+     * @return StructureOptions
+     */
+    public function getOptions(): StructureOptions
+    {
+        return $this->options;
+    }
+
 }
