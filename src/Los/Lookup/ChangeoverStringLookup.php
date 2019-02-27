@@ -25,7 +25,7 @@ class ChangeoverStringLookup implements ChangeoverLookupInterface
      */
     public function __construct(\DateTime $startingDate, string $changeoverString)
     {
-        $this->changeoverMap = $this->parseChangeoverString($startingDate, $changeoverString);
+        $this->parseChangeoverString($startingDate, $changeoverString);
     }
 
     /**
@@ -88,7 +88,9 @@ class ChangeoverStringLookup implements ChangeoverLookupInterface
             return;
         }
 
-        $days = explode('', $changeoverString);
+        $days = str_split($changeoverString);
+
+        $startingDate = clone $startingDate;
 
         foreach($days as $index => $changeoverInt) {
             $this->changeoverMap[$startingDate->format('Y-m-d')] = (int) $changeoverInt;

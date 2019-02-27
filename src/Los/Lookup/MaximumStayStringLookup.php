@@ -5,7 +5,7 @@ namespace Los\Lookup;
 use Los\LosOptions;
 use Aptenex\Upp\Exception\CannotGenerateLosException;
 
-class MaximumStayLookup implements MaximumStayLookupInterface
+class MaximumStayStringLookup implements MaximumStayLookupInterface
 {
 
     /**
@@ -28,7 +28,7 @@ class MaximumStayLookup implements MaximumStayLookupInterface
     public function __construct(\DateTime $startingDate, string $maximumStayString, LosOptions $options)
     {
         $this->options = $options;
-        $this->maximumStayMap = $this->parseMaximumStayString($startingDate, $maximumStayString);
+        $this->parseMaximumStayString($startingDate, $maximumStayString);
     }
 
     /**
@@ -57,6 +57,8 @@ class MaximumStayLookup implements MaximumStayLookupInterface
         }
 
         $days = explode(',', $maximumStayString);
+
+        $startingDate = clone $startingDate;
 
         foreach($days as $index => $maximumStay) {
             $this->maximumStayMap[$startingDate->format('Y-m-d')] = (int) $maximumStay;

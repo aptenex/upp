@@ -28,7 +28,7 @@ class MinimumStayStringLookup implements MinimumStayLookupInterface
     public function __construct(\DateTime $startingDate, string $minimumStayString, LosOptions $options)
     {
         $this->options = $options;
-        $this->minimumStayMap = $this->parseMinimumStayString($startingDate, $minimumStayString);
+        $this->parseMinimumStayString($startingDate, $minimumStayString);
     }
 
     /**
@@ -58,9 +58,10 @@ class MinimumStayStringLookup implements MinimumStayLookupInterface
 
         $days = explode(',', $minimumStayString);
 
+        $startingDate = clone $startingDate;
+
         foreach($days as $index => $minimumStay) {
             $this->minimumStayMap[$startingDate->format('Y-m-d')] = (int) $minimumStay;
-
             try {
                 $startingDate = $startingDate->add(new \DateInterval('P1D'));
             } catch (\Exception $e) {

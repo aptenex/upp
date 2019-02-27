@@ -2,7 +2,7 @@
 
 namespace Los\Lookup;
 
-class LookupDirector
+class LookupDirector implements LookupDirectorInterface
 {
 
     /**
@@ -26,17 +26,29 @@ class LookupDirector
    private $maximumStayLookup;
 
     /**
+     * @var MaxOccupancyLookupInterface
+     */
+   private $maxOccupancyLookup;
+
+    /**
      * @param AvailabilityLookupInterface $availabilityLookup
      * @param ChangeoverLookupInterface $changeoverLookup
      * @param MinimumStayLookupInterface $minimumStayLookup
      * @param MaximumStayLookupInterface $maximumStayLookup
+     * @param MaxOccupancyLookupInterface $maxOccupancyLookup
      */
-    public function __construct(AvailabilityLookupInterface $availabilityLookup, ChangeoverLookupInterface $changeoverLookup, MinimumStayLookupInterface $minimumStayLookup, MaximumStayLookupInterface $maximumStayLookup)
-    {
+    public function __construct(
+        AvailabilityLookupInterface $availabilityLookup,
+        ChangeoverLookupInterface $changeoverLookup,
+        MinimumStayLookupInterface $minimumStayLookup,
+        MaximumStayLookupInterface $maximumStayLookup,
+        MaxOccupancyLookupInterface $maxOccupancyLookup
+    ) {
         $this->availabilityLookup = $availabilityLookup;
         $this->changeoverLookup = $changeoverLookup;
         $this->minimumStayLookup = $minimumStayLookup;
         $this->maximumStayLookup = $maximumStayLookup;
+        $this->maxOccupancyLookup = $maxOccupancyLookup;
     }
 
     /**
@@ -69,6 +81,14 @@ class LookupDirector
     public function getMaximumStayLookup(): MaximumStayLookupInterface
     {
         return $this->maximumStayLookup;
+    }
+
+    /**
+     * @return MaxOccupancyLookupInterface
+     */
+    public function getMaxOccupancyLookup(): MaxOccupancyLookupInterface
+    {
+        return $this->maxOccupancyLookup;
     }
 
 }

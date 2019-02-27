@@ -20,7 +20,7 @@ class AvailabilityStringLookup implements AvailabilityLookupInterface
      */
     public function __construct(\DateTime $startingDate, string $availabilityString)
     {
-        $this->availabilityMap = $this->parseAvailabilityString($startingDate, $availabilityString);
+        $this->parseAvailabilityString($startingDate, $availabilityString);
     }
 
     /**
@@ -48,7 +48,9 @@ class AvailabilityStringLookup implements AvailabilityLookupInterface
             return;
         }
 
-        $days = explode('', $availabilityString);
+        $days = str_split($availabilityString);
+
+        $startingDate = clone $startingDate;
 
         foreach($days as $index => $availabilityCharacter) {
             $this->availabilityMap[$startingDate->format('Y-m-d')] = ($availabilityCharacter === 'Y');
