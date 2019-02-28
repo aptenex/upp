@@ -2,7 +2,7 @@
 
 namespace Los;
 
-use Los\Transformer\SimpleArrayRecordTransformer;
+use Los\Transformer\ArrayRecordTransformer;
 
 class LosRecords
 {
@@ -77,7 +77,7 @@ class LosRecords
      */
     public function toSimpleArrayRecord(): array
     {
-        return (new SimpleArrayRecordTransformer())->transform($this);
+        return (new ArrayRecordTransformer())->transform($this);
     }
 
     /**

@@ -39,7 +39,7 @@ class LosGenerator
         $losRecords = new LosRecords();
         $losRecords->startTiming();
         // TODO:
-        // - Make sure to clear out any rates that are ALL 0
+        // - Add a "patch" system if only the availability changes.. aka go through existing LOS records and modify them
 
         $bookingDate = date('Y-m-d');
 
@@ -107,13 +107,12 @@ class LosGenerator
                 // some simple introspection - if we there is only 1 modifier for guest range
                 // we can determine at what point it'll get modified and calculate accordingly
 
-                $notAvailable = false;
                 $previousRateSet = null;
 
                 for ($g = 1; $g <= $maxOccupancy; $g++) {
                     $rates = [];
 
-                    if ($g >= $perGuestChangesAt || $previousRateSet === null || $options->isForceFullGeneration()) {
+                    if (($g >= $perGuestChangesAt && $guestModifierCondition !== null) || $previousRateSet === null || $options->isForceFullGeneration()) {
                         // Because we start on 1 we need to add 1 (this can be done with an LTE operator
                         for ($i = 1; $i <= $dateMaxStay; $i++) {
 
@@ -125,12 +124,13 @@ class LosGenerator
                             $departureDate = date('Y-m-d', strtotime(sprintf(' +%s day', $i), strtotime($date)));
 
                             if (
-                                ($ld->getAvailabilityLookup()->isAvailable($departureDate) === false ||
-                                $ld->getChangeoverLookup()->canDepart($departureDate) === false) &&
-                                 !$options->isForceFullGeneration()
+                                (
+                                    $ld->getAvailabilityLookup()->isAvailable($departureDate) === false ||
+                                    $ld->getChangeoverLookup()->canDepart($departureDate) === false
+                                ) &&
+                                !$options->isForceFullGeneration()
                             ) {
                                 $rates[] = 0;
-                                $notAvailable = true;
                                 break;
                             }
 

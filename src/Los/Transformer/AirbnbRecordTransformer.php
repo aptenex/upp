@@ -44,7 +44,7 @@ class AirbnbRecordTransformer implements RecordTransformerInterface
             throw new CannotGenerateLosException('Could not locate valid currency for LosRecords');
         }
 
-        return (new SimpleArrayRecordTransformer())->transformCurrencySet($cData);
+        return (new ArrayRecordTransformer())->transformCurrencySet($cData);
     }
 
 }
