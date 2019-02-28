@@ -6,13 +6,13 @@ use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
 use Aptenex\Upp\Parser\Structure\StructureOptions;
 use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\ArrayUtils;
+use Aptenex\Upp\Util\MoneyUtils;
 use Los\Lookup\LookupDirectorFactory;
 use Los\LosGenerator;
 use Los\LosOptions;
 use Los\Transformer\AirbnbRecordTransformer;
 use Los\Transformer\SimpleArrayRecordTransformer;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\CodeCoverage\Report\PHP;
 use Translation\TestTranslator;
 
 class LosRecordTest extends TestCase
@@ -125,7 +125,7 @@ class LosRecordTest extends TestCase
                     "type": "LISTING_TYPE_BUILDING",
                     "beds": 0,
                     "sleeps": 3,
-                    "maxOccupancy": 8,
+                    "maxOccupancy": 16,
                     "bedrooms": 1,
                     "bathrooms": 0
                 },
@@ -250,7 +250,7 @@ class LosRecordTest extends TestCase
         $losGenerator = new LosGenerator($upp);
 
         $losOptions = new LosOptions(new \DateTime('2019-03-01'), new \DateTime('2020-09-01'));
-        //$losOptions->setForceFullGeneration(true);
+        $losOptions->setForceFullGeneration(true);
 
         $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
 

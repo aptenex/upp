@@ -245,9 +245,12 @@ class PricingGenerator
     {
         $fp->setBasePrice(MoneyUtils::newMoney(0, $fp->getBasePrice()->getCurrency()));
 
-        foreach ($fp->getStay()->getNights() as $day) {
-            $fp->setBasePrice($fp->getBasePrice()->add($day->getCost()));
+        $nightMonies = [];
+        foreach ($fp->getStay()->getNights() as $night) {
+            $nightMonies[] = $night->getCost();
         }
+
+        $fp->setBasePrice($fp->getBasePrice()->add(...$nightMonies));
 
         foreach ($fp->getAdjustments() as $adjustment) {
             switch ($adjustment->getPriceGroup()) {
