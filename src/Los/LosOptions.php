@@ -38,6 +38,11 @@ class LosOptions
     private $maximumStayRateLength = 30;
 
     /**
+     * @var bool
+     */
+    private $forceFullGeneration = false;
+
+    /**
      * @param \DateTime $startDate
      * @param \DateTime $endDate
      */
@@ -133,6 +138,22 @@ class LosOptions
     public function setSingleCurrency(string $singleCurrency)
     {
         $this->singleCurrency = $singleCurrency;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isForceFullGeneration(): bool
+    {
+        return $this->forceFullGeneration;
+    }
+
+    /**
+     * @param bool $forceFullGeneration
+     */
+    public function setForceFullGeneration(bool $forceFullGeneration)
+    {
+        $this->forceFullGeneration = $forceFullGeneration;
     }
 
 }

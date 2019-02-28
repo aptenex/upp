@@ -3,6 +3,9 @@
 namespace Los;
 
 use Aptenex\Upp\Context\PricingContext;
+use Aptenex\Upp\Exception\BaseException;
+use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
+use Aptenex\Upp\Exception\InvalidPriceException;
 use Aptenex\Upp\Parser\Structure\Condition;
 use Aptenex\Upp\Parser\Structure\PricingConfig;
 use Aptenex\Upp\Upp;
@@ -34,7 +37,7 @@ class LosGenerator
     public function generateLosRecords(LosOptions $options, LookupDirector $ld, PricingConfig $config)
     {
         $losRecords = new LosRecords();
-
+        $losRecords->startTiming();
         // TODO:
         // - Changeover days
         // - Detect if period exists for that day for base date
@@ -46,7 +49,7 @@ class LosGenerator
         $startStamp = strtotime($options->getStartDate()->format('Y-m-d'));
         $endStamp = strtotime($options->getEndDate()->format('Y-m-d'));
 
-        $days = round(($endStamp - $startStamp) / 86400);
+        $days = round(($endStamp - $startStamp) / 86400) + 1; // Missing a day so add 1
 
         $maxOccupancy = $ld->getMaxOccupancyLookup()->getMaxOccupancy();
 
@@ -84,7 +87,12 @@ class LosGenerator
 
             foreach($range as $date) {
                 // If the base date is not available then skip it
-                if ($ld->getAvailabilityLookup()->isAvailable($date) === false) {
+                if ($ld->getAvailabilityLookup()->isAvailable($date) === false && !$options->isForceFullGeneration()) {
+                    continue;
+                }
+
+                // We need to see if we can arrive on this date - if not then skip
+                if ($ld->getChangeoverLookup()->canArrive($date) === false && !$options->isForceFullGeneration()) {
                     continue;
                 }
 
@@ -108,31 +116,42 @@ class LosGenerator
                 for ($g = 1; $g <= $maxOccupancy; $g++) {
                     $rates = [];
 
-                    if ($g >= $perGuestChangesAt || $previousRateSet === null) {
+                    if ($g >= $perGuestChangesAt || $previousRateSet === null || $options->isForceFullGeneration()) {
                         // Because we start on 1 we need to add 1 (this can be done with an LTE operator
                         for ($i = 1; $i <= $dateMaxStay; $i++) {
 
-                            if ($i < $minStay || $i > $dateMaxStay) {
+                            if (($i < $minStay || $i > $dateMaxStay) && !$options->isForceFullGeneration()) {
                                 $rates[] = 0;
                                 continue; // No generation
                             }
 
                             $departureDate = date('Y-m-d', strtotime(sprintf(' +%s day', $i), strtotime($date)));
-                            if ($ld->getAvailabilityLookup()->isAvailable($departureDate) === false) {
+
+                            if (
+                                ($ld->getAvailabilityLookup()->isAvailable($departureDate) === false ||
+                                $ld->getChangeoverLookup()->canDepart($departureDate) === false) &&
+                                 !$options->isForceFullGeneration()
+                            ) {
                                 $rates[] = 0;
                                 $notAvailable = true;
-                                break; // Since they won't be able to stay past this night $i if this date isn't available we break and pad all 0's
+                                break;
                             }
 
                             $pc->setGuests($g);
                             $pc->setDepartureDate($departureDate);
 
-                            $losRecords->setTimesUppRan($losRecords->getTimesUppRan() + 1);
-                            $fp = $this->upp->generatePrice($pc, $config);
+                            try {
+                                $losRecords->setTimesUppRan($losRecords->getTimesUppRan() + 1);
+                                $fp = $this->upp->generatePrice($pc, $config);
 
-                            $rates[] = MoneyUtils::getConvertedAmount($fp->getTotal());
-
-
+                                $rates[] = MoneyUtils::getConvertedAmount($fp->getTotal());
+                            } catch (CannotMatchRequestedDatesException $ex) {
+                                $rates[] = 0;
+                            } catch (InvalidPriceException $ex) {
+                                $rates[] = 0;
+                            } catch (BaseException $ex) {
+                                $rates[] = 0;
+                            }
                         }
 
                         if (\count($rates) < $dateMaxStay) {
@@ -146,7 +165,6 @@ class LosGenerator
                         $cc->getCurrency(),
                         $date,
                         $g,
-                        $g,
                         $previousRateSet
                     );
                 }
@@ -154,6 +172,7 @@ class LosGenerator
 
         }
 
+        $losRecords->finishTiming();
         return $losRecords;
     }
 

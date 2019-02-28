@@ -23,16 +23,30 @@ class LosRecords
     private $maxAmountOfPotentialUppRuns = 0;
 
     /**
+     * @var mixed
+     */
+    private $startTime;
+
+    /**
+     * @var mixed
+     */
+    private $finishTime;
+
+    /**
+     * @var mixed
+     */
+    private $totalTime;
+
+    /**
      * We store min and max as the rate could be exactly the same regardless of the min/max.
      * Also we need to convert into different formats so storing it this way is helpful
      *
      * @param string $currency
      * @param string $date
-     * @param int $minGuest
-     * @param int $maxGuest
+     * @param int $guest
      * @param array $rates
      */
-    public function addLineEntry(string $currency, string $date, int $minGuest, int $maxGuest, array $rates)
+    public function addLineEntry(string $currency, string $date, int $guest, array $rates)
     {
         if (!isset($this->records[$currency])) {
             $this->records[$currency] = [];
@@ -44,9 +58,9 @@ class LosRecords
 
         $this->records[$currency][$date][] = [
             'date' => $date,
-            'minGuest' => $minGuest,
-            'maxGuest' => $maxGuest,
-            'rates' => $rates
+            'guest' => $guest,
+            'rates' => $rates,
+            'rateHash' => sha1(implode(',', $rates))
         ];
     }
 
@@ -99,16 +113,59 @@ class LosRecords
     }
 
     /**
+     * @return float
+     */
+    public function getEfficiencyPercentage(): float
+    {
+        return round(100 - (($this->getTimesUppRan() / $this->getMaxAmountOfPotentialUppRuns()) * 100), 3);
+    }
+
+    /**
      * @return string
      */
     public function getRunDataToString(): string
     {
         return sprintf(
-            'Times Ran: %s (Maximum: %s) Efficiency: %s%%',
+            'Completed in %ss%sTimes Ran: %s (Maximum: %s)%sEfficiency: %s%%',
+            round($this->totalTime / 1000, 2),
+            PHP_EOL,
             $this->getTimesUppRan(),
             $this->getMaxAmountOfPotentialUppRuns(),
-            round(100 - (($this->getTimesUppRan() / $this->getMaxAmountOfPotentialUppRuns()) * 100), 3)
+            PHP_EOL,
+            $this->getEfficiencyPercentage()
         );
+    }
+
+    public function startTiming()
+    {
+        $execTime = microtime();
+        $execTime = explode(" ", $execTime);
+        $execTime = $execTime[1] + $execTime[0];
+        $startTime = $execTime;
+
+        $this->startTime = $startTime;
+    }
+
+    public function finishTiming()
+    {
+        $execTime = microtime();
+        $execTime = explode(" ", $execTime);
+        $execTime = $execTime[1] + $execTime[0];
+        $this->finishTime = $execTime;
+
+        $this->totalTime = ($this->finishTime - $this->startTime) * 1000; // Get Milliseconds
+
+        return $this->totalTime;
+    }
+
+    /**
+     * In milliseconds
+     *
+     * @return mixed
+     */
+    public function getTotalTime()
+    {
+        return $this->totalTime;
     }
 
 }
