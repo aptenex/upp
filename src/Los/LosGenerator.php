@@ -39,10 +39,7 @@ class LosGenerator
         $losRecords = new LosRecords();
         $losRecords->startTiming();
         // TODO:
-        // - Changeover days
-        // - Detect if period exists for that day for base date
-        // - Catch upp exceptions
-        // - other speedups
+        // - Make sure to clear out any rates that are ALL 0
 
         $bookingDate = date('Y-m-d');
 
