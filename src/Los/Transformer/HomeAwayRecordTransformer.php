@@ -5,7 +5,7 @@ namespace Los\Transformer;
 /**
  * @package Los\Transformer
  */
-class AirbnbRecordTransformer extends ArrayRecordTransformer
+class HomeAwayRecordTransformer extends ArrayRecordTransformer
 {
 
 }

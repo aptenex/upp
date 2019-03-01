@@ -2,6 +2,7 @@
 
 namespace Los\Transformer;
 
+use Aptenex\Upp\Exception\CannotGenerateLosException;
 use Los\LosRecords;
 
 /**
@@ -9,29 +10,54 @@ use Los\LosRecords;
  *
  * @package Los\Transformer
  */
-class ArrayRecordTransformer implements RecordTransformerInterface
+class ArrayRecordTransformer extends BaseRecordTransformer
 {
 
     /**
+     * This will select a specific currency
+     *
      * @param LosRecords $records
-     * @return array|mixed
+     * @param TransformOptions $options
+     *
+     * @return array Format is [ los_string, los_string, los_string ]
+     *
+     * @throws CannotGenerateLosException
      */
-    public function transform(LosRecords $records)
+    public function transform(LosRecords $records, TransformOptions $options): array
     {
-        $data = [];
-
-        foreach($records->getRecords() as $currency => $recordSet) {
-            $data[$currency] = $this->transformCurrencySet($recordSet);
+        if (empty($records->getRecords())) {
+            return [];
         }
 
-        return $data;
+        $currencySet = $records->getRecords();
+
+        $cData = null;
+        foreach($currencySet as $setCurrency => $dateSet) {
+            if ($options->getCurrency() === null) {
+                $cData = $dateSet;
+                break;
+            }
+
+            if ($setCurrency === $options->getCurrency()) {
+                $cData = $dateSet;
+                break;
+            }
+        }
+
+        if ($cData === null) {
+            throw new CannotGenerateLosException('Could not locate valid currency for LosRecords');
+        }
+
+        return $this->transformCurrencySet($cData, $options);
     }
 
     /**
      * @param array $recordSet
+     * @param TransformOptions $options
+     *
      * @return array
      */
-    public function transformCurrencySet(array $recordSet): array
+    public function transformCurrencySet(array $recordSet, TransformOptions $options): array
     {
         $currencySet = [];
 
@@ -72,20 +98,12 @@ class ArrayRecordTransformer implements RecordTransformerInterface
                     // so we'll be adding two records one for the previous guest count and one for the last index guest count
                     // this extra index check
                     if ($maxGuestCountForSameHash !== 0 && $index !== ($guestEntries - 1)) {
-                        $currencySet[] = vsprintf('%s,%s,%s', [
-                            $previousSingleRecord['date'],
-                            $maxGuestCountForSameHash,
-                            implode(',', $previousSingleRecord['rates'])
-                        ]);
+                        $currencySet[] = $this->generateLosRecordString($previousSingleRecord, $options);
 
                         $maxGuestCountForSameHash = 0;
                     }
 
-                    $currencySet[] = vsprintf('%s,%s,%s', [
-                        $singleRecord['date'],
-                        $singleRecord['guest'],
-                        implode(',', $singleRecord['rates'])
-                    ]);
+                    $currencySet[] = $this->generateLosRecordString($singleRecord, $options);
                 }
 
                 $previousSingleRecord = $singleRecord;
