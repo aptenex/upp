@@ -11,6 +11,7 @@ use Los\Lookup\LookupDirectorFactory;
 use Los\LosGenerator;
 use Los\LosPlanGenerator;
 use Los\LosOptions;
+use Los\LosRecordMerger;
 use Los\Transformer\AirbnbRecordTransformer;
 use Los\Transformer\BookingComRecordTransformer;
 use Los\Transformer\SimpleArrayRecordTransformer;
@@ -218,7 +219,7 @@ class LosRecordTest extends TestCase
                                     {
                                         "type": "guests",
                                         "modifyRatePerUnit": true,
-                                        "minimum": 3
+                                        "minimum": 8
                                     },
                                     {
                                         "type": "nights",
@@ -248,17 +249,20 @@ class LosRecordTest extends TestCase
         );
 
         $losGenerator = new LosGenerator($upp);
-        $losOptions = new LosOptions('GBP', new \DateTime('2019-02-28'), new \DateTime('2020-08-28'));
+        $losOptions = new LosOptions('GBP', new \DateTime('2019-02-28'), new \DateTime('2019-12-31'));
         $losOptions->setForceFullGeneration(false);
+
+        $losOptions2 = new LosOptions('GBP', new \DateTime('2020-01-01'), new \DateTime('2020-08-28'));
+        $losOptions2->setForceFullGeneration(false);
 
         $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
         $parsed = $upp->parsePricingConfig($pricing, new StructureOptions());
 
-        $losRecords = $losGenerator->generateLosRecords($losOptions, $ld, $parsed);
-
-
+        $losRecords1 = $losGenerator->generateLosRecords($losOptions, $ld, $parsed);
+        $losRecords2 = $losGenerator->generateLosRecords($losOptions2, $ld, $parsed);
 
         // TRANSFORM
+        $losRecords = (new LosRecordMerger())->merge([$losRecords1, $losRecords2]);
 
 
         echo PHP_EOL . $losRecords->getMetrics()->getRunDataToString() . PHP_EOL;
