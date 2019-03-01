@@ -18,7 +18,7 @@ class LosOptions
     /**
      * @var string
      */
-    private $singleCurrency;
+    private $currency;
 
     /**
      * @var int
@@ -43,11 +43,13 @@ class LosOptions
     private $forceFullGeneration = false;
 
     /**
+     * @param string $currency
      * @param \DateTime $startDate
      * @param \DateTime $endDate
      */
-    public function __construct(\DateTime $startDate, \DateTime $endDate)
+    public function __construct(string $currency, \DateTime $startDate, \DateTime $endDate)
     {
+        $this->currency = $currency;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
     }
@@ -117,27 +119,11 @@ class LosOptions
     }
 
     /**
-     * @return bool
-     */
-    public function hasSingleCurrency(): bool
-    {
-        return !empty($this->singleCurrency);
-    }
-
-    /**
      * @return string
      */
-    public function getSingleCurrency(): string
+    public function getCurrency(): string
     {
-        return $this->singleCurrency;
-    }
-
-    /**
-     * @param string $singleCurrency
-     */
-    public function setSingleCurrency(string $singleCurrency)
-    {
-        $this->singleCurrency = $singleCurrency;
+        return $this->currency;
     }
 
     /**

@@ -6,11 +6,6 @@ class TransformOptions
 {
 
     /**
-     * @var string
-     */
-    private $currency;
-
-    /**
      * @var int
      */
     private $bcomRoomId;
@@ -19,22 +14,6 @@ class TransformOptions
      * @var int
      */
     private $bcomRateId;
-
-    /**
-     * @return string
-     */
-    public function getCurrency(): string
-    {
-        return $this->currency;
-    }
-
-    /**
-     * @param string $currency
-     */
-    public function setCurrency(string $currency)
-    {
-        $this->currency = $currency;
-    }
 
     /**
      * @return int

@@ -9,6 +9,7 @@ use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Util\MoneyUtils;
 use Los\Lookup\LookupDirectorFactory;
 use Los\LosGenerator;
+use Los\LosPlanGenerator;
 use Los\LosOptions;
 use Los\Transformer\AirbnbRecordTransformer;
 use Los\Transformer\BookingComRecordTransformer;
@@ -246,32 +247,33 @@ class LosRecordTest extends TestCase
             new TestTranslator()
         );
 
-        $structureOptions = new StructureOptions();
-        $parsed = $upp->parsePricingConfig($pricing, $structureOptions);
-
         $losGenerator = new LosGenerator($upp);
-
-        $losOptions = new LosOptions(new \DateTime('2019-02-28'), new \DateTime('2020-08-28'));
+        $losOptions = new LosOptions('GBP', new \DateTime('2019-02-28'), new \DateTime('2020-08-28'));
         $losOptions->setForceFullGeneration(false);
 
         $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
+        $parsed = $upp->parsePricingConfig($pricing, new StructureOptions());
 
         $losRecords = $losGenerator->generateLosRecords($losOptions, $ld, $parsed);
 
-        echo PHP_EOL . $losRecords->getRunDataToString() . PHP_EOL;
+
+
+        // TRANSFORM
+
+
+        echo PHP_EOL . $losRecords->getMetrics()->getRunDataToString() . PHP_EOL;
 
         $options = new TransformOptions();
-        $options->setCurrency('GBP');
         $options->setBcomRateId('111');
         $options->setBcomRoomId('222');
 
         $airbnb = new AirbnbRecordTransformer();
         $bcom = new BookingComRecordTransformer();
-        $simple = new SimpleArrayRecordTransformer();
         //echo PHP_EOL . PHP_EOL . json_encode($simple->transform($losRecords), JSON_PRETTY_PRINT);
         echo PHP_EOL;
         echo PHP_EOL;
-        echo json_encode($airbnb->transform($losRecords, $options), JSON_PRETTY_PRINT);
+        echo json_encode($bcom->transform($losRecords, $options), JSON_PRETTY_PRINT);
+
     }
 
 }

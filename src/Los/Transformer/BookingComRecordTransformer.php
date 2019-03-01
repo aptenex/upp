@@ -15,7 +15,7 @@ class BookingComRecordTransformer extends ArrayRecordTransformer
             $record['guest'],
             $options->getBcomRoomId(),
             $options->getBcomRateId(),
-            $options->getCurrency(),
+            $record['currency'],
             implode(',', $record['rates'])
         ]);
     }

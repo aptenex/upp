@@ -2,66 +2,70 @@
 
 namespace Los;
 
-use Los\Transformer\ArrayRecordTransformer;
-
 class LosRecords
 {
 
     /**
+     * @var string
+     */
+    private $currency;
+
+    /**
+     * @var Metrics
+     */
+    private $metrics;
+
+    /**
      * @var array
      */
-    private $records = [];
+    private $records;
+
+    public function __construct(string $currency, array $records = [])
+    {
+        $this->currency = $currency;
+        $this->records = $records;
+        $this->metrics = new Metrics();
+    }
 
     /**
-     * @var int
+     * @param string $currency
+     * @param array $records
+     * @return LosRecords
      */
-    private $timesUppRan = 0;
-
-    /**
-     * @var int
-     */
-    private $maxAmountOfPotentialUppRuns = 0;
-
-    /**
-     * @var mixed
-     */
-    private $startTime;
-
-    /**
-     * @var mixed
-     */
-    private $finishTime;
-
-    /**
-     * @var mixed
-     */
-    private $totalTime;
+    public static function makeFromExisting(string $currency, array $records): LosRecords
+    {
+        return new LosRecords($currency, $records);
+    }
 
     /**
      * We store min and max as the rate could be exactly the same regardless of the min/max.
      * Also we need to convert into different formats so storing it this way is helpful
      *
-     * @param string $currency
      * @param string $date
      * @param int $guest
      * @param array $rates
      */
-    public function addLineEntry(string $currency, string $date, int $guest, array $rates)
+    public function addLineEntry(string $date, int $guest, array $rates)
     {
-        if (!isset($this->records[$currency])) {
-            $this->records[$currency] = [];
+        if (!isset($this->records[$date])) {
+            $this->records[$date] = [];
         }
 
-        if (!isset($this->records[$currency][$date])) {
-            $this->records[$currency][$date] = [];
-        }
-
-        $this->records[$currency][$date][] = [
+        $this->records[$date][] = [
             'date' => $date,
             'guest' => $guest,
             'rates' => $rates,
-            'rateHash' => sha1(implode(',', $rates))
+            'rateHash' => sha1(implode(',', $rates)),
+            'currency' => $this->currency
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        return $this->currency;
     }
 
     /**
@@ -73,99 +77,11 @@ class LosRecords
     }
 
     /**
-     * @return array
+     * @return Metrics
      */
-    public function toSimpleArrayRecord(): array
+    public function getMetrics(): Metrics
     {
-        return (new ArrayRecordTransformer())->transform($this);
-    }
-
-    /**
-     * @return int
-     */
-    public function getTimesUppRan(): int
-    {
-        return $this->timesUppRan;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMaxAmountOfPotentialUppRuns(): int
-    {
-        return $this->maxAmountOfPotentialUppRuns;
-    }
-
-    /**
-     * @param int $timesUppRan
-     */
-    public function setTimesUppRan(int $timesUppRan)
-    {
-        $this->timesUppRan = $timesUppRan;
-    }
-
-    /**
-     * @param int $maxAmountOfPotentialUppRuns
-     */
-    public function setMaxAmountOfPotentialUppRuns(int $maxAmountOfPotentialUppRuns)
-    {
-        $this->maxAmountOfPotentialUppRuns = $maxAmountOfPotentialUppRuns;
-    }
-
-    /**
-     * @return float
-     */
-    public function getEfficiencyPercentage(): float
-    {
-        return round(100 - (($this->getTimesUppRan() / $this->getMaxAmountOfPotentialUppRuns()) * 100), 3);
-    }
-
-    /**
-     * @return string
-     */
-    public function getRunDataToString(): string
-    {
-        return sprintf(
-            'Completed in %ss%sTimes Ran: %s (Maximum: %s)%sEfficiency: %s%%',
-            round($this->totalTime / 1000, 2),
-            PHP_EOL,
-            $this->getTimesUppRan(),
-            $this->getMaxAmountOfPotentialUppRuns(),
-            PHP_EOL,
-            $this->getEfficiencyPercentage()
-        );
-    }
-
-    public function startTiming()
-    {
-        $execTime = microtime();
-        $execTime = explode(" ", $execTime);
-        $execTime = $execTime[1] + $execTime[0];
-        $startTime = $execTime;
-
-        $this->startTime = $startTime;
-    }
-
-    public function finishTiming()
-    {
-        $execTime = microtime();
-        $execTime = explode(" ", $execTime);
-        $execTime = $execTime[1] + $execTime[0];
-        $this->finishTime = $execTime;
-
-        $this->totalTime = ($this->finishTime - $this->startTime) * 1000; // Get Milliseconds
-
-        return $this->totalTime;
-    }
-
-    /**
-     * In milliseconds
-     *
-     * @return mixed
-     */
-    public function getTotalTime()
-    {
-        return $this->totalTime;
+        return $this->metrics;
     }
 
 }

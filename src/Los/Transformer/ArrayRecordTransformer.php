@@ -14,14 +14,10 @@ class ArrayRecordTransformer extends BaseRecordTransformer
 {
 
     /**
-     * This will select a specific currency
-     *
      * @param LosRecords $records
      * @param TransformOptions $options
      *
      * @return array Format is [ los_string, los_string, los_string ]
-     *
-     * @throws CannotGenerateLosException
      */
     public function transform(LosRecords $records, TransformOptions $options): array
     {
@@ -29,40 +25,10 @@ class ArrayRecordTransformer extends BaseRecordTransformer
             return [];
         }
 
-        $currencySet = $records->getRecords();
-
-        $cData = null;
-        foreach($currencySet as $setCurrency => $dateSet) {
-            if ($options->getCurrency() === null) {
-                $cData = $dateSet;
-                break;
-            }
-
-            if ($setCurrency === $options->getCurrency()) {
-                $cData = $dateSet;
-                break;
-            }
-        }
-
-        if ($cData === null) {
-            throw new CannotGenerateLosException('Could not locate valid currency for LosRecords');
-        }
-
-        return $this->transformCurrencySet($cData, $options);
-    }
-
-    /**
-     * @param array $recordSet
-     * @param TransformOptions $options
-     *
-     * @return array
-     */
-    public function transformCurrencySet(array $recordSet, TransformOptions $options): array
-    {
-        $currencySet = [];
+        $data = [];
 
         $computedEmptyHash = null;
-        foreach($recordSet as $date => $dateSet) {
+        foreach($records->getRecords() as $date => $dateSet) {
             // We need a lookahead to merge the first guest count if a few guest counts have the same rate
             // this is because there is no way to compare the first hash to the previous hash on the first one
             $firstLookahead = $dateSet[1] ?? null;
@@ -98,19 +64,19 @@ class ArrayRecordTransformer extends BaseRecordTransformer
                     // so we'll be adding two records one for the previous guest count and one for the last index guest count
                     // this extra index check
                     if ($maxGuestCountForSameHash !== 0 && $index !== ($guestEntries - 1)) {
-                        $currencySet[] = $this->generateLosRecordString($previousSingleRecord, $options);
+                        $data[] = $this->generateLosRecordString($previousSingleRecord, $options);
 
                         $maxGuestCountForSameHash = 0;
                     }
 
-                    $currencySet[] = $this->generateLosRecordString($singleRecord, $options);
+                    $data[] = $this->generateLosRecordString($singleRecord, $options);
                 }
 
                 $previousSingleRecord = $singleRecord;
             }
         }
 
-        return $currencySet;
+        return $data;
     }
 
 }
