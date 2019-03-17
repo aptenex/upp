@@ -34,9 +34,9 @@ class LosRecordMerger
         foreach($losRecords as $lrItem) {
             $totalRan += $lrItem->getMetrics()->getTimesRan();
             $totalMax += $lrItem->getMetrics()->getMaxPotentialRuns();
-            $cumulativeExecutionTime += $lrItem->getMetrics()->getTotalTime();
-            if ($lrItem->getMetrics()->getTotalTime() > $longestTime) {
-                $longestTime = $lrItem->getMetrics()->getTotalTime();
+            $cumulativeExecutionTime += $lrItem->getMetrics()->getTotalDuration();
+            if ($lrItem->getMetrics()->getTotalDuration() > $longestTime) {
+                $longestTime = $lrItem->getMetrics()->getTotalDuration();
             }
 
             if ($foundCurrency === null) {
@@ -57,7 +57,8 @@ class LosRecordMerger
         $mergedRecords = LosRecords::makeFromExisting($foundCurrency, $merged);
         $mergedRecords->getMetrics()->setTimesRan($totalRan);
         $mergedRecords->getMetrics()->setMaxPotentialRuns($totalMax);
-        $mergedRecords->getMetrics()->setTotalTime($cumulativeExecutionTime);
+        $mergedRecords->getMetrics()->setTotalDuration($cumulativeExecutionTime);
+        $mergedRecords->getMetrics()->setLongestDuration($longestTime);
 
         return $mergedRecords;
     }
