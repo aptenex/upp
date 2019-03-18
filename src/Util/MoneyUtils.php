@@ -15,24 +15,13 @@ class MoneyUtils
     private static $moneyParser;
     private static $moneyFormatter;
 
-    public static $currencyCache = ['__count' => 0];
-    public static $moneyInstanceCacheFromString = ['__count' => 0];
-    public static $moneyInstanceCacheNewMoney = ['__count' => 0];
-
     public static function getCurrency($currency)
     {
         if ($currency instanceof Currency) {
             return $currency;
         }
 
-        if (isset(self::$currencyCache[$currency])) {
-            self::$currencyCache['__count']++;
-            return self::$currencyCache[$currency];
-        }
-
         $currency = new Currency(strtoupper($currency));
-
-        self::$currencyCache[$currency->getCode()] = $currency;
 
         return $currency;
     }
@@ -55,16 +44,7 @@ class MoneyUtils
             $amount = 0;
         }
 
-        $key = $currency->getCode() . '_' . $amount;
-
-        if (isset(self::$moneyInstanceCacheFromString[$key])) {
-            self::$moneyInstanceCacheFromString['__count']++;
-            return self::$moneyInstanceCacheFromString[$key];
-        }
-
         $parsed = self::$moneyParser->parse((string) $amount, $currency);
-
-        self::$moneyInstanceCacheFromString[$key] = $parsed;
 
         return $parsed;
     }
@@ -83,16 +63,7 @@ class MoneyUtils
 
         $currency = self::getCurrency($currency);
 
-        $key = $currency->getCode() . '_' . $amount;
-
-        if (isset(self::$moneyInstanceCacheNewMoney[$key])) {
-            self::$moneyInstanceCacheNewMoney['__count']++;
-            return self::$moneyInstanceCacheNewMoney[$key];
-        }
-
         $money = new Money($amount, $currency);
-
-        self::$moneyInstanceCacheNewMoney[$key] = $money;
 
         return $money;
     }
