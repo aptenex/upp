@@ -85,7 +85,6 @@ class Price
             $this->total = MoneyUtils::newMoney(0, $this->getCurrency());
             $this->basePrice = MoneyUtils::newMoney(0, $this->getCurrency());
             $this->damageDeposit = MoneyUtils::newMoney(0, $this->getCurrency());
-
         }
 
         $this->stay = new Stay($contextUsed);
