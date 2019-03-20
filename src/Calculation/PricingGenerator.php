@@ -243,14 +243,14 @@ class PricingGenerator
      */
     private function calculateBasePrice(FinalPrice $fp)
     {
-        $fp->setBasePrice(MoneyUtils::newMoney(0, $fp->getBasePrice()->getCurrency()));
+        $zero = MoneyUtils::newMoney(0, $fp->getBasePrice()->getCurrency());
 
         $nightMonies = [];
         foreach ($fp->getStay()->getNights() as $night) {
             $nightMonies[] = $night->getCost();
         }
 
-        $fp->setBasePrice($fp->getBasePrice()->add(...$nightMonies));
+        $fp->setBasePrice($zero->add(...$nightMonies));
 
         foreach ($fp->getAdjustments() as $adjustment) {
             switch ($adjustment->getPriceGroup()) {

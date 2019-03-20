@@ -2708,5 +2708,450 @@
         }
       }
     ]
+  },
+  {
+    "name": "DVR Base Price Too Low",
+    "description": "Total/base amounts arnt calculating correctly",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "CAD",
+          "defaults": {
+            "damageDeposit": 500,
+            "damageDepositCalculationMethod": "fixed",
+            "perPetPerStay": 0,
+            "perPetPerNight": 0,
+            "perPetSplitMethod": "ON_TOTAL",
+            "minimumNights": 3,
+            "balanceDaysBeforeArrival": 45,
+            "depositSplitPercentage": 25,
+            "daysRequiredInAdvanceForBooking": 1,
+            "bookableType": "instant_bookable",
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_BALANCE"
+          },
+          "taxes": "@sun-peaks",
+          "periods": [
+            {
+              "description": "Spring Skiing",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-03-25",
+                  "endDate": "2019-04-21",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 275,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "4",
+                        "amount": 0.975,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 0.95,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 0.925,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "7",
+                        "amount": 0.9,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Spring\/Summer\/Fall",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-04-22",
+                  "endDate": "2019-11-14",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 190,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "4",
+                        "amount": 0.975,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 0.95,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 0.925,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "7",
+                        "amount": 0.9,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "10",
+                        "amount": 0.8,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Early Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-11-15",
+                  "endDate": "2019-12-19",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 275,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "Holidays",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-12-20",
+                  "endDate": "2019-12-26",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "5",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 595,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "New Years",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-12-27",
+                  "endDate": "2020-01-04",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "5",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 725,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "Powder Days",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-01-05",
+                  "endDate": "2020-02-13",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 245,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "Family Day Long Weekend",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-02-14",
+                  "endDate": "2020-02-16",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 395,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "Presidents Week",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-02-17",
+                  "endDate": "2020-02-22",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 375,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "Powder Fun",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-02-23",
+                  "endDate": "2020-03-06",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 295,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "March Break",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-03-07",
+                  "endDate": "2020-03-28",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 325,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "Spring Skiing",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-03-29",
+                  "endDate": "2020-04-19",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 275,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "Spring\/Summer\/Fall",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-04-20",
+                  "endDate": "2020-11-12",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 180,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_BALANCE",
+              "description": "Cleaning with Tax",
+              "conditionOperand": "AND",
+              "conditions": [],
+              "rate": {
+                "type": "adjustment",
+                "amount": 173.25,
+                "calculationMethod": "fixed",
+                "calculationOperand": "addition",
+                "applicableTaxes": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": {
+      "example-mixin": {}
+    },
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2019-04-19",
+          "departureDate": "2019-04-26",
+          "bookingDate": "2019-03-18",
+          "guests": 4,
+          "pets": 0,
+          "currency": "CAD"
+        },
+        "tests": {
+          "noNights": 7,
+          "finalPrice": 225350,
+          "basePrice": 158025,
+          "damageDeposit": 50000,
+          "adjustmentCount": 2,
+          "split": {
+            "deposit": 39507,
+            "balance": 185843
+          },
+          "nightPrices": {
+            "2019-04-19": 27500,
+            "2019-04-20": 27500,
+            "2019-04-21": 27500,
+            "2019-04-22": 19000,
+            "2019-04-23": 19000,
+            "2019-04-24": 19000,
+            "2019-04-25": 18525
+          }
+        }
+      }
+    ]
   }
 ]

@@ -18,6 +18,11 @@ class Defaults
     /**
      * @var int|null
      */
+    protected $maximumNights = null;
+
+    /**
+     * @var int|null
+     */
     protected $balanceDaysBeforeArrival = null;
 
     /**
@@ -94,7 +99,7 @@ class Defaults
      */
     public function hasMinimumNights()
     {
-        return !is_null($this->getMinimumNights());
+        return $this->getMinimumNights() !== null;
     }
 
     /**
@@ -111,6 +116,30 @@ class Defaults
     public function setMinimumNights($minimumNights)
     {
         $this->minimumNights = (int) $minimumNights;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMaximumNights()
+    {
+        return $this->getMaximumNights() !== null && $this->getMaximumNights() !== 0 && !empty($this->getMaximumNights());
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMaximumNights()
+    {
+        return $this->maximumNights;
+    }
+
+    /**
+     * @param int|null $maximumNights
+     */
+    public function setMaximumNights($maximumNights)
+    {
+        $this->maximumNights = $maximumNights;
     }
 
     /**
@@ -312,6 +341,7 @@ class Defaults
     {
         return [
             'minimumNights'                               => $this->getMinimumNights(),
+            'maximumNights'                               => $this->getMaximumNights(),
             'perPetPerStay'                               => $this->getPerPetPerStay(),
             'perPetPerNight'                              => $this->getPerPetPerStay(),
             'perPetSplitMethod'                           => $this->getPerPetSplitMethod(),

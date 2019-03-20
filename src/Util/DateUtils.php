@@ -592,4 +592,34 @@ class DateUtils
         return self::formatDateTime(new \DateTime(date("Y-m-d" . $extra, $unix), new \DateTimeZone('UTC')));
     }
 
+    /**
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param int $chunks
+     *
+     * @return array
+     */
+    public static function getDateChunks(\DateTime $start, \DateTime $end, int $chunks): array
+    {
+        $dateRange = self::getDateRangeInclusive($start, $end);
+
+        // Since array_chunk will return arrays of max length $chunk, we need to change this $chunk
+        // into the actual amount of days per chunk
+
+        $actualChunkCount = ceil(count($dateRange) / $chunks);
+
+        $chunkedList = array_chunk($dateRange, $actualChunkCount);
+
+        $chunkedDates = [];
+
+        foreach($chunkedList as $chunkItem) {
+            $chunkedDates[] = [
+                new \DateTime(array_shift($chunkItem)),
+                new \DateTime(array_pop($chunkItem)),
+            ];
+        }
+
+        return $chunkedDates;
+    }
+
 }

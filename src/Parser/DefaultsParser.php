@@ -32,6 +32,8 @@ class DefaultsParser
         $d->setPerPetSplitMethod(ArrayAccess::get('perPetSplitMethod', $defaults, SplitMethod::ON_TOTAL));
 
         $d->setMinimumNights(ArrayAccess::get('minimumNights', $defaults, null));
+        $d->setMaximumNights(ArrayAccess::get('maximumNights', $defaults, null));
+
         $d->setBalanceDaysBeforeArrival(ArrayAccess::get('balanceDaysBeforeArrival', $defaults, null));
         $d->setDepositSplitPercentage(ArrayAccess::get('depositSplitPercentage', $defaults, null));
 

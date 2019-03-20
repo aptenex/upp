@@ -28,7 +28,13 @@ class Metrics
     /**
      * @var mixed
      */
-    private $totalTime;
+    private $totalDuration;
+    
+    /**
+     * The longest duration is only useful when we merge results. It will give the longest duration..
+     * @var mixed
+     */
+    private $longestDuration;
 
     /**
      * @return int
@@ -77,7 +83,7 @@ class Metrics
     {
         return sprintf(
             'Completed in %ss%sTimes Ran: %s (Maximum: %s)%sEfficiency: %s%%',
-            round($this->totalTime / 1000, 2),
+            round($this->totalDuration / 1000, 2),
             PHP_EOL,
             $this->getTimesRan(),
             $this->getMaxPotentialRuns(),
@@ -103,17 +109,17 @@ class Metrics
         $execTime = $execTime[1] + $execTime[0];
         $this->finishTime = $execTime;
 
-        $this->totalTime = ($this->finishTime - $this->startTime) * 1000; // Get Milliseconds
+        $this->totalDuration = ($this->finishTime - $this->startTime) * 1000; // Get Milliseconds
 
-        return $this->totalTime;
+        return $this->totalDuration;
     }
 
     /**
-     * @param mixed $totalTime
+     * @param mixed $totalDuration
      */
-    public function setTotalTime($totalTime)
+    public function setTotalDuration($totalDuration)
     {
-        $this->totalTime = $totalTime;
+        $this->totalDuration = $totalDuration;
     }
 
     /**
@@ -121,10 +127,29 @@ class Metrics
      *
      * @return mixed
      */
-    public function getTotalTime()
+    public function getTotalDuration()
     {
-        return $this->totalTime;
+        return $this->totalDuration;
+    
+    
+    }
+    
+    /**
+     * @return mixed
+     */
+    public function getLongestDuration()
+    {
+        return $this->longestDuration;
+    }
+    
+    /**
+     * @param mixed $longestDuration
+     */
+    public function setLongestDuration($longestDuration): void
+    {
+        $this->longestDuration = $longestDuration;
     }
 
 
 }
+

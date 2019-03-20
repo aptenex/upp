@@ -273,10 +273,11 @@ class LosRecordTest extends TestCase
 
         $airbnb = new AirbnbRecordTransformer();
         $bcom = new BookingComRecordTransformer();
-        //echo PHP_EOL . PHP_EOL . json_encode($simple->transform($losRecords), JSON_PRETTY_PRINT);
+
+        // Uncomment this and then run composer test > los-records.txt to see its output
+        /*echo PHP_EOL;
         echo PHP_EOL;
-        echo PHP_EOL;
-        echo json_encode($bcom->transform($losRecords, $options), JSON_PRETTY_PRINT);
+        echo json_encode($bcom->transform($losRecords, $options), JSON_PRETTY_PRINT);*/
 
     }
 
