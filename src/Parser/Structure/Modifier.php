@@ -2,6 +2,8 @@
 
 namespace Aptenex\Upp\Parser\Structure;
 
+use Aptenex\Upp\Calculation\AdjustmentAmount;
+
 class Modifier extends AbstractControlItem implements ControlItemInterface
 {
 
@@ -14,7 +16,7 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
     const TYPE_EXTRA_GUEST_FEE = 'extra_guest_fee';
     const TYPE_BASE_PRICE_FEE = 'base_price_fee';
 
-    public static $basePriceModifierTypes = [
+    public static $priceGroupBaseTypes = [
         self::TYPE_EXTRA_GUEST_FEE,
         self::TYPE_BASE_PRICE_FEE
     ];
@@ -37,7 +39,7 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
     /**
      * @var bool
      */
-    protected $mergeBasePrice = false;
+    protected $priceGroup = AdjustmentAmount::PRICE_GROUP_TOTAL; // Default
 
     /**
      * @return string
@@ -88,27 +90,27 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isMergeBasePrice()
+    public function getPriceGroup()
     {
-        return $this->mergeBasePrice;
+        return $this->priceGroup;
     }
 
     /**
-     * @param bool $mergeBasePrice
+     * @param string $priceGroup
      */
-    public function setMergeBasePrice($mergeBasePrice)
+    public function setPriceGroup(string $priceGroup)
     {
-        $this->mergeBasePrice = $mergeBasePrice;
+        $this->priceGroup = $priceGroup;
     }
 
     /**
      * @return bool
      */
-    public function isBasePriceModifierType(): bool
+    public function isModifierTypeBasePrice(): bool
     {
-        return in_array($this->getType(), self::$basePriceModifierTypes, true);
+        return in_array($this->getType(), self::$priceGroupBaseTypes, true);
     }
 
     /**
@@ -120,7 +122,7 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
             'type'           => $this->getType(),
             'splitMethod'    => $this->getSplitMethod(),
             'hidden'         => $this->isHidden(),
-            'mergeBasePrice' => $this->isMergeBasePrice()
+            'priceGroup'     => $this->getPriceGroup()
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Parser;
 
+use Aptenex\Upp\Calculation\AdjustmentAmount;
 use Aptenex\Upp\Exception\InvalidPricingConfigException;
 use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\Modifier;
@@ -32,7 +33,7 @@ class ModifiersParser
 
         $m->setType(ArrayAccess::get('type', $modifierData, Modifier::TYPE_MODIFIER));
         $m->setHidden(ArrayAccess::get('hidden', $modifierData, false));
-        $m->setMergeBasePrice(ArrayAccess::get('mergeBasePrice', $modifierData, false));
+        $m->setPriceGroup(ArrayAccess::get('priceGroup', $modifierData, AdjustmentAmount::PRICE_GROUP_TOTAL));
         $m->setSplitMethod(ArrayAccess::get('splitMethod', $modifierData, SplitMethod::ON_TOTAL));
 
         $m->setDescription(ArrayAccess::getOrException(

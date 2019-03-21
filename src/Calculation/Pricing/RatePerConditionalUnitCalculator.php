@@ -155,12 +155,6 @@ class RatePerConditionalUnitCalculator
 
         $description = $controlItem->getDescription();
 
-        $adjustmentPriceGroup = AdjustmentAmount::PRICE_GROUP_TOTAL;
-
-        if ($controlItem->isMergeBasePrice() || $controlItem->isBasePriceModifierType()) {
-            $adjustmentPriceGroup = AdjustmentAmount::PRICE_GROUP_BASE;
-        }
-
         // If there are no conditions then we can just apply the modifier instantly
         if (count($modifier->getConditions()->getConditions()) === 0) {
             $fp->addAdjustment(new AdjustmentAmount(
@@ -169,7 +163,7 @@ class RatePerConditionalUnitCalculator
                 $description,
                 $rateConfig->getCalculationOperand(),
                 AdjustmentAmount::TYPE_MODIFIER,
-                $adjustmentPriceGroup,
+                $controlItem->getPriceGroup(),
                 $controlItem->getSplitMethod(),
                 $controlItem->isHidden(),
                 $modifier
@@ -236,7 +230,7 @@ class RatePerConditionalUnitCalculator
 
         $finalAdjustmentAmount = null;
 
-        if ($nonNightUnits > 0 || is_null($nonNightUnits) && !is_null($totalUnitAmount)) {
+        if ($nonNightUnits > 0 || (is_null($nonNightUnits) && !is_null($totalUnitAmount))) {
             $finalAdjustmentAmount = $amount->multiply($totalUnitAmount);
         } else if ($nightUnits > 0 && $totalConditions === 1 && !is_null($nightUnits)) {
             $finalAdjustmentAmount =  $amount->multiply($nightUnits);
@@ -253,7 +247,7 @@ class RatePerConditionalUnitCalculator
                 $description,
                 $rateConfig->getCalculationOperand(),
                 AdjustmentAmount::TYPE_MODIFIER,
-                $adjustmentPriceGroup,
+                $controlItem->getPriceGroup(),
                 $controlItem->getSplitMethod(),
                 $controlItem->isHidden(),
                 $modifier
