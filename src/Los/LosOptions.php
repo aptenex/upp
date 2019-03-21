@@ -5,6 +5,9 @@ namespace Los;
 class LosOptions
 {
 
+    const PRICE_RETURN_TYPE_TOTAL = 'RETURN_TOTAL';
+    const PRICE_RETURN_TYPE_BASE = 'BASE';
+
     /**
      * @var \DateTime
      */
@@ -41,6 +44,11 @@ class LosOptions
      * @var bool
      */
     private $forceFullGeneration = false;
+
+    /**
+     * @var string
+     */
+    private $priceReturnType = self::PRICE_RETURN_TYPE_TOTAL;
 
     /**
      * @param string $currency
@@ -140,6 +148,22 @@ class LosOptions
     public function setForceFullGeneration(bool $forceFullGeneration)
     {
         $this->forceFullGeneration = $forceFullGeneration;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPriceReturnType(): string
+    {
+        return $this->priceReturnType;
+    }
+
+    /**
+     * @param string $priceReturnType
+     */
+    public function setPriceReturnType(string $priceReturnType)
+    {
+        $this->priceReturnType = $priceReturnType;
     }
 
 }

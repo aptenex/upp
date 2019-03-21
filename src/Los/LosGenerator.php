@@ -153,7 +153,12 @@ class LosGenerator
                             $losRecords->getMetrics()->setTimesRan($losRecords->getMetrics()->getTimesRan() + 1);
                             $fp = $this->upp->generatePrice($pc, $pricingConfig);
 
-                            $rates[] = MoneyUtils::getConvertedAmount($fp->getTotal());
+                            $returnAmount = $fp->getTotal();
+                            if ($options->getPriceReturnType() === LosOptions::PRICE_RETURN_TYPE_BASE) {
+                                $returnAmount = $fp->getBasePrice();
+                            }
+
+                            $rates[] = MoneyUtils::getConvertedAmount($returnAmount);
                         } catch (CannotMatchRequestedDatesException $ex) {
                             $rates[] = 0;
                         } catch (InvalidPriceException $ex) {
