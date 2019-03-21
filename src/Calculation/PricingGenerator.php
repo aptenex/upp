@@ -86,6 +86,8 @@ class PricingGenerator
 
         $this->calculateHiddenOnBase($fp);
 
+        $this->calculateBaseNonTaxable($fp);
+
         $this->calculateTotalAndFinalBase($fp);
 
         $this->calculateSplitAmounts($fp);
@@ -270,6 +272,23 @@ class PricingGenerator
         foreach ($fp->getAdjustments() as $adjustment) {
             switch ($adjustment->getPriceGroup()) {
                 case AdjustmentAmount::PRICE_GROUP_HIDDEN_ON_BASE:
+                    $new = MoneyTools::applyMonetaryOperand($new, $adjustment->getAmount(), $adjustment->getOperand());
+                    break;
+            }
+        }
+
+        $fp->setBasePrice($new);
+    }
+
+    private function calculateBaseNonTaxable(FinalPrice $fp)
+    {
+        $new = MoneyUtils::newMoney(0, $fp->getCurrency());
+
+        $new = $new->add($fp->getBasePrice());
+
+        foreach ($fp->getAdjustments() as $adjustment) {
+            switch ($adjustment->getPriceGroup()) {
+                case AdjustmentAmount::PRICE_GROUP_BASE_NON_TAXABLE:
                     $new = MoneyTools::applyMonetaryOperand($new, $adjustment->getAmount(), $adjustment->getOperand());
                     break;
             }

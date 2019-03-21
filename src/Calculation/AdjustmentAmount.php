@@ -18,6 +18,7 @@ class AdjustmentAmount
 
     const PRICE_GROUP_TOTAL = 'total';
     const PRICE_GROUP_BASE = 'base';
+    const PRICE_GROUP_BASE_NON_TAXABLE = 'base_non_taxable';
     const PRICE_GROUP_NONE = 'none';
     const PRICE_GROUP_ARRIVAL = 'on_arrival';
 
