@@ -133,6 +133,11 @@ class PricingContext
      */
     private $configOverride;
 
+    /**
+     * @var array
+     */
+    private $meta;
+
     public function __construct()
     {
         $this->setBookingDate(date("Y-m-d"));
@@ -541,9 +546,26 @@ class PricingContext
     /**
      * @return array
      */
+    public function getMeta()
+    {
+        return $this->meta;
+    }
+
+    /**
+     * @param array $meta
+     */
+    public function setMeta($meta)
+    {
+        $this->meta = $meta;
+    }
+
+    /**
+     * @return array
+     */
     public function __toArray()
     {
         return [
+            'currency'            => $this->getCurrency(),
             'arrivalDate'         => $this->getArrivalDate(),
             'departureDate'       => $this->getDepartureDate(),
             'bookingDate'         => $this->getBookingDate(),
@@ -555,7 +577,8 @@ class PricingContext
             'locale'              => $this->getLocale(),
             'distributionChannel' => $this->getDistributionChannel(),
             'forceGeneration'     => $this->isForceGeneration(),
-            'testMode'            => $this->isTestMode()
+            'testMode'            => $this->isTestMode(),
+            'meta'                => $this->getMeta()
         ];
     }
 

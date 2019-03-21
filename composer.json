@@ -11,7 +11,7 @@
     },
     "require": {
         "php": ">=7.0",
-        "moneyphp/money": "^3.0",
+        "moneyphp/money": "3.2.1",
         "solaris/php-moon-phase": "1.1.*",
         "symfony/validator": "^3.2",
         "symfony/event-dispatcher" : "^3.2",

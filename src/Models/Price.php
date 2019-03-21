@@ -80,14 +80,17 @@ class Price
      */
     public function __construct(PricingContext $contextUsed)
     {
-        $this->currency = strtoupper(trim($contextUsed->getCurrency()));
-        $this->contextUsed = $contextUsed;
+        if (!empty($contextUsed->getCurrency())) {
+            $this->currency = strtoupper(trim($contextUsed->getCurrency()));
+            $this->total = MoneyUtils::newMoney(0, $this->getCurrency());
+            $this->basePrice = MoneyUtils::newMoney(0, $this->getCurrency());
+            $this->damageDeposit = MoneyUtils::newMoney(0, $this->getCurrency());
+        }
+
         $this->stay = new Stay($contextUsed);
-        $this->total = MoneyUtils::newMoney(0, $this->getCurrency());
-        $this->basePrice = MoneyUtils::newMoney(0, $this->getCurrency());
-        $this->damageDeposit = MoneyUtils::newMoney(0, $this->getCurrency());
         $this->splitDetails = new GuestSplitOverview();
         $this->errors = new ErrorHandler();
+        $this->contextUsed = $contextUsed;
     }
     
     /**
