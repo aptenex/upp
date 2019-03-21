@@ -60,6 +60,11 @@ class Upp
         }
 
         $context->setCurrency($currencyCode);
+
+        // Update Meta
+        $meta = $context->getMeta();
+        $meta['assignedDefaultCurrency'] = true;
+        $context->setMeta($meta);
     }
     
     /**
