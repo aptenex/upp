@@ -114,6 +114,8 @@ class AdjustmentAmount
     {
         if ($this->hidden && $this->priceGroup === self::PRICE_GROUP_TOTAL) {
             $this->priceGroup = self::PRICE_GROUP_HIDDEN_ON_BASE;
+        } else if ($this->hidden && $this->priceGroup === self::PRICE_GROUP_BASE) {
+            $this->priceGroup = self::PRICE_GROUP_HIDDEN_ON_BASE;
         }
 
         if ($this->splitMethod === 'ON_ARRIVAL') {

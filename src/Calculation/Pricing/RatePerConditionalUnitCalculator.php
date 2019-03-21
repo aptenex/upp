@@ -153,9 +153,13 @@ class RatePerConditionalUnitCalculator
             $amount = \Aptenex\Upp\Util\MoneyUtils::fromString($rateConfig->getAmount(), $fp->getCurrency());
         }
 
-        $description = $modifier->getControlItemConfig()->getDescription();
+        $description = $controlItem->getDescription();
 
         $adjustmentPriceGroup = AdjustmentAmount::PRICE_GROUP_TOTAL;
+
+        if ($controlItem->isMergeBasePrice() || $controlItem->isBasePriceModifierType()) {
+            $adjustmentPriceGroup = AdjustmentAmount::PRICE_GROUP_BASE;
+        }
 
         // If there are no conditions then we can just apply the modifier instantly
         if (count($modifier->getConditions()->getConditions()) === 0) {

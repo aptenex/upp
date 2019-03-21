@@ -9,6 +9,15 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
     const TYPE_BOOKING_FEE = 'booking_fee';
     const TYPE_MODIFIER = 'modifier';
     const TYPE_CLEANING = 'cleaning';
+    const TYPE_CARD_FEE = 'card_fee';
+    const TYPE_TOURISM_TAX = 'tourism_tax';
+    const TYPE_EXTRA_GUEST_FEE = 'extra_guest_fee';
+    const TYPE_BASE_PRICE_FEE = 'base_price_fee';
+
+    public static $basePriceModifierTypes = [
+        self::TYPE_EXTRA_GUEST_FEE,
+        self::TYPE_BASE_PRICE_FEE
+    ];
 
     /**
      * @var string
@@ -24,6 +33,11 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
      * @var bool
      */
     protected $hidden = false;
+
+    /**
+     * @var bool
+     */
+    protected $mergeBasePrice = false;
 
     /**
      * @return string
@@ -74,14 +88,39 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isMergeBasePrice()
+    {
+        return $this->mergeBasePrice;
+    }
+
+    /**
+     * @param bool $mergeBasePrice
+     */
+    public function setMergeBasePrice($mergeBasePrice)
+    {
+        $this->mergeBasePrice = $mergeBasePrice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBasePriceModifierType(): bool
+    {
+        return in_array($this->getType(), self::$basePriceModifierTypes, true);
+    }
+
+    /**
      * @return array
      */
-    public function __toArray()
+    public function __toArray(): array
     {
         return array_replace(parent::__toArray(), [
-            'type'        => $this->getType(),
-            'splitMethod' => $this->getSplitMethod(),
-            'hidden'      => $this->isHidden()
+            'type'           => $this->getType(),
+            'splitMethod'    => $this->getSplitMethod(),
+            'hidden'         => $this->isHidden(),
+            'mergeBasePrice' => $this->isMergeBasePrice()
         ]);
     }
 

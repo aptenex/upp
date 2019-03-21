@@ -32,6 +32,7 @@ class ModifiersParser
 
         $m->setType(ArrayAccess::get('type', $modifierData, Modifier::TYPE_MODIFIER));
         $m->setHidden(ArrayAccess::get('hidden', $modifierData, false));
+        $m->setMergeBasePrice(ArrayAccess::get('mergeBasePrice', $modifierData, false));
         $m->setSplitMethod(ArrayAccess::get('splitMethod', $modifierData, SplitMethod::ON_TOTAL));
 
         $m->setDescription(ArrayAccess::getOrException(
