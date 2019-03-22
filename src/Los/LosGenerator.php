@@ -143,7 +143,7 @@ class LosGenerator
                             !$options->isForceFullGeneration()
                         ) {
                             $rates[] = 0;
-                            break;
+                            continue;
                         }
 
                         $pc->setGuests($g);
@@ -166,6 +166,7 @@ class LosGenerator
                         } catch (BaseException $ex) {
                             $rates[] = 0;
                         }
+
                     }
 
                     if (\count($rates) < $dateMaxStay) {
