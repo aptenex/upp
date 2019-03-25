@@ -1,19 +1,20 @@
 <?php
 
-namespace Los;
+namespace Aptenex\Upp\Los;
 
-use Aptenex\Upp\Context\PricingContext;
-use Aptenex\Upp\Exception\BaseException;
-use Aptenex\Upp\Exception\CannotGenerateLosException;
-use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
-use Aptenex\Upp\Exception\InvalidPriceException;
-use Aptenex\Upp\Parser\Structure\Condition;
-use Aptenex\Upp\Parser\Structure\CurrencyConfig;
-use Aptenex\Upp\Parser\Structure\PricingConfig;
+require 'vendor/autoload.php';
+
 use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\DateUtils;
 use Aptenex\Upp\Util\MoneyUtils;
-use Los\Lookup\LookupDirector;
+use Aptenex\Upp\Context\PricingContext;
+use Aptenex\Upp\Exception\BaseException;
+use Aptenex\Upp\Parser\Structure\Condition;
+use Aptenex\Upp\Parser\Structure\PricingConfig;
+use Aptenex\Upp\Los\Lookup\LookupDirectorInterface;
+use Aptenex\Upp\Exception\InvalidPriceException;
+use Aptenex\Upp\Exception\CannotGenerateLosException;
+use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
 
 class LosGenerator
 {
@@ -33,14 +34,14 @@ class LosGenerator
 
     /**
      * @param LosOptions $options
-     * @param LookupDirector $ld
+     * @param LookupDirectorInterface $ld
      * @param PricingConfig $pricingConfig
      *
      * @return LosRecords
      *
      * @throws CannotGenerateLosException
      */
-    public function generateLosRecords(LosOptions $options, LookupDirector $ld, PricingConfig $pricingConfig): LosRecords
+    public function generateLosRecords(LosOptions $options, LookupDirectorInterface $ld, PricingConfig $pricingConfig): LosRecords
     {
         $cc = null;
         foreach($pricingConfig->getCurrencyConfigs() as $ccItem) {

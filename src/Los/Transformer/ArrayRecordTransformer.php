@@ -1,9 +1,9 @@
 <?php
 
-namespace Los\Transformer;
+namespace Aptenex\Upp\Los\Transformer;
 
 use Aptenex\Upp\Exception\CannotGenerateLosException;
-use Los\LosRecords;
+use Aptenex\Upp\Los\LosRecords;
 
 /**
  * This array -> record transformer mimics Airbnb's format near identical just with multiple currencies

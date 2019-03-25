@@ -1,8 +1,8 @@
 <?php
 
-namespace Los\Lookup;
+namespace Aptenex\Upp\Los\Lookup;
 
-use Los\LosOptions;
+use Aptenex\Upp\Los\LosOptions;
 use Aptenex\Upp\Helper\ArrayAccess;
 
 class LookupDirectorFactory

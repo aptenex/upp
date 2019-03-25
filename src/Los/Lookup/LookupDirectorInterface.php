@@ -1,6 +1,6 @@
 <?php
 
-namespace Los\Lookup;
+namespace Aptenex\Upp\Los\Lookup;
 
 interface LookupDirectorInterface
 {

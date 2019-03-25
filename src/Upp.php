@@ -13,6 +13,7 @@ use Aptenex\Upp\Parser\Structure\StructureOptions;
 use Aptenex\Upp\Parser\Resolver\ResolverInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Aptenex\Upp\Exception\InvalidPricingConfigException;
+use Translation\TestTranslator;
 
 class Upp
 {
@@ -78,6 +79,11 @@ class Upp
         $pricingGenerator = new PricingGenerator();
 
         // We need to see if the translation exists otherwise default to 'en'
+
+        // The only reason this CAN be null is due to being run in a threaded environment (pthreads)
+        if (LanguageTools::$translator === null) {
+            LanguageTools::$translator = new TestTranslator(); // Re-instantiate
+        }
 
         if (LanguageTools::$translator->trans('TRANSLATION_TEST', [], 'upp', $context->getLocale()) === 'TRANSLATION_TEST') {
             // Translation file does not exist

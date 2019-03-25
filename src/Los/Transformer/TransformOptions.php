@@ -1,6 +1,6 @@
 <?php
 
-namespace Los\Transformer;
+namespace Aptenex\Upp\Los\Transformer;
 
 class TransformOptions
 {

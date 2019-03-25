@@ -1,6 +1,6 @@
 <?php
 
-namespace Los;
+namespace Aptenex\Upp\Los;
 
 class LosOptions
 {

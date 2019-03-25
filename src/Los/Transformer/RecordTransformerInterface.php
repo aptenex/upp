@@ -1,8 +1,8 @@
 <?php
 
-namespace Los\Transformer;
+namespace Aptenex\Upp\Los\Transformer;
 
-use Los\LosRecords;
+use Aptenex\Upp\Los\LosRecords;
 
 interface RecordTransformerInterface
 {

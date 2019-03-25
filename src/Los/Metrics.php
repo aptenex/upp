@@ -1,6 +1,6 @@
 <?php
 
-namespace Los;
+namespace Aptenex\Upp\Los;
 
 class Metrics
 {
@@ -82,8 +82,10 @@ class Metrics
     public function getRunDataToString(): string
     {
         return sprintf(
-            'Completed in %ss%sTimes Ran: %s (Maximum: %s)%sEfficiency: %s%%',
+            'Completed in %ss%sLongest Duration: %ss%sTimes Ran: %s (Maximum: %s)%sEfficiency: %s%%',
             round($this->totalDuration / 1000, 2),
+            PHP_EOL,
+            round($this->longestDuration / 1000, 2),
             PHP_EOL,
             $this->getTimesRan(),
             $this->getMaxPotentialRuns(),

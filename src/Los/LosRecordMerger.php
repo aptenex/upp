@@ -1,6 +1,6 @@
 <?php
 
-namespace Los;
+namespace Aptenex\Upp\Los;
 use Aptenex\Upp\Exception\CannotGenerateLosException;
 
 /**
