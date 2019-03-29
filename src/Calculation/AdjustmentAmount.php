@@ -34,7 +34,7 @@ class AdjustmentAmount
     public static $priceGroupMap = [
         self::PRICE_GROUP_TOTAL => 'On Total',
         self::PRICE_GROUP_BASE => 'On Base (taxed & visible)',
-        self::PRICE_GROUP_BASE_NON_TAXABLE => 'Hidden On Base (not taxed)',
+        self::PRICE_GROUP_BASE_NON_TAXABLE => 'On Base (not taxed)',
         self::PRICE_GROUP_HIDDEN_ON_BASE => 'Hidden On Base (hidden from guest)',
         self::PRICE_GROUP_ARRIVAL => 'On Arrival (does not apply to any price)',
         self::PRICE_GROUP_NONE => 'None (does not apply to any price)',
