@@ -18,8 +18,7 @@ class Condition
 
     public static $dateBasedConditions = [
         self::TYPE_DATE,
-        self::TYPE_MULTI_DATE,
-        self::TYPE_WEEKDAYS
+        self::TYPE_MULTI_DATE
     ];
 
     public static $otherBasedConditions = [
@@ -31,7 +30,8 @@ class Condition
         self::TYPE_NIGHTS,
         self::TYPE_WEEKS,
         self::TYPE_MONTHS,
-        self::TYPE_BOOKING_DAYS
+        self::TYPE_BOOKING_DAYS,
+        self::TYPE_WEEKDAYS
     ];
 
     /**
