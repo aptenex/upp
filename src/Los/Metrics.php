@@ -112,6 +112,7 @@ class Metrics
         $this->finishTime = $execTime;
 
         $this->totalDuration = ($this->finishTime - $this->startTime) * 1000; // Get Milliseconds
+        $this->longestDuration = $this->totalDuration; // These are effectively the same when set via start/finish timing
 
         return $this->totalDuration;
     }
