@@ -128,6 +128,9 @@ class RatePerConditionalUnitCalculator
             $cur->setUnits($noMonths);
             $cur->setUnitDescription('MONTH_UNIT');
 
+        } else if ($config instanceof Condition\WeekdaysCondition) {
+            $cur->setUnits(count($condition->getDatesMatched()));
+            $cur->setUnitDescription('DAY_OF_WEEK_UNIT');
         }
 
         return $cur;
