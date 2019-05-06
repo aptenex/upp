@@ -53,7 +53,7 @@ class PricingConfigParser
             ArrayAccess::getOrException('name', $data, InvalidPricingConfigException::class, "The 'name' parameter is not specified"),
             ArrayAccess::getOrException('schema', $data, InvalidPricingConfigException::class, "The 'schema' parameter is not specified"),
             ArrayAccess::getOrException('version', $data, InvalidPricingConfigException::class, "The 'version' parameter is not specified"),
-            ArrayAccess::getOrException('meta', $data, InvalidPricingConfigException::class, "The 'meta' parameter is not specified"),
+            ArrayAccess::get('meta', $data, []),
             $data
         );
 
