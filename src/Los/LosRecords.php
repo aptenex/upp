@@ -44,8 +44,9 @@ class LosRecords
      * @param string $date
      * @param int $guest
      * @param array $rates
+     * @param array $baseRates
      */
-    public function addLineEntry(string $date, int $guest, array $rates)
+    public function addLineEntry(string $date, int $guest, array $rates, array $baseRates)
     {
         if (!isset($this->records[$date])) {
             $this->records[$date] = [];
@@ -56,6 +57,8 @@ class LosRecords
             'guest' => $guest,
             'rates' => $rates,
             'rateHash' => sha1(implode(',', $rates)),
+            'baseRates' => $baseRates,
+            'baseRatesHash' => sha1(implode(',', $baseRates)),
             'currency' => $this->currency
         ];
     }

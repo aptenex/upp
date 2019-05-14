@@ -5,6 +5,8 @@ namespace Aptenex\Upp\Los\Transformer;
 class TransformOptions
 {
 
+    const PRICE_RETURN_TYPE_TOTAL = 'RETURN_TOTAL';
+    const PRICE_RETURN_TYPE_BASE = 'RETURN_BASE';
     /**
      * @var int
      */
@@ -14,6 +16,11 @@ class TransformOptions
      * @var int
      */
     private $bcomRateId;
+
+    /**
+     * @var string
+     */
+    private $priceReturnType = self::PRICE_RETURN_TYPE_TOTAL;
 
     /**
      * @return int
@@ -45,6 +52,22 @@ class TransformOptions
     public function setBcomRateId(int $bcomRateId)
     {
         $this->bcomRateId = $bcomRateId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPriceReturnType(): string
+    {
+        return $this->priceReturnType;
+    }
+
+    /**
+     * @param string $priceReturnType
+     */
+    public function setPriceReturnType(string $priceReturnType)
+    {
+        $this->priceReturnType = $priceReturnType;
     }
 
 }

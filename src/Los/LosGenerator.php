@@ -121,9 +121,11 @@ class LosGenerator
             // we can determine at what point it'll get modified and calculate accordingly
 
             $previousRateSet = null;
+            $previousBaseRateSet = null;
 
             for ($g = 1; $g <= $maxOccupancy; $g++) {
                 $rates = [];
+                $baseRates = [];
 
                 if (($g >= $perGuestChangesAt && $guestModifierCondition !== null) || $previousRateSet === null || $options->isForceFullGeneration()) {
                     // Because we start on 1 we need to add 1 (this can be done with an LTE operator
@@ -154,33 +156,35 @@ class LosGenerator
                             $losRecords->getMetrics()->setTimesRan($losRecords->getMetrics()->getTimesRan() + 1);
                             $fp = $this->upp->generatePrice($pc, $pricingConfig);
 
-                            $returnAmount = $fp->getTotal();
-                            if ($options->getPriceReturnType() === LosOptions::PRICE_RETURN_TYPE_BASE) {
-                                $returnAmount = $fp->getBasePrice();
-                            }
-
-                            $rates[] = MoneyUtils::getConvertedAmount($returnAmount);
+                            $rates[] = MoneyUtils::getConvertedAmount($fp->getTotal());
+                            $baseRates[] = MoneyUtils::getConvertedAmount($fp->getBasePrice());
                         } catch (CannotMatchRequestedDatesException $ex) {
                             $rates[] = 0;
+                            $baseRates[] = 0;
                         } catch (InvalidPriceException $ex) {
                             $rates[] = 0;
+                            $baseRates[] = 0;
                         } catch (BaseException $ex) {
                             $rates[] = 0;
+                            $baseRates[] = 0;
                         }
 
                     }
 
                     if (\count($rates) < $dateMaxStay) {
                         $rates = array_pad($rates, $dateMaxStay, 0);
+                        $baseRates = array_pad($baseRates, $dateMaxStay, 0);
                     }
 
                     $previousRateSet = $rates;
+                    $previousBaseRateSet = $baseRates;
                 }
 
                 $losRecords->addLineEntry(
                     $date,
                     $g,
-                    $previousRateSet
+                    $previousRateSet,
+                    $previousBaseRateSet
                 );
             }
         }
