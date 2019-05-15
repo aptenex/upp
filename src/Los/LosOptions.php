@@ -2,6 +2,8 @@
 
 namespace Aptenex\Upp\Los;
 
+use Aptenex\Upp\Context\PricingContext;
+
 class LosOptions
 {
 
@@ -38,9 +40,18 @@ class LosOptions
     private $maximumStayRateLength = 30;
 
     /**
+     * Whether to brute force the generation and not to take into account availability & other factors etc
+     *
      * @var bool
      */
     private $forceFullGeneration = false;
+
+    /**
+     * PricingContext Mode
+     *
+     * @var string
+     */
+    private $pricingContextMode = PricingContext::MODE_NORMAL;
 
     /**
      * @param string $currency
@@ -140,6 +151,22 @@ class LosOptions
     public function setForceFullGeneration(bool $forceFullGeneration)
     {
         $this->forceFullGeneration = $forceFullGeneration;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPricingContextMode(): string
+    {
+        return $this->pricingContextMode;
+    }
+
+    /**
+     * @param string $pricingContextMode
+     */
+    public function setPricingContextMode(string $pricingContextMode): void
+    {
+        $this->pricingContextMode = $pricingContextMode;
     }
 
 }

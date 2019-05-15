@@ -73,14 +73,14 @@ class PricingGenerator
 
         // Re-loop through the nights and re-total
         $this->calculateBasePrice($fp);
-        $this->applyModifiers($fp);
+        $this->applyModifiers($context, $fp);
         $this->calculateBasePrice($fp);
 
         $this->calculateExtras($fp);
 
-        $this->calculatePets($fp);
+        $this->calculatePets($context, $fp);
 
-        $this->calculateTaxes($fp);
+        $this->calculateTaxes($context, $fp);
 
         $this->calculateDamageDeposit($fp);
 
@@ -90,13 +90,13 @@ class PricingGenerator
 
         $this->calculateTotalAndFinalBase($fp);
 
-        $this->calculateSplitAmounts($fp);
+        $this->calculateSplitAmounts($context, $fp);
 
         /*
          * This will go through all periods used and determine what bookable type this price should be,
          * the order of precedence is enquiry only, then with price and then instant bookable
          */
-        $this->determineBookableTypeAndFields($fp);
+        $this->determineBookableTypeAndFields($context, $fp);
 
         /*
          * The final check, just to make sure this isn't a messed up price
@@ -118,7 +118,7 @@ class PricingGenerator
             throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
         }
 
-        if (!is_null($fp->getSplitDetails())) {
+        if ($context->isLosMode() === false && $fp->getSplitDetails() !== null) {
             if ($fp->getSplitDetails()->getDeposit()->isNegative()) {
                 throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
             }
@@ -134,6 +134,12 @@ class PricingGenerator
     {
         if ($context->isTestMode()) {
             return; // Do not check this in test mode
+        }
+
+        // LOS is not going to be generated every day so this will become out of date and inaccurate.
+        // Days required in advance will need to be set when pushing ARI to the various otas
+        if ($context->isLosMode()) {
+            return;
         }
 
         $defaults = $fp->getCurrencyConfigUsed()->getDefaults();
@@ -215,18 +221,30 @@ class PricingGenerator
     }
 
     /**
+     * @param PricingContext $context
      * @param FinalPrice $fp
      */
-    private function calculatePets(FinalPrice $fp)
+    private function calculatePets(PricingContext $context, FinalPrice $fp): void
     {
+        // If mode is los, this needs to be skipped as when sending ARI these will be sent separately
+        if ($context->isLosMode()) {
+            return;
+        }
+
         (new PetsCalculator())->calculateAndApplyAdjustments($fp);
     }
 
     /**
+     * @param PricingContext $context
      * @param FinalPrice $fp
      */
-    private function calculateTaxes(FinalPrice $fp)
+    private function calculateTaxes(PricingContext $context, FinalPrice $fp): void
     {
+        // If mode is los, this needs to be skipped as when sending ARI these will be sent separately
+        if ($context->getMode() === PricingContext::MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES) {
+            return;
+        }
+
         (new TaxesCalculator())->calculateAndApplyAdjustments($fp);
     }
 
@@ -235,7 +253,7 @@ class PricingGenerator
      *
      * @param FinalPrice $fp
      */
-    private function calculateDamageDeposit(FinalPrice $fp)
+    private function calculateDamageDeposit(FinalPrice $fp): void
     {
         (new DamageDepositCalculator())->calculateAndApplyAdjustment($fp);
     }
@@ -243,7 +261,7 @@ class PricingGenerator
     /**
      * @param FinalPrice $fp
      */
-    private function calculateBasePrice(FinalPrice $fp)
+    private function calculateBasePrice(FinalPrice $fp): void
     {
         $zero = MoneyUtils::newMoney(0, $fp->getBasePrice()->getCurrency());
 
@@ -263,7 +281,7 @@ class PricingGenerator
         }
     }
 
-    private function calculateHiddenOnBase(FinalPrice $fp)
+    private function calculateHiddenOnBase(FinalPrice $fp): void
     {
         $new = MoneyUtils::newMoney(0, $fp->getCurrency());
 
@@ -280,7 +298,7 @@ class PricingGenerator
         $fp->setBasePrice($new);
     }
 
-    private function calculateBaseNonTaxable(FinalPrice $fp)
+    private function calculateBaseNonTaxable(FinalPrice $fp): void
     {
         $new = MoneyUtils::newMoney(0, $fp->getCurrency());
 
@@ -297,7 +315,7 @@ class PricingGenerator
         $fp->setBasePrice($new);
     }
 
-    private function calculateTotalAndFinalBase(FinalPrice $fp)
+    private function calculateTotalAndFinalBase(FinalPrice $fp): void
     {
         $newTotal = MoneyUtils::newMoney(0, $fp->getCurrency());
         $newBase = MoneyUtils::newMoney($fp->getBasePrice()->getAmount(), $fp->getCurrency());
@@ -329,18 +347,19 @@ class PricingGenerator
     /**
      * This will alter the relevant days based on the modifiers
      *
+     * @param PricingContext $context
      * @param FinalPrice $fp
      */
-    private function applyModifiers(FinalPrice $fp)
+    private function applyModifiers(PricingContext $context, FinalPrice $fp): void
     {
-        (new ModifierRateCalculator())->compute($fp);
+        (new ModifierRateCalculator())->compute($context, $fp);
     }
 
     /**
      * @param PricingContext $context
      * @param FinalPrice     $fp
      */
-    private function evaluatePeriods(PricingContext $context, FinalPrice $fp)
+    private function evaluatePeriods(PricingContext $context, FinalPrice $fp): void
     {
         foreach ($fp->getCurrencyConfigUsed()->getPeriods() as $period) {
 
@@ -390,12 +409,26 @@ class PricingGenerator
      * @param PricingContext $context
      * @param FinalPrice     $fp
      */
-    private function evaluateModifiers(PricingContext $context, FinalPrice $fp)
+    private function evaluateModifiers(PricingContext $context, FinalPrice $fp): void
     {
         foreach ($fp->getCurrencyConfigUsed()->getModifiers() as $modifier) {
 
             $cm = new Modifier($fp);
             $cm->setControlItemConfig($modifier);
+
+            /*
+             * If the mode is to exclude fees & taxes, then we need to check if this modifier has any conditions.
+             *
+             * If it does not, then skip this modifier as it will be sent to the OTA separately on the ARI push.
+             * This is to stop commissions by the OTA's being taken on tax amounts etc...
+             */
+
+            if (
+                $context->getMode() === PricingContext::MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES &&
+                empty($modifier->getConditions())
+            ) {
+                continue;
+            }
 
             $conSet = (new Evaluator())->evaluateConditions($context, $cm);
 
@@ -444,13 +477,13 @@ class PricingGenerator
      *
      * @throws CannotMatchRequestedDatesException
      */
-    private function validateDaysMatched(FinalPrice $fp)
+    private function validateDaysMatched(FinalPrice $fp): void
     {
         $notMatched = [];
 
         foreach ($fp->getStay()->getNights() as $day) {
             if (!$day->hasPeriodControlItem()) {
-                $notMatched[] = $day->getDate()->format("Y-m-d");
+                $notMatched[] = $day->getDate()->format('Y-m-d');
             }
         }
 
@@ -462,7 +495,7 @@ class PricingGenerator
     /**
      * @param FinalPrice $fp
      */
-    private function runPostEvaluationOnValidPeriods(FinalPrice $fp)
+    private function runPostEvaluationOnValidPeriods(FinalPrice $fp): void
     {
         $this->performMinimumNightsCheck($fp);
 
@@ -482,7 +515,7 @@ class PricingGenerator
     /**
      * @param FinalPrice $fp
      */
-    private function performMinimumNightsCheck(FinalPrice $fp)
+    private function performMinimumNightsCheck(FinalPrice $fp): void
     {
         $defaults = $fp->getCurrencyConfigUsed()->getDefaults();
 
@@ -542,8 +575,12 @@ class PricingGenerator
         }
     }
 
-    private function calculateSplitAmounts(FinalPrice $fp)
+    private function calculateSplitAmounts(PricingContext $context, FinalPrice $fp): void
     {
+        if ($context->isLosMode()) {
+            return;
+        }
+
         $defaults = $fp->getCurrencyConfigUsed()->getDefaults();
 
         if ($defaults->hasDamageDeposit()) {
@@ -676,8 +713,12 @@ class PricingGenerator
      *
      * @param FinalPrice $fp
      */
-    private function determineBookableTypeAndFields(FinalPrice $fp)
+    private function determineBookableTypeAndFields(PricingContext $context, FinalPrice $fp): void
     {
+        if ($context->isLosMode()) {
+            return;
+        }
+
         $priorityMap = \Aptenex\Upp\Parser\Structure\Period::$bookableTypePriorityMap;
 
         $current = null; // So first bookable type will always work
@@ -715,7 +756,7 @@ class PricingGenerator
      *
      * @return \DateTime
      */
-    public function calculateDepositDueDate()
+    public function calculateDepositDueDate(): \DateTime
     {
         return new \DateTime(date("Y-m-d"), new \DateTimeZone('UTC'));
     }
@@ -727,7 +768,7 @@ class PricingGenerator
      * @return \DateTime
      * @throws \Exception
      */
-    public function calculateBalanceDueDate($balanceDaysBeforeArrival, $arrivalDate)
+    public function calculateBalanceDueDate($balanceDaysBeforeArrival, $arrivalDate): \DateTime
     {
         $arrivalDate = clone $arrivalDate;
 

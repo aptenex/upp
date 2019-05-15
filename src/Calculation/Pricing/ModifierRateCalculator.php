@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Calculation\Pricing;
 
+use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Util\MoneyUtils;
 use Aptenex\Upp\Helper\MoneyTools;
 use Aptenex\Upp\Calculation\FinalPrice;
@@ -10,9 +11,10 @@ class ModifierRateCalculator
 {
 
     /**
+     * @param PricingContext $context
      * @param FinalPrice $fp
      */
-    public function compute(FinalPrice $fp)
+    public function compute(PricingContext $context, FinalPrice $fp)
     {
         foreach($fp->getStay()->getModifiersUsed() as $modifier) {
             if (false) {

@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Aptenex\Upp\Context\PricingContext;
 use Pool;
 use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\DateUtils;
@@ -24,7 +25,6 @@ class LosRecordTest extends TestCase
 
     public function testLosRecords()
     {
-        return;
         $rentalSchemaData = '
             {
                 "supportedLocales": [
@@ -182,7 +182,16 @@ class LosRecordTest extends TestCase
                             "daysRequiredInAdvanceForBooking": 0,
                             "extraNightAlterationStrategyUseGlobalNights": false
                         },
-                        "taxes": [],
+                        "taxes": [
+                            {
+                                "name": "Test Tax",
+                                "uuid": "677188f0-d2c2-45df-bdf0-35a0e1bd5388",
+                                "type": "TYPE_TAX",
+                                "amount": 0.05,
+                                "calculationMethod": "percentage",
+                                "includeBasePrice": true
+                            }
+                        ],
                         "periods": [
                             {
                                 "description": "Example Period",
@@ -210,6 +219,21 @@ class LosRecordTest extends TestCase
                             }
                         ],
                         "modifiers": [
+                            {
+                                "type": "cleaning",
+                                "hidden": false,
+                                "splitMethod": "ON_TOTAL",
+                                "description": "Cleaning",
+                                "conditionOperand": "AND",
+                                "conditions": [],
+                                "rate": {
+                                    "type": "adjustment",
+                                    "amount": 100,
+                                    "calculationMethod": "fixed",
+                                    "calculationOperand": "addition",
+                                    "applicableTaxes": []
+                                }
+                            },
                             {
                                 "type": "modifier",
                                 "hidden": false,
@@ -250,35 +274,31 @@ class LosRecordTest extends TestCase
         );
 
         $losGenerator = new LosGenerator($upp);
-        $losOptions = new LosOptions('GBP', new \DateTime('2019-02-28'), new \DateTime('2019-12-31'));
+
+        $losOptions = new LosOptions(
+            'GBP',
+            new \DateTime('2019-02-01'),
+            new \DateTime('2019-05-31')
+        );
+
         $losOptions->setForceFullGeneration(false);
 
-        $losOptions2 = new LosOptions('GBP', new \DateTime('2020-01-01'), new \DateTime('2020-08-28'));
-        $losOptions2->setForceFullGeneration(false);
+        // The test rates are generated without a fee that is always applied. This option should remove these
+        $losOptions->setPricingContextMode(PricingContext::MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES);
 
         $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
         $parsed = $upp->parsePricingConfig($pricing, new StructureOptions());
 
         $losRecords1 = $losGenerator->generateLosRecords($losOptions, $ld, $parsed);
-        $losRecords2 = $losGenerator->generateLosRecords($losOptions2, $ld, $parsed);
-
-        // TRANSFORM
-        $losRecords = (new LosRecordMerger())->merge([$losRecords1, $losRecords2]);
-
+        $losRecords = (new LosRecordMerger())->merge([$losRecords1]);
 
         echo PHP_EOL . $losRecords->getMetrics()->getRunDataToString() . PHP_EOL;
 
         $options = new TransformOptions();
-        $options->setBcomRateId('111');
-        $options->setBcomRoomId('222');
-
         $transformer = new AirbnbRecordTransformer();
+        $output = json_encode($transformer->transform($losRecords, $options), JSON_PRETTY_PRINT);
 
-        echo PHP_EOL;
-        echo PHP_EOL;
-        echo json_encode($transformer->transform($losRecords, $options), JSON_PRETTY_PRINT);
-
-        $this->assertTrue(true);
+        $this->assertStringEqualsFile(__DIR__ . '/Resources/los_test_01.txt', $output);
     }
 
     public function testPthreadsLosRecords()

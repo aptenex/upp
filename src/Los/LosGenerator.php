@@ -72,6 +72,7 @@ class LosGenerator
         $pc = new PricingContext();
         $pc->setBookingDate($bookingDate);
         $pc->setCurrency($cc->getCurrency());
+        $pc->setMode($options->getPricingContextMode());
 
         $losRecords->getMetrics()->setMaxPotentialRuns($maxOccupancy * $days * $options->getMaximumStayRateLength());
 
@@ -192,6 +193,13 @@ class LosGenerator
         $losRecords->getMetrics()->finishTiming();
 
         return $losRecords;
+    }
+
+    /**
+     * @param PricingConfig $config
+     */
+    private function removeMandatoryFeesAndTaxes(PricingConfig $config): void
+    {
     }
 
     /**

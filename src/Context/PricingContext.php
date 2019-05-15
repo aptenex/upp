@@ -15,10 +15,24 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class PricingContext
 {
 
+    public const MODE_NORMAL = 'MODE_NORMAL';
+    public const MODE_LOS = 'MODE_LOS';
+    public const MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES = 'MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES';
+
+    public static $losModes = [
+        self::MODE_LOS,
+        self::MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES
+    ];
+
     /**
      * @var string
      */
     private $description;
+
+    /**
+     * @var string
+     */
+    private $mode = self::MODE_NORMAL;
 
     /**
      * @Currency()
@@ -560,12 +574,37 @@ class PricingContext
     }
 
     /**
+     * @return string
+     */
+    public function getMode(): string
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode(string $mode): void
+    {
+        $this->mode = $mode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLosMode(): bool
+    {
+        return \in_array($this->mode, self::$losModes, true);
+    }
+
+    /**
      * @return array
      */
-    public function __toArray()
+    public function __toArray(): array
     {
         return [
             'currency'            => $this->getCurrency(),
+            'mode'                => $this->getMode(),
             'arrivalDate'         => $this->getArrivalDate(),
             'departureDate'       => $this->getDepartureDate(),
             'bookingDate'         => $this->getBookingDate(),
