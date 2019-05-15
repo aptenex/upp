@@ -5,10 +5,23 @@ namespace Aptenex\Upp\Parser\Structure;
 class Tax
 {
 
+    public const TYPE_TAX = 'TYPE_TAX';
+    public const TYPE_VAT = 'TYPE_VAT';
+    public const TYPE_CITY_TAX = 'TYPE_CITY_TAX';
+    public const TYPE_GST = 'TYPE_GST';
+    public const TYPE_GOVERNMENT_TAX = 'TYPE_GOVERNMENT_TAX';
+    public const TYPE_RESIDENTIAL_TAX = 'TYPE_RESIDENTIAL_TAX';
+    public const TYPE_LOCAL_COUNCIL_TAX = 'TYPE_LOCAL_COUNCIL_TAX';
+
     /**
      * @var string
      */
     private $name;
+
+    /**
+     * @var string
+     */
+    private $type;
 
     /**
      * @var string
@@ -174,12 +187,29 @@ class Tax
     }
 
     /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type)
+    {
+        $this->type = $type;
+    }
+
+    /**
      * @return array
      */
-    public function __toArray()
+    public function __toArray(): array
     {
         return [
             'name' => $this->getName(),
+            'type' => $this->getType(),
             'uuid' => $this->getUuid(),
             'description' => $this->getDescription(),
             'amount' => $this->getAmount(),

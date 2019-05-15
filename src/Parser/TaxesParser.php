@@ -49,6 +49,7 @@ class TaxesParser
             sprintf("The 'amount' parameter is not set for the tax at index %s", $index)
         ));
 
+        $t->setType(ArrayAccess::get('type', $taxData, Tax::TYPE_TAX));
         $t->setDescription(ArrayAccess::get('description', $taxData));
 
         $t->setCalculationMethod(ArrayAccess::get('calculationMethod', $taxData, Rate::METHOD_PERCENTAGE));
