@@ -119,7 +119,7 @@ class PricingGenerator
             throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
         }
 
-        if ($context->isLosMode() === false && $fp->getSplitDetails() !== null) {
+        if ($context->isLosCalculationMode() === false && $fp->getSplitDetails() !== null) {
             if ($fp->getSplitDetails()->getDeposit()->isNegative()) {
                 throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
             }
@@ -139,7 +139,7 @@ class PricingGenerator
 
         // LOS is not going to be generated every day so this will become out of date and inaccurate.
         // Days required in advance will need to be set when pushing ARI to the various otas
-        if ($context->isLosMode()) {
+        if ($context->isLosCalculationMode()) {
             return;
         }
 
@@ -228,7 +228,7 @@ class PricingGenerator
     private function calculatePets(PricingContext $context, FinalPrice $fp): void
     {
         // If mode is los, this needs to be skipped as when sending ARI these will be sent separately
-        if ($context->isLosMode()) {
+        if ($context->isLosCalculationMode()) {
             return;
         }
 
@@ -242,7 +242,7 @@ class PricingGenerator
     private function calculateTaxes(PricingContext $context, FinalPrice $fp): void
     {
         // If mode is los, this needs to be skipped as when sending ARI these will be sent separately
-        if ($context->getMode() === PricingContext::MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES) {
+        if ($context->getCalculationMode() === PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES) {
             return;
         }
 
@@ -426,7 +426,7 @@ class PricingGenerator
              * This is to stop commissions by the OTA's being taken on tax amounts etc...
              */
 
-            if ($me->isModifierSupportedByMode($context->getMode(), $modifier) === false) {
+            if ($me->isModifierSupportedByMode($context->getCalculationMode(), $modifier) === false) {
                 continue;
             }
 
@@ -577,7 +577,7 @@ class PricingGenerator
 
     private function calculateSplitAmounts(PricingContext $context, FinalPrice $fp): void
     {
-        if ($context->isLosMode()) {
+        if ($context->isLosCalculationMode()) {
             return;
         }
 
@@ -715,7 +715,7 @@ class PricingGenerator
      */
     private function determineBookableTypeAndFields(PricingContext $context, FinalPrice $fp): void
     {
-        if ($context->isLosMode()) {
+        if ($context->isLosCalculationMode()) {
             return;
         }
 

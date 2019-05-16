@@ -299,7 +299,7 @@ class LosRecordTest extends TestCase
         $losOptions->setForceFullGeneration(false);
 
         // The test rates are generated without a fee that is always applied. This option should remove these
-        $losOptions->setPricingContextMode(PricingContext::MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES);
+        $losOptions->setPricingContextMode(PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES);
 
         $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
         $parsed = $upp->parsePricingConfig($pricing, new StructureOptions());

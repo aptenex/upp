@@ -51,7 +51,7 @@ class LosOptions
      *
      * @var string
      */
-    private $pricingContextMode = PricingContext::MODE_NORMAL;
+    private $pricingContextMode = PricingContext::CALCULATION_MODE_NORMAL;
 
     /**
      * @param string $currency

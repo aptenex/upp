@@ -25,7 +25,7 @@ class ModifierExtractor
      */
     public function isModifierSupportedByMode(string $mode, Modifier $modifier): bool
     {
-        if ($mode === PricingContext::MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES) {
+        if ($mode === PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES) {
             if ($modifier->isHidden()) {
                 return true; // Any hidden ones are supported
             }

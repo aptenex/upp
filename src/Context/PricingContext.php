@@ -15,13 +15,13 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class PricingContext
 {
 
-    public const MODE_NORMAL = 'MODE_NORMAL';
-    public const MODE_LOS = 'MODE_LOS';
-    public const MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES = 'MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES';
+    public const CALCULATION_MODE_NORMAL = 'CALCULATION_MODE_NORMAL';
+    public const CALCULATION_MODE_LOS = 'CALCULATION_MODE_LOS';
+    public const CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES = 'CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES';
 
-    public static $losModes = [
-        self::MODE_LOS,
-        self::MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES
+    public static $losCalculationModes = [
+        self::CALCULATION_MODE_LOS,
+        self::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES
     ];
 
     /**
@@ -32,7 +32,7 @@ class PricingContext
     /**
      * @var string
      */
-    private $mode = self::MODE_NORMAL;
+    private $calculationMode = self::CALCULATION_MODE_NORMAL;
 
     /**
      * @Currency()
@@ -576,25 +576,25 @@ class PricingContext
     /**
      * @return string
      */
-    public function getMode(): string
+    public function getCalculationMode(): string
     {
-        return $this->mode;
+        return $this->calculationMode;
     }
 
     /**
-     * @param string $mode
+     * @param string $calculationMode
      */
-    public function setMode(string $mode): void
+    public function setCalculationMode(string $calculationMode): void
     {
-        $this->mode = $mode;
+        $this->calculationMode = $calculationMode;
     }
 
     /**
      * @return bool
      */
-    public function isLosMode(): bool
+    public function isLosCalculationMode(): bool
     {
-        return \in_array($this->mode, self::$losModes, true);
+        return \in_array($this->calculationMode, self::$losCalculationModes, true);
     }
 
     /**
@@ -604,7 +604,7 @@ class PricingContext
     {
         return [
             'currency'            => $this->getCurrency(),
-            'mode'                => $this->getMode(),
+            'calculationMode'     => $this->getCalculationMode(),
             'arrivalDate'         => $this->getArrivalDate(),
             'departureDate'       => $this->getDepartureDate(),
             'bookingDate'         => $this->getBookingDate(),

@@ -72,7 +72,7 @@ class LosGenerator
         $pc = new PricingContext();
         $pc->setBookingDate($bookingDate);
         $pc->setCurrency($cc->getCurrency());
-        $pc->setMode($options->getPricingContextMode());
+        $pc->setCalculationMode($options->getPricingContextMode());
 
         $losRecords->getMetrics()->setMaxPotentialRuns($maxOccupancy * $days * $options->getMaximumStayRateLength());
 
