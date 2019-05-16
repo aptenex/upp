@@ -33,6 +33,7 @@ use Aptenex\Upp\Parser\Structure\SplitMethod;
 use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Util\ExceptionUtils;
 use Aptenex\Upp\Util\MoneyUtils;
+use Los\Modifier\ModifierExtractor;
 
 class PricingGenerator
 {
@@ -411,6 +412,8 @@ class PricingGenerator
      */
     private function evaluateModifiers(PricingContext $context, FinalPrice $fp): void
     {
+        $me = new ModifierExtractor();
+
         foreach ($fp->getCurrencyConfigUsed()->getModifiers() as $modifier) {
 
             $cm = new Modifier($fp);
@@ -423,10 +426,7 @@ class PricingGenerator
              * This is to stop commissions by the OTA's being taken on tax amounts etc...
              */
 
-            if (
-                $context->getMode() === PricingContext::MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES &&
-                empty($modifier->getConditions())
-            ) {
+            if ($me->isModifierSupportedByMode($context->getMode(), $modifier) === false) {
                 continue;
             }
 

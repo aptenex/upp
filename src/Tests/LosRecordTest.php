@@ -235,6 +235,21 @@ class LosRecordTest extends TestCase
                                 }
                             },
                             {
+                                "type": "card_fee",
+                                "hidden": true,
+                                "splitMethod": "ON_TOTAL",
+                                "description": "Card Fee",
+                                "conditionOperand": "AND",
+                                "conditions": [],
+                                "rate": {
+                                    "type": "adjustment",
+                                    "amount": 0.015,
+                                    "calculationMethod": "percentage",
+                                    "calculationOperand": "addition",
+                                    "applicableTaxes": []
+                                }
+                            },
+                            {
                                 "type": "modifier",
                                 "hidden": false,
                                 "splitMethod": "ON_TOTAL",
