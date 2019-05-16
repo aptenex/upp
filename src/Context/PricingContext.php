@@ -600,7 +600,7 @@ class PricingContext
     /**
      * @return array
      */
-    public function __toArray(): array
+    public function __toArray()
     {
         return [
             'currency'            => $this->getCurrency(),
