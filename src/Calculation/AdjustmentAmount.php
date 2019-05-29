@@ -76,6 +76,23 @@ class AdjustmentAmount
      * @var string
      */
     private $identifier;
+    
+    /**
+     * This is used to assign the adjustment a product code.
+     * We would do this to allow us to match an adjustment with a specific product from an external system
+     * This field is largely relied upon on Lycan
+     *
+     * @var string
+     */
+    private $productCode;
+    
+    /**
+     * This is used to give an adjustment an externalId
+     *
+     * @var string
+     */
+    private $externalId;
+    
 
     /**
      * @var boolean
@@ -246,7 +263,9 @@ class AdjustmentAmount
             'identifier'         => $this->getIdentifier(),
             'description'        => $this->getDescription(),
             'calculationOperand' => $this->getOperand(),
-            'guestSplitMethod'        => $this->getSplitMethod(),
+            'guestSplitMethod'   => $this->getSplitMethod(),
+            'productCode'        =>$this->getProductCode(),
+            'externalId'         => $this->getExternalId()
         ];
     }
 	
@@ -257,5 +276,45 @@ class AdjustmentAmount
 	{
 		$this->amount = $amount;
 	}
+    
+    /**
+     * @return string
+     */
+    public function getProductCode(): string
+    {
+        return $this->productCode;
+    }
+    
+    /**
+     * @param string $productCode
+     * @return AdjustmentAmount
+     */
+    public function setProductCode(string $productCode): AdjustmentAmount
+    {
+        $this->productCode = $productCode;
+        
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getExternalId(): string
+    {
+        return $this->externalId;
+    }
+    
+    /**
+     * @param string $externalId
+     * @return AdjustmentAmount
+     */
+    public function setExternalId(string $externalId): AdjustmentAmount
+    {
+        $this->externalId = $externalId;
+        
+        return $this;
+    }
+	
+	
 	
 }
