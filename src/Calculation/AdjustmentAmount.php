@@ -82,14 +82,14 @@ class AdjustmentAmount
      * We would do this to allow us to match an adjustment with a specific product from an external system
      * This field is largely relied upon on Lycan
      *
-     * @var string
+     * @var string|null
      */
     private $productCode;
     
     /**
      * This is used to give an adjustment an externalId
      *
-     * @var string
+     * @var string|null
      */
     private $externalId;
     
@@ -278,9 +278,9 @@ class AdjustmentAmount
 	}
     
     /**
-     * @return string
+     * @return string|null
      */
-    public function getProductCode(): string
+    public function getProductCode(): ?string
     {
         return $this->productCode;
     }
@@ -297,9 +297,9 @@ class AdjustmentAmount
     }
     
     /**
-     * @return string
+     * @return string|null
      */
-    public function getExternalId(): string
+    public function getExternalId(): ?string
     {
         return $this->externalId;
     }
