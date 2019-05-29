@@ -46,7 +46,7 @@ class PetsCalculator
 
         $adjustment = new AdjustmentAmount(
             $totalPetAmount,
-            'pet_fee',
+            'PET_FEE',
             vsprintf('%sx Pet Fee', [
                 $context->getPets()
             ]),

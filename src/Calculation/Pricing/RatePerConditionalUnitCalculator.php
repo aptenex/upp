@@ -162,7 +162,7 @@ class RatePerConditionalUnitCalculator
         if (count($modifier->getConditions()->getConditions()) === 0) {
             $fp->addAdjustment(new AdjustmentAmount(
                 $amount,
-                strtolower(trim($description)),
+                strtoupper(trim(str_replace(' ', '_', $description))),
                 $description,
                 $rateConfig->getCalculationOperand(),
                 AdjustmentAmount::TYPE_MODIFIER,
@@ -246,7 +246,7 @@ class RatePerConditionalUnitCalculator
         if (!is_null($finalAdjustmentAmount)) {
             $fp->addAdjustment(new AdjustmentAmount(
                 $finalAdjustmentAmount,
-                strtolower(trim($description)),
+                strtoupper(trim(str_replace(' ', '_', $description))),
                 $description,
                 $rateConfig->getCalculationOperand(),
                 AdjustmentAmount::TYPE_MODIFIER,

@@ -29,7 +29,7 @@ class TaxesCalculator
             if ($tax->getCalculationMethod() === Rate::METHOD_FIXED) {
                 $adjustment = new AdjustmentAmount(
                     \Aptenex\Upp\Util\MoneyUtils::fromString($tax->getAmount(), $fp->getCurrency()),
-                    strtolower(trim($tax->getName())),
+                    strtoupper(trim(str_replace(' ', '_', $tax->getName()))),
                     sprintf("%s%s", $tax->getName(), !empty($tax->getDescription()) ? ' (' . $tax->getDescription() . ')' : ''),
                     Operand::OP_ADDITION,
                     AdjustmentAmount::TYPE_TAX,
@@ -101,7 +101,7 @@ class TaxesCalculator
 
                 $adjustment = new AdjustmentAmount(
                     $calculatedAmount,
-                    strtolower(trim($tax->getName())),
+                    strtoupper(trim(str_replace(' ', '_', $tax->getName()))),
                     sprintf("%s%s", $tax->getName(), !empty($tax->getDescription()) ? ' (' . $tax->getDescription() . ')' : ''),
                     Operand::OP_ADDITION,
                     AdjustmentAmount::TYPE_TAX,

@@ -362,7 +362,7 @@ class Price
             'bookableType'             => $this->getBookableType(),
             'adjustments'              => $this->getAdjustmentsArray(),
             'stayBreakdown'            => $this->getStay()->__toArray(),
-            'splitDetails'             => !is_null($this->splitDetails) ? $this->splitDetails->__toArray() : null,
+            'splitDetails'             => $this->splitDetails !== null ? $this->splitDetails->__toArray() : null,
             'errors'                   => $this->getErrors()->__toArray(),
         ];
     }

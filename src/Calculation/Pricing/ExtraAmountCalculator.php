@@ -23,7 +23,7 @@ class ExtraAmountCalculator
         foreach($fp->getStay()->getExtras() as $extra) {
             $adjustment = new AdjustmentAmount(
                 \Aptenex\Upp\Util\MoneyUtils::fromString($extra->getAmount(), $fp->getCurrency()),
-                strtolower(trim($extra->getName())),
+                strtoupper(trim(str_replace(' ', '_', $extra->getName()))),
                 vsprintf("%s%s%s%s", [
                     $extra->getName(),
                     !empty($extra->getDescription()) ? ' (' : '',

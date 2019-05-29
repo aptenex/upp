@@ -56,7 +56,7 @@ class DamageDepositCalculator
 
         $adjustment = new AdjustmentAmount(
             $fp->getDamageDeposit(),
-            'Damage Deposit',
+            'DAMAGE_DEPOSIT',
             sprintf('Damage Deposit%s', $isOnArrival ? ' (On Arrival)': ''),
             Operand::OP_ADDITION,
             AdjustmentAmount::TYPE_DAMAGE_DEPOSIT,
