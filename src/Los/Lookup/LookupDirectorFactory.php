@@ -28,7 +28,7 @@ class LookupDirectorFactory
         
         $cl = new ChangeoverStringLookup(
             $startDate,
-            ArrayAccess::get('configuration.changeover', $unitAvailability, []),
+            ArrayAccess::get('configuration.changeover', $unitAvailability, null),
             ArrayAccess::get('changeoverDefault', $unitAvailability, 3)
         );
 

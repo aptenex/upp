@@ -29,9 +29,9 @@ class ChangeoverStringLookup implements ChangeoverLookupInterface
      *
      * @throws CannotGenerateLosException
      */
-    public function __construct(\DateTime $startingDate, string $changeoverString, string $changeoverDefault)
+    public function __construct(\DateTime $startingDate, $changeoverString, $changeoverDefault)
     {
-        $this->changeoverDefault = $changeoverDefault;
+        $this->changeoverDefault = (int) $changeoverDefault;
 
         $this->parseChangeoverString($startingDate, $changeoverString);
     }
@@ -92,7 +92,7 @@ class ChangeoverStringLookup implements ChangeoverLookupInterface
      *
      * @throws CannotGenerateLosException
      */
-    private function parseChangeoverString(\DateTime $startingDate, string $changeoverString)
+    private function parseChangeoverString(\DateTime $startingDate, $changeoverString): void
     {
         if (empty($changeoverString)) {
             $this->changeoverMap = [];
