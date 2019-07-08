@@ -25,7 +25,7 @@ class MinimumStayStringLookup implements MinimumStayLookupInterface
      *
      * @throws CannotGenerateLosException
      */
-    public function __construct(\DateTime $startingDate, string $minimumStayString, LosOptions $options)
+    public function __construct(\DateTime $startingDate, $minimumStayString, LosOptions $options)
     {
         $this->options = $options;
         $this->parseMinimumStayString($startingDate, $minimumStayString);
@@ -50,9 +50,11 @@ class MinimumStayStringLookup implements MinimumStayLookupInterface
      *
      * @throws CannotGenerateLosException
      */
-    private function parseMinimumStayString(\DateTime $startingDate, string $minimumStayString)
+    private function parseMinimumStayString(\DateTime $startingDate, $minimumStayString): void
     {
         if (empty($minimumStayString)) {
+            $this->minimumStayMap = [];
+
             return;
         }
 

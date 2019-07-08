@@ -5329,21 +5329,24 @@
           "amount": 0.05,
           "calculationMethod": "percentage",
           "uuid": "14b1fd02-91a3-46e9-91e1-b4c1639ef21b",
-          "type": "TYPE_TAX"
+          "type": "TYPE_TAX",
+          "includeBasePrice": true
         },
         {
           "name": "PST",
           "amount": 0.08,
           "calculationMethod": "percentage",
           "uuid": "2b7d74ec-4331-4946-82b0-1f053e710aae",
-          "type": "TYPE_TAX"
+          "type": "TYPE_TAX",
+          "includeBasePrice": true
         },
         {
           "name": "MRDT",
           "amount": 0.03,
           "calculationMethod": "percentage",
           "uuid": "1d8edb07-a3ed-482b-a4f0-4c1615f0e916",
-          "type": "TYPE_TAX"
+          "type": "TYPE_TAX",
+          "includeBasePrice": true
         }
       ]
     },

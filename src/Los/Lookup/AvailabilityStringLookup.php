@@ -13,13 +13,21 @@ class AvailabilityStringLookup implements AvailabilityLookupInterface
     private $availabilityMap;
 
     /**
+     * @var string
+     */
+    private $availabilityDefault;
+
+    /**
      * @param \DateTime $startingDate
      * @param string $availabilityString
+     * @param $availabilityDefault
      *
      * @throws CannotGenerateLosException
      */
-    public function __construct(\DateTime $startingDate, string $availabilityString)
+    public function __construct(\DateTime $startingDate, $availabilityString, $availabilityDefault)
     {
+        $this->availabilityDefault = $availabilityDefault;
+
         $this->parseAvailabilityString($startingDate, $availabilityString);
     }
 
@@ -29,11 +37,7 @@ class AvailabilityStringLookup implements AvailabilityLookupInterface
      */
     public function isAvailable(string $date): bool
     {
-        if (!isset($this->availabilityMap[$date])) {
-            return false; // If its not in the map then return false
-        }
-
-        return $this->availabilityMap[$date];
+        return $this->availabilityMap[$date] ?? $this->availabilityDefault;
     }
 
     /**
@@ -42,9 +46,11 @@ class AvailabilityStringLookup implements AvailabilityLookupInterface
      *
      * @throws CannotGenerateLosException
      */
-    private function parseAvailabilityString(\DateTime $startingDate, string $availabilityString)
+    private function parseAvailabilityString(\DateTime $startingDate, string $availabilityString): void
     {
         if (empty($availabilityString)) {
+            $this->availabilityMap = [];
+
             return;
         }
 

@@ -7,10 +7,10 @@ use Aptenex\Upp\Exception\CannotGenerateLosException;
 class ChangeoverStringLookup implements ChangeoverLookupInterface
 {
 
-    const ARRIVAL_ONLY = 1;
-    const DEPARTURE_ONLY = 2;
-    const ARRIVAL_OR_DEPARTURE = 3;
-    const NO_ARRIVAL_OR_DEPARTURE = 0;
+    public const ARRIVAL_ONLY = 1;
+    public const DEPARTURE_ONLY = 2;
+    public const ARRIVAL_OR_DEPARTURE = 3;
+    public const NO_ARRIVAL_OR_DEPARTURE = 0;
 
     /**
      * @var array
@@ -79,11 +79,11 @@ class ChangeoverStringLookup implements ChangeoverLookupInterface
     /**
      * @param string $date
      *
-     * @return string
+     * @return int
      */
-    private function getChangeoverValue(string $date): string
+    private function getChangeoverValue(string $date): int
     {
-        return $this->changeoverMap[$date] ?? $this->changeoverDefault;
+        return (int) ($this->changeoverMap[$date] ?? $this->changeoverDefault);
     }
 
     /**
@@ -96,6 +96,8 @@ class ChangeoverStringLookup implements ChangeoverLookupInterface
     {
         if (empty($changeoverString)) {
             $this->changeoverMap = [];
+
+            return;
         }
 
         $days = str_split($changeoverString);

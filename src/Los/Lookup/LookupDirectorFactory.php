@@ -16,14 +16,16 @@ class LookupDirectorFactory
      * @return array
      * @throws \Aptenex\Upp\Exception\CannotGenerateLosException
      */
-    public static function getUnitAvailabilityContraintOptions(
+    public static function getUnitAvailabilityConstraintOptions(
         \DateTime $startDate,
         array $unitAvailability,
         LosOptions $options
     ): array {
         
         $al   = new AvailabilityStringLookup(
-            $startDate, ArrayAccess::get('configuration.availability', $unitAvailability)
+            $startDate,
+            ArrayAccess::get('configuration.availability', $unitAvailability, null),
+            ArrayAccess::get('availabilityDefault', $unitAvailability, 'N')
         );
         
         $cl = new ChangeoverStringLookup(
@@ -34,12 +36,12 @@ class LookupDirectorFactory
 
         $minL = new MinimumStayStringLookup(
             $startDate,
-            ArrayAccess::get('configuration.minStay', $unitAvailability, $unitAvailability['minStayDefault'] ?? 0),
+            ArrayAccess::get('configuration.minStay', $unitAvailability, null),
             $options
         );
         $maxL = new MaximumStayStringLookup(
             $startDate,
-            ArrayAccess::get('configuration.maxStay', $unitAvailability, $unitAvailability['maxStayDefault'] ?? 28),
+            ArrayAccess::get('configuration.maxStay', $unitAvailability, null),
             $options
         );
         
@@ -62,7 +64,7 @@ class LookupDirectorFactory
         LosOptions $options
     ): LookupDirector {
         $startDate = new \DateTime(ArrayAccess::get('dateRange.startDate', $unitAvailability));
-        [$al, $cl, $minL, $maxL] = self::getUnitAvailabilityContraintOptions($startDate, $unitAvailability, $options);
+        [$al, $cl, $minL, $maxL] = self::getUnitAvailabilityConstraintOptions($startDate, $unitAvailability, $options);
         $oL = new MaxOccupancyFixedValue($maxOccupancy);
         
         return new LookupDirector($al, $cl, $minL, $maxL, $oL);
@@ -83,7 +85,7 @@ class LookupDirectorFactory
         LosOptions $options
     ): LookupDirector {
         $startDate = new \DateTime(ArrayAccess::get('dateRange.startDate', $unitAvailability));
-        [$al, $cl, $minL, $maxL] = self::getUnitAvailabilityContraintOptions($startDate, $unitAvailability, $options);
+        [$al, $cl, $minL, $maxL] = self::getUnitAvailabilityConstraintOptions($startDate, $unitAvailability, $options);
         $oL = new MaxOccupancySchemaLookup($rentalSchema);
         
         return new LookupDirector($al, $cl, $minL, $maxL, $oL);
@@ -102,7 +104,7 @@ class LookupDirectorFactory
     {
         $unitAvailability = ArrayAccess::get('unitAvailability', $rentalSchema);
         $startDate        = new \DateTime(ArrayAccess::get('dateRange.startDate', $unitAvailability));
-        [$al, $cl, $minL, $maxL] = self::getUnitAvailabilityContraintOptions($startDate, $unitAvailability, $options);
+        [$al, $cl, $minL, $maxL] = self::getUnitAvailabilityConstraintOptions($startDate, $unitAvailability, $options);
         $oL = new MaxOccupancySchemaLookup($rentalSchema);
         
         return new LookupDirector($al, $cl, $minL, $maxL, $oL);

@@ -25,7 +25,7 @@ class MaximumStayStringLookup implements MaximumStayLookupInterface
      *
      * @throws CannotGenerateLosException
      */
-    public function __construct(\DateTime $startingDate, string $maximumStayString, LosOptions $options)
+    public function __construct(\DateTime $startingDate, $maximumStayString, LosOptions $options)
     {
         $this->options = $options;
         $this->parseMaximumStayString($startingDate, $maximumStayString);
@@ -50,9 +50,11 @@ class MaximumStayStringLookup implements MaximumStayLookupInterface
      *
      * @throws CannotGenerateLosException
      */
-    private function parseMaximumStayString(\DateTime $startingDate, string $maximumStayString)
+    private function parseMaximumStayString(\DateTime $startingDate, $maximumStayString): void
     {
         if (empty($maximumStayString)) {
+            $this->maximumStayMap = [];
+
             return;
         }
 
