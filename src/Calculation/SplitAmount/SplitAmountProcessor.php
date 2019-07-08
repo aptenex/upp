@@ -18,7 +18,7 @@ class SplitAmountProcessor
     /**
      * @param FinalPrice $fp
      */
-    public function __construct(FinalPrice $fp)
+    public function __construct(?FinalPrice $fp = null)
     {
         $this->fp = $fp;
     }

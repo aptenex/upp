@@ -15,6 +15,10 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
     const TYPE_TOURISM_TAX = 'tourism_tax';
     const TYPE_EXTRA_GUEST_FEE = 'extra_guest_fee';
     const TYPE_BASE_PRICE_FEE = 'base_price_fee';
+    const TYPE_GENERAL_FEE = 'general_fee';
+    const TYPE_SERVICE_CHARGE = 'service_charge';
+    const TYPE_DESTINATION_FEE = 'destination_fee';
+    const TYPE_RESORT_FEE = 'resort_fee';
 
     public static $priceGroupBaseTypes = [
         self::TYPE_EXTRA_GUEST_FEE,
