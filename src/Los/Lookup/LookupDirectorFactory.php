@@ -26,10 +26,12 @@ class LookupDirectorFactory
             $startDate, ArrayAccess::get('configuration.availability', $unitAvailability)
         );
         
-        $cl   = new ChangeoverStringLookup(
+        $cl = new ChangeoverStringLookup(
             $startDate,
-            ArrayAccess::get('configuration.changeover', $unitAvailability, $unitAvailability['changeoverDefault'] ?? 3)
+            ArrayAccess::get('configuration.changeover', $unitAvailability, []),
+            ArrayAccess::get('changeoverDefault', $unitAvailability, 3)
         );
+
         $minL = new MinimumStayStringLookup(
             $startDate,
             ArrayAccess::get('configuration.minStay', $unitAvailability, $unitAvailability['minStayDefault'] ?? 0),

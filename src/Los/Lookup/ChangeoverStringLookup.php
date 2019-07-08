@@ -18,13 +18,21 @@ class ChangeoverStringLookup implements ChangeoverLookupInterface
     private $changeoverMap;
 
     /**
+     * @var string
+     */
+    private $changeoverDefault;
+
+    /**
      * @param \DateTime $startingDate
      * @param string $changeoverString
+     * @param string $changeoverDefault
      *
      * @throws CannotGenerateLosException
      */
-    public function __construct(\DateTime $startingDate, string $changeoverString)
+    public function __construct(\DateTime $startingDate, string $changeoverString, string $changeoverDefault)
     {
+        $this->changeoverDefault = $changeoverDefault;
+
         $this->parseChangeoverString($startingDate, $changeoverString);
     }
 
@@ -34,11 +42,7 @@ class ChangeoverStringLookup implements ChangeoverLookupInterface
      */
     public function canArrive(string $date): bool
     {
-        if (!isset($this->changeoverMap[$date])) {
-            return false;
-        }
-
-        $changeover = $this->changeoverMap[$date];
+        $changeover = $this->getChangeoverValue($date);
 
         return $changeover === self::ARRIVAL_ONLY || $changeover === self::ARRIVAL_OR_DEPARTURE;
     }
@@ -49,11 +53,7 @@ class ChangeoverStringLookup implements ChangeoverLookupInterface
      */
     public function canDepart(string $date): bool
     {
-        if (!isset($this->changeoverMap[$date])) {
-            return false;
-        }
-
-        $changeover = $this->changeoverMap[$date];
+        $changeover = $this->getChangeoverValue($date);
 
         return $changeover === self::DEPARTURE_ONLY || $changeover === self::ARRIVAL_OR_DEPARTURE;
     }
@@ -77,6 +77,16 @@ class ChangeoverStringLookup implements ChangeoverLookupInterface
     }
 
     /**
+     * @param string $date
+     *
+     * @return string
+     */
+    private function getChangeoverValue(string $date): string
+    {
+        return $this->changeoverMap[$date] ?? $this->changeoverDefault;
+    }
+
+    /**
      * @param \DateTime $startingDate
      * @param string $changeoverString
      *
@@ -85,7 +95,7 @@ class ChangeoverStringLookup implements ChangeoverLookupInterface
     private function parseChangeoverString(\DateTime $startingDate, string $changeoverString)
     {
         if (empty($changeoverString)) {
-            return;
+            $this->changeoverMap = [];
         }
 
         $days = str_split($changeoverString);
