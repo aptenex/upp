@@ -495,6 +495,566 @@ class LosRecordTest extends TestCase
         $this->assertStringEqualsFile(__DIR__ . '/Resources/los_test_limited_unit_availability.txt', $output);
     }
 
+    public function testLosRecordsWithLimitedUnitAvailability2()
+    {
+        $rentalSchemaData = '
+            {
+                "unitAvailability": {
+                    "availabilityDefault": "N",
+                    "changeoverDefault": "3",
+                    "configuration": {
+                      "availability": "NNNNNNNNYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+                    },
+                    "dateRange": {
+                      "endDate": "2022-06-30",
+                      "startDate": "2019-07-01"
+                    },
+                    "instantBookableDefault": "N",
+                    "maxStayDefault": 30,
+                    "minPriorNotifyDefault": 0,
+                    "minStayDefault": 0
+                  }
+            }
+        ';
+
+        $pricingConfig = '
+            {
+              "data": [
+                {
+                  "currency": "THB",
+                  "defaults": {
+                    "balanceDaysBeforeArrival": 42,
+                    "damageDeposit": "0",
+                    "damageDepositCalculationMethod": "fixed",
+                    "damageDepositSplitMethod": "ON_DEPOSIT",
+                    "daysRequiredInAdvanceForBooking": 0,
+                    "depositSplitPercentage": "NULL",
+                    "extraNightAlterationStrategyUseGlobalNights": false,
+                    "minimumNights": "2"
+                  },
+                  "modifiers": [
+                    {
+                      "conditionOperand": "AND",
+                      "conditions": [],
+                      "description": "Cleaning",
+                      "hidden": false,
+                      "rate": {
+                        "amount": 0,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "addition",
+                        "type": "adjustment"
+                      },
+                      "splitMethod": "ON_TOTAL",
+                      "type": "cleaning"
+                    },
+                    {
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "maximum": 9,
+                          "minimum": 9,
+                          "modifyRatePerUnit": true,
+                          "type": "guests"
+                        },
+                        {
+                          "maximum": null,
+                          "minimum": 0,
+                          "modifyRatePerUnit": true,
+                          "type": "nights"
+                        }
+                      ],
+                      "description": "Extra Guests",
+                      "hidden": false,
+                      "rate": {
+                        "amount": 1000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "addition",
+                        "type": "adjustment"
+                      },
+                      "splitMethod": "ON_TOTAL",
+                      "type": "modifier"
+                    }
+                  ],
+                  "periods": [
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2019-07-31",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2019-06-16",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "Mid Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 15500,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2019-10-31",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2019-08-01",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "Low season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 15000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2019-12-15",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2019-11-01",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "High Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 16000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2020-01-15",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2019-12-16",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "XMAS-NY",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 17000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2020-04-30",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2020-01-16",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "High Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 16000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2020-06-15",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2020-05-01",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "Low Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 15000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2020-07-31",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2020-06-16",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "Mid Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 15500,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2020-10-31",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2020-08-01",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "Low Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 15000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2020-12-15",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2020-11-01",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "High Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 16000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2019-07-31",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2019-06-16",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "Mid Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 16500,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2019-10-31",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2019-08-01",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "Low season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 16000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2019-12-15",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2019-11-01",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "High Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 17000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2020-01-15",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2019-12-16",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "XMAS-NY",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 18000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2020-04-30",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2020-01-16",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "High Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 17000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2020-06-16",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2020-05-01",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "Low Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 16000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2020-07-31",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2020-06-16",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "Mid Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 16500,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2020-10-31",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2020-08-01",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "Low Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 16000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    },
+                    {
+                      "bookableType": null,
+                      "conditionOperand": "AND",
+                      "conditions": [
+                        {
+                          "arrivalDays": [],
+                          "departureDays": [],
+                          "endDate": "2020-12-15",
+                          "modifyRatePerUnit": false,
+                          "startDate": "2020-11-01",
+                          "type": "date"
+                        }
+                      ],
+                      "description": "High Season",
+                      "minimumNights": 2,
+                      "priority": 500,
+                      "rate": {
+                        "amount": 17000,
+                        "applicableTaxes": [],
+                        "calculationMethod": "fixed",
+                        "calculationOperand": "equals",
+                        "type": "nightly"
+                      }
+                    }
+                  ],
+                  "taxes": []
+                }
+              ],
+              "meta": [],
+              "name": "Pricing",
+              "schema": "property-pricing",
+              "version": "0.0.1"
+            }
+        ';
+
+        $schema = json_decode($rentalSchemaData, true);
+        $pricing = json_decode($pricingConfig, true);
+
+        $upp = new Upp(
+            new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $pricing, [])),
+            new TestTranslator()
+        );
+
+        $losGenerator = new LosGenerator($upp);
+
+        $losOptions = new LosOptions(
+            'THB',
+            new \DateTime('2020-04-01'),
+            new \DateTime('2020-06-30')
+        );
+
+        $losOptions->setForceFullGeneration(false);
+
+        // The test rates are generated without a fee that is always applied. This option should remove these
+        $losOptions->setPricingContextMode(PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES);
+
+        $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
+        $parsed = $upp->parsePricingConfig($pricing, new StructureOptions());
+
+        $losRecords1 = $losGenerator->generateLosRecords($losOptions, $ld, $parsed);
+        $losRecords = (new LosRecordMerger())->merge([$losRecords1]);
+
+        $options = new TransformOptions();
+        $transformer = new AirbnbRecordTransformer();
+        $output = json_encode($transformer->transform($losRecords, $options), JSON_PRETTY_PRINT);
+
+        $this->assertStringEqualsFile(__DIR__ . '/Resources/los_test_limited_unit_availability_02.txt', $output);
+    }
+
     public function testPthreadsLosRecords()
     {
         return;
