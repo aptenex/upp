@@ -30,7 +30,7 @@ class LosRecordMerger
         $totalMax = 0; # the maximum amount of runs we could have ran
         $longestTime = 0;
         $cumulativeExecutionTime = 0;
-        
+        $debugging = [];
         foreach($losRecords as $lrItem) {
             $totalRan += $lrItem->getMetrics()->getTimesRan();
             $totalMax += $lrItem->getMetrics()->getMaxPotentialRuns();
@@ -48,6 +48,7 @@ class LosRecordMerger
             foreach($lrItem->getRecords() as $date => $priceSet) {
                 $merged[$date] = $priceSet;
             }
+            $debugging += $lrItem->getDebug();
         }
 
         if ($foundCurrency === null) {
@@ -59,7 +60,7 @@ class LosRecordMerger
         $mergedRecords->getMetrics()->setMaxPotentialRuns($totalMax);
         $mergedRecords->getMetrics()->setTotalDuration($cumulativeExecutionTime);
         $mergedRecords->getMetrics()->setLongestDuration($longestTime);
-
+        $mergedRecords->setDebug($debugging);
         return $mergedRecords;
     }
 

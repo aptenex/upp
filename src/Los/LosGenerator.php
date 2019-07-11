@@ -4,6 +4,8 @@ namespace Aptenex\Upp\Los;
 
 require 'vendor/autoload.php';
 
+use Aptenex\Upp\Los\Debug\DebugException;
+use Aptenex\Upp\Los\Debug\Diagnostics;
 use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\DateUtils;
 use Aptenex\Upp\Util\MoneyUtils;
@@ -18,7 +20,7 @@ use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
 
 class LosGenerator
 {
-
+    
     /**
      * @var Upp
      */
@@ -43,7 +45,9 @@ class LosGenerator
      */
     public function generateLosRecords(LosOptions $options, LookupDirectorInterface $ld, PricingConfig $pricingConfig): LosRecords
     {
+        $exceptions = [];
         $cc = null;
+        
         foreach($pricingConfig->getCurrencyConfigs() as $ccItem) {
             if ($ccItem->getCurrency() === $options->getCurrency()) {
                 $cc = $ccItem;
@@ -159,15 +163,12 @@ class LosGenerator
 
                             $rates[] = MoneyUtils::getConvertedAmount($fp->getTotal());
                             $baseRates[] = MoneyUtils::getConvertedAmount($fp->getBasePrice());
-                        } catch (CannotMatchRequestedDatesException $ex) {
+                        } catch (CannotMatchRequestedDatesException|InvalidPriceException|BaseException $ex) {
                             $rates[] = 0;
                             $baseRates[] = 0;
-                        } catch (InvalidPriceException $ex) {
-                            $rates[] = 0;
-                            $baseRates[] = 0;
-                        } catch (BaseException $ex) {
-                            $rates[] = 0;
-                            $baseRates[] = 0;
+                            if($options->isDebugMode()){
+                                $exceptions[] = new DebugException( $ex->getCode(), $ex->getMessage(),$ex->getFile(), $ex->getLine() );
+                            }
                         }
 
                     }
@@ -189,9 +190,11 @@ class LosGenerator
                 );
             }
         }
-
+        
         $losRecords->getMetrics()->finishTiming();
-
+        if($options->isDebugMode()) {
+            $losRecords->setDebug(array_slice($exceptions,0, Diagnostics::MAX_ALLOWED_DEBUGGING_ITEMS));
+        }
         return $losRecords;
     }
 

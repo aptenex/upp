@@ -45,6 +45,15 @@ class LosOptions
      * @var bool
      */
     private $forceFullGeneration = false;
+    
+    /**
+     * Wether all debugging/exception notices can be included in with the LosRecords. This is useful for knowing why specific dates may fail to calculate.
+     *
+     * @var bool
+     */
+    private $debugMode = false;
+    
+    
 
     /**
      * PricingContext Mode
@@ -168,5 +177,21 @@ class LosOptions
     {
         $this->pricingContextMode = $pricingContextMode;
     }
-
+    
+    /**
+     * @return bool
+     */
+    public function isDebugMode(): bool
+    {
+        return $this->debugMode;
+    }
+    
+    /**
+     * @param bool $debugMode
+     */
+    public function setDebugMode(bool $debugMode): void
+    {
+        $this->debugMode = $debugMode;
+    }
+    
 }

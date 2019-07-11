@@ -19,12 +19,20 @@ class LosRecords
      * @var array
      */
     private $records;
+    
+    /**
+     * Debug is an array of any values that take a
+     * what can be contained in this.
+     * @var array
+     */
+    private $debug;
 
     public function __construct(string $currency, array $records = [])
     {
         $this->currency = $currency;
         $this->records = $records;
         $this->metrics = new Metrics();
+        $this->debug = [];
     }
 
     /**
@@ -86,5 +94,21 @@ class LosRecords
     {
         return $this->metrics;
     }
+    
+    
+    /**
+     * @param iterable $debug
+     */
+    public function setDebug(iterable $debug): void
+    {
+        $this->debug = $debug;
+    }
+    
+    public function getDebug(): iterable
+    {
+        return $this->debug;
+    }
 
+    
+    
 }
