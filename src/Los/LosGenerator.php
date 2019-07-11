@@ -167,7 +167,7 @@ class LosGenerator
                             $rates[] = 0;
                             $baseRates[] = 0;
                             if($options->isDebugMode()){
-                                $exceptions[] = new DebugException( $ex->getCode(), $ex->getMessage(),$ex->getFile(), $ex->getLine() );
+                                $exceptions[] = (new DebugException( $ex->getCode(), $ex->getMessage(),$ex->getFile(), $ex->getLine() ))->toArray();
                             }
                         }
 
