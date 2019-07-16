@@ -53,7 +53,7 @@ class AvailabilityStringLookup implements AvailabilityLookupInterface
 
             return;
         }
-
+        
         $days = str_split($availabilityString);
 
         $startingDate = clone $startingDate;
@@ -64,7 +64,7 @@ class AvailabilityStringLookup implements AvailabilityLookupInterface
             try {
                 $startingDate = $startingDate->add(new \DateInterval('P1D'));
             } catch (\Exception $e) {
-                throw new CannotGenerateLosException($e->getMessage(), $e->getCode(), $e);
+                throw new CannotGenerateLosException($e->getMessage(), $e->getCode(), $e, func_get_args());
             }
         }
     }

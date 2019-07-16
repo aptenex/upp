@@ -110,7 +110,7 @@ class ChangeoverStringLookup implements ChangeoverLookupInterface
             try {
                 $startingDate = $startingDate->add(new \DateInterval('P1D'));
             } catch (\Exception $e) {
-                throw new CannotGenerateLosException($e->getMessage(), $e->getCode(), $e);
+                throw new CannotGenerateLosException($e->getMessage(), $e->getCode(), $e, func_get_args());
             }
         }
     }

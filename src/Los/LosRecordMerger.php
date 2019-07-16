@@ -31,10 +31,14 @@ class LosRecordMerger
         $longestTime = 0;
         $cumulativeExecutionTime = 0;
         $debugging = [];
+        $buildOptions = null;
+        /** @var LosRecords $lrItem */
         foreach($losRecords as $lrItem) {
             $totalRan += $lrItem->getMetrics()->getTimesRan();
             $totalMax += $lrItem->getMetrics()->getMaxPotentialRuns();
             $cumulativeExecutionTime += $lrItem->getMetrics()->getTotalDuration();
+            
+            
             if ($lrItem->getMetrics()->getTotalDuration() > $longestTime) {
                 $longestTime = $lrItem->getMetrics()->getTotalDuration();
             }
@@ -49,18 +53,20 @@ class LosRecordMerger
                 $merged[$date] = $priceSet;
             }
             $debugging += $lrItem->getDebug();
+            $buildOptions = $buildOptions ?? $lrItem->getBuildOptions();
         }
 
         if ($foundCurrency === null) {
             throw new CannotGenerateLosException('Could not merge LosRecords');
         }
-
+        /** @var LosRecords $mergedRecords */
         $mergedRecords = LosRecords::makeFromExisting($foundCurrency, $merged);
         $mergedRecords->getMetrics()->setTimesRan($totalRan);
         $mergedRecords->getMetrics()->setMaxPotentialRuns($totalMax);
         $mergedRecords->getMetrics()->setTotalDuration($cumulativeExecutionTime);
         $mergedRecords->getMetrics()->setLongestDuration($longestTime);
         $mergedRecords->setDebug($debugging);
+        $mergedRecords->setBuildOptions($buildOptions);
         return $mergedRecords;
     }
 

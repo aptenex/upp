@@ -26,6 +26,11 @@ class LosRecords
      * @var array
      */
     private $debug;
+    
+    /**
+     * @var LosOptions|null
+     */
+    private $buildOptions;
 
     public function __construct(string $currency, array $records = [])
     {
@@ -108,6 +113,24 @@ class LosRecords
     {
         return $this->debug;
     }
+    
+    /**
+     * @return LosOptions|null
+     */
+    public function getBuildOptions(): ?LosOptions
+    {
+        return $this->buildOptions;
+    }
+    
+    /**
+     * @param LosOptions|null $buildOptions
+     */
+    public function setBuildOptions(?LosOptions $buildOptions): void
+    {
+        $this->buildOptions = $buildOptions;
+    }
+    
+    
 
     
     

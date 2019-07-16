@@ -53,7 +53,16 @@ class LosOptions
      */
     private $debugMode = false;
     
-    
+    /**
+     * Supports ISO8601 date.
+     * {date} OR
+     * {date},{occupancy} OR
+     * /{regularExpress}/ where the subject is the pattern below.
+     * When provided such as [ "2019-09-01,3" ]
+     *
+     * @var array|null
+     */
+    private $forceDebugOnDate;
 
     /**
      * PricingContext Mode
@@ -81,13 +90,15 @@ class LosOptions
     {
         return $this->defaultMinStay;
     }
-
+    
     /**
      * @param int $defaultMinStay
+     * @return LosOptions
      */
-    public function setDefaultMinStay(int $defaultMinStay)
+    public function setDefaultMinStay(int $defaultMinStay): LosOptions
     {
         $this->defaultMinStay = $defaultMinStay;
+        return $this;
     }
 
     /**
@@ -97,13 +108,15 @@ class LosOptions
     {
         return $this->defaultMaxStay;
     }
-
+    
     /**
      * @param int $defaultMaxStay
+     * @return LosOptions
      */
-    public function setDefaultMaxStay(int $defaultMaxStay)
+    public function setDefaultMaxStay(int $defaultMaxStay): self
     {
         $this->defaultMaxStay = $defaultMaxStay;
+        return $this;
     }
 
     /**
@@ -129,13 +142,15 @@ class LosOptions
     {
         return $this->maximumStayRateLength;
     }
-
+    
     /**
      * @param int $maximumStayRateLength
+     * @return LosOptions
      */
-    public function setMaximumStayRateLength(int $maximumStayRateLength)
+    public function setMaximumStayRateLength(int $maximumStayRateLength): self
     {
         $this->maximumStayRateLength = $maximumStayRateLength;
+        return $this;
     }
 
     /**
@@ -153,13 +168,15 @@ class LosOptions
     {
         return $this->forceFullGeneration;
     }
-
+    
     /**
      * @param bool $forceFullGeneration
+     * @return LosOptions
      */
-    public function setForceFullGeneration(bool $forceFullGeneration)
+    public function setForceFullGeneration(bool $forceFullGeneration): self
     {
         $this->forceFullGeneration = $forceFullGeneration;
+        return $this;
     }
 
     /**
@@ -169,13 +186,15 @@ class LosOptions
     {
         return $this->pricingContextMode;
     }
-
+    
     /**
      * @param string $pricingContextMode
+     * @return LosOptions
      */
-    public function setPricingContextMode(string $pricingContextMode): void
+    public function setPricingContextMode(string $pricingContextMode): self
     {
         $this->pricingContextMode = $pricingContextMode;
+        return $this;
     }
     
     /**
@@ -188,10 +207,45 @@ class LosOptions
     
     /**
      * @param bool $debugMode
+     * @return LosOptions
      */
-    public function setDebugMode(bool $debugMode): void
+    public function setDebugMode(bool $debugMode): self
     {
         $this->debugMode = $debugMode;
+        return $this;
+    }
+    
+    /**
+     * @return array
+     */
+    public function getForceDebugOnDate(): ?array
+    {
+        return $this->forceDebugOnDate;
+    }
+    
+    /**
+     * @param array $forceDebugOnDate
+     */
+    public function setForceDebugOnDate(array $forceDebugOnDate): void
+    {
+        $this->forceDebugOnDate = $forceDebugOnDate;
+    }
+    
+    
+    
+    public function __toArray(): array
+    {
+        return [
+            'startDate' => $this->getStartDate()->format('Y-m-d'),
+            'endDate' => $this->getStartDate()->format('Y-m-d'),
+            'currency' => $this->getCurrency(),
+            'defaultMinStay' => $this->getDefaultMinStay(),
+            'defaultMaxStay' => $this->getDefaultMaxStay(),
+            'forceFullGeneration'   => $this->isForceFullGeneration(),
+            'forceDebugOnDate' => $this->getForceDebugOnDate(),
+            'debugMode' => $this->isDebugMode(),
+            'pricingContextMode' => $this->getPricingContextMode()
+        ];
     }
     
 }

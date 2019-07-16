@@ -4,6 +4,8 @@ namespace Aptenex\Upp\Los;
 
 require 'vendor/autoload.php';
 
+use Aptenex\Upp\Exception\LosAvailabiltitySkippedException;
+use Aptenex\Upp\Exception\LosChangeoverSkippedException;
 use Aptenex\Upp\Los\Debug\DebugException;
 use Aptenex\Upp\Los\Debug\Diagnostics;
 use Aptenex\Upp\Upp;
@@ -33,15 +35,16 @@ class LosGenerator
     {
         $this->upp = $upp;
     }
-
+    
     /**
-     * @param LosOptions $options
+     * @param LosOptions              $options
      * @param LookupDirectorInterface $ld
-     * @param PricingConfig $pricingConfig
+     * @param PricingConfig           $pricingConfig
      *
      * @return LosRecords
      *
      * @throws CannotGenerateLosException
+     * @throws BaseException
      */
     public function generateLosRecords(LosOptions $options, LookupDirectorInterface $ld, PricingConfig $pricingConfig): LosRecords
     {
@@ -56,7 +59,8 @@ class LosGenerator
         }
 
         if ($cc === null) {
-            throw new CannotGenerateLosException('Provided currency does not exist in PricingConfig');
+            throw CannotGenerateLosException::withArgs('Provided currency does not exist in PricingConfig',
+                ['currency' => $options->getCurrency()]);
         }
 
         $losRecords = new LosRecords($cc->getCurrency());
@@ -68,7 +72,8 @@ class LosGenerator
 
         $startStamp = strtotime($options->getStartDate()->format('Y-m-d'));
         $endStamp = strtotime($options->getEndDate()->format('Y-m-d'));
-
+    
+        /** @noinspection SummerTimeUnsafeTimeManipulationInspection */
         $days = round(($endStamp - $startStamp) / 86400) + 1; // Missing a day so add 1
 
         $maxOccupancy = $ld->getMaxOccupancyLookup()->getMaxOccupancy();
@@ -103,11 +108,21 @@ class LosGenerator
         foreach($range as $date) {
             // If the base date is not available then skip it
             if ($ld->getAvailabilityLookup()->isAvailable($date) === false && !$options->isForceFullGeneration()) {
+                if($this->isForcedDateDebug($date, $options->getForceDebugOnDate())){
+                    $ex = new LosAvailabiltitySkippedException(sprintf('No Availability for %s', $date));
+                    $ex->setArgs(['date' => $date]);
+                    $exceptions[] = $ex;
+                }
                 continue;
             }
 
             // We need to see if we can arrive on this date - if not then skip
             if ($ld->getChangeoverLookup()->canArrive($date) === false && !$options->isForceFullGeneration()) {
+                if($this->isForcedDateDebug($date, $options->getForceDebugOnDate())){
+                    $ex = new LosChangeoverSkippedException(sprintf('Not an accepted changeover for %s', $date));
+                    $ex->setArgs(['date' => $date]);
+                    $exceptions[] = $ex;
+                }
                 continue;
             }
 
@@ -138,6 +153,7 @@ class LosGenerator
 
                         if (($i < $minStay || $i > $dateMaxStay) && !$options->isForceFullGeneration()) {
                             $rates[] = 0;
+                            $baseRates[] = 0;
                             continue; // No generation
                         }
 
@@ -151,6 +167,7 @@ class LosGenerator
                             !$options->isForceFullGeneration()
                         ) {
                             $rates[] = 0;
+                            $baseRates[] = 0;
                             continue;
                         }
 
@@ -167,7 +184,11 @@ class LosGenerator
                             $rates[] = 0;
                             $baseRates[] = 0;
                             if($options->isDebugMode()){
-                                $exceptions[] = (new DebugException( $ex->getCode(), $ex->getMessage(),$ex->getFile(), $ex->getLine() ))->toArray();
+                                $args = [];
+                                if ($ex instanceof BaseException){
+                                    $args = $ex->getArgs();
+                                }
+                                $exceptions[] = (new DebugException( $ex->getCode(), $ex->getMessage(),$ex->getFile(), $ex->getLine(), $args ))->toArray();
                             }
                         }
 
@@ -195,7 +216,27 @@ class LosGenerator
         if($options->isDebugMode()) {
             $losRecords->setDebug(array_slice($exceptions,0, Diagnostics::MAX_ALLOWED_DEBUGGING_ITEMS));
         }
+        // Save the options that were used to generate this LOS.
+        $losRecords->setBuildOptions($options);
         return $losRecords;
+    }
+    
+    private function isForcedDateDebug(string $date, $dateDebugs = []): bool
+    {
+        if($dateDebugs === null || empty($dateDebugs)){
+            return false;
+        }
+        
+        foreach ($dateDebugs as $pattern){
+            // Regex..
+            if((strpos($pattern, '/') === 0) && @preg_match($pattern, $date, $matches)) {
+                return true;
+            }
+            if($date === $pattern){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

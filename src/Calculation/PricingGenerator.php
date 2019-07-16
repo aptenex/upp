@@ -20,6 +20,7 @@ use Aptenex\Upp\Calculation\Pricing\TaxesCalculator;
 use Aptenex\Upp\Calculation\SplitAmount\GuestSplitOverview;
 use Aptenex\Upp\Calculation\SplitAmount\SplitAmountProcessor;
 use Aptenex\Upp\Context\PricingContext;
+use Aptenex\Upp\Exception\BaseException;
 use Aptenex\Upp\Exception\CannotBookDatesException;
 use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
 use Aptenex\Upp\Exception\Error;
@@ -116,7 +117,8 @@ class PricingGenerator
     private function performSanityChecks(PricingContext $context, FinalPrice $fp)
     {
         if ($fp->getTotal()->isNegative()) {
-            throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
+            $ex = (new InvalidPriceException(LanguageTools::trans('INVALID_PRICE')))->setArgs(['total' => $fp->getTotal()->getAmount()]);
+            throw $ex;
         }
 
         if ($context->isLosCalculationMode() === false && $fp->getSplitDetails() !== null) {
@@ -488,7 +490,8 @@ class PricingGenerator
         }
 
         if (!empty($notMatched)) {
-            throw new CannotMatchRequestedDatesException(LanguageTools::trans('NO_PERIOD_MATCHED'));
+            throw (new CannotMatchRequestedDatesException(LanguageTools::trans('NO_PERIOD_MATCHED')))
+                   ->setArgs(['notMatched' => $notMatched]);
         }
     }
 

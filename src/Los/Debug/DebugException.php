@@ -12,14 +12,16 @@ class DebugException implements DebugInterface
     private $message;
     private $line;
     private $file;
+    private $args;
     
-    public function __construct($code, $message, $file, $line)
+    public function __construct($code, $message, $file, $line, $args)
     {
     
         $this->code = $code;
         $this->message = $message;
         $this->file = $file;
         $this->line = $line;
+        $this->args = $args;
         
     }
     
@@ -30,7 +32,8 @@ class DebugException implements DebugInterface
             'code' => $this->code,
             'message' => $this->message,
             'file' => $this->file,
-            'line' => $this->line
+            'line' => $this->line,
+            'args'  => $this->args
         ];
     }
 }
