@@ -76,11 +76,19 @@ class LosOptions
      * @param \DateTime $startDate
      * @param \DateTime $endDate
      */
-    public function __construct(string $currency, \DateTime $startDate, \DateTime $endDate)
+    public function __construct(?string $currency = null, ?\DateTime $startDate= null, ?\DateTime $endDate= null)
     {
         $this->currency = $currency;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+    }
+    
+    /**
+     * @return LosOptions
+     */
+    public static function create(): LosOptions
+    {
+        return new self();
     }
 
     /**
