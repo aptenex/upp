@@ -134,6 +134,7 @@ class LosOptions
     {
         return $this->startDate;
     }
+    
 
     /**
      * @return \DateTime
@@ -263,6 +264,28 @@ class LosOptions
     public function setCurrency(string $currency): LosOptions
     {
         $this->currency = $currency;
+        
+        return $this;
+    }
+    
+    /**
+     * @param \DateTime $startDate
+     * @return LosOptions
+     */
+    public function setStartDate(\DateTime $startDate): LosOptions
+    {
+        $this->startDate = $startDate;
+        
+        return $this;
+    }
+    
+    /**
+     * @param \DateTime $endDate
+     * @return LosOptions
+     */
+    public function setEndDate(\DateTime $endDate): LosOptions
+    {
+        $this->endDate = $endDate;
         
         return $this;
     }
