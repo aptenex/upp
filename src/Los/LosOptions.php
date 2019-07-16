@@ -256,4 +256,16 @@ class LosOptions
         ];
     }
     
+    /**
+     * @param string $currency
+     * @return LosOptions
+     */
+    public function setCurrency(string $currency): LosOptions
+    {
+        $this->currency = $currency;
+        
+        return $this;
+    }
+    
+    
 }
