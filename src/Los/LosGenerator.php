@@ -169,14 +169,18 @@ class LosGenerator
                             if ($hasBlockedAvailability === false && !$ld->getAvailabilityLookup()->isAvailable($departureDate)) {
                                 $hasBlockedAvailability = true;
 
-                                $rates[] = 0;
-                                $baseRates[] = 0;
-
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                     $ex = new LosAvailabiltitySkippedException('Cannot generate prices after blocked availability');
                                     $ex->setArgs(['arrival' => $date, 'departure' => $departureDate, 'stayLength' => $i]);
                                     $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
+                            }
+
+                            if ($hasBlockedAvailability) {
+                                $rates[] = 0;
+                                $baseRates[] = 0;
+
+                                continue;
                             }
 
                             if ($i < $minStay) {
