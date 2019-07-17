@@ -10,5 +10,12 @@ interface AvailabilityLookupInterface
      * @return bool
      */
     public function isAvailable(string $date): bool;
+    
+    /**
+     * @param string $startDate
+     * @param string $endDate
+     * @return bool
+     */
+    public function isAvailableBetween(string $startDate, string $endDate): bool;
 
 }

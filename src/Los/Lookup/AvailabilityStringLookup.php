@@ -16,6 +16,15 @@ class AvailabilityStringLookup implements AvailabilityLookupInterface
      * @var string
      */
     private $availabilityDefault;
+    
+    /**
+     * @var \DateTime
+     */
+    private $sequenceStartDate;
+    /**
+     * @var string
+     */
+    private $sequenceString;
 
     /**
      * @param \DateTime $startingDate
@@ -39,7 +48,18 @@ class AvailabilityStringLookup implements AvailabilityLookupInterface
     {
         return $this->availabilityMap[$date] ?? $this->availabilityDefault;
     }
-
+    
+    /**
+     * @todo
+     * @param string $startDate
+     * @param string $endDate
+     * @return bool
+     */
+    public function isAvailableBetween(string $startDate, string $endDate): bool
+    {
+        // not yet implemented
+    }
+    
     /**
      * @param \DateTime $startingDate
      * @param string $availabilityString
@@ -55,9 +75,11 @@ class AvailabilityStringLookup implements AvailabilityLookupInterface
         }
         
         $days = str_split($availabilityString);
-
+        
+        $this->sequenceStartDate = clone $startingDate;
+        $this->sequenceString = $availabilityString;
         $startingDate = clone $startingDate;
-
+        
         foreach($days as $index => $availabilityCharacter) {
             $this->availabilityMap[$startingDate->format('Y-m-d')] = ($availabilityCharacter === 'Y');
 

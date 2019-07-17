@@ -50,7 +50,7 @@ class LosGenerator
     {
         $forcedDebugExceptions = $exceptions = [];
         $cc = null;
-        
+       
         foreach($pricingConfig->getCurrencyConfigs() as $ccItem) {
             if ($ccItem->getCurrency() === $options->getCurrency()) {
                 $cc = $ccItem;
@@ -182,7 +182,7 @@ class LosGenerator
                                 continue; // No generation
                             }
                             
-                            if ( ! $ld->getAvailabilityLookup()->isAvailable($departureDate)) {
+                            if ( ! $ld->getAvailabilityLookup()->isAvailableBetween($date, $departureDate)) {
                                 $rates[]     = 0;
                                 $baseRates[] = 0;
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
