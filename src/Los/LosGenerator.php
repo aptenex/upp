@@ -154,54 +154,80 @@ class LosGenerator
 
                 if (($g >= $perGuestChangesAt && $guestModifierCondition !== null) || $previousRateSet === null || $options->isForceFullGeneration()) {
                     // Because we start on 1 we need to add 1 (this can be done with an LTE operator
-                    for ($i = 1; $i <= $dateMaxStay; $i++) {
 
+                    $hasBlockedAvailability = false;
+
+                    for ($i = 1; $i <= $dateMaxStay; $i++) {
 
                         $departureDate = date('Y-m-d', strtotime(sprintf(' +%s day', $i), strtotime($date)));
 
                         if (!$options->isForceFullGeneration()) {
 
+                            // We need to make sure that the departure cannot depart after it has failed to do so,
+                            // eg. 100,200,300,0,0,0,0,800 <- that would not work as you cannot stay in between there
+                            // Perform a check to see if it has already been switched, to stop an array lookup
+                            if ($hasBlockedAvailability === false && !$ld->getAvailabilityLookup()->isAvailable($departureDate)) {
+                                $hasBlockedAvailability = true;
+
+                                $rates[] = 0;
+                                $baseRates[] = 0;
+
+                                if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
+                                    $ex = new LosAvailabiltitySkippedException('Cannot generate prices after blocked availability');
+                                    $ex->setArgs(['arrival' => $date, 'departure' => $departureDate, 'stayLength' => $i]);
+                                    $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
+                                }
+                            }
+
                             if ($i < $minStay) {
                                 $rates[] = 0;
                                 $baseRates[] = 0;
+
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
-                                    $ex = new LosAvailabiltitySkippedException(sprintf('Minimum Stay of %s is not satisfied for Stay lenth of %s', $minStay, $i));
+                                    $ex = new LosAvailabiltitySkippedException(sprintf('Minimum Stay of %s is not satisfied for Stay length of %s', $minStay, $i));
                                     $ex->setArgs(['date' => $date, 'minStay' => $minStay, 'stayLength' => $i]);
                                     $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
+
                                 continue; // No generation
                             }
 
                             if ($i > $dateMaxStay) {
                                 $rates[] = 0;
                                 $baseRates[] = 0;
+
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
-                                    $ex = new LosAvailabiltitySkippedException(sprintf('Maximum Stay of %s is exceeded with Stay lenth of %s', $minStay, $i));
+                                    $ex = new LosAvailabiltitySkippedException(sprintf('Maximum Stay of %s is exceeded with Stay length of %s', $minStay, $i));
                                     $ex->setArgs(['date' => $date, 'maxStay' => $minStay, 'stayLength' => $i]);
                                     $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
+
                                 continue; // No generation
                             }
 
-                            if (!$ld->getAvailabilityLookup()->isAvailableBetween($date, $departureDate)) {
+                            if (!$ld->getAvailabilityLookup()->isAvailable($departureDate)) {
                                 $rates[] = 0;
                                 $baseRates[] = 0;
+
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                     $ex = new LosAvailabiltitySkippedException(sprintf('Availability lookup failed for %s', $departureDate));
                                     $ex->setArgs(['date' => $date, 'availableDate' => $departureDate]);
                                     $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
+
                                 continue;
                             }
 
                             if (!$ld->getChangeoverLookup()->canDepart($departureDate)) {
                                 $rates[] = 0;
                                 $baseRates[] = 0;
+
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                     $ex = new LosChangeoverSkippedException(sprintf('Changeover not possible for departing on %s', $departureDate));
                                     $ex->setArgs(['date' => $date, 'departureDate' => $departureDate]);
                                     $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
+
                                 continue;
                             }
                         }
@@ -218,10 +244,13 @@ class LosGenerator
                         } catch (CannotMatchRequestedDatesException|InvalidPriceException|BaseException $ex) {
                             $rates[] = 0;
                             $baseRates[] = 0;
+
                             $args = [];
+
                             if ($ex instanceof BaseException) {
                                 $args = $ex->getArgs();
                             }
+
                             if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                 $forcedDebugExceptions[] = (new DebugException($ex->getCode(), $ex->getMessage(), $ex->getFile(), $ex->getLine(), $args))->toArray();
                             } else if ($options->isDebugMode()) {
