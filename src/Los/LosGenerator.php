@@ -22,7 +22,7 @@ use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
 
 class LosGenerator
 {
-    
+
     /**
      * @var Upp
      */
@@ -35,11 +35,11 @@ class LosGenerator
     {
         $this->upp = $upp;
     }
-    
+
     /**
-     * @param LosOptions              $options
+     * @param LosOptions $options
      * @param LookupDirectorInterface $ld
-     * @param PricingConfig           $pricingConfig
+     * @param PricingConfig $pricingConfig
      *
      * @return LosRecords
      *
@@ -50,8 +50,8 @@ class LosGenerator
     {
         $forcedDebugExceptions = $exceptions = [];
         $cc = null;
-       
-        foreach($pricingConfig->getCurrencyConfigs() as $ccItem) {
+
+        foreach ($pricingConfig->getCurrencyConfigs() as $ccItem) {
             if ($ccItem->getCurrency() === $options->getCurrency()) {
                 $cc = $ccItem;
                 break;
@@ -59,8 +59,10 @@ class LosGenerator
         }
 
         if ($cc === null) {
-            throw CannotGenerateLosException::withArgs('Provided currency does not exist in PricingConfig',
-                ['currency' => $options->getCurrency()]);
+            throw CannotGenerateLosException::withArgs(
+                'Provided currency does not exist in PricingConfig',
+                ['currency' => $options->getCurrency()]
+            );
         }
 
         $losRecords = new LosRecords($cc->getCurrency());
@@ -72,7 +74,7 @@ class LosGenerator
 
         $startStamp = strtotime($options->getStartDate()->format('Y-m-d'));
         $endStamp = strtotime($options->getEndDate()->format('Y-m-d'));
-    
+
         /** @noinspection SummerTimeUnsafeTimeManipulationInspection */
         $days = round(($endStamp - $startStamp) / 86400) + 1; // Missing a day so add 1
 
@@ -90,8 +92,8 @@ class LosGenerator
         $guestModifierCount = 0;
         $perGuestChangesAt = 0;
         $guestModifierCondition = null;
-        foreach($cc->getModifiers() as $modifierItem) {
-            foreach($modifierItem->getConditions() as $conditionItem) {
+        foreach ($cc->getModifiers() as $modifierItem) {
+            foreach ($modifierItem->getConditions() as $conditionItem) {
                 if ($conditionItem->getType() === Condition::TYPE_GUESTS) {
                     /** @var Condition\GuestsCondition $conditionItem */
                     $guestModifierCount++;
@@ -105,9 +107,9 @@ class LosGenerator
             $perGuestChangesAt = $guestModifierCondition->getMinimum();
         }
 
-        foreach($range as $date) {
+        foreach ($range as $date) {
             // If the base date is not available then skip it
-            if( !$options->isForceFullGeneration()) {
+            if (!$options->isForceFullGeneration()) {
                 if ($ld->getAvailabilityLookup()->isAvailable($date) === false) {
                     // We need to know if we are forcing a debug on this.
                     if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
@@ -117,7 +119,7 @@ class LosGenerator
                     }
                     continue;
                 }
-    
+
                 // We need to see if we can arrive on this date - if not then skip
                 if ($ld->getChangeoverLookup()->canArrive($date) === false) {
                     if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
@@ -154,47 +156,46 @@ class LosGenerator
                     // Because we start on 1 we need to add 1 (this can be done with an LTE operator
                     for ($i = 1; $i <= $dateMaxStay; $i++) {
 
-                      
 
                         $departureDate = date('Y-m-d', strtotime(sprintf(' +%s day', $i), strtotime($date)));
-                        
-                        if(!$options->isForceFullGeneration()) {
-                            
-                            if ($i < $minStay){
+
+                        if (!$options->isForceFullGeneration()) {
+
+                            if ($i < $minStay) {
                                 $rates[] = 0;
                                 $baseRates[] = 0;
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                     $ex = new LosAvailabiltitySkippedException(sprintf('Minimum Stay of %s is not satisfied for Stay lenth of %s', $minStay, $i));
-                                    $ex->setArgs(['date' => $date, 'minStay' => $minStay,  'stayLength' => $i]);
+                                    $ex->setArgs(['date' => $date, 'minStay' => $minStay, 'stayLength' => $i]);
                                     $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
                                 continue; // No generation
                             }
-                            
-                            if($i > $dateMaxStay) {
+
+                            if ($i > $dateMaxStay) {
                                 $rates[] = 0;
                                 $baseRates[] = 0;
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                     $ex = new LosAvailabiltitySkippedException(sprintf('Maximum Stay of %s is exceeded with Stay lenth of %s', $minStay, $i));
-                                    $ex->setArgs(['date' => $date, 'maxStay' => $minStay,  'stayLength' => $i]);
+                                    $ex->setArgs(['date' => $date, 'maxStay' => $minStay, 'stayLength' => $i]);
                                     $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
                                 continue; // No generation
                             }
-                            
-                            if ( ! $ld->getAvailabilityLookup()->isAvailableBetween($date, $departureDate)) {
-                                $rates[]     = 0;
+
+                            if (!$ld->getAvailabilityLookup()->isAvailableBetween($date, $departureDate)) {
+                                $rates[] = 0;
                                 $baseRates[] = 0;
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                     $ex = new LosAvailabiltitySkippedException(sprintf('Availability lookup failed for %s', $departureDate));
-                                    $ex->setArgs(['date' => $date,'availableDate' => $departureDate]);
+                                    $ex->setArgs(['date' => $date, 'availableDate' => $departureDate]);
                                     $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
                                 continue;
                             }
-    
-                            if ( ! $ld->getChangeoverLookup()->canDepart($departureDate)) {
-                                $rates[]     = 0;
+
+                            if (!$ld->getChangeoverLookup()->canDepart($departureDate)) {
+                                $rates[] = 0;
                                 $baseRates[] = 0;
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                     $ex = new LosChangeoverSkippedException(sprintf('Changeover not possible for departing on %s', $departureDate));
@@ -218,13 +219,13 @@ class LosGenerator
                             $rates[] = 0;
                             $baseRates[] = 0;
                             $args = [];
-                            if ($ex instanceof BaseException){
+                            if ($ex instanceof BaseException) {
                                 $args = $ex->getArgs();
                             }
-                            if($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
-                                $forcedDebugExceptions[] = (new DebugException( $ex->getCode(), $ex->getMessage(),$ex->getFile(), $ex->getLine(), $args ))->toArray();
-                            } else if($options->isDebugMode()){
-                                $exceptions[] = (new DebugException( $ex->getCode(), $ex->getMessage(),$ex->getFile(), $ex->getLine(), $args ))->toArray();
+                            if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
+                                $forcedDebugExceptions[] = (new DebugException($ex->getCode(), $ex->getMessage(), $ex->getFile(), $ex->getLine(), $args))->toArray();
+                            } else if ($options->isDebugMode()) {
+                                $exceptions[] = (new DebugException($ex->getCode(), $ex->getMessage(), $ex->getFile(), $ex->getLine(), $args))->toArray();
                             }
                         }
 
@@ -247,35 +248,37 @@ class LosGenerator
                 );
             }
         }
-        
+
         $losRecords->getMetrics()->finishTiming();
-        $exceptions = array_slice($exceptions,0, Diagnostics::MAX_ALLOWED_DEBUGGING_ITEMS);
-        
-        if($options->isDebugMode()) {
-            $losRecords->setDebug(array_merge($forcedDebugExceptions , $exceptions));
-        } elseif(!empty($forcedDebugExceptions)) {
+        $exceptions = array_slice($exceptions, 0, Diagnostics::MAX_ALLOWED_DEBUGGING_ITEMS);
+
+        if ($options->isDebugMode()) {
+            $losRecords->setDebug(array_merge($forcedDebugExceptions, $exceptions));
+        } elseif (!empty($forcedDebugExceptions)) {
             $losRecords->setDebug($forcedDebugExceptions);
         }
         // Save the options that were used to generate this LOS.
         $losRecords->setBuildOptions($options);
+
         return $losRecords;
     }
-    
+
     private function isForcedDateDebug(string $date, $dateDebugs = []): bool
     {
-        if($dateDebugs === null || empty($dateDebugs)){
+        if ($dateDebugs === null || empty($dateDebugs)) {
             return false;
         }
-        
-        foreach ($dateDebugs as $pattern){
+
+        foreach ($dateDebugs as $pattern) {
             // Regex..
-            if((strpos($pattern, '/') === 0) && @preg_match($pattern, $date, $matches)) {
+            if ((strpos($pattern, '/') === 0) && @preg_match($pattern, $date, $matches)) {
                 return true;
             }
-            if($date === $pattern){
+            if ($date === $pattern) {
                 return true;
             }
         }
+
         return false;
     }
 
