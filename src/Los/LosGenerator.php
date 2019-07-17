@@ -113,7 +113,7 @@ class LosGenerator
                     if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                         $ex = new LosAvailabiltitySkippedException(sprintf('No Availability for %s', $date));
                         $ex->setArgs(['date' => $date]);
-                        $forcedDebugExceptions[] = $ex;
+                        $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                     }
                     continue;
                 }
@@ -123,7 +123,7 @@ class LosGenerator
                     if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                         $ex = new LosChangeoverSkippedException(sprintf('Not an accepted changeover for %s', $date));
                         $ex->setArgs(['date' => $date]);
-                        $forcedDebugExceptions[] = $ex;
+                        $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                     }
                     continue;
                 }
@@ -166,7 +166,7 @@ class LosGenerator
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                     $ex = new LosAvailabiltitySkippedException(sprintf('Minimum Stay of %s is not satisfied for Stay lenth of %s', $minStay, $i));
                                     $ex->setArgs(['date' => $date, 'minStay' => $minStay,  'stayLength' => $i]);
-                                    $forcedDebugExceptions[] = $ex;
+                                    $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
                                 continue; // No generation
                             }
@@ -177,7 +177,7 @@ class LosGenerator
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                     $ex = new LosAvailabiltitySkippedException(sprintf('Maximum Stay of %s is exceeded with Stay lenth of %s', $minStay, $i));
                                     $ex->setArgs(['date' => $date, 'maxStay' => $minStay,  'stayLength' => $i]);
-                                    $forcedDebugExceptions[] = $ex;
+                                    $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
                                 continue; // No generation
                             }
@@ -188,7 +188,7 @@ class LosGenerator
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                     $ex = new LosAvailabiltitySkippedException(sprintf('Availability lookup failed for %s', $departureDate));
                                     $ex->setArgs(['date' => $date,'availableDate' => $departureDate]);
-                                    $forcedDebugExceptions[] = $ex;
+                                    $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
                                 continue;
                             }
@@ -199,7 +199,7 @@ class LosGenerator
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                     $ex = new LosChangeoverSkippedException(sprintf('Changeover not possible for departing on %s', $departureDate));
                                     $ex->setArgs(['date' => $date, 'departureDate' => $departureDate]);
-                                    $forcedDebugExceptions[] = $ex;
+                                    $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
                                 continue;
                             }
