@@ -30,15 +30,23 @@ class MultipleCalculationTest extends TestCase
     public function testConfigs()
     {
         $priceConfigs = json_decode(file_get_contents(__DIR__ . '/Resources/test-configs.json'), true);
-        $structureOptions = new StructureOptions();
 
         foreach($priceConfigs as $priceConfig) {
+            $structureOptions = new StructureOptions();
+
             self::$currentTestName = $priceConfig['name'];
 
             $upp = new Upp(
                 new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $priceConfig, [])),
                 new TestTranslator()
             );
+
+            if (ArrayUtils::hasNestedArrayValue('parseOptions', $priceConfig)) {
+                foreach($priceConfig['parseOptions'] as $key => $value) {
+                    $setter = sprintf('set%s', ucfirst($key));
+                    $structureOptions->$setter($value);
+                }
+            }
 
             $parsedConfig = $upp->parsePricingConfig($priceConfig['config'], $structureOptions);
 

@@ -62,7 +62,7 @@ class CurrencyConfigParser
             }
 
             $c->setPeriods((new PeriodsParser())->parse($rawPeriods));
-            $c->setModifiers((new ModifiersParser())->parse(ArrayAccess::get('modifiers', $rawConfig, [])));
+            $c->setModifiers((new ModifiersParser())->parse(ArrayAccess::get('modifiers', $rawConfig, []), $this->pricingConfigParser->getOptions()));
 
             $pc[strtoupper($c->getCurrency())] = $c;
         }

@@ -8,7 +8,7 @@ class StructureOptions
 {
 
     /**
-     * Not reccommended when running actual pricing calculations but useful when transforming the data
+     * Not recommended when running actual pricing calculations but useful when transforming the data
      *
      * @var bool
      */
@@ -18,6 +18,13 @@ class StructureOptions
      * @var ExternalCommandDirector|null
      */
     private $externalCommandDirector;
+
+    /**
+     * If a value is passed here, when parsing the modifiers it will exclude any that do not meet this channel
+     *
+     * @var string|null
+     */
+    private $distributionChannel = null;
 
     /**
      * @return ExternalCommandDirector|null
@@ -57,6 +64,30 @@ class StructureOptions
     public function setExpandNestedPeriods(bool $expandNestedPeriods)
     {
         $this->expandNestedPeriods = $expandNestedPeriods;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getDistributionChannel(): ?string
+    {
+        return $this->distributionChannel;
+    }
+
+    /**
+     * @param null|string $distributionChannel
+     */
+    public function setDistributionChannel(?string $distributionChannel): void
+    {
+        $this->distributionChannel = $distributionChannel;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDistributionChannel(): bool
+    {
+        return $this->distributionChannel !== null;
     }
 
 }
