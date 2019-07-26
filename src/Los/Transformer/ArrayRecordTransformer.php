@@ -4,6 +4,7 @@ namespace Aptenex\Upp\Los\Transformer;
 
 use Aptenex\Upp\Exception\CannotGenerateLosException;
 use Aptenex\Upp\Los\LosRecords;
+use Money\Currency;
 
 /**
  * This array -> record transformer mimics Airbnb's format near identical just with multiple currencies
@@ -26,7 +27,10 @@ class ArrayRecordTransformer extends BaseRecordTransformer
         }
 
         $data = [];
-
+        
+        // We do this so that we know if we need to do any conversion using the Exchange.
+        $options->setSourceCurrency(new Currency($records->getCurrency()));
+        
         $computedEmptyHash = null;
         foreach($records->getRecords() as $date => $dateSet) {
             // We need a lookahead to merge the first guest count if a few guest counts have the same rate
@@ -65,7 +69,7 @@ class ArrayRecordTransformer extends BaseRecordTransformer
                     // this extra index check
                     if ($maxGuestCountForSameHash !== 0 && $index !== ($guestEntries - 1)) {
                         $data[] = $this->generateLosRecordString($previousSingleRecord, $options);
-
+        
                         $maxGuestCountForSameHash = 0;
                     }
 
@@ -75,7 +79,7 @@ class ArrayRecordTransformer extends BaseRecordTransformer
                 $previousSingleRecord = $singleRecord;
             }
         }
-
+       
         return $data;
     }
 

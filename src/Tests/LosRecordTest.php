@@ -3,6 +3,9 @@
 namespace Tests;
 
 use Aptenex\Upp\Context\PricingContext;
+use Money\Currency;
+use Money\Exchange\FixedExchange;
+use Money\Exchange\SwapExchange;
 use Pool;
 use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\DateUtils;
@@ -207,8 +210,10 @@ class LosRecordTest extends TestCase
 
         $losRecords1 = $losGenerator->generateLosRecords($losOptions, $ld, $parsed);
         $losRecords = (new LosRecordMerger())->merge([$losRecords1]);
+        
 
         $options = new TransformOptions();
+        
         $transformer = new AirbnbRecordTransformer();
         $output = json_encode($transformer->transform($losRecords, $options), JSON_PRETTY_PRINT);
 
