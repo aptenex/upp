@@ -5372,5 +5372,115 @@
         }
       }
     ]
+  },
+  {
+    "name": "Distribution Filter Check",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "EUR",
+          "defaults": {
+            "damageDeposit": 0,
+            "damageDepositCalculationMethod": "fixed",
+            "minimumNights": 7,
+            "balanceDaysBeforeArrival": 60,
+            "depositSplitPercentage": 30,
+            "daysRequiredInAdvanceForBooking": 1,
+            "bookableType": "instant_bookable",
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_ARRIVAL"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "2020",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-01-01",
+                  "endDate": "2020-12-31",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": 2,
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 100,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "description": "Early Bird",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "distribution",
+                  "channels": ["rentalsunited"]
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 0.10,
+                "calculationMethod": "percentage",
+                "calculationOperand": "subtraction",
+                "applicableTaxes": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2020-02-01",
+          "departureDate": "2020-02-08",
+          "bookingDate": "2020-01-31",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "parseOptions": {
+            "distributionChannel": "rentalsunited"
+        },
+        "tests": {
+          "noNights": 7,
+          "finalPrice": 10000,
+          "basePrice": 10000,
+          "damageDeposit": 0,
+          "adjustmentCount": 0,
+          "split": {
+            "deposit": 3000,
+            "balance": 7000
+          },
+          "nightPrices": {
+            "2020-02-01": 1429,
+            "2020-02-02": 1429,
+            "2020-02-03": 1429,
+            "2020-02-04": 1429,
+            "2020-02-05": 1428,
+            "2020-02-06": 1428,
+            "2020-02-07": 1428
+          }
+        }
+      }
+    ]
   }
 ]
