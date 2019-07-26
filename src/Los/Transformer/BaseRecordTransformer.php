@@ -60,33 +60,23 @@ abstract class BaseRecordTransformer implements RecordTransformerInterface
             )) {
             return $rates;
         }
-     
+        
         if ($options->getModifyRatePercentage()) {
             foreach ($rates as &$rate) {
-                $rate = MoneyUtils::fromSmallestToNormalized(
-                    MoneyUtils::fromString($rate, $options->getSourceCurrency())
-                              ->multiply($options->getModifyRatePercentage())
-                              ->getAmount(),
-                    $options->getSourceCurrency()
-                );
+                $rate = round( bcmul( $rate, $options->getModifyRatePercentage(), 2), 2);
             }
             unset($rate);
-           
+            
         }
         
         if ( ! $options->getExchange() instanceof Exchange) {
             return $rates;
         }
         $converter = new Converter(new ISOCurrencies(), $options->getExchange());
+        $conversionRatio = $options->getExchange()->quote($options->getSourceCurrency(), $options->getTargetCurrency())->getConversionRatio();
         
         foreach ($rates as &$rate) {
-            $rate = MoneyUtils::fromSmallestToNormalized(
-                $converter->convert(
-                    MoneyUtils::fromString($rate, $options->getSourceCurrency()),
-                    $options->getTargetCurrency()
-                )->getAmount(),
-                $options->getTargetCurrency()
-            );
+            $rate = round( bcmul( $rate, $conversionRatio, 2), 2);
         }
         unset($rate);
         return $rates;
