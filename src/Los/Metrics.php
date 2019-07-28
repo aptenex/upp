@@ -73,6 +73,10 @@ class Metrics
      */
     public function getEfficiencyPercentage(): float
     {
+        if($this->getMaxPotentialRuns() === 0){
+            // It's a 100, cause we could never run it.
+            return 100;
+        }
         return round(100 - (($this->getTimesRan() / $this->getMaxPotentialRuns()) * 100), 3);
     }
 

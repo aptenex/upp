@@ -246,7 +246,7 @@ class LosOptions
     {
         return [
             'startDate' => $this->getStartDate()->format('Y-m-d'),
-            'endDate' => $this->getStartDate()->format('Y-m-d'),
+            'endDate' => $this->getEndDate()->format('Y-m-d'),
             'currency' => $this->getCurrency(),
             'defaultMinStay' => $this->getDefaultMinStay(),
             'defaultMaxStay' => $this->getDefaultMaxStay(),
