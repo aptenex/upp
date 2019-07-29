@@ -41,16 +41,17 @@ class MultipleCalculationTest extends TestCase
                 new TestTranslator()
             );
 
-            if (ArrayUtils::hasNestedArrayValue('parseOptions', $priceConfig)) {
-                foreach($priceConfig['parseOptions'] as $key => $value) {
-                    $setter = sprintf('set%s', ucfirst($key));
-                    $structureOptions->$setter($value);
-                }
-            }
-
-            $parsedConfig = $upp->parsePricingConfig($priceConfig['config'], $structureOptions);
-
             foreach($priceConfig['priceTests'] as $index => $pTest) {
+
+                if (ArrayUtils::hasNestedArrayValue('parseOptions', $pTest)) {
+                    foreach($pTest['parseOptions'] as $key => $value) {
+                        $setter = sprintf('set%s', ucfirst($key));
+                        $structureOptions->$setter($value);
+                    }
+                }
+
+                $parsedConfig = $upp->parsePricingConfig($priceConfig['config'], $structureOptions);
+
                 $contextData = $pTest['context'];
                 $testAmounts = $pTest['tests'];
 

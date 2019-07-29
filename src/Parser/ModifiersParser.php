@@ -28,16 +28,40 @@ class ModifiersParser
             $mo =  $this->parseModifier($modifier, $index);
 
             if (
-                $options->hasDistributionChannel() &&
-                $this->matchesDistributionChannel($mo, $options->getDistributionChannel()) === false
+                $options->hasDistributionChannel() && // has the option
+                $this->getDistributionCondition($mo) !== null // this modifier contains the condition
             ) {
-                continue;
+                if ($this->matchesDistributionChannel($mo, $options->getDistributionChannel())) {
+                    // We need to remove this condition from the modifier
+                    $mo->setConditions(array_filter($mo->getConditions(), function ($item) {
+                        /** @var Condition $item */
+                        return $item->getType() !== Condition::TYPE_DISTRIBUTION;
+                    }));
+                } else {
+                    continue;
+                }
             }
 
             $m[] = $mo;
         }
 
         return $m;
+    }
+
+    /**
+     * @param Modifier $modifier
+     * @return
+     */
+    private function getDistributionCondition(Modifier $modifier): ?Condition\DistributionCondition
+    {
+        foreach($modifier->getConditions() as $condition) {
+            if ($condition->getType() === Condition::TYPE_DISTRIBUTION) {
+                /** @var Condition\DistributionCondition $condition */
+                return $condition;
+            }
+        }
+
+        return null;
     }
 
     /**

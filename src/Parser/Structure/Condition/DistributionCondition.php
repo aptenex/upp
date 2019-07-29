@@ -11,6 +11,7 @@ class DistributionCondition extends Condition
     const CHANNEL_AIRBNB = 'airbnb';
     const CHANNEL_HOMEAWAY = 'homeaway';
     const CHANNEL_RENTIVO = 'rentivo';
+    const CHANNEL_RENTALS_UNITED = 'rentalsunited';
 
     /**
      * @var string[]
@@ -20,7 +21,8 @@ class DistributionCondition extends Condition
     const CHANNELS_LIST = [
         'airbnb',
         'homeaway',
-        'rentivo'
+        'rentivo',
+        'rentalsunited',
     ];
 
     /**
