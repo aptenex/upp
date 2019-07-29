@@ -5432,7 +5432,7 @@
               "conditions": [
                 {
                   "type": "distribution",
-                  "channels": ["rentalsunited"]
+                  "distributionChannels": ["rentalsunited"]
                 }
               ],
               "rate": {
@@ -5457,9 +5457,6 @@
           "guests": 10,
           "currency": "EUR"
         },
-        "parseOptions": {
-            "distributionChannel": "rentalsunited"
-        },
         "tests": {
           "noNights": 7,
           "finalPrice": 10000,
@@ -5469,6 +5466,38 @@
           "split": {
             "deposit": 3000,
             "balance": 7000
+          },
+          "nightPrices": {
+            "2020-02-01": 1429,
+            "2020-02-02": 1429,
+            "2020-02-03": 1429,
+            "2020-02-04": 1429,
+            "2020-02-05": 1428,
+            "2020-02-06": 1428,
+            "2020-02-07": 1428
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2020-02-01",
+          "departureDate": "2020-02-08",
+          "bookingDate": "2020-01-31",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "parseOptions": {
+          "distributionChannel": "rentalsunited"
+        },
+        "tests": {
+          "noNights": 7,
+          "finalPrice": 9000,
+          "basePrice": 9000,
+          "damageDeposit": 0,
+          "adjustmentCount": 1,
+          "split": {
+            "deposit": 2700,
+            "balance": 6300
           },
           "nightPrices": {
             "2020-02-01": 1429,
