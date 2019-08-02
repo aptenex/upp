@@ -161,22 +161,22 @@ class LosGenerator
                     for ($i = 1; $i <= $dateMaxStay; $i++) {
 
                         $departureDate = date('Y-m-d', strtotime(sprintf(' +%s day', $i), strtotime($date)));
-
+                        // We need to make sure that the departure cannot depart after it has failed to do so,
+                        // eg. 100,200,300,0,0,0,0,800 <- that would not work as you cannot stay in between there
+                        // Perform a check to see if it has already been switched, to stop an array lookup
+                        try {
+                            // We aren't checking if the departureDate is available, we actually need to check if the PREVIOUS
+                            // day is available.
+                            $p = (new \DateTime($departureDate))
+                                ->sub(new DateInterval('P1D'))
+                                ->format('Y-m-d');
+                        } catch (\Exception $e) {
+                            $hasBlockedAvailability = true;
+                            $p = $departureDate;
+                        }
+                        
                         if (!$options->isForceFullGeneration()) {
                             
-                            // We need to make sure that the departure cannot depart after it has failed to do so,
-                            // eg. 100,200,300,0,0,0,0,800 <- that would not work as you cannot stay in between there
-                            // Perform a check to see if it has already been switched, to stop an array lookup
-                            try {
-                                // We aren't checking if the departureDate is available, we actually need to check if the PREVIOUS
-                                // day is available.
-                                $p = (new \DateTime($departureDate))
-                                    ->sub(new DateInterval('P1D'))
-                                    ->format('Y-m-d');
-                            } catch (\Exception $e) {
-                                $hasBlockedAvailability = true;
-                                $p = $departureDate;
-                            }
                             
                             if ($hasBlockedAvailability === false && !$ld->getAvailabilityLookup()->isAvailable($p)) {
                                 $hasBlockedAvailability = true;
@@ -221,12 +221,12 @@ class LosGenerator
                                 continue; // No generation
                             }
 
-                            if (!$ld->getAvailabilityLookup()->isAvailable($departureDate)) {
+                            if (!$ld->getAvailabilityLookup()->isAvailable($p)) {
                                 $rates[] = 0;
                                 $baseRates[] = 0;
 
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
-                                    $ex = new LosAvailabiltitySkippedException(sprintf('Availability lookup failed for %s', $departureDate));
+                                    $ex = new LosAvailabiltitySkippedException(sprintf('Availability lookup failed for availability on %s with departure of %s', $p, $departureDate));
                                     $ex->setArgs(['date' => $date, 'availableDate' => $departureDate]);
                                     $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
