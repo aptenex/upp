@@ -19,6 +19,7 @@ use Aptenex\Upp\Los\Lookup\LookupDirectorInterface;
 use Aptenex\Upp\Exception\InvalidPriceException;
 use Aptenex\Upp\Exception\CannotGenerateLosException;
 use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
+use DateInterval;
 
 class LosGenerator
 {
@@ -162,11 +163,22 @@ class LosGenerator
                         $departureDate = date('Y-m-d', strtotime(sprintf(' +%s day', $i), strtotime($date)));
 
                         if (!$options->isForceFullGeneration()) {
-
+                            
                             // We need to make sure that the departure cannot depart after it has failed to do so,
                             // eg. 100,200,300,0,0,0,0,800 <- that would not work as you cannot stay in between there
                             // Perform a check to see if it has already been switched, to stop an array lookup
-                            if ($hasBlockedAvailability === false && !$ld->getAvailabilityLookup()->isAvailable($departureDate)) {
+                            try {
+                                // We aren't checking if the departureDate is available, we actually need to check if the PREVIOUS
+                                // day is available.
+                                $p = (new \DateTime($departureDate))
+                                    ->sub(new DateInterval('P1D'))
+                                    ->format('Y-m-d');
+                            } catch (\Exception $e) {
+                                $hasBlockedAvailability = true;
+                                $p = $departureDate;
+                            }
+                            
+                            if ($hasBlockedAvailability === false && !$ld->getAvailabilityLookup()->isAvailable($p)) {
                                 $hasBlockedAvailability = true;
 
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
