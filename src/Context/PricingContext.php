@@ -104,7 +104,7 @@ class PricingContext
      *
      * @var string
      */
-    private $distributionChannel = DistributionCondition::CHANNEL_RENTIVO;
+    private $distributionChannel;
 
     /**
      * @Valid()
