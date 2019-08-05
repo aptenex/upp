@@ -2,13 +2,13 @@
 
 namespace Tests;
 
-use Aptenex\Upp\Util\DateUtils;
 use PHPUnit\Framework\TestCase;
+use Aptenex\Upp\Util\ConfigUtils;
 
 class ExpandPeriodsTest extends TestCase
 {
 
-    public function testNestedPeriodsExpansion()
+    public function testNestedPeriodsExpansion(): void
     {
 
         $periods = [
@@ -50,7 +50,7 @@ class ExpandPeriodsTest extends TestCase
             ]
         ];
 
-        $expanded = DateUtils::expandPeriods($periods);
+        $expanded = ConfigUtils::expandPeriods($periods);
 
         $this->assertCount(7, $expanded);
 
@@ -59,7 +59,7 @@ class ExpandPeriodsTest extends TestCase
         $this->assertSame($expected, json_encode($expanded));
     }
 
-    public function testNonNestedRemainsTheSame()
+    public function testNonNestedRemainsTheSame(): void
     {
 
         $periods = [
@@ -92,7 +92,7 @@ class ExpandPeriodsTest extends TestCase
             ]
         ];
 
-        $expanded = DateUtils::expandPeriods($periods);
+        $expanded = ConfigUtils::expandPeriods($periods);
 
         $this->assertSame(json_encode($periods), json_encode($expanded));
     }

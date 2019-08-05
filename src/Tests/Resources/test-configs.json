@@ -5513,6 +5513,7 @@
     ]
   },
   {
+    "key": "distribution-parser-test",
     "name": "Distribution Condition Always True",
     "description": "",
     "config": {
@@ -5595,7 +5596,7 @@
               "hidden": true,
               "splitMethod": "ON_TOTAL",
               "priceGroup": "total",
-              "description": "CC fee",
+              "description": "CC Fee",
               "conditionOperand": "AND",
               "conditions": [
                 {
@@ -5604,12 +5605,34 @@
                   "distributionChannels": [
                     "homeaway"
                   ]
+                },
+                {
+                  "type": "nights",
+                  "modifyRatePerUnit": false,
+                  "minimum": 21,
+                  "maximum": 28
                 }
               ],
               "rate": {
                 "type": "adjustment",
                 "amount": 0.017,
                 "calculationMethod": "percentage",
+                "calculationOperand": "addition",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "type": "cleaning",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "priceGroup": "total",
+              "description": "Cleaning fee",
+              "conditionOperand": "AND",
+              "conditions": [],
+              "rate": {
+                "type": "adjustment",
+                "amount": 100,
+                "calculationMethod": "fixed",
                 "calculationOperand": "addition",
                 "applicableTaxes": []
               }
@@ -5630,13 +5653,13 @@
         },
         "tests": {
           "noNights": 7,
-          "finalPrice": 525000,
+          "finalPrice": 535000,
           "basePrice": 525000,
           "damageDeposit": 0,
-          "adjustmentCount": 0,
+          "adjustmentCount": 1,
           "split": {
-            "deposit": 157500,
-            "balance": 367500
+            "deposit": 160500,
+            "balance": 374500
           },
           "nightPrices": {
             "2020-01-10": 75000,
