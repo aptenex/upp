@@ -18,6 +18,11 @@ class LosOptions
     private $endDate;
 
     /**
+     * @var \DateTime
+     */
+    private $bookingDate;
+
+    /**
      * @var string
      */
     private $currency;
@@ -289,6 +294,29 @@ class LosOptions
         
         return $this;
     }
-    
+
+    /**
+     * @return \DateTime
+     */
+    public function getBookingDate(): ?\DateTime
+    {
+        return $this->bookingDate;
+    }
+
+    /**
+     * @param \DateTime $bookingDate
+     */
+    public function setBookingDate(?\DateTime $bookingDate): void
+    {
+        $this->bookingDate = $bookingDate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasBookingDate(): bool
+    {
+        return $this->bookingDate instanceof \DateTime;
+    }
     
 }

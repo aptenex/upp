@@ -71,7 +71,7 @@ class LosGenerator
         // TODO:
         // - Add a "patch" system if only the availability changes.. aka go through existing LOS records and modify them
 
-        $bookingDate = date('Y-m-d');
+        $bookingDate = $options->hasBookingDate() ? $options->getBookingDate()->format('Y-m-d') : date('Y-m-d');
 
         $startStamp = strtotime($options->getStartDate()->format('Y-m-d'));
         $endStamp = strtotime($options->getEndDate()->format('Y-m-d'));

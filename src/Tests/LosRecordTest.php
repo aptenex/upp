@@ -200,6 +200,8 @@ class LosRecordTest extends TestCase
             new \DateTime('2019-05-31')
         );
 
+        $losOptions->setBookingDate(new \DateTime('2019-01-01'));
+
         $losOptions->setForceFullGeneration(false);
 
         // The test rates are generated without a fee that is always applied. This option should remove these
