@@ -71,7 +71,7 @@ class StructureOptions
      */
     public function getDistributionChannel(): ?string
     {
-        return $this->distributionChannel;
+        return  strtolower($this->distributionChannel);
     }
 
     /**
@@ -79,7 +79,7 @@ class StructureOptions
      */
     public function setDistributionChannel(?string $distributionChannel): void
     {
-        $this->distributionChannel = $distributionChannel;
+        $this->distributionChannel =  strtolower($distributionChannel);
     }
 
     /**

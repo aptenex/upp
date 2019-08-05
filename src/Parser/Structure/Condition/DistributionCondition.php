@@ -7,10 +7,11 @@ use Aptenex\Upp\Parser\Structure\Condition;
 
 class DistributionCondition extends Condition
 {
-
+    // Keep lower case always.
     const CHANNEL_AIRBNB = 'airbnb';
     const CHANNEL_HOMEAWAY = 'homeaway';
     const CHANNEL_RENTIVO = 'rentivo';
+    const CHANNEL_BOOKINGDOTCOM = 'bookingdotcom';
     const CHANNEL_RENTALS_UNITED = 'rentalsunited';
 
     /**
@@ -19,10 +20,10 @@ class DistributionCondition extends Condition
     private $channels = [];
 
     const CHANNELS_LIST = [
-        'airbnb',
-        'homeaway',
-        'rentivo',
-        'rentalsunited',
+        self::CHANNEL_AIRBNB,
+        self::CHANNEL_HOMEAWAY,
+        self::CHANNEL_RENTIVO,
+        self::CHANNEL_RENTALS_UNITED,
     ];
 
     /**

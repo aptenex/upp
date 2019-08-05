@@ -8,7 +8,7 @@ use Aptenex\Upp\Parser\Structure\StructureOptions;
 
 class ConfigUtils
 {
-
+    public const NO_CHANNEL_SPECIFIED = 'none';
     /**
      * @param array $config
      * @param null|string $channel
@@ -29,7 +29,7 @@ class ConfigUtils
         // set the channel to NO_CHANNEL_SPECIFIED which achieves the same goal
 
         $so = new StructureOptions();
-        $so->setDistributionChannel(!empty($channel) ? $channel : 'NO_CHANNEL_SPECIFIED');
+        $so->setDistributionChannel(!empty($channel) ? $channel : self::NO_CHANNEL_SPECIFIED);
 
         foreach($config['data'] as $indexCc => $cc) {
             if (!isset($cc['modifiers'])) {

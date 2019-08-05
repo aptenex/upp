@@ -76,7 +76,7 @@ class ModifiersParser
             /** @var Condition\DistributionCondition $condition */
             if (
                 $condition->getType() === Condition::TYPE_DISTRIBUTION &&
-                \in_array($distributionChannel, $condition->getChannels(), true)
+                \in_array(  strtolower($distributionChannel), $condition->getChannels(), true)
             ) {
                 return true;
             }
