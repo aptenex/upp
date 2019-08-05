@@ -5511,5 +5511,144 @@
         }
       }
     ]
+  },
+  {
+    "name": "Distribution Condition Always True",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "EUR",
+          "defaults": {
+            "damageDeposit": null,
+            "damageDepositCalculationMethod": "fixed",
+            "perPetPerStay": 0,
+            "perPetPerNight": 0,
+            "perPetSplitMethod": "ON_TOTAL",
+            "minimumNights": 7,
+            "maximumNights": "",
+            "balanceDaysBeforeArrival": 45,
+            "depositSplitPercentage": 30,
+            "daysRequiredInAdvanceForBooking": 2,
+            "bookableType": "enquiry_with_price",
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_BALANCE"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "Christmas\/New Year 2019\/20",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-12-21",
+                  "endDate": "2020-01-07",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "7",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 920,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "description": "Winter\/Spring 2020",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-01-08",
+                  "endDate": "2020-04-04",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "5",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 750,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": []
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "modifier",
+              "hidden": true,
+              "splitMethod": "ON_TOTAL",
+              "priceGroup": "total",
+              "description": "CC fee",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "distribution",
+                  "modifyRatePerUnit": false,
+                  "distributionChannels": [
+                    "homeaway"
+                  ]
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 0.017,
+                "calculationMethod": "percentage",
+                "calculationOperand": "addition",
+                "applicableTaxes": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2020-01-10",
+          "departureDate": "2020-01-17",
+          "bookingDate": "2020-01-01",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 7,
+          "finalPrice": 525000,
+          "basePrice": 525000,
+          "damageDeposit": 0,
+          "adjustmentCount": 0,
+          "split": {
+            "deposit": 157500,
+            "balance": 367500
+          },
+          "nightPrices": {
+            "2020-01-10": 75000,
+            "2020-01-11": 75000,
+            "2020-01-12": 75000,
+            "2020-01-13": 75000,
+            "2020-01-14": 75000,
+            "2020-01-15": 75000,
+            "2020-01-16": 75000
+          }
+        }
+      }
+    ]
   }
 ]
