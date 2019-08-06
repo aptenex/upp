@@ -46,6 +46,11 @@ class Defaults
     protected $extraNightAlterationStrategyUseGlobalNights = false;
 
     /**
+     * @var boolean
+     */
+    protected $partialWeekAlterationStrategyUseGlobalNights = false;
+
+    /**
      * @var string
      */
     protected $bookableType = Period::BOOKABLE_TYPE_DEFAULT;
@@ -215,6 +220,22 @@ class Defaults
     }
 
     /**
+     * @return bool
+     */
+    public function isPartialWeekAlterationStrategyUseGlobalNights(): bool
+    {
+        return $this->partialWeekAlterationStrategyUseGlobalNights;
+    }
+
+    /**
+     * @param bool $partialWeekAlterationStrategyUseGlobalNights
+     */
+    public function setPartialWeekAlterationStrategyUseGlobalNights(bool $partialWeekAlterationStrategyUseGlobalNights): void
+    {
+        $this->partialWeekAlterationStrategyUseGlobalNights = $partialWeekAlterationStrategyUseGlobalNights;
+    }
+
+    /**
      * @return string
      */
     public function getDamageDepositCalculationMethod()
@@ -340,18 +361,19 @@ class Defaults
     public function __toArray(): array
     {
         return [
-            'minimumNights'                               => $this->getMinimumNights(),
-            'maximumNights'                               => $this->getMaximumNights(),
-            'perPetPerStay'                               => $this->getPerPetPerStay(),
-            'perPetPerNight'                              => $this->getPerPetPerStay(),
-            'perPetSplitMethod'                           => $this->getPerPetSplitMethod(),
-            'damageDeposit'                               => $this->getDamageDeposit(),
-            'damageDepositCalculationMethod'              => $this->getDamageDepositCalculationMethod(),
-            'damageDepositSplitMethod'                    => $this->getDamageDepositSplitMethod(),
-            'daysRequiredInAdvanceForBooking'             => $this->getDaysRequiredInAdvanceForBooking(),
-            'balanceDaysBeforeArrival'                    => $this->getBalanceDaysBeforeArrival(),
-            'depositSplitPercentage'                      => $this->getDepositSplitPercentage(),
-            'extraNightAlterationStrategyUseGlobalNights' => $this->isExtraNightAlterationStrategyUseGlobalNights()
+            'minimumNights'                                => $this->getMinimumNights(),
+            'maximumNights'                                => $this->getMaximumNights(),
+            'perPetPerStay'                                => $this->getPerPetPerStay(),
+            'perPetPerNight'                               => $this->getPerPetPerStay(),
+            'perPetSplitMethod'                            => $this->getPerPetSplitMethod(),
+            'damageDeposit'                                => $this->getDamageDeposit(),
+            'damageDepositCalculationMethod'               => $this->getDamageDepositCalculationMethod(),
+            'damageDepositSplitMethod'                     => $this->getDamageDepositSplitMethod(),
+            'daysRequiredInAdvanceForBooking'              => $this->getDaysRequiredInAdvanceForBooking(),
+            'balanceDaysBeforeArrival'                     => $this->getBalanceDaysBeforeArrival(),
+            'depositSplitPercentage'                       => $this->getDepositSplitPercentage(),
+            'extraNightAlterationStrategyUseGlobalNights'  => $this->isExtraNightAlterationStrategyUseGlobalNights(),
+            'partialWeekAlterationStrategyUseGlobalNights' => $this->isPartialWeekAlterationStrategyUseGlobalNights()
         ];
     }
 

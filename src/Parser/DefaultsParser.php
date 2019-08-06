@@ -41,7 +41,8 @@ class DefaultsParser
 
         $d->setDaysRequiredInAdvanceForBooking(ArrayAccess::get('daysRequiredInAdvanceForBooking', $defaults, null));
 
-        $d->setExtraNightAlterationStrategyUseGlobalNights(ArrayAccess::get('extraNightAlterationStrategyUseGlobalNights', $defaults, null));
+        $d->setExtraNightAlterationStrategyUseGlobalNights(ArrayAccess::get('extraNightAlterationStrategyUseGlobalNights', $defaults, false));
+        $d->setPartialWeekAlterationStrategyUseGlobalNights(ArrayAccess::get('partialWeekAlterationStrategyUseGlobalNights', $defaults, false));
 
         return $d;
     }

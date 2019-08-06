@@ -116,6 +116,8 @@ class DaysOfWeekAlterationStrategy implements PriceAlterationInterface
                 $night->setCost($bracketAmount);
             }
 
+            $night->addStrategy($dowa);
+
             $total = $total->add($night->getCost());
         }
 

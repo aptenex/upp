@@ -870,6 +870,7 @@
   },
   {
     "name": "On Arrival Damage Deposit Test",
+    "skip": false,
     "description": "Tests that when the damage deposit is set to ON_ARRIVAL it will not be added to the total",
     "config": {
       "name": "Pricing",
@@ -922,262 +923,6 @@
               "bookableType": "instant_bookable"
             },
             {
-              "id": 5413,
-              "description": "2019-08-25 - 2019-09-14",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2019-08-25",
-                  "endDate": "2019-09-14",
-                  "arrivalDays": [
-                    "saturday"
-                  ],
-                  "departureDays": [
-                    "saturday"
-                  ]
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 2360,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5419,
-              "description": "2020-08-25 - 2020-09-14",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2020-08-25",
-                  "endDate": "2020-09-14",
-                  "arrivalDays": [
-                    "saturday"
-                  ],
-                  "departureDays": [
-                    "saturday"
-                  ]
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 2360,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5418,
-              "description": "2020-06-30 - 2020-08-24",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2020-06-30",
-                  "endDate": "2020-08-24",
-                  "arrivalDays": [
-                    "saturday"
-                  ],
-                  "departureDays": [
-                    "saturday"
-                  ]
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 2963,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5417,
-              "description": "2020-05-19 - 2020-06-29",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2020-05-19",
-                  "endDate": "2020-06-29",
-                  "arrivalDays": [],
-                  "departureDays": []
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 2360,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5416,
-              "description": "2020-04-07 - 2020-05-18",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2020-04-07",
-                  "endDate": "2020-05-18",
-                  "arrivalDays": [],
-                  "departureDays": []
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 1482,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5415,
-              "description": "2020-03-31 - 2020-04-06",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2020-03-31",
-                  "endDate": "2020-04-06",
-                  "arrivalDays": [],
-                  "departureDays": []
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 2360,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5414,
-              "description": "2019-09-15 - 2019-10-26",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2019-09-15",
-                  "endDate": "2019-10-26",
-                  "arrivalDays": [],
-                  "departureDays": []
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 1482,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5412,
-              "description": "2019-06-30 - 2019-08-24",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2019-06-30",
-                  "endDate": "2019-08-24",
-                  "arrivalDays": [
-                    "saturday"
-                  ],
-                  "departureDays": [
-                    "saturday"
-                  ]
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 2963,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
               "id": 5404,
               "description": "7 Apr - 18 May",
               "priority": 500,
@@ -1196,254 +941,6 @@
               "rate": {
                 "type": "weekly",
                 "amount": 1347,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5411,
-              "description": "2019-05-19 - 2019-06-29",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2019-05-19",
-                  "endDate": "2019-06-29",
-                  "arrivalDays": [],
-                  "departureDays": []
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 2360,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5410,
-              "description": "2019-04-07 - 2019-05-18",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2019-04-07",
-                  "endDate": "2019-05-18",
-                  "arrivalDays": [],
-                  "departureDays": []
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 1482,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5409,
-              "description": "2019-03-31 - 2019-04-06",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2019-03-31",
-                  "endDate": "2019-04-06",
-                  "arrivalDays": [],
-                  "departureDays": []
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 2360,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5408,
-              "description": "15 Sep - 26 Oct",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2018-09-15",
-                  "endDate": "2018-10-26",
-                  "arrivalDays": [],
-                  "departureDays": []
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 1347,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5407,
-              "description": "25 Aug - 14 Sep",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2018-08-25",
-                  "endDate": "2018-09-14",
-                  "arrivalDays": [
-                    "saturday"
-                  ],
-                  "departureDays": [
-                    "saturday"
-                  ]
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 2145,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5406,
-              "description": "30 Jun - 24 Aug",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2018-06-30",
-                  "endDate": "2018-08-24",
-                  "arrivalDays": [
-                    "saturday"
-                  ],
-                  "departureDays": [
-                    "saturday"
-                  ]
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 2694,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5405,
-              "description": "19 May - 29 Jun",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2018-05-19",
-                  "endDate": "2018-06-29",
-                  "arrivalDays": [],
-                  "departureDays": []
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 2145,
-                "taxable": false,
-                "damageDeposit": null,
-                "basePriceOnly": false,
-                "applicableTaxes": [],
-                "calculationMethod": "fixed",
-                "calculationOperand": "equals",
-                "strategy": null
-              },
-              "minimumNights": 7,
-              "bookableType": "instant_bookable"
-            },
-            {
-              "id": 5420,
-              "description": "2020-09-15 - 2020-10-26",
-              "priority": 500,
-              "conditionOperand": "AND",
-              "conditions": [
-                {
-                  "type": "date",
-                  "inverse": false,
-                  "modifyRatePerUnit": false,
-                  "startDate": "2020-09-15",
-                  "endDate": "2020-10-26",
-                  "arrivalDays": [],
-                  "departureDays": []
-                }
-              ],
-              "rate": {
-                "type": "weekly",
-                "amount": 1482,
                 "taxable": false,
                 "damageDeposit": null,
                 "basePriceOnly": false,
@@ -5669,6 +5166,379 @@
             "2020-01-14": 75000,
             "2020-01-15": 75000,
             "2020-01-16": 75000
+          }
+        }
+      }
+    ]
+  },
+  {
+    "key": "homeaway-global-brackets-matching-weekly",
+    "name": "HomeAway Global Brackets Matching Weekly",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "EUR",
+          "defaults": {
+            "damageDeposit": 0,
+            "damageDepositCalculationMethod": "fixed",
+            "perPetPerStay": 0,
+            "perPetPerNight": 0,
+            "perPetSplitMethod": "ON_TOTAL",
+            "minimumNights": 0,
+            "maximumNights": "",
+            "balanceDaysBeforeArrival": 0,
+            "depositSplitPercentage": 0,
+            "daysRequiredInAdvanceForBooking": 0,
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "partialWeekAlterationStrategyUseGlobalNights": true,
+            "damageDepositSplitMethod": "ON_TOTAL"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "Season Pricing (2019-07-19 - 2019-08-30)",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-07-19",
+                  "endDate": "2019-08-30",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 1595,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "minimumWeekCount": 0,
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1-3",
+                        "amount": 0.75,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "4",
+                        "amount": 0.85,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 0.9,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 0.95,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Season Pricing (2019-08-31 - 2019-09-12)",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-08-31",
+                  "endDate": "2019-09-30",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "weekly",
+                "amount": 1279,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "minimumWeekCount": 0,
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1-3",
+                        "amount": 0.75,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "4",
+                        "amount": 0.85,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 0.9,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 0.95,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_BALANCE",
+              "priceGroup": "total",
+              "description": "Last minute",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "booking_days",
+                  "modifyRatePerUnit": false,
+                  "minimum": 1,
+                  "maximum": 7
+                },
+                {
+                  "type": "nights",
+                  "modifyRatePerUnit": false
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 0.2,
+                "calculationMethod": "percentage",
+                "calculationOperand": "subtraction",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "priceGroup": "total",
+              "description": "Last minute 2 weeks",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "booking_days",
+                  "modifyRatePerUnit": false,
+                  "minimum": 7,
+                  "maximum": 14
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 0.05,
+                "calculationMethod": "percentage",
+                "calculationOperand": "subtraction",
+                "applicableTaxes": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2019-08-30",
+          "departureDate": "2019-09-01",
+          "bookingDate": "2019-08-05",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 2,
+          "finalPrice": 107776,
+          "basePrice": 107776,
+          "damageDeposit": 0,
+          "adjustmentCount": 0,
+          "nightPrices": {
+            "2019-08-30": 59813,
+            "2019-08-31": 47963
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2019-08-30",
+          "departureDate": "2019-09-02",
+          "bookingDate": "2019-08-05",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 3,
+          "finalPrice": 103746,
+          "basePrice": 103746,
+          "damageDeposit": 0,
+          "adjustmentCount": 0,
+          "nightPrices": {
+            "2019-08-30": 39476,
+            "2019-08-31": 32135,
+            "2019-09-01": 32135
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2019-08-30",
+          "departureDate": "2019-09-03",
+          "bookingDate": "2019-08-05",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 4,
+          "finalPrice": 115430,
+          "basePrice": 115430,
+          "damageDeposit": 0,
+          "adjustmentCount": 0,
+          "nightPrices": {
+            "2019-08-30": 33894,
+            "2019-08-31": 27179,
+            "2019-09-01": 27179,
+            "2019-09-02": 27178
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2019-08-30",
+          "departureDate": "2019-09-04",
+          "bookingDate": "2019-08-05",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 5,
+          "finalPrice": 120798,
+          "basePrice": 120798,
+          "damageDeposit": 0,
+          "adjustmentCount": 0,
+          "nightPrices": {
+            "2019-08-30": 28710,
+            "2019-08-31": 23022,
+            "2019-09-01": 23022,
+            "2019-09-02": 23022,
+            "2019-09-03": 23022
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2019-08-30",
+          "departureDate": "2019-09-05",
+          "bookingDate": "2019-08-05",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 6,
+          "finalPrice": 126608,
+          "basePrice": 126608,
+          "damageDeposit": 0,
+          "adjustmentCount": 0,
+          "nightPrices": {
+            "2019-08-30": 25759,
+            "2019-08-31": 20170,
+            "2019-09-01": 20170,
+            "2019-09-02": 20170,
+            "2019-09-03": 20170,
+            "2019-09-04": 20169
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2019-08-30",
+          "departureDate": "2019-09-06",
+          "bookingDate": "2019-08-05",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 7,
+          "finalPrice": 132413,
+          "basePrice": 132413,
+          "damageDeposit": 0,
+          "adjustmentCount": 0,
+          "nightPrices": {
+            "2019-08-30": 22786,
+            "2019-08-31": 18272,
+            "2019-09-01": 18271,
+            "2019-09-02": 18271,
+            "2019-09-03": 18271,
+            "2019-09-04": 18271,
+            "2019-09-05": 18271
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2019-08-30",
+          "departureDate": "2019-09-10",
+          "bookingDate": "2019-08-05",
+          "guests": 10,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 11,
+          "finalPrice": 255596,
+          "basePrice": 255596,
+          "damageDeposit": 0,
+          "adjustmentCount": 0,
+          "nightPrices": {
+            "2019-08-30": 18981,
+            "2019-08-31": 18272,
+            "2019-09-01": 18272,
+            "2019-09-02": 18272,
+            "2019-09-03": 18271,
+            "2019-09-04": 18271,
+            "2019-09-05": 18271,
+            "2019-09-06": 18271,
+            "2019-09-07": 36239,
+            "2019-09-08": 36238,
+            "2019-09-09": 36238
           }
         }
       }

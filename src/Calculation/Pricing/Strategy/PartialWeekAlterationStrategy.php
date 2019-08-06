@@ -16,6 +16,11 @@ class PartialWeekAlterationStrategy implements PriceAlterationInterface
     public function canAlter(PricingContext $context, ControlItemInterface $controlItem, FinalPrice $fp)
     {
         $matchedNights = count($controlItem->getMatchedNights());
+
+        if ($fp->getCurrencyConfigUsed()->getDefaults()->isPartialWeekAlterationStrategyUseGlobalNights()) {
+            $matchedNights = $fp->getStay()->getNoNights();
+        }
+
         $weeks = floor($matchedNights / 7);
         $extraNights = $matchedNights % 7;
 
@@ -53,6 +58,7 @@ class PartialWeekAlterationStrategy implements PriceAlterationInterface
     public function alterPrice(PricingContext $context, ControlItemInterface $controlItem, FinalPrice $fp)
     {
         $matchedNights = count($controlItem->getMatchedNights());
+
         $weeks = floor($matchedNights / 7);
         $extraNights = $matchedNights % 7;
 
@@ -61,7 +67,12 @@ class PartialWeekAlterationStrategy implements PriceAlterationInterface
 
         $be = new BracketsEvaluator();
 
-        $bracketsValue = $be->retrieveValue($weekOvercharge->getBrackets(), $extraNights, true);
+        $bracketsExtraNights = $extraNights;
+        if ($fp->getCurrencyConfigUsed()->getDefaults()->isPartialWeekAlterationStrategyUseGlobalNights()) {
+            $bracketsExtraNights = $fp->getStay()->getNoNights() % 7;
+        }
+
+        $bracketsValue = $be->retrieveValue($weekOvercharge->getBrackets(), $bracketsExtraNights, true);
 
         if (is_null($bracketsValue)) {
             return; // Do not alter as we have no valid bracket
@@ -91,6 +102,8 @@ class PartialWeekAlterationStrategy implements PriceAlterationInterface
 
         $counter = 0;
         foreach($applicableNights as $night) {
+
+            $night->addStrategy($weekOvercharge);
 
             switch ($weekOvercharge->getCalculationOperand()) {
 

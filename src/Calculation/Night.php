@@ -2,9 +2,10 @@
 
 namespace Aptenex\Upp\Calculation;
 
-use Aptenex\Upp\Util\MoneyUtils;
-use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
 use Money\Money;
+use Aptenex\Upp\Util\MoneyUtils;
+use Aptenex\Upp\Parser\Structure\PeriodStrategy;
+use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
 
 /**
  * This class represents a date - and contains the period and any modifiers it was matched for
@@ -26,6 +27,11 @@ class Night
      * @var ControlItemInterface
      */
     private $periodControlItem = null;
+
+    /**
+     * @var PeriodStrategy[]
+     */
+    private $strategies = [];
 
     /**
      * @var ControlItemInterface[]
@@ -115,6 +121,35 @@ class Night
     public function addModifierControlItem(ControlItemInterface $controlItem)
     {
         $this->modifierControlItems[] = $controlItem;
+    }
+
+    /**
+     * @return PeriodStrategy[]
+     */
+    public function getStrategies(): array
+    {
+        return $this->strategies;
+    }
+
+    /**
+     * @param PeriodStrategy[] $strategies
+     */
+    public function setStrategies(array $strategies): void
+    {
+        $this->strategies = $strategies;
+    }
+
+    /**
+     * @param PeriodStrategy $strategy
+     */
+    public function addStrategy(PeriodStrategy $strategy): void
+    {
+        $this->strategies[] = $strategy;
+    }
+
+    public function hasStrategies(): bool
+    {
+        return !empty($this->strategies);
     }
 
     /**

@@ -32,6 +32,10 @@ class MultipleCalculationTest extends TestCase
         $priceConfigs = json_decode(file_get_contents(__DIR__ . '/Resources/test-configs.json'), true);
 
         foreach($priceConfigs as $priceConfig) {
+            if (isset($priceConfig['skip']) && $priceConfig['skip']) {
+                continue;
+            }
+
             $structureOptions = new StructureOptions();
 
             self::$currentTestName = $priceConfig['name'];

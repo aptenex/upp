@@ -29,12 +29,14 @@ use Aptenex\Upp\Exception\InvalidPriceException;
 use Aptenex\Upp\Helper\LanguageTools;
 use Aptenex\Upp\Helper\MoneyTools;
 use Aptenex\Upp\Parser\Structure\Operand;
+use Aptenex\Upp\Parser\Structure\PartialWeekAlteration;
 use Aptenex\Upp\Parser\Structure\PricingConfig;
 use Aptenex\Upp\Parser\Structure\SplitMethod;
 use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Util\ExceptionUtils;
 use Aptenex\Upp\Util\MoneyUtils;
 use Los\Modifier\ModifierExtractor;
+use Money\Money;
 
 class PricingGenerator
 {
@@ -70,13 +72,13 @@ class PricingGenerator
 
         $this->calculateBasicPrice($fp);
 
-        // This will apply the costs to each night
         $this->applyPeriodStrategyAlterations($context, $fp);
 
-        // Re-loop through the nights and re-total
+        $this->applyWeeklyPeriodCrossoverAlterations($context, $fp);
+
         $this->calculateBasePrice($fp);
+
         $this->applyModifiers($context, $fp);
-        $this->calculateBasePrice($fp);
 
         $this->calculateExtras($fp);
 
@@ -204,6 +206,115 @@ class PricingGenerator
             }
         }
     }
+
+    /**
+     * @param PricingContext $context
+     * @param FinalPrice     $fp
+     */
+    private function applyWeeklyPeriodCrossoverAlterations($context, $fp): void
+    {
+        /*
+         * We may come across a case where a arrival/departure date overlaps multiple seasons that are
+         * priced as weekly. Eg 3 day stay, over 2 seasons. This becomes priced as essentially two separate
+         * week charges. We will loop through all the affected and calculate the actual cost (this is after
+         * the alteration strategies have been applied). This will also pro-rata between the seasons to find
+         * the combination of the two.
+         */
+
+        // Need to get all the periods used for each week of the stay
+        $currentWeek = 0;
+        $periodsUsedPerWeek = [];
+
+        $strategiesUsed = 0;
+
+        $periodsUsed = 1;
+        $currentPeriod = null;
+
+        foreach(array_values($fp->getStay()->getNights()) as $count => $night) {
+            /** @var Night $night */
+            $periodConfig = $night->getPeriodControlItem();
+            $periodControl = $periodConfig->getControlItemConfig();
+
+            if ($periodControl->getRate()->getType() === \Aptenex\Upp\Parser\Structure\Rate::TYPE_WEEKLY) {
+
+                if ($night->hasStrategies() && $night->getStrategies()[0] instanceof PartialWeekAlteration) {
+                    $strategiesUsed++;
+                }
+
+                if ($currentPeriod === null) {
+                    $currentPeriod = $night->getPeriodControlItem()->getId();
+                } else if ($currentPeriod !== $night->getPeriodControlItem()->getId()) {
+                    $currentPeriod = $night->getPeriodControlItem()->getId();
+
+                    $periodsUsed++;
+                }
+
+                if (!isset($periodsUsedPerWeek[$currentWeek])) {
+                    $periodsUsedPerWeek[$currentWeek] = [];
+                }
+
+                if (!isset($periodsUsedPerWeek[$currentWeek][$periodConfig->getId()])) {
+                    $periodsUsedPerWeek[$currentWeek][$periodConfig->getId()] = [
+                        'period' => $periodConfig,
+                        'nightsMatched' => 1,
+                        'totalCost' => clone $night->getCost(),
+                        'nights' => [
+                            $night
+                        ]
+                    ];
+                } else {
+                    $periodsUsedPerWeek[$currentWeek][$periodConfig->getId()]['nightsMatched'] += 1;
+                    $periodsUsedPerWeek[$currentWeek][$periodConfig->getId()]['nights'][] = $night;
+
+                    $newCost = $periodsUsedPerWeek[$currentWeek][$periodConfig->getId()]['totalCost']->add($night->getCost());
+                    $periodsUsedPerWeek[$currentWeek][$periodConfig->getId()]['totalCost'] = $newCost;
+                }
+
+            }
+
+            if (($count % 7) === 0 && $count !== 0) {
+                $currentWeek++;
+            }
+        }
+
+        if ($periodsUsed >= 2 && $strategiesUsed >= 2 && \count($periodsUsedPerWeek) > 0) {
+
+            // We now need to go through each week, determine if the periods used per week is greater than 1
+            // If it is, then we need to pro-rata each week
+
+            foreach($periodsUsedPerWeek as $weekNumber => $periods) {
+                // Skip any week that only had one period used, so we should realistically
+                // only be running the code below once for the week where the periods cross over
+                // unless the date range crosses 3 periods, then there should be two
+                if (\count($periods) === 1) {
+                    continue;
+                }
+
+                // Get the total of all the nights for this week/period
+
+                // There may only be one week, so we need to get the total nights
+                $totalNightsForThisWeek = $fp->getStay()->getNoNights() < 7 ? $fp->getStay()->getNoNights() : 7;
+
+                foreach($periods as $period) {
+
+                    // We now need to find what % of the week is comprised of the total nights for this week
+                    $percentageOfWeek = round($period['nightsMatched'] / $totalNightsForThisWeek, 2);
+
+                    /** @var Money $totalCost */
+                    $totalCost = $period['totalCost'];
+
+                    $totalProRataed = $totalCost->multiply($percentageOfWeek);
+
+                    $allocated = $totalProRataed->allocateTo($period['nightsMatched']);
+
+                    foreach($period['nights'] as $nI => $night) {
+                        $night->setCost($allocated[$nI]);
+                    }
+                }
+            }
+        }
+    }
+
 
     /**
      * @param FinalPrice $fp

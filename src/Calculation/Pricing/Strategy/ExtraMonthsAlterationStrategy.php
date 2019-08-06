@@ -134,6 +134,8 @@ class ExtraMonthsAlterationStrategy implements PriceAlterationInterface
                 $nightRate = $allocatedMonthlyRate[$nightNum % 30];
             }
 
+            $night->addStrategy($extraMonthsAlteration);
+
             switch ($extraMonthsAlteration->getCalculationOperand()) {
 
                 case Operand::OP_ADDITION:

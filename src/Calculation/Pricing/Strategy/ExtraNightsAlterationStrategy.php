@@ -104,6 +104,8 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
                 $monetaryAmount = $night->getCost()->multiply((float) $rate);
             }
 
+            $night->addStrategy($extraNightsAlteration);
+
             switch ($extraNightsAlteration->getCalculationOperand()) {
 
                 case Operand::OP_ADDITION:
