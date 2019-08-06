@@ -48,7 +48,7 @@ class PartialWeekAlterationStrategy implements PriceAlterationInterface
             return false; // If weeks below the minimum skip
         }
 
-        if (!is_null($weekOvercharge->getMaximumWeekCount()) && $weeks > $weekOvercharge->getMaximumWeekCount()) {
+        if (!is_null($weekOvercharge->getMaximumWeekCount()) && $weeks >= $weekOvercharge->getMaximumWeekCount()) {
             return false;
         }
 
