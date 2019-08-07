@@ -72,9 +72,9 @@ class LosOptions
     /**
      * PricingContext Mode
      *
-     * @var string
+     * @var string[]
      */
-    private $pricingContextMode = PricingContext::CALCULATION_MODE_NORMAL;
+    private $pricingContextCalculationMode = [];
 
     /**
      * @param string $currency
@@ -194,20 +194,22 @@ class LosOptions
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getPricingContextMode(): string
+    public function getPricingContextCalculationMode(): array
     {
-        return $this->pricingContextMode;
+        return $this->pricingContextCalculationMode;
     }
-    
+
     /**
-     * @param string $pricingContextMode
+     * @param string[] $pricingContextCalculationMode
+     *
      * @return LosOptions
      */
-    public function setPricingContextMode(string $pricingContextMode): self
+    public function setPricingContextCalculationMode(array $pricingContextCalculationMode): LosOptions
     {
-        $this->pricingContextMode = $pricingContextMode;
+        $this->pricingContextCalculationMode = $pricingContextCalculationMode;
+
         return $this;
     }
     
@@ -258,7 +260,7 @@ class LosOptions
             'forceFullGeneration'   => $this->isForceFullGeneration(),
             'forceDebugOnDate' => $this->getForceDebugOnDate(),
             'debugMode' => $this->isDebugMode(),
-            'pricingContextMode' => $this->getPricingContextMode()
+            'pricingContextMode' => $this->getPricingContextCalculationMode()
         ];
     }
     

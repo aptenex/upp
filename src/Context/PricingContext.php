@@ -15,13 +15,14 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class PricingContext
 {
 
-    public const CALCULATION_MODE_NORMAL = 'CALCULATION_MODE_NORMAL';
     public const CALCULATION_MODE_LOS = 'CALCULATION_MODE_LOS';
     public const CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES = 'CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES';
+    public const CALCULATION_MODE_LOS_EXCLUDE_DAMAGE_DEPOSIT = 'CALCULATION_MODE_LOS_EXCLUDE_DAMAGE_DEPOSIT';
 
     public static $losCalculationModes = [
         self::CALCULATION_MODE_LOS,
-        self::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES
+        self::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES,
+        self::CALCULATION_MODE_LOS_EXCLUDE_DAMAGE_DEPOSIT
     ];
 
     /**
@@ -30,9 +31,9 @@ class PricingContext
     private $description;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $calculationMode = self::CALCULATION_MODE_NORMAL;
+    private $calculationModes = [];
 
     /**
      * @Currency()
@@ -574,37 +575,53 @@ class PricingContext
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getCalculationMode(): string
+    public function getCalculationModes(): array
     {
-        return $this->calculationMode;
+        return $this->calculationModes;
     }
 
     /**
-     * @param string $calculationMode
+     * @param string[] $calculationModes
      */
-    public function setCalculationMode(string $calculationMode): void
+    public function setCalculationModes(array $calculationModes): void
     {
-        $this->calculationMode = $calculationMode;
+        $this->calculationModes = $calculationModes;
     }
 
     /**
      * @return bool
      */
-    public function isLosCalculationMode(): bool
+    public function hasLosCalculationMode(): bool
     {
-        return \in_array($this->calculationMode, self::$losCalculationModes, true);
+        foreach($this->calculationModes as $mode) {
+            if (\in_array($mode, self::$losCalculationModes, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $mode
+     *
+     * @return bool
+     */
+    public function hasCalculationMode(string $mode): bool
+    {
+        return \in_array($mode, $this->calculationModes, true);
     }
 
     /**
      * @return array
      */
-    public function __toArray()
+    public function __toArray(): array
     {
         return [
             'currency'            => $this->getCurrency(),
-            'calculationMode'     => $this->getCalculationMode(),
+            'calculationMode'     => $this->getCalculationModes(),
             'arrivalDate'         => $this->getArrivalDate(),
             'departureDate'       => $this->getDepartureDate(),
             'bookingDate'         => $this->getBookingDate(),

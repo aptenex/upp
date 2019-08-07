@@ -86,7 +86,7 @@ class PricingGenerator
 
         $this->calculateTaxes($context, $fp);
 
-        $this->calculateDamageDeposit($fp);
+        $this->calculateDamageDeposit($context, $fp);
 
         $this->calculateHiddenOnBase($fp);
 
@@ -123,7 +123,7 @@ class PricingGenerator
             throw $ex;
         }
 
-        if ($context->isLosCalculationMode() === false && $fp->getSplitDetails() !== null) {
+        if ($context->hasLosCalculationMode() === false && $fp->getSplitDetails() !== null) {
             if ($fp->getSplitDetails()->getDeposit()->isNegative()) {
                 throw new InvalidPriceException(LanguageTools::trans('INVALID_PRICE'));
             }
@@ -143,7 +143,7 @@ class PricingGenerator
 
         // LOS is not going to be generated every day so this will become out of date and inaccurate.
         // Days required in advance will need to be set when pushing ARI to the various otas
-        if ($context->isLosCalculationMode()) {
+        if ($context->hasLosCalculationMode()) {
             return;
         }
 
@@ -341,7 +341,7 @@ class PricingGenerator
     private function calculatePets(PricingContext $context, FinalPrice $fp): void
     {
         // If mode is los, this needs to be skipped as when sending ARI these will be sent separately
-        if ($context->isLosCalculationMode()) {
+        if ($context->hasLosCalculationMode()) {
             return;
         }
 
@@ -355,7 +355,7 @@ class PricingGenerator
     private function calculateTaxes(PricingContext $context, FinalPrice $fp): void
     {
         // If mode is los, this needs to be skipped as when sending ARI these will be sent separately
-        if ($context->getCalculationMode() === PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES) {
+        if ($context->hasCalculationMode(PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES)) {
             return;
         }
 
@@ -365,10 +365,15 @@ class PricingGenerator
     /**
      * This is applied after taxes and is added as another adjustment
      *
+     * @param PricingContext $context
      * @param FinalPrice $fp
      */
-    private function calculateDamageDeposit(FinalPrice $fp): void
+    private function calculateDamageDeposit(PricingContext $context, FinalPrice $fp): void
     {
+        if ($context->hasCalculationMode(PricingContext::CALCULATION_MODE_LOS_EXCLUDE_DAMAGE_DEPOSIT)) {
+            return;
+        }
+
         (new DamageDepositCalculator())->calculateAndApplyAdjustment($fp);
     }
 
@@ -539,7 +544,7 @@ class PricingGenerator
              * This is to stop commissions by the OTA's being taken on tax amounts etc...
              */
 
-            if ($me->isModifierSupportedByMode($context->getCalculationMode(), $modifier) === false) {
+            if ($me->isModifierSupportedByMode($context, $modifier) === false) {
                 continue;
             }
 
@@ -691,7 +696,7 @@ class PricingGenerator
 
     private function calculateSplitAmounts(PricingContext $context, FinalPrice $fp): void
     {
-        if ($context->isLosCalculationMode()) {
+        if ($context->hasLosCalculationMode()) {
             return;
         }
 
@@ -829,7 +834,7 @@ class PricingGenerator
      */
     private function determineBookableTypeAndFields(PricingContext $context, FinalPrice $fp): void
     {
-        if ($context->isLosCalculationMode()) {
+        if ($context->hasLosCalculationMode()) {
             return;
         }
 

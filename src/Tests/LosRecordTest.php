@@ -205,7 +205,7 @@ class LosRecordTest extends TestCase
         $losOptions->setForceFullGeneration(false);
 
         // The test rates are generated without a fee that is always applied. This option should remove these
-        $losOptions->setPricingContextMode(PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES);
+        $losOptions->setPricingContextCalculationMode([PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES]);
 
         $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
         $parsed = $upp->parsePricingConfig($pricing, new StructureOptions());
@@ -487,7 +487,7 @@ class LosRecordTest extends TestCase
         $losOptions->setForceFullGeneration(false);
 
         // The test rates are generated without a fee that is always applied. This option should remove these
-        $losOptions->setPricingContextMode(PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES);
+        $losOptions->setPricingContextCalculationMode([PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES]);
 
         $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
         $parsed = $upp->parsePricingConfig($pricing, new StructureOptions());
@@ -534,7 +534,7 @@ class LosRecordTest extends TestCase
                   "currency": "THB",
                   "defaults": {
                     "balanceDaysBeforeArrival": 42,
-                    "damageDeposit": "0",
+                    "damageDeposit": "200",
                     "damageDepositCalculationMethod": "fixed",
                     "damageDepositSplitMethod": "ON_DEPOSIT",
                     "daysRequiredInAdvanceForBooking": 0,
@@ -690,7 +690,10 @@ class LosRecordTest extends TestCase
         $losOptions->setForceFullGeneration(false);
 
         // The test rates are generated without a fee that is always applied. This option should remove these
-        $losOptions->setPricingContextMode(PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES);
+        $losOptions->setPricingContextCalculationMode([
+            PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES,
+            PricingContext::CALCULATION_MODE_LOS_EXCLUDE_DAMAGE_DEPOSIT
+        ]);
 
         $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
         $parsed = $upp->parsePricingConfig($pricing, new StructureOptions());

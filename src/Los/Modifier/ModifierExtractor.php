@@ -19,13 +19,14 @@ class ModifierExtractor
 {
 
     /**
-     * @param string $mode
+     * @param PricingContext $context
      * @param Modifier $modifier
+     *
      * @return bool
      */
-    public function isModifierSupportedByMode(string $mode, Modifier $modifier): bool
+    public function isModifierSupportedByMode(PricingContext $context, Modifier $modifier): bool
     {
-        if ($mode === PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES) {
+        if ($context->hasCalculationMode(PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES)) {
             if ($modifier->isHidden()) {
                 return true; // Any hidden ones are supported
             }
@@ -43,16 +44,16 @@ class ModifierExtractor
     }
 
     /**
-     * @param string $mode
+     * @param PricingContext $context
      * @param Modifier[] $modifiers
      * @return Modifier[]
      */
-    public function extractSupportedModifiers(string $mode, array $modifiers): array
+    public function extractSupportedModifiers(PricingContext $context, array $modifiers): array
     {
         $items = [];
 
         foreach($modifiers as $modifier) {
-            if ($this->isModifierSupportedByMode($mode, $modifier)) {
+            if ($this->isModifierSupportedByMode($context, $modifier)) {
                 $items[] = $modifier;
             }
         }
@@ -61,16 +62,16 @@ class ModifierExtractor
     }
 
     /**
-     * @param string $mode
+     * @param PricingContext $context
      * @param Modifier[] $modifiers
      * @return Modifier[]
      */
-    public function extractUnsupportedModifiers(string $mode, array $modifiers): array
+    public function extractUnsupportedModifiers(PricingContext $context, array $modifiers): array
     {
         $items = [];
 
         foreach($modifiers as $modifier) {
-            if (!$this->isModifierSupportedByMode($mode, $modifier)) {
+            if (!$this->isModifierSupportedByMode($context, $modifier)) {
                 $items[] = $modifier;
             }
         }
