@@ -34,6 +34,17 @@ class Price
     protected $basePrice;
 
     /**
+     * ## NOT FOR DISPLAY ##
+     *
+     * This field may not represent an accurate amount at time of final generation, as this value is used
+     * to calculate the taxes on after all discounts have been applied. This field is a reference field
+     * for debugging and not for display purposes
+     *
+     * @var Money
+     */
+    protected $basePriceTaxable;
+
+    /**
      * @var Money
      */
     protected $damageDeposit;
@@ -84,6 +95,7 @@ class Price
             $this->currency = strtoupper(trim($contextUsed->getCurrency()));
             $this->total = MoneyUtils::newMoney(0, $this->getCurrency());
             $this->basePrice = MoneyUtils::newMoney(0, $this->getCurrency());
+            $this->basePriceTaxable = MoneyUtils::newMoney(0, $this->getCurrency());
             $this->damageDeposit = MoneyUtils::newMoney(0, $this->getCurrency());
         }
 
@@ -155,7 +167,25 @@ class Price
      */
     public function setBasePrice($basePrice)
     {
-        $this->basePrice = $basePrice;
+        $this
+
+            ->basePrice = $basePrice;
+    }
+
+    /**
+     * @return Money
+     */
+    public function getBasePriceTaxable(): Money
+    {
+        return $this->basePriceTaxable;
+    }
+
+    /**
+     * @param Money $basePriceTaxable
+     */
+    public function setBasePriceTaxable(Money $basePriceTaxable): void
+    {
+        $this->basePriceTaxable = $basePriceTaxable;
     }
 
     /**
@@ -357,6 +387,7 @@ class Price
             'description'              => !empty($this->getContextUsed()->getDescription()) ? $this->getContextUsed()->getDescription() : null,
             'total'                    => MoneyUtils::getConvertedAmount($this->getTotal()),
             'basePrice'                => MoneyUtils::getConvertedAmount($this->getBasePrice()),
+            'basePriceTaxable'         => MoneyUtils::getConvertedAmount($this->getBasePriceTaxable()),
             'damageDeposit'            => MoneyUtils::getConvertedAmount($this->getDamageDeposit()),
             'damageDepositSplitMethod' => $this->getDamageDepositSplitMethod(),
             'bookableType'             => $this->getBookableType(),
@@ -378,6 +409,12 @@ class Price
     {
         $this->setTotal(MoneyUtils::fromString($data['total'], $data['currency']));
         $this->setBasePrice(MoneyUtils::fromString($data['basePrice'], $data['currency']));
+
+        // New addition so add check
+        if (isset($data['basePriceTaxable'])) {
+            $this->setBasePriceTaxable(MoneyUtils::fromString($data['basePriceTaxable'], $data['currency']));
+        }
+
         $this->setBookableType($data['bookableType']);
 
         $adjustments = [];

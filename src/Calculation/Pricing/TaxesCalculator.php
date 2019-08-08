@@ -16,7 +16,6 @@ class TaxesCalculator
 
     public function calculateAndApplyAdjustments(FinalPrice $fp)
     {
-
         /*
          * Taxes are very simple and we will use the parsed 'tax' directly
          *
@@ -43,7 +42,7 @@ class TaxesCalculator
                 $calculableAmount = \Aptenex\Upp\Util\MoneyUtils::newMoney(0, $fp->getCurrency());
 
                 if ($tax->isIncludeBasePrice()) {
-                    $calculableAmount = $calculableAmount->add($fp->getBasePrice());
+                    $calculableAmount = $calculableAmount->add($fp->getBasePriceTaxable());
                 }
 
                 // All extras are done

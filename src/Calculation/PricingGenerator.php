@@ -84,15 +84,13 @@ class PricingGenerator
 
         $this->calculatePets($context, $fp);
 
-        $this->calculateTaxes($context, $fp);
-
         $this->calculateDamageDeposit($context, $fp);
 
         $this->calculateHiddenOnBase($fp);
 
         $this->calculateBaseNonTaxable($fp);
 
-        $this->calculateTotalAndFinalBase($fp);
+        $this->calculateTotalWithTaxesAndFinalBase($context, $fp);
 
         $this->calculateSplitAmounts($context, $fp);
 
@@ -349,20 +347,6 @@ class PricingGenerator
     }
 
     /**
-     * @param PricingContext $context
-     * @param FinalPrice $fp
-     */
-    private function calculateTaxes(PricingContext $context, FinalPrice $fp): void
-    {
-        // If mode is los, this needs to be skipped as when sending ARI these will be sent separately
-        if ($context->hasCalculationMode(PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES)) {
-            return;
-        }
-
-        (new TaxesCalculator())->calculateAndApplyAdjustments($fp);
-    }
-
-    /**
      * This is applied after taxes and is added as another adjustment
      *
      * @param PricingContext $context
@@ -400,6 +384,12 @@ class PricingGenerator
         }
     }
 
+    /**
+     * This ALWAYS needs to be called before calculateBaseNonTaxable so we
+     * can accurately set the basePriceTaxable for the final taxes calculation
+     *
+     * @param FinalPrice $fp
+     */
     private function calculateHiddenOnBase(FinalPrice $fp): void
     {
         $new = MoneyUtils::newMoney(0, $fp->getCurrency());
@@ -415,6 +405,7 @@ class PricingGenerator
         }
 
         $fp->setBasePrice($new);
+        $fp->setBasePriceTaxable($new);
     }
 
     private function calculateBaseNonTaxable(FinalPrice $fp): void
@@ -434,38 +425,57 @@ class PricingGenerator
         $fp->setBasePrice($new);
     }
 
-    private function calculateTotalAndFinalBase(FinalPrice $fp): void
+    private function calculateTotalWithTaxesAndFinalBase(PricingContext $context, FinalPrice $fp): void
     {
         $newTotal = MoneyUtils::newMoney(0, $fp->getCurrency());
         $newBase = MoneyUtils::newMoney($fp->getBasePrice()->getAmount(), $fp->getCurrency());
-
+        $newBaseTaxable = MoneyUtils::newMoney($fp->getBasePriceTaxable()->getAmount(), $fp->getCurrency());
         $newTotal = $newTotal->add($fp->getBasePrice());
 
+        // Process modifier discounts
         foreach ($fp->getAdjustments() as $adjustment) {
-            switch ($adjustment->getPriceGroup()) {
-                case AdjustmentAmount::PRICE_GROUP_TOTAL:
+            if ($adjustment->getType() !== AdjustmentAmount::TYPE_MODIFIER || $adjustment->getOperand() !== Operand::OP_SUBTRACTION) {
+                continue;
+            }
 
-                    $newTotal = MoneyTools::applyMonetaryOperand($newTotal, $adjustment->getAmount(), $adjustment->getOperand());
-
-                    if (
-                        $adjustment->getType() === AdjustmentAmount::TYPE_MODIFIER &&
-                        $adjustment->getOperand() === Operand::OP_SUBTRACTION
-                    ) {
-                        // Here, since its a subtraction we've also got to modify the base too
-                        $newBase = MoneyTools::applyMonetaryOperand($newBase, $adjustment->getAmount(), $adjustment->getOperand());
-                    }
-
-                    break;
+            if ($adjustment->getPriceGroup() === AdjustmentAmount::PRICE_GROUP_TOTAL) {
+                $newTotal = MoneyTools::applyMonetaryOperand($newTotal, $adjustment->getAmount(), $adjustment->getOperand());
+                $newBase = MoneyTools::applyMonetaryOperand($newBase, $adjustment->getAmount(), $adjustment->getOperand());
+                $newBaseTaxable = MoneyTools::applyMonetaryOperand($newBaseTaxable, $adjustment->getAmount(), $adjustment->getOperand());
             }
         }
 
         $fp->setBasePrice($newBase);
+        $fp->setBasePriceTaxable($newBaseTaxable);
+        $fp->setTotal($newTotal);
+
+        // If mode is los, this needs to be skipped as when sending ARI these will be sent separately
+        if (!$context->hasCalculationMode(PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES)) {
+            // Taxes need to be calculated at the very end to apply correctly after discounts...
+            (new TaxesCalculator())->calculateAndApplyAdjustments($fp);
+        }
+
+        $newTotal = MoneyUtils::newMoney(0, $fp->getCurrency());
+        $newTotal = $newTotal->add($fp->getBasePrice());
+
+        // This will now process all the remaining adjustments
+        foreach ($fp->getAdjustments() as $adjustment) {
+            if (
+                $adjustment->getType() === AdjustmentAmount::TYPE_MODIFIER &&
+                $adjustment->getOperand() === Operand::OP_SUBTRACTION
+            ) {
+                continue;
+            }
+
+            if ($adjustment->getPriceGroup() === AdjustmentAmount::PRICE_GROUP_TOTAL) {
+                $newTotal = MoneyTools::applyMonetaryOperand($newTotal, $adjustment->getAmount(), $adjustment->getOperand());
+            }
+        }
+
         $fp->setTotal($newTotal);
     }
 
     /**
-     * This will alter the relevant days based on the modifiers
-     *
      * @param PricingContext $context
      * @param FinalPrice $fp
      */
