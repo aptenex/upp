@@ -367,6 +367,7 @@ class Defaults
             'perPetPerNight'                               => $this->getPerPetPerStay(),
             'perPetSplitMethod'                            => $this->getPerPetSplitMethod(),
             'damageDeposit'                                => $this->getDamageDeposit(),
+            'bookableType'                                 => $this->getBookableType(),
             'damageDepositCalculationMethod'               => $this->getDamageDepositCalculationMethod(),
             'damageDepositSplitMethod'                     => $this->getDamageDepositSplitMethod(),
             'daysRequiredInAdvanceForBooking'              => $this->getDaysRequiredInAdvanceForBooking(),
