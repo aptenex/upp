@@ -51,6 +51,11 @@ class TransformOptions
     private $priceReturnType = self::PRICE_RETURN_TYPE_TOTAL;
 
     /**
+     * @var bool
+     */
+    private $indexRecordsByDate = false;
+
+    /**
      * @return int
      */
     public function getBcomRoomId(): int
@@ -178,6 +183,21 @@ class TransformOptions
     {
         return $this->sourceCurrency;
     }
-    
-    
+
+    /**
+     * @return bool
+     */
+    public function isIndexRecordsByDate(): bool
+    {
+        return $this->indexRecordsByDate;
+    }
+
+    /**
+     * @param bool $indexRecordsByDate
+     */
+    public function setIndexRecordsByDate(bool $indexRecordsByDate): void
+    {
+        $this->indexRecordsByDate = $indexRecordsByDate;
+    }
+
 }

@@ -62,18 +62,32 @@ class ArrayRecordTransformer extends BaseRecordTransformer
                         continue;
                     }
 
+                    if ($options->isIndexRecordsByDate() && !isset($data[$date])) {
+                        $data[$date] = [];
+                    }
+
                     // Hash does not match that means we need to finally add the entry for the previous entries
                     // We also need to perform the check if this is the LAST index because
                     // if all the rates are exactly the same then $maxGuestCountForSameHash !== 0 = true
                     // so we'll be adding two records one for the previous guest count and one for the last index guest count
                     // this extra index check
                     if ($maxGuestCountForSameHash !== 0 && $index !== ($guestEntries - 1)) {
-                        $data[] = $this->generateLosRecordString($previousSingleRecord, $options);
+
+                        if ($options->isIndexRecordsByDate()) {
+                            $data[$date][] = $this->generateLosRecordString($previousSingleRecord, $options);
+                        } else {
+                            $data[] = $this->generateLosRecordString($previousSingleRecord, $options);
+                        }
+
         
                         $maxGuestCountForSameHash = 0;
                     }
 
-                    $data[] = $this->generateLosRecordString($singleRecord, $options);
+                    if ($options->isIndexRecordsByDate()) {
+                        $data[$date][] = $this->generateLosRecordString($singleRecord, $options);
+                    } else {
+                        $data[] = $this->generateLosRecordString($singleRecord, $options);
+                    }
                 }
 
                 $previousSingleRecord = $singleRecord;

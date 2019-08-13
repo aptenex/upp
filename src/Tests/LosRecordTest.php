@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Aptenex\Upp\Context\PricingContext;
+use Aptenex\Upp\Los\Transformer\ElasticSearchTransformer;
 use Money\Currency;
 use Money\Exchange\FixedExchange;
 use Money\Exchange\SwapExchange;
@@ -220,6 +221,202 @@ class LosRecordTest extends TestCase
         $output = json_encode($transformer->transform($losRecords, $options), JSON_PRETTY_PRINT);
 
         $this->assertStringEqualsFile(__DIR__ . '/Resources/los_test_01.txt', $output);
+    }
+
+    public function testLosEsTransformer()
+    {
+        $rentalSchemaData = '
+            {
+                "supportedLocales": [
+                    "en",
+                    "ru"
+                ],              
+                "flags": {
+                    "isActive": false
+                },
+                "name": "Villa Louise Builder",
+                "listing": {
+                    "type": "LISTING_TYPE_BUILDING",
+                    "beds": 0,
+                    "sleeps": 3,
+                    "maxOccupancy": 16,
+                    "bedrooms": 1,
+                    "bathrooms": 0
+                },
+                "unitAvailability": {
+                    "dateRange": {
+                        "startDate": "2019-02-28",
+                        "endDate": "2022-02-28"
+                    },
+                    "changeoverDefault": 3,
+                    "minPriorNotifyDefault": 0,
+                    "minStayDefault": 0,
+                    "instantBookableDefault": "Y",
+                    "configuration": {
+                        "changeover": "23323222332320233232220323222332322233232223323022332322200232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332322233232223323222332333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333",
+                        "availability": "NNNNNNNYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+                        "minStay": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+                        "maxStay": "30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30"
+                    }
+                }
+            }
+        ';
+
+        $pricingConfig = '
+            {
+                "name": "Pricing",
+                "schema": "property-pricing",
+                "version": "0.0.1",
+                "meta": [],
+                "data": [
+                    {
+                        "currency": "GBP",
+                        "defaults": {
+                            "damageDeposit": 0,
+                            "damageDepositCalculationMethod": "fixed",
+                            "perPetPerStay": 0,
+                            "perPetPerNight": 0,
+                            "perPetSplitMethod": "ON_TOTAL",
+                            "minimumNights": 0,
+                            "balanceDaysBeforeArrival": 0,
+                            "depositSplitPercentage": 0,
+                            "daysRequiredInAdvanceForBooking": 0,
+                            "extraNightAlterationStrategyUseGlobalNights": false
+                        },
+                        "taxes": [
+                            {
+                                "name": "Test Tax",
+                                "uuid": "677188f0-d2c2-45df-bdf0-35a0e1bd5388",
+                                "type": "TYPE_TAX",
+                                "amount": 0.05,
+                                "calculationMethod": "percentage",
+                                "includeBasePrice": true
+                            }
+                        ],
+                        "periods": [
+                            {
+                                "description": "Example Period",
+                                "priority": 500,
+                                "conditionOperand": "AND",
+                                "conditions": [
+                                    {
+                                        "type": "date",
+                                        "modifyRatePerUnit": false,
+                                        "startDate": "2019-02-01",
+                                        "endDate": "2021-02-01",
+                                        "arrivalDays": [],
+                                        "departureDays": []
+                                    }
+                                ],
+                                "minimumNights": "0",
+                                "bookableType": null,
+                                "rate": {
+                                    "type": "nightly",
+                                    "amount": 100,
+                                    "calculationMethod": "fixed",
+                                    "calculationOperand": "equals",
+                                    "applicableTaxes": []
+                                }
+                            }
+                        ],
+                        "modifiers": [
+                            {
+                                "type": "cleaning",
+                                "hidden": false,
+                                "splitMethod": "ON_TOTAL",
+                                "description": "Cleaning",
+                                "conditionOperand": "AND",
+                                "conditions": [],
+                                "rate": {
+                                    "type": "adjustment",
+                                    "amount": 100,
+                                    "calculationMethod": "fixed",
+                                    "calculationOperand": "addition",
+                                    "applicableTaxes": []
+                                }
+                            },
+                            {
+                                "type": "card_fee",
+                                "hidden": true,
+                                "splitMethod": "ON_TOTAL",
+                                "description": "Card Fee",
+                                "conditionOperand": "AND",
+                                "conditions": [],
+                                "rate": {
+                                    "type": "adjustment",
+                                    "amount": 0.015,
+                                    "calculationMethod": "percentage",
+                                    "calculationOperand": "addition",
+                                    "applicableTaxes": []
+                                }
+                            },
+                            {
+                                "type": "modifier",
+                                "hidden": false,
+                                "splitMethod": "ON_TOTAL",
+                                "description": "Per Guest Per Night",
+                                "conditionOperand": "AND",
+                                "conditions": [
+                                    {
+                                        "type": "guests",
+                                        "modifyRatePerUnit": true,
+                                        "minimum": 8
+                                    },
+                                    {
+                                        "type": "nights",
+                                        "modifyRatePerUnit": true
+                                    }
+                                ],
+                                "rate": {
+                                    "type": "adjustment",
+                                    "amount": 25,
+                                    "calculationMethod": "fixed",
+                                    "calculationOperand": "addition",
+                                    "applicableTaxes": []
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ';
+
+        $schema = json_decode($rentalSchemaData, true);
+        $pricing = json_decode($pricingConfig, true);
+
+        $upp = new Upp(
+            new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $pricing, [])),
+            new TestTranslator()
+        );
+
+        $losGenerator = new LosGenerator($upp);
+
+        $losOptions = new LosOptions(
+            'GBP',
+            new \DateTime('2019-02-01'),
+            new \DateTime('2019-05-31')
+        );
+
+        $losOptions->setBookingDate(new \DateTime('2019-01-01'));
+
+        $losOptions->setForceFullGeneration(false);
+
+        // The test rates are generated without a fee that is always applied. This option should remove these
+        $losOptions->setPricingContextCalculationMode([PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES]);
+
+        $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
+        $parsed = $upp->parsePricingConfig($pricing, new StructureOptions());
+
+        $losRecords1 = $losGenerator->generateLosRecords($losOptions, $ld, $parsed);
+        $losRecords = (new LosRecordMerger())->merge([$losRecords1]);
+
+
+        $options = new TransformOptions();
+        $options->setIndexRecordsByDate(true);
+        $transformer = new ElasticSearchTransformer();
+        $output = json_encode($transformer->transform($losRecords, $options), JSON_PRETTY_PRINT);
+
+        $this->assertStringEqualsFile(__DIR__ . '/Resources/los_test_es_transformer.txt', $output);
     }
 
     public function testLosRecordsWithLimitedUnitAvailability()
