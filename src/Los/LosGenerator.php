@@ -284,12 +284,12 @@ class LosGenerator
                     $previousRateSet = $rates;
                     $previousBaseRateSet = $baseRates;
                 }
-
+				
+                // We do not need to use the baseRates, because of the strategy modes.
                 $losRecords->addLineEntry(
                     $date,
                     $g,
-                    $previousRateSet,
-                    $previousBaseRateSet
+                    $previousRateSet
                 );
             }
         }
