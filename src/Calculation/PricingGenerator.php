@@ -651,8 +651,9 @@ class PricingGenerator
         // The previous functionality was to get the arrival day period and use that minimum nights
         // to either error or continue. The new functionality will error out if the period with the
         // highest minimum nights is matched and not met.
-
-        $useHighestMinimumNights = true;
+		
+		// @todo Sam to turn into an option on the defaults on pricingConfig so specify if we should use highest min nights from a period range
+        $useHighestMinimumNights = false;
         if ($useHighestMinimumNights) {
             $minimumNights = 0;
             if ($defaults->hasMinimumNights() && $minimumNights < $defaults->getMinimumNights()) {
