@@ -10,8 +10,12 @@ use Money\Exchange;
 
 abstract class BaseRecordTransformer implements RecordTransformerInterface
 {
-    
-    abstract public function transform(LosRecords $records, TransformOptions $options);
+    public function __invoke(LosRecords $records, TransformOptions $options)
+	{
+		return $this->transform($records, $options);
+	}
+	
+	abstract public function transform(LosRecords $records, TransformOptions $options);
     
     public function generateLosRecordString($record, TransformOptions $options): string
     {
