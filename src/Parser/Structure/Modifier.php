@@ -11,6 +11,7 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
     const TYPE_BOOKING_FEE = 'booking_fee';
     const TYPE_MODIFIER = 'modifier';
     const TYPE_CLEANING = 'cleaning';
+	const TYPE_DISCOUNT = 'discount';
     const TYPE_CARD_FEE = 'card_fee';
     const TYPE_TOURISM_TAX = 'tourism_tax';
     const TYPE_EXTRA_GUEST_FEE = 'extra_guest_fee';
