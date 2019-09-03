@@ -71,8 +71,6 @@ class AvailabilityUtils
 
         $availability = [];
 
-        $dateRange = DateUtils::getDateRangeInclusive($startDate, $endDate);
-
         $doesNotExistChar = $dateExistsChar === 'Y' ? 'N' : 'Y';
 
         // We need to expand the ranges
@@ -85,9 +83,7 @@ class AvailabilityUtils
             }
         }
 
-        foreach($dateRange as $date) {
-            $currentDay = strtolower(date("l", strtotime($date)));
-
+        foreach(DateUtils::getDateRangeInclusive($startDate, $endDate) as $date) {
             if (isset($expandedRanges[$date])) {
                 $avResult = $dateExistsChar;
             } else {
