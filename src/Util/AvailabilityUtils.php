@@ -12,6 +12,94 @@ namespace Aptenex\Upp\Util;
  */
 class AvailabilityUtils
 {
+
+    /**
+     * This function assumes all strings start on the same date. It merges all given availability strings via
+     * applying all blocks into a single string
+     *
+     * @param array $strings
+     * @return string
+     */
+    public static function mergeAvailabilityStrings(array $strings): string
+    {
+        $availability = [];
+
+        foreach($strings as $string) {
+            if (empty($string) || $string === null) {
+                continue;
+            }
+
+            $chars = str_split($string);
+
+            foreach($chars as $index => $char) {
+                $current = $availability[$index] ?? null;
+
+                if ($current === null) {
+                    $availability[$index] = $char;
+                } else {
+                    // We want to essentially not allow any Y updates on existing chars that are N
+                    if ($current === 'Y' && $char === 'N') {
+                        $availability[$index] = $char; // Blocking the available
+                    }
+                }
+            }
+        }
+
+        return implode('', $availability);
+    }
+
+    /**
+     * This will accept a start date and an array of items that follow the format ['start' => \DateTime, 'end' => \DateTime]
+     * into a availability sequence. This function expects no date ranges to be overlapping / nested.
+     *
+     * It will convert these date ranges into the designated char, eg if Y then non-date ranges will be N and vice versa
+     *
+     * @param \DateTime $startDate
+     * @param array $ranges
+     * @param int $stringLength The amount of days to generate the availability for
+     * @param string $dateExistsChar
+     *
+     * @return string
+     */
+    public static function convertDateRangesToAvailabilityString(\DateTime $startDate, array $ranges, int $stringLength = 1095, string $dateExistsChar = 'Y'): string
+    {
+        try {
+            $endDate =(clone $startDate)->add(new \DateInterval(sprintf('P%sD', $stringLength)));
+        } catch (\Exception $e) {
+            return null;
+        }
+
+        $availability = [];
+
+        $dateRange = DateUtils::getDateRangeInclusive($startDate, $endDate);
+
+        $doesNotExistChar = $dateExistsChar === 'Y' ? 'N' : 'Y';
+
+        // We need to expand the ranges
+        $expandedRanges = [];
+        foreach($ranges as $item) {
+            $expandedItem = DateUtils::getDateRangeInclusive($item['start'], $item['end']);
+
+            foreach($expandedItem as $date) {
+                $expandedRanges[$date] = $date;
+            }
+        }
+
+        foreach($dateRange as $date) {
+            $currentDay = strtolower(date("l", strtotime($date)));
+
+            if (isset($expandedRanges[$date])) {
+                $avResult = $dateExistsChar;
+            } else {
+                $avResult = $doesNotExistChar;
+            }
+
+            $availability[] = $avResult;
+        }
+
+        return implode('', $availability);
+    }
+
     /**
      * @param array $ranges
      * @param int $addDaysToDuration

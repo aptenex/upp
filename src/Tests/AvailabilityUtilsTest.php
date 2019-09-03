@@ -52,4 +52,30 @@ class AvailabilityUtilsTest extends TestCase
         $this->assertSame(json_encode(json_decode($expectedRanges, true), JSON_PRETTY_PRINT), json_encode($result, JSON_PRETTY_PRINT));
     }
 
+    public function testMergeAvailabilityStrings()
+    {
+        $strings = [
+            'YYYYYYYNNNNNYYYYYNNNNNYYYYYYYYY',
+            'YYYNNNNNYYYNNNNYYNNNNNYYNNNYY',
+            'YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYNNNNN',
+            'YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYNNNNN',
+            'YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY'
+        ];
+
+        $this->assertSame('YYYNNNNNNNNNNNNYYNNNNNYYNNNYYYYNNNNNNNYYY', AvailabilityUtils::mergeAvailabilityStrings($strings));
+    }
+
+    public function testConvertDateRangesToAvailabilityString()
+    {
+        $ranges = [
+            ['start' => '2019-01-01', 'end' => '2019-01-07'],
+            ['start' => '2019-01-15', 'end' => '2019-01-30'],
+            ['start' => '2019-02-04', 'end' => '2019-02-08'],
+        ];
+
+        $string = AvailabilityUtils::convertDateRangesToAvailabilityString(new \DateTime('2019-01-01'), $ranges, 50);
+
+        $this->assertSame('YYYYYYYNNNNNNNYYYYYYYYYYYYYYYYNNNNYYYYYNNNNNNNNNNNN', $string);
+    }
+
 }
