@@ -318,6 +318,82 @@
     ]
   },
   {
+    "name": "Bracket matches work on last night entered without a +",
+    "description": "",
+    "config": {
+      "name": "Pricing Example Structure",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "taxes": [],
+          "periods": [
+            {
+              "description": "April '16",
+              "priority": 2,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "startDate": "2016-04-05",
+                  "endDate": "2016-04-30"
+                }
+              ],
+              "rate": {
+                "type": "nightly",
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "calculationMethod": "fixed",
+                    "makePreviousDaysSameRate": true,
+                    "brackets": {
+                      "1": 100,
+                      "2": 90,
+                      "3-5": 80,
+                      "6": 35
+                    }
+                  }
+                },
+                "amount": 350
+              }
+            }
+          ],
+          "modifiers": []
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2016-04-05",
+          "departureDate": "2016-04-15",
+          "bookingDate": "2016-02-22",
+          "guests": 6,
+          "currency": "GBP"
+        },
+        "tests": {
+          "noNights": 10,
+          "finalPrice": 350000,
+          "nightPrices": {
+            "2016-04-05": 35000,
+            "2016-04-06": 35000,
+            "2016-04-07": 35000,
+            "2016-04-08": 35000,
+            "2016-04-09": 35000,
+            "2016-04-10": 35000,
+            "2016-04-11": 35000,
+            "2016-04-12": 35000,
+            "2016-04-13": 35000,
+            "2016-04-14": 35000
+          }
+        }
+      }
+    ]
+  },
+  {
     "name": "Specific Tax Test 01",
     "description": "",
     "config": {
