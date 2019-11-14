@@ -139,7 +139,11 @@ class LycanVisualPricingTransformer implements TransformerInterface
 
     private function getLowestRoughlyNightlyAmount(Period $period, $nights = 30)
     {
-        $activeStrategy = $period->getRate()->getStrategy()->getActiveStrategy();
+        $activeStrategy = null;
+
+        if ($period->getRate() !== null && $period->getRate()->getStrategy() !== null) {
+            $activeStrategy = $period->getRate()->getStrategy()->getActiveStrategy();
+        }
 
         if ($activeStrategy === null || !($activeStrategy instanceof ExtraNightsAlteration)) {
             return $period->getRate()->getRoughNightlyAmount();
@@ -168,7 +172,11 @@ class LycanVisualPricingTransformer implements TransformerInterface
 
     private function getHighestRoughlyNightlyAmount(Period $period, $nights = 30)
     {
-        $activeStrategy = $period->getRate()->getStrategy()->getActiveStrategy();
+        $activeStrategy = null;
+
+        if ($period->getRate() !== null && $period->getRate()->getStrategy() !== null) {
+            $activeStrategy = $period->getRate()->getStrategy()->getActiveStrategy();
+        }
 
         if ($activeStrategy === null || !($activeStrategy instanceof ExtraNightsAlteration)) {
             return $period->getRate()->getRoughNightlyAmount();
