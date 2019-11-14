@@ -45,6 +45,10 @@ class MultipleCalculationTest extends TestCase
                 new TestTranslator()
             );
 
+            if (!isset($priceConfig['priceTests'])) {
+                continue;
+            }
+
             foreach($priceConfig['priceTests'] as $index => $pTest) {
 
                 if (ArrayUtils::hasNestedArrayValue('parseOptions', $pTest)) {

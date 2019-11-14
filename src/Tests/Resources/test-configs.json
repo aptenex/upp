@@ -5936,5 +5936,685 @@
         }
       }
     ]
+  },
+  {
+    "key": "robins-retreat-visual-pricing-regression-test",
+    "name": "Robins Retreat Visual Pricing for Weekly",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "defaults": {
+            "damageDeposit": 0,
+            "damageDepositCalculationMethod": "fixed",
+            "perPetPerStay": 0,
+            "perPetPerNight": 0,
+            "perPetSplitMethod": "ON_TOTAL",
+            "minimumNights": 2,
+            "maximumNights": "",
+            "balanceDaysBeforeArrival": 70,
+            "depositSplitPercentage": 30,
+            "daysRequiredInAdvanceForBooking": 0,
+            "bookableType": "instant_bookable",
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_BALANCE"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "Low Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-11-01",
+                  "endDate": "2019-12-19",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 275,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "2",
+                        "amount": 275,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "3",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "4",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Festive Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-12-20",
+                  "endDate": "2020-01-02",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 375,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "2",
+                        "amount": 375,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "3",
+                        "amount": 150,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "4",
+                        "amount": 150,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 150,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 150,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Low Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-01-03",
+                  "endDate": "2020-04-02",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 275,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "2",
+                        "amount": 275,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "3",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "4",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Mid Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-04-03",
+                  "endDate": "2020-06-25",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 325,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "2",
+                        "amount": 325,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "3",
+                        "amount": 130,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "4",
+                        "amount": 130,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 130,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 130,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "High Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-06-26",
+                  "endDate": "2020-09-03",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 375,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "2",
+                        "amount": 375,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "3",
+                        "amount": 150,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "4",
+                        "amount": 150,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 150,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 150,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Mid Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-09-04",
+                  "endDate": "2020-11-05",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 325,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "2",
+                        "amount": 325,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "3",
+                        "amount": 130,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "4",
+                        "amount": 130,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 130,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 130,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Low Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-11-06",
+                  "endDate": "2020-12-17",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 275,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "2",
+                        "amount": 275,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "3",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "4",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Festive Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-12-18",
+                  "endDate": "2021-01-07",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 375,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "2",
+                        "amount": 375,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "3",
+                        "amount": 150,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "4",
+                        "amount": 150,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 150,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 150,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Low Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2021-01-08",
+                  "endDate": "2021-04-01",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 275,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "2",
+                        "amount": 275,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "3",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "4",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "5",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      },
+                      {
+                        "night": "6",
+                        "amount": 110,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "booking_fee",
+              "hidden": false,
+              "splitMethod": "ON_DEPOSIT",
+              "priceGroup": "total",
+              "description": "Booking Fee",
+              "conditionOperand": "AND",
+              "conditions": [],
+              "rate": {
+                "type": "adjustment",
+                "amount": 30,
+                "calculationMethod": "fixed",
+                "calculationOperand": "addition",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_DEPOSIT",
+              "priceGroup": "total",
+              "description": "Damage Waiver",
+              "conditionOperand": "AND",
+              "conditions": [],
+              "rate": {
+                "type": "adjustment",
+                "amount": 30,
+                "calculationMethod": "fixed",
+                "calculationOperand": "addition",
+                "applicableTaxes": []
+              }
+            }
+          ]
+        }
+      ]
+    }
   }
 ]

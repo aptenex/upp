@@ -52,12 +52,11 @@ class LycanVisualPricingTransformer implements TransformerInterface
             'weeklyHigh' => null
         ];
 
-        /**
-         * @var float|null $lowPeriodAmount
-         * @var float|null $highPeriodAmount
-         */
-        $lowPeriodAmount = null;
-        $highPeriodAmount = null;
+        $lowPeriodAmountNightly = null;
+        $lowPeriodAmountWeekly = null;
+
+        $highPeriodAmountNightly = null;
+        $highPeriodAmountWeekly = null;
 
         try {
 
@@ -76,37 +75,60 @@ class LycanVisualPricingTransformer implements TransformerInterface
                 }
 
                 // First lets determine the cheapest and most expensive periods
-                if ($lowPeriodAmount === null) {
-                    $lowPeriodAmount = $this->getLowestRoughlyNightlyAmount($period);
-                    $highPeriodAmount = $this->getHighestRoughlyNightlyAmount($period);
+                if ($lowPeriodAmountNightly === null) {
+                    $lowPeriodAmountNightly = $this->getLowestRoughlyNightlyAmount($period);
+                    $lowPeriodAmountWeekly = $this->getLowestRoughlyNightlyAmount($period) * 7;
+
+                    $highPeriodAmountNightly = $this->getHighestRoughlyNightlyAmount($period);
+                    $highPeriodAmountWeekly = $this->getHighestRoughlyNightlyAmount($period) * 7;
                 } else {
                     // Get the nightly version
-                    $currentLowPeriodAmount = $this->getLowestRoughlyNightlyAmount($period);
-                    $currentHighPeriodAmount = $this->getHighestRoughlyNightlyAmount($period);
+                    $currentLowPeriodAmountNightly = $this->getLowestRoughlyNightlyAmount($period);
+                    $currentHighPeriodAmountNightly = $this->getHighestRoughlyNightlyAmount($period);
 
-                    if ($currentLowPeriodAmount < $lowPeriodAmount) {
-                        $lowPeriodAmount = $currentLowPeriodAmount;
+                    if ($currentLowPeriodAmountNightly < $lowPeriodAmountNightly) {
+                        $lowPeriodAmountNightly = $currentLowPeriodAmountNightly;
                     }
 
-                    if ($currentHighPeriodAmount > $highPeriodAmount) {
-                        $highPeriodAmount = $currentHighPeriodAmount;
+                    if ($currentLowPeriodAmountNightly > $highPeriodAmountNightly) {
+                        $highPeriodAmountNightly = $currentHighPeriodAmountNightly;
+                    }
+
+                    // Get the weekly version
+                    $currentLowPeriodAmountWeekly = $this->getLowestRoughlyNightlyAmount($period) * 7;
+                    $currentHighPeriodAmountWeekly = $this->getHighestRoughlyNightlyAmount($period) * 7;
+
+                    if ($currentLowPeriodAmountWeekly < $lowPeriodAmountWeekly) {
+                        $lowPeriodAmountWeekly = $currentLowPeriodAmountWeekly;
+                    }
+
+                    if ($currentLowPeriodAmountWeekly > $highPeriodAmountWeekly) {
+                        $highPeriodAmountWeekly = $currentHighPeriodAmountWeekly;
                     }
                 }
                 
             }
 
-            if ($lowPeriodAmount !== null && $lowPeriodAmount > 0) {
-                $visual['nightlyLow'] = $lowPeriodAmount;
+            if ($lowPeriodAmountNightly !== null && $lowPeriodAmountNightly > 0) {
+                $visual['nightlyLow'] = $lowPeriodAmountNightly;
             }
 
-            if ($highPeriodAmount !== null && $highPeriodAmount > 0) {
-                $visual['nightlyHigh'] = $highPeriodAmount;
+            if ($highPeriodAmountNightly !== null && $highPeriodAmountNightly > 0) {
+                $visual['nightlyHigh'] = $highPeriodAmountNightly;
+            }
+
+            if ($lowPeriodAmountWeekly !== null && $lowPeriodAmountWeekly > 0) {
+                $visual['weeklyLow'] = $lowPeriodAmountWeekly;
+            }
+
+            if ($highPeriodAmountWeekly !== null && $highPeriodAmountWeekly > 0) {
+                $visual['weeklyHigh'] = $highPeriodAmountWeekly;
             }
 
             $visual['nightlyLow'] = (int) round($visual['nightlyLow']);
             $visual['nightlyHigh'] = (int) round($visual['nightlyHigh']);
-            $visual['weeklyLow'] = (int) round($visual['nightlyLow'] * 7);
-            $visual['weeklyHigh'] = (int) round($visual['nightlyHigh'] * 7);
+            $visual['weeklyLow'] = (int) round($visual['weeklyLow']);
+            $visual['weeklyHigh'] = (int) round($visual['weeklyHigh']);
 
             return $visual;
 
@@ -115,7 +137,7 @@ class LycanVisualPricingTransformer implements TransformerInterface
         }
     }
 
-    private function getLowestRoughlyNightlyAmount(Period $period)
+    private function getLowestRoughlyNightlyAmount(Period $period, $nights = 30)
     {
         $activeStrategy = $period->getRate()->getStrategy()->getActiveStrategy();
 
@@ -129,7 +151,7 @@ class LycanVisualPricingTransformer implements TransformerInterface
             return $period->getRate()->getRoughNightlyAmount();
         }
 
-        $expandedBrackets = (new BracketsEvaluator())->expandBrackets($activeStrategy->getBrackets(), 30, true);
+        $expandedBrackets = (new BracketsEvaluator())->expandBrackets($activeStrategy->getBrackets(), $nights, true);
 
         // Set the cheapest to the rough nightly amount
         $cheapest = $period->getRate()->getRoughNightlyAmount();
@@ -144,7 +166,7 @@ class LycanVisualPricingTransformer implements TransformerInterface
         return $cheapest;
     }
 
-    private function getHighestRoughlyNightlyAmount(Period $period)
+    private function getHighestRoughlyNightlyAmount(Period $period, $nights = 30)
     {
         $activeStrategy = $period->getRate()->getStrategy()->getActiveStrategy();
 
@@ -158,7 +180,7 @@ class LycanVisualPricingTransformer implements TransformerInterface
             return $period->getRate()->getRoughNightlyAmount();
         }
 
-        $expandedBrackets = (new BracketsEvaluator())->expandBrackets($activeStrategy->getBrackets(), 30, true);
+        $expandedBrackets = (new BracketsEvaluator())->expandBrackets($activeStrategy->getBrackets(), $nights, true);
 
         // Set the expensive to the rough nightly amount
         $expensive = $period->getRate()->getRoughNightlyAmount();
