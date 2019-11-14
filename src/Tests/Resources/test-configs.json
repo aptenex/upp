@@ -223,27 +223,34 @@
                 "strategy": {
                   "partialWeekAlteration": {
                     "calculationMethod": "fixed",
-                    "brackets": {
-                      "1": 0.4,
-                      "2": 0.5,
-                      "3": 300,
-                      "4": 0.7,
-                      "5": 0.8,
-                      "6": 0.9
-                    },
+                    "brackets": [
+                      {
+                        "night": 1,
+                        "amount": 0.4
+                      },
+                      {
+                        "night": 2,
+                        "amount": 0.5
+                      },
+                      {
+                        "night": 3,
+                        "amount": 300
+                      },
+                      {
+                        "night": 4,
+                        "amount": 0.7
+                      },
+                      {
+                        "night": 5,
+                        "amount": 0.8
+                      },
+                      {
+                        "night": 6,
+                        "amount": 0.9
+                      }
+                    ],
                     "minimumWeekCount": 0,
                     "maximumWeekCount": null
-                  },
-                  "extraNightsAlteration": {
-                    "applyToTotal": false,
-                    "calculationMethod": "fixed",
-                    "makePreviousDaysSameRate": true,
-                    "brackets": {
-                      "1": 50,
-                      "2": 40,
-                      "3-7": 38,
-                      "8+": 35
-                    }
                   }
                 },
                 "amount": 350
@@ -300,7 +307,7 @@
         },
         "tests": {
           "noNights": 10,
-          "finalPrice": 47250,
+          "finalPrice": 61425,
           "nightPrices": {
             "2016-04-05": 5000,
             "2016-04-06": 5000,
@@ -309,9 +316,9 @@
             "2016-04-09": 5000,
             "2016-04-10": 5000,
             "2016-04-11": 5000,
-            "2016-04-12": 5000,
-            "2016-04-13": 5000,
-            "2016-04-14": 5000
+            "2016-04-12": 10000,
+            "2016-04-13": 10000,
+            "2016-04-14": 10000
           }
         }
       }
@@ -319,6 +326,7 @@
   },
   {
     "name": "Bracket matches work on last night entered without a +",
+    "key": "lycan-visual-transformer-test-nightly",
     "description": "",
     "config": {
       "name": "Pricing Example Structure",
@@ -343,20 +351,75 @@
               ],
               "rate": {
                 "type": "nightly",
+                "calculationOperand": "equals",
+                "amount": 350,
                 "strategy": {
                   "extraNightsAlteration": {
                     "applyToTotal": false,
                     "calculationMethod": "fixed",
                     "makePreviousDaysSameRate": true,
-                    "brackets": {
-                      "1": 100,
-                      "2": 90,
-                      "3-5": 80,
-                      "6": 35
-                    }
+                    "brackets": [
+                      {
+                        "night": 1,
+                        "amount": 100
+                      },
+                      {
+                        "night": "2",
+                        "amount": 90
+                      },
+                      {
+                        "night": "3-5",
+                        "amount": 80
+                      },
+                      {
+                        "night": "6",
+                        "amount": 35
+                      }
+                    ]
                   }
-                },
-                "amount": 350
+                }
+              }
+            },
+            {
+              "description": "April '17",
+              "priority": 2,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "startDate": "2017-04-05",
+                  "endDate": "2017-04-30"
+                }
+              ],
+              "rate": {
+                "type": "nightly",
+                "calculationOperand": "equals",
+                "amount": 500,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "calculationMethod": "fixed",
+                    "makePreviousDaysSameRate": true,
+                    "brackets": [
+                      {
+                        "night": 1,
+                        "amount": 100
+                      },
+                      {
+                        "night": "2",
+                        "amount": 90
+                      },
+                      {
+                        "night": "3-5",
+                        "amount": 80
+                      },
+                      {
+                        "night": "6",
+                        "amount": 35
+                      }
+                    ]
+                  }
+                }
               }
             }
           ],
@@ -376,18 +439,146 @@
         },
         "tests": {
           "noNights": 10,
-          "finalPrice": 350000,
+          "finalPrice": 35000,
           "nightPrices": {
-            "2016-04-05": 35000,
-            "2016-04-06": 35000,
-            "2016-04-07": 35000,
-            "2016-04-08": 35000,
-            "2016-04-09": 35000,
-            "2016-04-10": 35000,
-            "2016-04-11": 35000,
-            "2016-04-12": 35000,
-            "2016-04-13": 35000,
-            "2016-04-14": 35000
+            "2016-04-05": 3500,
+            "2016-04-06": 3500,
+            "2016-04-07": 3500,
+            "2016-04-08": 3500,
+            "2016-04-09": 3500,
+            "2016-04-10": 3500,
+            "2016-04-11": 3500,
+            "2016-04-12": 3500,
+            "2016-04-13": 3500,
+            "2016-04-14": 3500
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Bracket matches work on last night entered without a + (weekly)",
+    "key": "lycan-visual-transformer-test-weekly",
+    "description": "",
+    "config": {
+      "name": "Pricing Example Structure",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "taxes": [],
+          "periods": [
+            {
+              "description": "April '16",
+              "priority": 2,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "startDate": "2016-04-05",
+                  "endDate": "2016-04-30"
+                }
+              ],
+              "rate": {
+                "type": "weekly",
+                "calculationOperand": "equals",
+                "amount": 500,
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "applyToTotal": false,
+                    "calculationMethod": "fixed",
+                    "makePreviousDaysSameRate": true,
+                    "brackets": [
+                      {
+                        "night": 1,
+                        "amount": 200
+                      },
+                      {
+                        "night": "2",
+                        "amount": 250
+                      },
+                      {
+                        "night": "3-5",
+                        "amount": 300
+                      },
+                      {
+                        "night": "6",
+                        "amount": 400
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "April '17",
+              "priority": 2,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "startDate": "2017-04-05",
+                  "endDate": "2017-04-30"
+                }
+              ],
+              "rate": {
+                "type": "weekly",
+                "calculationOperand": "equals",
+                "amount": 600,
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "applyToTotal": false,
+                    "calculationMethod": "fixed",
+                    "makePreviousDaysSameRate": true,
+                    "brackets": [
+                      {
+                        "night": 1,
+                        "amount": 250
+                      },
+                      {
+                        "night": "2",
+                        "amount": 300
+                      },
+                      {
+                        "night": "3-5",
+                        "amount": 350
+                      },
+                      {
+                        "night": "6",
+                        "amount": 450
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "modifiers": []
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2016-04-05",
+          "departureDate": "2016-04-10",
+          "bookingDate": "2016-02-22",
+          "guests": 6,
+          "currency": "GBP"
+        },
+        "tests": {
+          "noNights": 5,
+          "finalPrice": 30000,
+          "nightPrices": {
+            "2016-04-05": 6000,
+            "2016-04-06": 6000,
+            "2016-04-07": 6000,
+            "2016-04-08": 6000,
+            "2016-04-09": 6000,
+            "2016-04-10": 6000
           }
         }
       }
