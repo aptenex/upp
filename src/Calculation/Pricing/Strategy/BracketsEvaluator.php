@@ -66,7 +66,7 @@ class BracketsEvaluator
      */
     public function hasAtLeastOneMatch($brackets, $nights)
     {
-        return !is_null($this->retrieveValue($brackets, $nights));
+        return $this->retrieveValue($brackets, $nights) !== null;
     }
 
     /**

@@ -2,14 +2,13 @@
 
 namespace Tests;
 
-use Aptenex\Upp\Exception\InvalidPricingConfigException;
-use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
-use Aptenex\Upp\Parser\Structure\StructureOptions;
-use Aptenex\Upp\Transformer\LycanVisualPricingTransformer;
 use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\TestUtils;
 use PHPUnit\Framework\TestCase;
 use Translation\TestTranslator;
+use Aptenex\Upp\Parser\Structure\StructureOptions;
+use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
+use Aptenex\Upp\Transformer\LycanVisualPricingTransformer;
 
 class LycanVisualPricingTransformerTest extends TestCase
 {
@@ -43,8 +42,8 @@ class LycanVisualPricingTransformerTest extends TestCase
             'currency' => 'GBP',
             'nightlyLow' => 110,
             'nightlyHigh' => 275,
-            'weeklyLow' => 770,
-            'weeklyHigh' => 1925
+            'weeklyLow' => 1100,
+            'weeklyHigh' => 1500
         ];
 
         $this->assertSame($expectedVisual, $actualVisual);
@@ -77,7 +76,7 @@ class LycanVisualPricingTransformerTest extends TestCase
             'nightlyLow' => 35,
             'nightlyHigh' => 350,
             'weeklyLow' => 245,
-            'weeklyHigh' => 2450
+            'weeklyHigh' => 245
         ];
 
         $this->assertSame($expectedVisual, $actualVisual);

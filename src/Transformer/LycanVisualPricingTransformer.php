@@ -3,11 +3,11 @@
 namespace Aptenex\Upp\Transformer;
 
 use Aptenex\Upp\Calculation\Pricing\Strategy\BracketsEvaluator;
+use Aptenex\Upp\Calculation\Pricing\Strategy\ExtraNightsAlterationStrategy;
 use Aptenex\Upp\Exception\InvalidPricingConfigException;
 use Aptenex\Upp\Parser\Structure\CurrencyConfig;
 use Aptenex\Upp\Parser\Structure\ExtraNightsAlteration;
 use Aptenex\Upp\Parser\Structure\Operand;
-use Aptenex\Upp\Parser\Structure\PartialWeekAlteration;
 use Aptenex\Upp\Parser\Structure\Period;
 use Aptenex\Upp\Parser\Structure\PricingConfig;
 use Aptenex\Upp\Parser\Structure\Rate;
@@ -76,15 +76,15 @@ class LycanVisualPricingTransformer implements TransformerInterface
 
                 // First lets determine the cheapest and most expensive periods
                 if ($lowPeriodAmountNightly === null) {
-                    $lowPeriodAmountNightly = $this->getLowestRoughlyNightlyAmount($period);
-                    $lowPeriodAmountWeekly = $this->getLowestRoughlyNightlyAmount($period) * 7;
+                    $lowPeriodAmountNightly = $this->getLowestRoughAmount($period);
+                    $highPeriodAmountNightly = $this->getHighestRoughAmount($period);
 
-                    $highPeriodAmountNightly = $this->getHighestRoughlyNightlyAmount($period);
-                    $highPeriodAmountWeekly = $this->getHighestRoughlyNightlyAmount($period) * 7;
+                    $lowPeriodAmountWeekly = $this->getLowestRoughAmount($period, true);
+                    $highPeriodAmountWeekly = $this->getHighestRoughAmount($period, true);
                 } else {
                     // Get the nightly version
-                    $currentLowPeriodAmountNightly = $this->getLowestRoughlyNightlyAmount($period);
-                    $currentHighPeriodAmountNightly = $this->getHighestRoughlyNightlyAmount($period);
+                    $currentLowPeriodAmountNightly = $this->getLowestRoughAmount($period);
+                    $currentHighPeriodAmountNightly = $this->getHighestRoughAmount($period);
 
                     if ($currentLowPeriodAmountNightly < $lowPeriodAmountNightly) {
                         $lowPeriodAmountNightly = $currentLowPeriodAmountNightly;
@@ -95,8 +95,8 @@ class LycanVisualPricingTransformer implements TransformerInterface
                     }
 
                     // Get the weekly version
-                    $currentLowPeriodAmountWeekly = $this->getLowestRoughlyNightlyAmount($period) * 7;
-                    $currentHighPeriodAmountWeekly = $this->getHighestRoughlyNightlyAmount($period) * 7;
+                    $currentLowPeriodAmountWeekly = $this->getLowestRoughAmount($period, true);
+                    $currentHighPeriodAmountWeekly = $this->getHighestRoughAmount($period, true);
 
                     if ($currentLowPeriodAmountWeekly < $lowPeriodAmountWeekly) {
                         $lowPeriodAmountWeekly = $currentLowPeriodAmountWeekly;
@@ -136,7 +136,7 @@ class LycanVisualPricingTransformer implements TransformerInterface
         }
     }
 
-    private function getLowestRoughlyNightlyAmount(Period $period, $nights = 30)
+    private function getLowestRoughAmount(Period $period, $forWeek = false)
     {
         $activeStrategy = null;
 
@@ -145,18 +145,29 @@ class LycanVisualPricingTransformer implements TransformerInterface
         }
 
         if ($activeStrategy === null || !($activeStrategy instanceof ExtraNightsAlteration)) {
-            return $period->getRate()->getRoughNightlyAmount();
+            if ($forWeek) {
+                return $period->getRate()->getAmount();
+            } else {
+                return $period->getRate()->getRoughNightlyAmount();
+            }
         }
+
+        $be = new BracketsEvaluator();
 
         $brackets = $activeStrategy->getBrackets();
 
-        if (empty($brackets)) {
+        $nights = $forWeek ? 7 : 30;
+
+        if (!$be->hasAtLeastOneMatch($brackets, $nights)) {
             return $period->getRate()->getRoughNightlyAmount();
+        }
+
+        if ($forWeek) {
+            return $this->calculateWeek($be, $nights, $activeStrategy, $period);
         }
 
         $expandedBrackets = (new BracketsEvaluator())->expandBrackets($activeStrategy->getBrackets(), $nights, true);
 
-        // Set the cheapest to the rough nightly amount
         $cheapest = $period->getRate()->getRoughNightlyAmount();
         foreach($expandedBrackets as $bracket) {
             $moneyAmount = $this->getMonetaryFigure($period->getRate(), $bracket['amount']);
@@ -169,7 +180,7 @@ class LycanVisualPricingTransformer implements TransformerInterface
         return $cheapest;
     }
 
-    private function getHighestRoughlyNightlyAmount(Period $period, $nights = 30)
+    private function getHighestRoughAmount(Period $period, $forWeek = false)
     {
         $activeStrategy = null;
 
@@ -178,20 +189,31 @@ class LycanVisualPricingTransformer implements TransformerInterface
         }
 
         if ($activeStrategy === null || !($activeStrategy instanceof ExtraNightsAlteration)) {
-            return $period->getRate()->getRoughNightlyAmount();
+            if ($forWeek) {
+                return $period->getRate()->getAmount();
+            } else {
+                return $period->getRate()->getRoughNightlyAmount();
+            }
         }
+
+        $be = new BracketsEvaluator();
 
         $brackets = $activeStrategy->getBrackets();
 
-        if (empty($brackets)) {
+        $nights = $forWeek ? 7 : 30;
+
+        if (!$be->hasAtLeastOneMatch($brackets, $nights)) {
             return $period->getRate()->getRoughNightlyAmount();
+        }
+
+        if ($forWeek) {
+            return $this->calculateWeek($be, $nights, $activeStrategy, $period);
         }
 
         $expandedBrackets = (new BracketsEvaluator())->expandBrackets($activeStrategy->getBrackets(), $nights, true);
 
-        // Set the expensive to the rough nightly amount
         $expensive = $period->getRate()->getRoughNightlyAmount();
-        foreach($expandedBrackets as $bracket) {
+        foreach ($expandedBrackets as $bracket) {
             $moneyAmount = $this->getMonetaryFigure($period->getRate(), $bracket['amount']);
 
             if ($moneyAmount > $expensive) {
@@ -200,6 +222,62 @@ class LycanVisualPricingTransformer implements TransformerInterface
         }
 
         return $expensive;
+    }
+
+    private function calculateWeek(BracketsEvaluator $be, int $nights, ExtraNightsAlteration $activeStrategy, Period $period)
+    {
+        if ($period->getRate()->getType() === Rate::TYPE_WEEKLY) {
+            return $period->getRate()->getAmount();
+        }
+
+        $bracketDayValueMap = $be->retrieveExtraNightsDiscountValues($activeStrategy->getBrackets(), $nights);
+
+        // We need to sort this in case a lower bracket is added after a high one with
+        // extraNightsAlterationStrategyUseGlobalNights being enabled as this causes issues
+        ksort($bracketDayValueMap);
+
+        if (empty($bracketDayValueMap)) {
+            return $period->getRate()->getRoughNightlyAmount(); // No brackets so no point in looping
+        }
+
+        $enas = new ExtraNightsAlterationStrategy();
+
+        $totalCost = 0;
+
+        for ($i = 0;  $i < $nights; $i++) {
+
+            $baseNightAmount = $period->getRate()->getAmount();
+
+            $value = $enas->getNightlyValue(
+                $i + 1,
+                $baseNightAmount,
+                $bracketDayValueMap,
+                $activeStrategy
+            );
+
+            if ($value !== null) {
+                switch ($activeStrategy->getCalculationOperand()) {
+                    case Operand::OP_ADDITION:
+                        $baseNightAmount += $value;
+
+                        break;
+
+                    case Operand::OP_SUBTRACTION:
+                        $baseNightAmount -= $value;
+
+                        break;
+
+                    case Operand::OP_EQUALS:
+                    default:
+                        $baseNightAmount =  $value;
+
+                }
+            }
+
+            $totalCost += $baseNightAmount;
+        }
+
+        return $totalCost;
     }
 
     private function getMonetaryFigure(Rate $rate, $bracketAmount)
