@@ -102,11 +102,10 @@ class LycanVisualPricingTransformer implements TransformerInterface
                         $lowPeriodAmountWeekly = $currentLowPeriodAmountWeekly;
                     }
 
-                    if ($currentLowPeriodAmountWeekly > $highPeriodAmountWeekly) {
+                    if ($currentHighPeriodAmountWeekly > $highPeriodAmountWeekly) {
                         $highPeriodAmountWeekly = $currentHighPeriodAmountWeekly;
                     }
                 }
-                
             }
 
             if ($lowPeriodAmountNightly !== null && $lowPeriodAmountNightly > 0) {
