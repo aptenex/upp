@@ -146,7 +146,11 @@ class LycanVisualPricingTransformer implements TransformerInterface
 
         if ($activeStrategy === null || !($activeStrategy instanceof ExtraNightsAlteration)) {
             if ($forWeek) {
-                return $period->getRate()->getAmount();
+                if ($period->getRate()->getType() === Rate::TYPE_WEEKLY) {
+                    return $period->getRate()->getAmount();
+                } else {
+                    return $period->getRate()->getRoughNightlyAmount() * 7;
+                }
             } else {
                 return $period->getRate()->getRoughNightlyAmount();
             }
@@ -170,7 +174,7 @@ class LycanVisualPricingTransformer implements TransformerInterface
 
         $cheapest = $period->getRate()->getRoughNightlyAmount();
         foreach($expandedBrackets as $bracket) {
-            $moneyAmount = $this->getMonetaryFigure($period->getRate(), $bracket['amount']);
+            $moneyAmount = $this->getMonetaryFigure($period->getRate(), $activeStrategy, $bracket['amount']);
 
             if ($moneyAmount < $cheapest) {
                 $cheapest = $moneyAmount;
@@ -190,7 +194,11 @@ class LycanVisualPricingTransformer implements TransformerInterface
 
         if ($activeStrategy === null || !($activeStrategy instanceof ExtraNightsAlteration)) {
             if ($forWeek) {
-                return $period->getRate()->getAmount();
+                if ($period->getRate()->getType() === Rate::TYPE_WEEKLY) {
+                    return $period->getRate()->getAmount();
+                } else {
+                    return $period->getRate()->getRoughNightlyAmount() * 7;
+                }
             } else {
                 return $period->getRate()->getRoughNightlyAmount();
             }
@@ -214,7 +222,7 @@ class LycanVisualPricingTransformer implements TransformerInterface
 
         $expensive = $period->getRate()->getRoughNightlyAmount();
         foreach ($expandedBrackets as $bracket) {
-            $moneyAmount = $this->getMonetaryFigure($period->getRate(), $bracket['amount']);
+            $moneyAmount = $this->getMonetaryFigure($period->getRate(), $activeStrategy, $bracket['amount']);
 
             if ($moneyAmount > $expensive) {
                 $expensive = $moneyAmount;
@@ -236,8 +244,10 @@ class LycanVisualPricingTransformer implements TransformerInterface
         // extraNightsAlterationStrategyUseGlobalNights being enabled as this causes issues
         ksort($bracketDayValueMap);
 
+        // No brackets so no point in looping
+        // times by 7 as its nightly
         if (empty($bracketDayValueMap)) {
-            return $period->getRate()->getRoughNightlyAmount(); // No brackets so no point in looping
+            return $period->getRate()->getRoughNightlyAmount() * 7;
         }
 
         $enas = new ExtraNightsAlterationStrategy();
@@ -280,17 +290,20 @@ class LycanVisualPricingTransformer implements TransformerInterface
         return $totalCost;
     }
 
-    private function getMonetaryFigure(Rate $rate, $bracketAmount)
+    private function getMonetaryFigure(Rate $rate, ExtraNightsAlteration $activeStrategy, $bracketAmount)
     {
-        if ($rate->getCalculationMethod() === Rate::METHOD_PERCENTAGE) {
+        /** @var ExtraNightsAlteration $activeStrategy */
+        if ($activeStrategy->getCalculationMethod() === Rate::METHOD_PERCENTAGE) {
             $bracketAmount = $rate->getAmount() * $bracketAmount;
         }
 
-        if ($rate->getCalculationOperand() === Operand::OP_SUBTRACTION) {
+        if ($activeStrategy->getCalculationOperand() === Operand::OP_SUBTRACTION) {
             // We actually need to subtract this off the rate
             $bracketAmount = $rate->getAmount() - $bracketAmount;
-        } else if ($rate->getCalculationOperand() === Operand::OP_ADDITION) {
+        } else if ($activeStrategy->getCalculationOperand() === Operand::OP_ADDITION) {
             $bracketAmount = $rate->getAmount() + $bracketAmount;
+        } else if ($activeStrategy->getCalculationOperand() === Operand::OP_EQUALS) {
+            $bracketAmount = $bracketAmount;
         }
 
         return $bracketAmount;
