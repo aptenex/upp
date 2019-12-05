@@ -2,10 +2,10 @@
 
 namespace Aptenex\Upp\Parser;
 
-use Aptenex\Upp\Exception\InvalidPricingConfigException;
 use Aptenex\Upp\Helper\ArrayAccess;
-use Aptenex\Upp\Parser\Structure\Operand;
 use Aptenex\Upp\Parser\Structure\Rate;
+use Aptenex\Upp\Parser\Structure\Operand;
+use Aptenex\Upp\Exception\InvalidPricingConfigException;
 
 class RateParser
 {
@@ -18,7 +18,7 @@ class RateParser
     {
         $r = new Rate();
 
-        $r->setType(ArrayAccess::getOrException('type', $data, InvalidPricingConfigException::class, "Rate type must be specified"));
+        $r->setType(ArrayAccess::getOrException('type', $data, InvalidPricingConfigException::class, 'Rate type must be specified'));
         $r->setAmount(ArrayAccess::get('amount', $data, 0));
         $r->setDamageDeposit(ArrayAccess::get('damageDeposit', $data, 0));
         $r->setBasePriceOnly(ArrayAccess::get('basePriceOnly', $data, false));
