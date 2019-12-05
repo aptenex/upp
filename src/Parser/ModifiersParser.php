@@ -52,7 +52,7 @@ class ModifiersParser
      * @param Modifier $modifier
      * @return
      */
-    private function getDistributionCondition(Modifier $modifier): ?Condition\DistributionCondition
+    protected function getDistributionCondition(Modifier $modifier): ?Condition\DistributionCondition
     {
         foreach($modifier->getConditions() as $condition) {
             if ($condition->getType() === Condition::TYPE_DISTRIBUTION) {
@@ -69,7 +69,7 @@ class ModifiersParser
      * @param null|string $distributionChannel
      * @return bool
      */
-    private function matchesDistributionChannel(Modifier $modifier, ?string $distributionChannel): bool
+    protected function matchesDistributionChannel(Modifier $modifier, ?string $distributionChannel): bool
     {
         foreach($modifier->getConditions() as $condition) {
 
@@ -85,7 +85,7 @@ class ModifiersParser
         return false;
     }
 
-    private function parseModifier($modifierData, $index): Modifier
+    protected function parseModifier($modifierData, $index): Modifier
     {
         $m = new Modifier();
 
