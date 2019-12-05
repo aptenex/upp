@@ -6,8 +6,10 @@ use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
 use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Helper\ArrayAccess;
+use Aptenex\Upp\Parser\Structure\ExtraNightsAlteration;
 use Aptenex\Upp\Parser\Structure\Operand;
 use Aptenex\Upp\Parser\Structure\Rate;
+use Aptenex\Upp\Util\MoneyUtils;
 use Money\Money;
 
 class ExtraNightsAlterationStrategy implements PriceAlterationInterface
@@ -24,11 +26,11 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
 
         $rateConfig = $controlItem->getControlItemConfig()->getRate();
 
-        if (is_null($rateConfig->getStrategy())) {
+        if ($rateConfig->getStrategy() === null) {
             return false;
         }
 
-        if (is_null($rateConfig->getStrategy()->getExtraNightsAlteration())) {
+        if ($rateConfig->getStrategy()->getExtraNightsAlteration() === null) {
             return false;
         }
 
@@ -73,66 +75,87 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
         // Now we need to loop through and evaluate based on the present options
         // Let's get some various figures early on though
 
-        $lastBracketValue = ArrayAccess::getLastElement($bracketDayValueMap);
-
         foreach($matchedNightsList as $nightIndex => $night) {
             $nightNum = $nightIndex + 1;
 
-            if (!$extraNightsAlteration->isApplyToTotal() && !array_key_exists($nightNum, $bracketDayValueMap)) {
-                // So if the applyToTotal is enabled, skip this check as we re-check if the make previous days
-                // same rate if that is the case. If previous day same rate is not enabled - check the key
-                // and apply!
-                continue;
-            }
+            $value = $this->getNightlyValue(
+                $nightNum,
+                MoneyUtils::getConvertedAmount($night->getCost()),
+                $bracketDayValueMap,
+                $extraNightsAlteration
+            );
 
-            if ($extraNightsAlteration->isMakePreviousNightsSameRate()) {
-                $rate = $lastBracketValue;
-            } else if (array_key_exists($nightNum, $bracketDayValueMap)) {
-                $rate = $bracketDayValueMap[$nightNum];
-            } else {
-                continue; // Skip
-            }
+            if ($value !== null) {
+                $night->addStrategy($extraNightsAlteration);
 
-            if (is_null($rate)) {
-                continue; // Do not alter if there is no match...
-            }
+                $moneyValue = MoneyUtils::fromString($value, $night->getCost()->getCurrency());
 
-            if ($extraNightsAlteration->getCalculationMethod() === Rate::METHOD_FIXED) {
-                // Percentage based
-                $monetaryAmount = \Aptenex\Upp\Util\MoneyUtils::fromString($rate, $fp->getCurrency());
-            } else {
-                $monetaryAmount = $night->getCost()->multiply((float) $rate);
-            }
+                switch ($extraNightsAlteration->getCalculationOperand()) {
 
-            $night->addStrategy($extraNightsAlteration);
+                    case Operand::OP_ADDITION:
 
-            switch ($extraNightsAlteration->getCalculationOperand()) {
+                        $night->setCost($night->getCost()->add($moneyValue));
 
-                case Operand::OP_ADDITION:
+                        break;
 
-                    $night->setCost($night->getCost()->add($monetaryAmount));
+                    case Operand::OP_SUBTRACTION:
 
-                    break;
+                        $night->setCost($night->getCost()->subtract($moneyValue));
 
-                case Operand::OP_SUBTRACTION:
+                        break;
 
-                    $night->setCost($night->getCost()->subtract($monetaryAmount));
+                    case Operand::OP_EQUALS:
+                    default:
+                        $night->setCost($moneyValue);
 
-                    break;
-
-                case Operand::OP_EQUALS:
-                default:
-                    $night->setCost($monetaryAmount);
-
+                }
             }
         }
 
+    }
+
+    /**
+     * @param int $nightNum
+     * @param float $baseNightlyCost
+     * @param array $bracketDayValueMap
+     * @param ExtraNightsAlteration $strategy
+     * @return float|null
+     */
+    public function getNightlyValue(int $nightNum, float $baseNightlyCost, array $bracketDayValueMap, ExtraNightsAlteration $strategy): ?float
+    {
+        $lastBracketValue = ArrayAccess::getLastElement($bracketDayValueMap);
+
+        if (!\array_key_exists($nightNum, $bracketDayValueMap) && !$strategy->isApplyToTotal()) {
+            // So if the applyToTotal is enabled, skip this check as we re-check if the make previous days
+            // same rate if that is the case. If previous day same rate is not enabled - check the key
+            // and apply!
+            return null;
+        }
+
+        if ($strategy->isMakePreviousNightsSameRate()) {
+            $rate = $lastBracketValue;
+        } else if (array_key_exists($nightNum, $bracketDayValueMap)) {
+            $rate = $bracketDayValueMap[$nightNum];
+        } else {
+            return null; // Skip
+        }
+
+        if ($rate === null) {
+            return null;
+        }
+
+        if ($strategy->getCalculationMethod() === Rate::METHOD_FIXED) {
+            $monetaryAmount = $rate;
+        } else {
+            $monetaryAmount = $baseNightlyCost * (float) $rate;
+        }
+
+        return (float) $monetaryAmount;
     }
 
     public function postAlter(PricingContext $context, ControlItemInterface $controlItem, FinalPrice $fp)
     {
         // Do nothing
     }
-
 
 }

@@ -66,7 +66,7 @@ class BracketsEvaluator
      */
     public function hasAtLeastOneMatch($brackets, $nights)
     {
-        return !is_null($this->retrieveValue($brackets, $nights));
+        return $this->retrieveValue($brackets, $nights) !== null;
     }
 
     /**
@@ -158,9 +158,11 @@ class BracketsEvaluator
             }
         }
 
+        // Sort the array
+        ksort($en);
+
         // This will fill the rest of the nights with the highest number
         if (count($en) < $nights) {
-            ksort($en);
             $value = array_values($en)[count($en) - 1];
             $highestNum = array_keys($en)[count($en) - 1];
             for ($i = $highestNum; $i <= $nights; $i++) {

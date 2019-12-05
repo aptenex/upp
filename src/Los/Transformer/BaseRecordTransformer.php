@@ -58,6 +58,14 @@ abstract class BaseRecordTransformer implements RecordTransformerInterface
      */
     public function convertRates(array $rates, TransformOptions $options): array
     {
+    
+    
+        if ($options->getModifyRatePercentage()) {
+            foreach ($rates as &$rate) {
+                $rate = round( bcmul( $rate, $options->getModifyRatePercentage(), 2), 2);
+            }
+            unset($rate);
+        }
         
         if ($options->getTargetCurrency() === null || $options->getTargetCurrency()->equals(
                 $options->getSourceCurrency()
@@ -65,13 +73,6 @@ abstract class BaseRecordTransformer implements RecordTransformerInterface
             return $rates;
         }
         
-        if ($options->getModifyRatePercentage()) {
-            foreach ($rates as &$rate) {
-                $rate = round( bcmul( $rate, $options->getModifyRatePercentage(), 2), 2);
-            }
-            unset($rate);
-            
-        }
         
         if ( ! $options->getExchange() instanceof Exchange) {
             return $rates;
