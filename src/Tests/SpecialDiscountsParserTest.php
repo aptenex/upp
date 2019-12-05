@@ -2,15 +2,8 @@
 
 namespace Tests;
 
-use Aptenex\Upp\Parser\SpecialDiscountsParser;
-use Aptenex\Upp\Parser\Structure\Modifier;
-use Aptenex\Upp\Upp;
-use Aptenex\Upp\Util\ConfigUtils;
-use Aptenex\Upp\Util\TestUtils;
-use Translation\TestTranslator;
 use PHPUnit\Framework\TestCase;
-use Aptenex\Upp\Exception\InvalidPricingConfigException;
-use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
+use Aptenex\Upp\Parser\ModifiersParser;
 use Aptenex\Upp\Parser\Structure\StructureOptions;
 
 class SpecialDiscountsParserTest extends TestCase
@@ -72,11 +65,14 @@ class SpecialDiscountsParserTest extends TestCase
         // the pricing context channel will handle this anyway
         $structureOptions = new StructureOptions();
 
-        $sdParser = new SpecialDiscountsParser();
+        $sdParser = new ModifiersParser();
 
         $modifiers = $sdParser->parse($specialDiscounts, $structureOptions);
 
         $this->assertCount(2, $modifiers);
+        foreach($modifiers as $modifier) {
+            $this->assertTrue($modifier->satisfiesSpecialDiscountCriteria());
+        }
     }
 
 }

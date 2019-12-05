@@ -118,6 +118,74 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
         return in_array($this->getType(), self::$priceGroupBaseTypes, true);
     }
 
+    public function satisfiesSpecialDiscountCriteria(): bool
+    {
+        if ($this->getType() !== self::TYPE_DISCOUNT) {
+            return false;
+        }
+
+        if ($this->isHidden()) {
+            return false;
+        }
+
+        if ($this->getPriceGroup() !== AdjustmentAmount::PRICE_GROUP_TOTAL) {
+            return false;
+        }
+
+        if ($this->getRate()->getCalculationMethod() !== Rate::METHOD_PERCENTAGE) {
+            return false;
+        }
+
+        if ($this->getRate()->getCalculationOperand() !== Operand::OP_SUBTRACTION) {
+            return false;
+        }
+
+        if ($this->getRate()->getAmount() <= 0) {
+            return false;
+        }
+
+        // Look at the conditions, we are essentially looking for two conditions and ignoring the distribution condition
+        $validConditionCount = 0;
+
+        $hasValidDateRangeCondition = false;
+        $hasValidBookingDaysCondition = false;
+
+        foreach($this->getConditions() as $condition) {
+            if ($condition->getType() === Condition::TYPE_DISTRIBUTION) {
+                continue;
+            }
+
+            $validConditionCount++;
+
+            if ($condition->getType() === Condition::TYPE_DATE) {
+                /** @var Condition\DateCondition $condition */
+                if (!empty($condition->getStartDate()) && !empty($condition->getEndDate())) {
+                    $hasValidDateRangeCondition = true;
+                }
+            } else if ($condition->getType() === Condition::TYPE_BOOKING_DAYS) {
+                /** @var Condition\BookingDaysCondition $condition */
+                // We need at least one value entered here
+                if (!empty($condition->getMinimum()) || !empty($condition->getMaximum())) {
+                    $hasValidBookingDaysCondition = true;
+                }
+            }
+        }
+
+        if ($validConditionCount !== 2) {
+            return false;
+        }
+
+        if (!$hasValidBookingDaysCondition) {
+            return false;
+        }
+
+        if (!$hasValidDateRangeCondition) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * @return array
      */
