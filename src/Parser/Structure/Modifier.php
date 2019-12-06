@@ -120,7 +120,7 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
 
     public function satisfiesSpecialDiscountCriteria(): bool
     {
-        if ($this->getType() !== self::TYPE_DISCOUNT) {
+        if ($this->getType() !== self::TYPE_DISCOUNT && $this->getType() !== self::TYPE_MODIFIER) {
             return false;
         }
 
@@ -161,6 +161,11 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
                 /** @var Condition\DateCondition $condition */
                 if (!empty($condition->getStartDate()) && !empty($condition->getEndDate())) {
                     $hasValidDateRangeCondition = true;
+                }
+            } else if ($condition->getType() === Condition::TYPE_MULTI_DATE) {
+                /** @var Condition\MultiDateCondition $condition */
+                if (!empty($condition->getDates())) {
+                    $hasValidDateRangeCondition = true; // Multi-data is also supported
                 }
             } else if ($condition->getType() === Condition::TYPE_BOOKING_DAYS) {
                 /** @var Condition\BookingDaysCondition $condition */
