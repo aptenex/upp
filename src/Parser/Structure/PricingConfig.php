@@ -100,6 +100,32 @@ class PricingConfig
     }
 
     /**
+     * @param string $currency
+     *
+     * @return CurrencyConfig|null
+     */
+    public function getCurrencyConfig(string $currency): ?CurrencyConfig
+    {
+        foreach($this->currencyConfigs as $cc) {
+            if (\strtoupper($cc->getCurrency()) === \strtoupper($currency)) {
+                return $cc;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $currency
+     *
+     * @return bool
+     */
+    public function hasCurrencyConfig(string $currency): bool
+    {
+        return $this->getCurrencyConfig($currency) !== null;
+    }
+
+    /**
      * @param CurrencyConfig[] $currencyConfigs
      *
      * @throws BaseException
