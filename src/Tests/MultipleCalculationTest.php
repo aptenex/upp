@@ -58,18 +58,22 @@ class MultipleCalculationTest extends TestCase
                 $results = $lvt->transform($parsedVisual);
 
                 if (isset($vTests['nightlyLow'])) {
+                    $this->setName($this->getCurrentTestName($priceConfig, 0, 'nightlyLow'));
                     $this->assertSame($vTests['nightlyLow'], $results['nightlyLow']);
                 }
 
                 if (isset($vTests['nightlyHigh'])) {
+                    $this->setName($this->getCurrentTestName($priceConfig, 0, 'nightlyHigh'));
                     $this->assertSame($vTests['nightlyHigh'], $results['nightlyHigh']);
                 }
 
                 if (isset($vTests['weeklyLow'])) {
+                    $this->setName($this->getCurrentTestName($priceConfig, 0, 'weeklyLow'));
                     $this->assertSame($vTests['weeklyLow'], $results['weeklyLow']);
                 }
 
                 if (isset($vTests['weeklyHigh'])) {
+                    $this->setName($this->getCurrentTestName($priceConfig, 0, 'weeklyHigh'));
                     $this->assertSame($vTests['weeklyHigh'], $results['weeklyHigh']);
                 }
             }

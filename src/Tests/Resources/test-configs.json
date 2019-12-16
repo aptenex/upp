@@ -7799,5 +7799,1932 @@
       "weeklyLow": 675,
       "weeklyHigh": 5075
     }
+  },
+  {
+    "key": "lc-lamberts-cottage-visual-pricing-regression",
+    "name": "LC Lamberts Cottage Visual Pricing Regression Test",
+    "description": "Pricing was showing up as 00 on simba via Lycan transform to ES",
+    "config": {
+      "data": [
+        {
+          "currency": "GBP",
+          "defaults": {
+            "balanceDaysBeforeArrival": 45,
+            "damageDeposit": 150,
+            "damageDepositCalculationMethod": "fixed",
+            "daysRequiredInAdvanceForBooking": 0,
+            "depositSplitPercentage": 30,
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "minimumNights": 2,
+            "partialWeekAlterationStrategyUseGlobalNights": true
+          },
+          "periods": [
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-01-03",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2018-12-21",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2018-12-21 - 2019-01-03)",
+              "priority": 500,
+              "rate": {
+                "amount": 578,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-02-14",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-01-05",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-01-05 - 2019-02-14)",
+              "priority": 500,
+              "rate": {
+                "amount": 330,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-02-21",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-02-15",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-02-15 - 2019-02-21)",
+              "priority": 500,
+              "rate": {
+                "amount": 382,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-04-04",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-02-22",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-02-22 - 2019-04-04)",
+              "priority": 500,
+              "rate": {
+                "amount": 330,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-04-18",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-04-05",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-04-05 - 2019-04-18)",
+              "priority": 500,
+              "rate": {
+                "amount": 446,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-05-23",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-04-19",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-04-19 - 2019-05-23)",
+              "priority": 500,
+              "rate": {
+                "amount": 382,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-05-30",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-05-24",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-05-24 - 2019-05-30)",
+              "priority": 500,
+              "rate": {
+                "amount": 543,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-07-11",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-05-31",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-05-31 - 2019-07-11)",
+              "priority": 500,
+              "rate": {
+                "amount": 446,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-07-25",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-07-12",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-07-12 - 2019-07-25)",
+              "priority": 500,
+              "rate": {
+                "amount": 543,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-08-29",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-07-26",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-07-26 - 2019-08-29)",
+              "priority": 500,
+              "rate": {
+                "amount": 596,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-09-12",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-08-30",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-08-30 - 2019-09-12)",
+              "priority": 500,
+              "rate": {
+                "amount": 446,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-09-26",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-09-13",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-09-13 - 2019-09-26)",
+              "priority": 500,
+              "rate": {
+                "amount": 446,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-10-17",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-09-27",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-09-27 - 2019-10-17)",
+              "priority": 500,
+              "rate": {
+                "amount": 382,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-10-24",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-10-18",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-10-18 - 2019-10-24)",
+              "priority": 500,
+              "rate": {
+                "amount": 446,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2019-12-19",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-10-25",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-10-25 - 2019-12-19)",
+              "priority": 500,
+              "rate": {
+                "amount": 330,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-01-02",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2019-12-20",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2019-12-20 - 2020-01-02)",
+              "priority": 500,
+              "rate": {
+                "amount": 596,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-02-13",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-01-03",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-01-03 - 2020-02-13)",
+              "priority": 500,
+              "rate": {
+                "amount": 337,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-02-20",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-02-14",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-02-14 - 2020-02-20)",
+              "priority": 500,
+              "rate": {
+                "amount": 390,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": 0.85,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": 0.9,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": 0.95,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-04-02",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-02-21",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-02-21 - 2020-04-02)",
+              "priority": 500,
+              "rate": {
+                "amount": 337,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": 0.85,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": 0.9,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": 0.95,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-04-16",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-04-03",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-04-03 - 2020-04-16)",
+              "priority": 500,
+              "rate": {
+                "amount": 455,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-05-21",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-04-17",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-04-17 - 2020-05-21)",
+              "priority": 500,
+              "rate": {
+                "amount": 390,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": 0.85,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": 0.9,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": 0.95,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-05-28",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-05-22",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-05-22 - 2020-05-28)",
+              "priority": 500,
+              "rate": {
+                "amount": 554,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": 0.85,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": 0.9,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": 0.95,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-07-09",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-05-29",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-05-29 - 2020-07-09)",
+              "priority": 500,
+              "rate": {
+                "amount": 455,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": 0.85,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": 0.9,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": 0.95,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-07-23",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-07-10",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-07-10 - 2020-07-23)",
+              "priority": 500,
+              "rate": {
+                "amount": 554,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": 0.85,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": 0.9,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": 0.95,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-09-03",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-07-24",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-07-24 - 2020-09-03)",
+              "priority": 500,
+              "rate": {
+                "amount": 608,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": "0.75",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": "0.85",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": "0.9",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": "0.95",
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-09-10",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-09-04",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-09-04 - 2020-09-10)",
+              "priority": 500,
+              "rate": {
+                "amount": 554,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": 0.85,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": 0.9,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": 0.95,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-09-24",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-09-11",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-09-11 - 2020-09-24)",
+              "priority": 500,
+              "rate": {
+                "amount": 455,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": 0.85,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": 0.9,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": 0.95,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-10-22",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-09-25",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-09-25 - 2020-10-22)",
+              "priority": 500,
+              "rate": {
+                "amount": 390,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": 0.85,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": 0.9,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": 0.95,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-10-29",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-10-23",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-10-23 - 2020-10-29)",
+              "priority": 500,
+              "rate": {
+                "amount": 455,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": 0.85,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": 0.9,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": 0.95,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2020-12-17",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-10-30",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-10-30 - 2020-12-17)",
+              "priority": 500,
+              "rate": {
+                "amount": 337,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": 0.85,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": 0.9,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": 0.95,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            },
+            {
+              "bookableType": "instant_bookable",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "arrivalDays": [],
+                  "departureDays": [],
+                  "endDate": "2021-01-04",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-12-18",
+                  "type": "date"
+                }
+              ],
+              "description": "Season Pricing (2020-12-18 - 2021-01-04)",
+              "priority": 500,
+              "rate": {
+                "amount": 608,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "strategy": {
+                  "partialWeekAlteration": {
+                    "brackets": [
+                      {
+                        "amount": 0.75,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "1-3"
+                      },
+                      {
+                        "amount": 0.85,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "4"
+                      },
+                      {
+                        "amount": 0.9,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "5"
+                      },
+                      {
+                        "amount": 0.95,
+                        "damageDepositOverride": null,
+                        "days": [],
+                        "matchAmount": 0,
+                        "night": "6"
+                      }
+                    ],
+                    "calculationMethod": "percentage",
+                    "calculationOperand": "equals",
+                    "maximumWeekCount": 1,
+                    "minimumWeekCount": 0
+                  }
+                },
+                "type": "weekly"
+              }
+            }
+          ],
+          "taxes": []
+        }
+      ],
+      "meta": [],
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1"
+    },
+    "mixins": [],
+    "visualPriceTests": {
+      "nightlyLow": 47,
+      "nightlyHigh": 87,
+      "weeklyLow": 330,
+      "weeklyHigh": 608
+    }
   }
 ]
