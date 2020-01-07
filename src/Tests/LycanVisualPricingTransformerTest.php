@@ -49,6 +49,39 @@ class LycanVisualPricingTransformerTest extends TestCase
         $this->assertSame($expectedVisual, $actualVisual);
     }
 
+    public function testNoPricingWorksAsExpected()
+    {
+        $distributionConfig = TestUtils::getPriceTestByKey(
+            json_decode(file_get_contents(__DIR__ . '/Resources/test-configs.json'), true),
+            'no-pricing-visual-test'
+        )['config'];
+
+        $upp = new Upp(
+            new HashMapPricingResolver([]),
+            new TestTranslator()
+        );
+
+        // no channel set so keep it - this is because it is only being parsed and for realtime stuff,
+        // the pricing context channel will handle this anyway
+        $structureOptions = new StructureOptions();
+
+        $parsed = $upp->parsePricingConfig($distributionConfig, $structureOptions);
+
+        $lvpt = new LycanVisualPricingTransformer(true);
+
+        $actualVisual = $lvpt->transform($parsed);
+
+        $expectedVisual = [
+            'currency' => 'GBP',
+            'nightlyLow' => 0,
+            'nightlyHigh' => 0,
+            'weeklyLow' => 0,
+            'weeklyHigh' => 0
+        ];
+
+        $this->assertSame($expectedVisual, $actualVisual);
+    }
+
     public function testNightlyLowAndHighWorksAsExpected()
     {
         $distributionConfig = TestUtils::getPriceTestByKey(
