@@ -6618,6 +6618,73 @@
     }
   },
   {
+    "key": "no-pricing-visual-test",
+    "name": "Test for expected outcome with no seasons",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "GBP",
+          "defaults": {
+            "damageDeposit": 0,
+            "damageDepositCalculationMethod": "fixed",
+            "perPetPerStay": 0,
+            "perPetPerNight": 0,
+            "perPetSplitMethod": "ON_TOTAL",
+            "minimumNights": 2,
+            "maximumNights": "",
+            "balanceDaysBeforeArrival": 70,
+            "depositSplitPercentage": 30,
+            "daysRequiredInAdvanceForBooking": 0,
+            "bookableType": "instant_bookable",
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "damageDepositSplitMethod": "ON_BALANCE"
+          },
+          "taxes": [],
+          "periods": [],
+          "modifiers": [
+            {
+              "type": "booking_fee",
+              "hidden": false,
+              "splitMethod": "ON_DEPOSIT",
+              "priceGroup": "total",
+              "description": "Booking Fee",
+              "conditionOperand": "AND",
+              "conditions": [],
+              "rate": {
+                "type": "adjustment",
+                "amount": 30,
+                "calculationMethod": "fixed",
+                "calculationOperand": "addition",
+                "applicableTaxes": []
+              }
+            },
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_DEPOSIT",
+              "priceGroup": "total",
+              "description": "Damage Waiver",
+              "conditionOperand": "AND",
+              "conditions": [],
+              "rate": {
+                "type": "adjustment",
+                "amount": 30,
+                "calculationMethod": "fixed",
+                "calculationOperand": "addition",
+                "applicableTaxes": []
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "key": "dvr-visual-pricing-one-dollar",
     "name": "DVR Visual Pricing Nightly Low = 1 dollar regression test",
     "description": "",
