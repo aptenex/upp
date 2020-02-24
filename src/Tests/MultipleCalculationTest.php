@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Tests;
 
+use Aptenex\Upp\Parser\Structure\PricingConfig;
 use Aptenex\Upp\Transformer\LycanVisualPricingTransformer;
 use Aptenex\Upp\Upp;
 use Translation\TestTranslator;
@@ -16,9 +17,10 @@ class MultipleCalculationTest extends TestCase
 
     public static $currentTestName = null;
 
-    private function getCurrentTestName($priceConfig, $testIndex, $testKey)
+    private function getCurrentTestName($priceConfig, $testIndex, $testKey, $prefix = '')
     {
-        return vsprintf('testConfigs() // Name: %s %sTest Index: %s %sComparison: %s%s', [
+        return vsprintf('testConfigs() %s // Name: %s %sTest Index: %s %sComparison: %s%s', [
+            $prefix,
             $priceConfig['name'],
             PHP_EOL,
             $testIndex,
@@ -90,74 +92,107 @@ class MultipleCalculationTest extends TestCase
 
                     $parsedConfig = $upp->parsePricingConfig($priceConfig['config'], $structureOptions);
 
-                    $contextData = $pTest['context'];
-                    $testAmounts = $pTest['tests'];
+                    $this->executeTests(
+                        $upp,
+                        $pTest,
+                        $priceConfig,
+                        $index,
+                        $parsedConfig
+                    );
 
-                    $this->setName($this->getCurrentTestName($priceConfig, $index, 'n/a'));
+                    // We also want to test the __toArray() function on the parsed structure
+                    // to make sure we can reverse it
 
-                    $context = new PricingContext();
+                    $convertedConfig = $parsedConfig->__toArray();
 
-                    foreach($contextData as $key => $value) {
-                        $setter = sprintf('set%s', ucfirst($key));
-                        if (method_exists($context, $setter)) {
-                            $context->$setter($value);
-                        }
-                    }
+                    $reParsedConfig = $upp->parsePricingConfig($convertedConfig, $structureOptions);
 
-                    $pricing = $upp->generatePrice($context, $parsedConfig);
+                    $this->executeTests(
+                        $upp,
+                        $pTest,
+                        $priceConfig,
+                        $index,
+                        $reParsedConfig,
+                        true
+                    );
 
-                    if ($pricing->getErrors()->hasErrors()) {
-                        $this->setName($this->getCurrentTestName($priceConfig, $index, 'No Errors'));
-
-                        var_dump($pricing->getErrors()->getErrors());
-
-                        $this->assertFalse($pricing->getErrors()->hasErrors(), 'Pricing has errors');
-                    }
-
-                    if (isset($testAmounts['noNights'])) {
-                        $this->setName($this->getCurrentTestName($priceConfig, $index, 'noNights'));
-                        $this->assertSame($testAmounts['noNights'], $pricing->getStay()->getNoNights());
-                    }
-
-                    if (isset($testAmounts['adjustmentCount'])) {
-                        $this->setName($this->getCurrentTestName($priceConfig, $index, 'adjustmentCount'));
-                        $this->assertSame($testAmounts['adjustmentCount'], count($pricing->getAdjustments()));
-                    }
-
-                    if (isset($testAmounts['basePrice'])) {
-                        $this->setName($this->getCurrentTestName($priceConfig, $index, 'basePrice'));
-                        $this->assertSame($testAmounts['basePrice'], (int) $pricing->getBasePrice()->getAmount());
-                    }
-
-                    if (isset($testAmounts['finalPrice'])) {
-                        $this->setName($this->getCurrentTestName($priceConfig, $index, 'finalPrice'));
-                        $this->assertSame($testAmounts['finalPrice'], (int)$pricing->getTotal()->getAmount());
-                    }
-
-                    if (isset($testAmounts['basePrice'])) {
-                        $this->setName($this->getCurrentTestName($priceConfig, $index, 'basePrice'));
-                        $this->assertSame($testAmounts['basePrice'], (int) $pricing->getBasePrice()->getAmount());
-                    }
-
-                    if (isset($testAmounts['damageDeposit'])) {
-                        $this->setName($this->getCurrentTestName($priceConfig, $index, 'damageDeposit'));
-                        $this->assertSame($testAmounts['damageDeposit'], (int) $pricing->getDamageDeposit()->getAmount());
-                    }
-
-                    if (isset($testAmounts['split'])) {
-                        $this->setName($this->getCurrentTestName($priceConfig, $index, 'split.deposit'));
-                        $this->assertSame($testAmounts['split']['deposit'], (int) $pricing->getSplitDetails()->getDeposit()->getAmount());
-                        $this->setName($this->getCurrentTestName($priceConfig, $index, 'split.balance'));
-                        $this->assertSame($testAmounts['split']['balance'], (int) $pricing->getSplitDetails()->getBalance()->getAmount());
-                    }
-
-                    if (isset($testAmounts['nightPrices'])) {
-                        foreach ($pricing->getStay()->getNights() as $date => $day) {
-                            $this->setName($this->getCurrentTestName($priceConfig, $index, 'nightPrices: '. $date));
-                            $this->assertSame($testAmounts['nightPrices'][$date], (int) $day->getCost()->getAmount());
-                        }
-                    }
                 }
+            }
+        }
+    }
+
+    private function executeTests(Upp $upp, array $pTest, $priceConfig, $index, $parsedConfig, $isReParsed = false)
+    {
+        $testNamePrefix = '';
+        if ($isReParsed) {
+            $testNamePrefix = 'RE-PARSED: ';
+        }
+
+        $contextData = $pTest['context'];
+        $testAmounts = $pTest['tests'];
+
+        $this->setName($this->getCurrentTestName($priceConfig, $index, 'n/a', $testNamePrefix));
+
+        $context = new PricingContext();
+
+        foreach($contextData as $key => $value) {
+            $setter = sprintf('set%s', ucfirst($key));
+            if (method_exists($context, $setter)) {
+                $context->$setter($value);
+            }
+        }
+
+        $pricing = $upp->generatePrice($context, $parsedConfig);
+
+        if ($pricing->getErrors()->hasErrors()) {
+            $this->setName($this->getCurrentTestName($priceConfig, $index, 'No Errors', $testNamePrefix));
+
+            var_dump($pricing->getErrors()->getErrors());
+
+            $this->assertFalse($pricing->getErrors()->hasErrors(), 'Pricing has errors');
+        }
+
+        if (isset($testAmounts['noNights'])) {
+            $this->setName($this->getCurrentTestName($priceConfig, $index, 'noNights', $testNamePrefix));
+            $this->assertSame($testAmounts['noNights'], $pricing->getStay()->getNoNights());
+        }
+
+        if (isset($testAmounts['adjustmentCount'])) {
+            $this->setName($this->getCurrentTestName($priceConfig, $index, 'adjustmentCount', $testNamePrefix));
+            $this->assertCount($testAmounts['adjustmentCount'], $pricing->getAdjustments());
+        }
+
+        if (isset($testAmounts['basePrice'])) {
+            $this->setName($this->getCurrentTestName($priceConfig, $index, 'basePrice', $testNamePrefix));
+            $this->assertSame($testAmounts['basePrice'], (int) $pricing->getBasePrice()->getAmount());
+        }
+
+        if (isset($testAmounts['finalPrice'])) {
+            $this->setName($this->getCurrentTestName($priceConfig, $index, 'finalPrice', $testNamePrefix));
+            $this->assertSame($testAmounts['finalPrice'], (int)$pricing->getTotal()->getAmount());
+        }
+
+        if (isset($testAmounts['basePrice'])) {
+            $this->setName($this->getCurrentTestName($priceConfig, $index, 'basePrice', $testNamePrefix));
+            $this->assertSame($testAmounts['basePrice'], (int) $pricing->getBasePrice()->getAmount());
+        }
+
+        if (isset($testAmounts['damageDeposit'])) {
+            $this->setName($this->getCurrentTestName($priceConfig, $index, 'damageDeposit', $testNamePrefix));
+            $this->assertSame($testAmounts['damageDeposit'], (int) $pricing->getDamageDeposit()->getAmount());
+        }
+
+        if (isset($testAmounts['split'])) {
+            $this->setName($this->getCurrentTestName($priceConfig, $index, 'split.deposit', $testNamePrefix));
+            $this->assertSame($testAmounts['split']['deposit'], (int) $pricing->getSplitDetails()->getDeposit()->getAmount());
+            $this->setName($this->getCurrentTestName($priceConfig, $index, 'split.balance', $testNamePrefix));
+            $this->assertSame($testAmounts['split']['balance'], (int) $pricing->getSplitDetails()->getBalance()->getAmount());
+        }
+
+        if (isset($testAmounts['nightPrices'])) {
+            foreach ($pricing->getStay()->getNights() as $date => $day) {
+                $this->setName($this->getCurrentTestName($priceConfig, $index, 'nightPrices: '. $date, $testNamePrefix));
+                $this->assertSame($testAmounts['nightPrices'][$date], (int) $day->getCost()->getAmount());
             }
         }
     }

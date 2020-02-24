@@ -106,7 +106,7 @@ class PricingConfig
      */
     public function getCurrencyConfig(string $currency): ?CurrencyConfig
     {
-        foreach($this->currencyConfigs as $cc) {
+        foreach ($this->currencyConfigs as $cc) {
             if (\strtoupper($cc->getCurrency()) === \strtoupper($currency)) {
                 return $cc;
             }
@@ -145,6 +145,26 @@ class PricingConfig
     public function getRawConfig()
     {
         return $this->rawConfig;
+    }
+
+    /**
+     * @return array
+     */
+    public function __toArray(): array
+    {
+        $ccs = [];
+
+        foreach ($this->getCurrencyConfigs() as $index => $cc) {
+            $ccs[] = $cc->__toArray();
+        }
+
+        return [
+            'name'    => $this->getName(),
+            'version' => $this->getVersion(),
+            'schema'  => $this->getSchema(),
+            'meta'    => $this->getMeta(),
+            'data'    => $ccs
+        ];
     }
 
 }
