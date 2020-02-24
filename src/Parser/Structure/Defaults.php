@@ -364,7 +364,7 @@ class Defaults
             'minimumNights'                                => $this->getMinimumNights(),
             'maximumNights'                                => $this->getMaximumNights(),
             'perPetPerStay'                                => $this->getPerPetPerStay(),
-            'perPetPerNight'                               => $this->getPerPetPerStay(),
+            'perPetPerNight'                               => $this->getPerPetPerNight(),
             'perPetSplitMethod'                            => $this->getPerPetSplitMethod(),
             'damageDeposit'                                => $this->getDamageDeposit(),
             'bookableType'                                 => $this->getBookableType(),
