@@ -147,6 +147,8 @@ class RatePerConditionalUnitCalculator
         $controlItem = $modifier->getControlItemConfig();
         $rateConfig = $modifier->getControlItemConfig()->getRate();
 
+        $isModifierDiscount = $rateConfig->getCalculationOperand() === Operand::OP_SUBTRACTION;
+
         $totalConditions = 0;
         $applyPerUnitConditions = 0;
 
@@ -189,7 +191,7 @@ class RatePerConditionalUnitCalculator
             }
 
             $totalConditions++;
-            if ($condition->getConditionConfig()->isModifyRatePerUnit() && $this->canDetermineUnit($condition)) {
+            if ($condition->getConditionConfig()->isModifyRatePerUnit() && $this->canDetermineUnit($condition) && !$isModifierDiscount) {
                 $applyPerUnitConditions++;
                 $result = $this->determineUnits($fp->getContextUsed(), $condition, $modifier);
 
