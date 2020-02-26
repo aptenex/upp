@@ -101,20 +101,10 @@ class StrategyRemovalTest extends TestCase
             new TestTranslator()
         );
 
-        $defaults = new Defaults();
-        $defaults->setDaysRequiredInAdvanceForBooking(1);
-
         $options = new StructureOptions();
         $options->setExternalCommandDirector(new ExternalCommandDirector([
             new StrategyRemovalCommand()
         ]));
-
-        $context = new PricingContext();
-        $context->setCurrency('GBP');
-        $context->setBookingDate('2017-05-01');
-        $context->setArrivalDate('2017-06-26');
-        $context->setDepartureDate('2017-06-30');
-        $context->setGuests(3);
 
         $config = $upp->parsePricingConfig(json_decode(self::$json1, true), $options);
         $this->assertNull($config->getCurrencyConfig('GBP')->getPeriods()[0]->getRate()->getStrategy());
