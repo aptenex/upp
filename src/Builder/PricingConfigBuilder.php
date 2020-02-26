@@ -2,6 +2,8 @@
 
 namespace Aptenex\Upp\Builder;
 
+use Builder\BuildResult;
+
 class PricingConfigBuilder
 {
 
@@ -11,8 +13,13 @@ class PricingConfigBuilder
      *
      * @return array
      */
-    public function buildConfig(array $propertyConfig, array $tagConfigs): array
+    public function buildConfig(array $propertyConfig, array $tagConfigs): BuildResult
     {
+        $finalConfig = $propertyConfig;
+
+        $taxesMergedByCurrencyMap = [];
+        $modifiersMergedByCurrencyMap = [];
+
         // Loop through currency configs
         foreach ($propertyConfig['data'] as $index => $cc) {
 
@@ -31,27 +38,45 @@ class PricingConfigBuilder
                      * Taxes
                      */
 
-                    if (!\is_array($propertyConfig['data'][$index]['taxes'])) {
-                        $propertyConfig['data'][$index]['taxes'] = [];
+                    if (!\is_array($finalConfig['data'][$index]['taxes'])) {
+                        $finalConfig['data'][$index]['taxes'] = [];
                     }
 
-                    $propertyConfig['data'][$index]['taxes'] = \array_merge($propertyConfig['data'][$index]['taxes'], $tagCc['taxes']);
+                    $finalConfig['data'][$index]['taxes'] = \array_merge($finalConfig['data'][$index]['taxes'], $tagCc['taxes']);
+
+                    if (!isset($taxesMergedByCurrencyMap[$tagCc['currency']])) {
+                        $taxesMergedByCurrencyMap[$tagCc['currency']] = [];
+                    }
+
+                    $taxesMergedByCurrencyMap[$tagCc['currency']] = \array_merge(
+                        $taxesMergedByCurrencyMap[$tagCc['currency']],
+                        $tagCc['taxes']
+                    );
 
                     /*
                      * Modifiers
                      */
 
-                    if (!\is_array($propertyConfig['data'][$index]['modifiers'])) {
-                        $propertyConfig['data'][$index]['modifiers'] = [];
+                    if (!\is_array($finalConfig['data'][$index]['modifiers'])) {
+                        $finalConfig['data'][$index]['modifiers'] = [];
                     }
 
-                    $propertyConfig['data'][$index]['modifiers'] = \array_merge($propertyConfig['data'][$index]['modifiers'], $tagCc['modifiers']);
+                    $finalConfig['data'][$index]['modifiers'] = \array_merge($finalConfig['data'][$index]['modifiers'], $tagCc['modifiers']);
+
+                    if (!isset($modifiersMergedByCurrencyMap[$tagCc['currency']])) {
+                        $modifiersMergedByCurrencyMap[$tagCc['currency']] = [];
+                    }
+
+                    $modifiersMergedByCurrencyMap[$tagCc['currency']] = \array_merge(
+                        $modifiersMergedByCurrencyMap[$tagCc['currency']],
+                        $tagCc['modifiers']
+                    );
                 }
             }
 
         }
 
-        return $propertyConfig;
+        return new BuildResult($finalConfig, $propertyConfig, $taxesMergedByCurrencyMap, $modifiersMergedByCurrencyMap);
     }
 
 }

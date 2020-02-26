@@ -230,7 +230,7 @@ class PropertyAndTagConfigMergeTest extends TestCase
 
         $options = new StructureOptions();
 
-        $mergedConfig = (new PricingConfigBuilder())->buildConfig(
+        $result = (new PricingConfigBuilder())->buildConfig(
             json_decode($this->propertyJson, true),
             [
                 json_decode($this->tagOne, true),
@@ -238,10 +238,13 @@ class PropertyAndTagConfigMergeTest extends TestCase
             ]
         );
 
-        $config = $upp->parsePricingConfig($mergedConfig, $options);
+        $config = $upp->parsePricingConfig($result->getFinalConfig(), $options);
 
         $this->assertCount(3, $config->getCurrencyConfig('GBP')->getTaxes());
         $this->assertCount(3, $config->getCurrencyConfig('GBP')->getModifiers());
+
+        $this->assertCount(2, $result->getTaxesAddedByCurrencyMap()['GBP']);
+        $this->assertCount(2, $result->getModifiersAddedByCurrencyMap()['GBP']);
     }
 
 }
