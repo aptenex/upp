@@ -18,7 +18,7 @@ class GuestsCondition extends Condition
     private $maximum;
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getMinimum()
     {
@@ -30,7 +30,7 @@ class GuestsCondition extends Condition
      */
     public function setMinimum($minimum)
     {
-        if (!is_null($minimum)) {
+        if ($minimum !== null) {
             $minimum = (int)$minimum;
         }
 
@@ -38,7 +38,7 @@ class GuestsCondition extends Condition
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getMaximum()
     {
@@ -50,7 +50,7 @@ class GuestsCondition extends Condition
      */
     public function setMaximum($maximum)
     {
-        if (!is_null($maximum)) {
+        if ($maximum !== null) {
             $maximum = (int)$maximum;
         }
 

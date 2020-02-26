@@ -47,7 +47,7 @@ class RatePerConditionalUnitCalculator
             } else {
                 $extraGuests = ((int) $context->getGuests() - $config->getMinimum()) + 1;
 
-                if ($config->getMinimum() === 0) {
+                if ((int) $config->getMinimum() === 0) {
                     $extraGuests = $context->getGuests();
                 }
             }

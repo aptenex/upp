@@ -240,8 +240,8 @@ class PropertyAndTagConfigMergeTest extends TestCase
 
         $config = $upp->parsePricingConfig($mergedConfig, $options);
 
-        $this->assertCount(2, $config->getCurrencyConfig('GBP')->getTaxes());
-        $this->assertCount(2, $config->getCurrencyConfig('GBP')->getModifiers());
+        $this->assertCount(3, $config->getCurrencyConfig('GBP')->getTaxes());
+        $this->assertCount(3, $config->getCurrencyConfig('GBP')->getModifiers());
     }
 
 }

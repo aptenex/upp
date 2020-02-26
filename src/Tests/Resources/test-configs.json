@@ -689,7 +689,7 @@
         },
         "tests": {
           "noNights": 4,
-          "finalPrice": 69000,
+          "finalPrice": 68000,
           "nightPrices": {
             "2017-06-26": 10000,
             "2017-06-27": 10000,
@@ -855,7 +855,7 @@
         },
         "tests": {
           "noNights": 14,
-          "finalPrice": 40000,
+          "finalPrice": 35000,
           "nightPrices": {
             "2017-11-11": 1429,
             "2017-11-12": 1429,
