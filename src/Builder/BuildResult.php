@@ -72,4 +72,22 @@ class BuildResult
         return $this->modifiersAddedByCurrencyMap;
     }
 
+    /**
+     * @return int
+     */
+    public function getTotalMergedItems(): int
+    {
+        $count = 0;
+
+        foreach($this->getTaxesAddedByCurrencyMap() as $currency => $items) {
+            $count += \count($items);
+        }
+
+        foreach($this->getModifiersAddedByCurrencyMap() as $currency => $items) {
+            $count += \count($items);
+        }
+
+        return $count;
+    }
+
 }
