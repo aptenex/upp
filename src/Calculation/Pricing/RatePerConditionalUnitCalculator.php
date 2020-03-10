@@ -323,7 +323,7 @@ class RatePerConditionalUnitCalculator
                     \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE,
                     \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_MANAGEMENT_FEES,
                     \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_CLEANING
-                ]));
+                ], true));
 
             case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TAX:
                 return $fp->getBasePrice();
@@ -334,16 +334,16 @@ class RatePerConditionalUnitCalculator
         }
     }
 
-    private function calculatePreviousAdjustmentsTotal(FinalPrice $fp, $previousOrders = []): Money
+    private function calculatePreviousAdjustmentsTotal(FinalPrice $fp, $previousOrders = [], bool $includeDiscounts = false): Money
     {
         $amount = MoneyUtils::newMoney(0, $fp->getCurrency());
 
-        foreach( $fp->getAdjustments() as $adj) {
-            if (
-                $adj->getType() === AdjustmentAmount::TYPE_MODIFIER &&
-                $adj->getOperand() === Operand::OP_ADDITION
-            ) {
+        foreach($fp->getAdjustments() as $adj) {
+            if ($adj->getType() !== AdjustmentAmount::TYPE_MODIFIER) {
+                continue;
+            }
 
+            if ($adj->getOperand() === Operand::OP_ADDITION) {
                 /** @var \Aptenex\Upp\Parser\Structure\Modifier $adjModifierConfig */
                 $adjModifierConfig = $adj->getControlItem()->getControlItemConfig();
 
@@ -351,6 +351,8 @@ class RatePerConditionalUnitCalculator
                     $amount = $amount->add($adj->getAmount());
                 }
 
+            } else if ($includeDiscounts && $adj->getOperand() === Operand::OP_SUBTRACTION) {
+                $amount = $amount->subtract($adj->getAmount());
             }
         }
 

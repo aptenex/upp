@@ -318,6 +318,8 @@ class ModifierCalculationSourceFeatureTest extends TestCase
 
         $price = $upp->generatePrice($context, $config);
 
+        //echo json_encode($price->__toArray(), JSON_PRETTY_PRINT);exit;
+
         $this->assertSame(100.00, MoneyUtils::getConvertedAmount(array_values($price->getStay()->getNights())[0]->getCost()));
         $this->assertSame(111.41, MoneyUtils::getConvertedAmount($price->getBasePrice()));
         $this->assertSame(141.91, MoneyUtils::getConvertedAmount($price->getTotal()));
@@ -326,6 +328,24 @@ class ModifierCalculationSourceFeatureTest extends TestCase
         $this->assertSame(5.5, MoneyUtils::getConvertedAmount($price->getAdjustments()[1]->getAmount()));
         $this->assertSame(25.0, MoneyUtils::getConvertedAmount($price->getAdjustments()[2]->getAmount()));
         $this->assertSame(1.41, MoneyUtils::getConvertedAmount($price->getAdjustments()[3]->getAmount()));
+
+        $context2 = new PricingContext();
+        $context2->setCurrency('GBP');
+        $context2->setBookingDate('2020-03-10');
+        $context2->setArrivalDate('2020-03-14');
+        $context2->setDepartureDate('2020-03-15');
+        $context2->setGuests(2);
+
+        $price2 = $upp->generatePrice($context2, $config);
+
+        //echo json_encode($price2->__toArray(), JSON_PRETTY_PRINT);exit;
+
+        $this->assertSame(137.64, MoneyUtils::getConvertedAmount($price2->getTotal()));
+
+        $lastAdjustment = \count($price2->getAdjustments()) - 1;
+        $lastAdjustmentAmount = $price2->getAdjustments()[$lastAdjustment]->getAmount();
+
+        $this->assertSame(1.36, MoneyUtils::getConvertedAmount($lastAdjustmentAmount));
     }
 
 }
