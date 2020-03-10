@@ -10,6 +10,8 @@ use Aptenex\Upp\Calculation\AdjustmentAmount;
 use Aptenex\Upp\Calculation\ControlItem\Modifier;
 use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
 use Aptenex\Upp\Parser\Structure\Operand;
+use Aptenex\Upp\Util\MoneyUtils;
+use Money\Money;
 
 class RatePerConditionalUnitCalculator
 {
@@ -156,8 +158,10 @@ class RatePerConditionalUnitCalculator
         $totalConditions = 0;
         $applyPerUnitConditions = 0;
 
+        $calculationSourceAmount = $this->calculateSourceAmount($fp, $modifier);
+
         if ($rateConfig->getCalculationMethod() === \Aptenex\Upp\Parser\Structure\Rate::METHOD_PERCENTAGE) {
-            $amount = $fp->getBasePrice()->multiply($rateConfig->getAmount());
+            $amount = $calculationSourceAmount->multiply($rateConfig->getAmount());
         } else {
             $amount = \Aptenex\Upp\Util\MoneyUtils::fromString($rateConfig->getAmount(), $fp->getCurrency());
         }
@@ -262,6 +266,95 @@ class RatePerConditionalUnitCalculator
                 $modifier
             ));
         }
+    }
+
+    public function calculateSourceAmount(FinalPrice $fp, Modifier $modifier): Money
+    {
+        $useModifierCalculationOrder = $fp
+            ->getCurrencyConfigUsed()
+            ->getDefaults()
+            ->isModifiersUseCategorizedCalculationOrder()
+        ;
+
+        if ($useModifierCalculationOrder === false) {
+            return $fp->getBasePrice();
+        }
+
+        /** @var \Aptenex\Upp\Parser\Structure\Modifier $modifierConfig */
+        $modifierConfig = $modifier->getControlItemConfig();
+
+        $calculationOrder = $modifierConfig->getCalculationOrderFromType();
+
+        // Since this code will always be run in the same order from PricingGenerator
+        // We can calculate the new "price source" from the previous calculated modifiers
+
+        switch ($calculationOrder) {
+
+            case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE:
+                // Calculates off base price
+                return $fp->getBasePrice();
+
+            case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_DISCOUNTS:
+                // Calculates off base price + base price modifiers
+                // Potentially handled later on so keep existing functionality
+                return $fp->getBasePrice();
+
+            case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_EXTRAS_FEES:
+                return $fp->getBasePrice()->add($this->calculatePreviousAdjustmentsTotal($fp, [
+                    \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE
+                ]));
+
+            case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_MANAGEMENT_FEES:
+                return $fp->getBasePrice()->add($this->calculatePreviousAdjustmentsTotal($fp, [
+                    \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_EXTRAS_FEES,
+                    \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE
+                ]));
+
+            case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_CLEANING:
+                return $fp->getBasePrice()->add($this->calculatePreviousAdjustmentsTotal($fp, [
+                    \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_EXTRAS_FEES,
+                    \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE,
+                    \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_MANAGEMENT_FEES
+                ]));
+
+            case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TOTAL:
+                return $fp->getBasePrice()->add($this->calculatePreviousAdjustmentsTotal($fp, [
+                    \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_EXTRAS_FEES,
+                    \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE,
+                    \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_MANAGEMENT_FEES,
+                    \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_CLEANING
+                ]));
+
+            case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TAX:
+                return $fp->getBasePrice();
+
+            default:
+                return $fp->getBasePrice();
+
+        }
+    }
+
+    private function calculatePreviousAdjustmentsTotal(FinalPrice $fp, $previousOrders = []): Money
+    {
+        $amount = MoneyUtils::newMoney(0, $fp->getCurrency());
+
+        foreach( $fp->getAdjustments() as $adj) {
+            if (
+                $adj->getType() === AdjustmentAmount::TYPE_MODIFIER &&
+                $adj->getOperand() === Operand::OP_ADDITION
+            ) {
+
+                /** @var \Aptenex\Upp\Parser\Structure\Modifier $adjModifierConfig */
+                $adjModifierConfig = $adj->getControlItem()->getControlItemConfig();
+
+                if (\in_array($adjModifierConfig->getCalculationOrderFromType(), $previousOrders, true)) {
+                    $amount = $amount->add($adj->getAmount());
+                }
+
+            }
+        }
+
+        return $amount;
     }
 
 }

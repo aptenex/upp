@@ -44,6 +44,8 @@ class DefaultsParser
         $d->setExtraNightAlterationStrategyUseGlobalNights(ArrayAccess::get('extraNightAlterationStrategyUseGlobalNights', $defaults, false));
         $d->setPartialWeekAlterationStrategyUseGlobalNights(ArrayAccess::get('partialWeekAlterationStrategyUseGlobalNights', $defaults, false));
 
+        $d->setModifiersUseCategorizedCalculationOrder(ArrayAccess::get('modifiersUseCategorizedCalculationOrder', $defaults, false));
+
         return $d;
     }
 

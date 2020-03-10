@@ -76,6 +76,11 @@ class Defaults
     protected $perPetSplitMethod = SplitMethod::ON_TOTAL;
 
     /**
+     * @var boolean|null
+     */
+    protected $modifiersUseCategorizedCalculationOrder = false;
+
+    /**
      * @return bool
      */
     public function hasDamageDeposit()
@@ -356,6 +361,22 @@ class Defaults
     }
 
     /**
+     * @return bool|null
+     */
+    public function isModifiersUseCategorizedCalculationOrder(): ?bool
+    {
+        return $this->modifiersUseCategorizedCalculationOrder;
+    }
+
+    /**
+     * @param bool|null $modifiersUseCategorizedCalculationOrder
+     */
+    public function setModifiersUseCategorizedCalculationOrder(?bool $modifiersUseCategorizedCalculationOrder): void
+    {
+        $this->modifiersUseCategorizedCalculationOrder = $modifiersUseCategorizedCalculationOrder;
+    }
+
+    /**
      * @return array
      */
     public function __toArray(): array
@@ -374,7 +395,8 @@ class Defaults
             'balanceDaysBeforeArrival'                     => $this->getBalanceDaysBeforeArrival(),
             'depositSplitPercentage'                       => $this->getDepositSplitPercentage(),
             'extraNightAlterationStrategyUseGlobalNights'  => $this->isExtraNightAlterationStrategyUseGlobalNights(),
-            'partialWeekAlterationStrategyUseGlobalNights' => $this->isPartialWeekAlterationStrategyUseGlobalNights()
+            'partialWeekAlterationStrategyUseGlobalNights' => $this->isPartialWeekAlterationStrategyUseGlobalNights(),
+            'modifiersUseCategorizedCalculationOrder'      => $this->isModifiersUseCategorizedCalculationOrder()
         ];
     }
 

@@ -53,6 +53,12 @@ class PricingGenerator
     {
         $fp = new FinalPrice($context, $config);
 
+        $useModifierCalculationOrder = $fp
+            ->getCurrencyConfigUsed()
+            ->getDefaults()
+            ->isModifiersUseCategorizedCalculationOrder()
+        ;
+
         // First lets evaluate if we can even generate a price due to things like booking too close to arrival
         // In the future we will set the bookable field to be false but for now throw an exception as its the most
         // reliable way to handle not allowing a booking rentivo side
@@ -78,7 +84,21 @@ class PricingGenerator
 
         $this->calculateBasePrice($fp);
 
-        $this->applyModifiers($context, $fp);
+        // If we are using the calculationOrder (turned on in defaults) to have categorized modifiers which
+        // can calculate on top of one another, then we need to "apply" the modifiers at different parts of the
+        // calculation. If this setting is disabled just apply them all here
+
+        if ($useModifierCalculationOrder) {
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE]);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_DISCOUNTS]);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_EXTRAS_FEES]);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_MANAGEMENT_FEES]);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_CLEANING]);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TOTAL]);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TAX]);
+        } else {
+            $this->applyModifiers($context, $fp);
+        }
 
         $this->calculateExtras($fp);
 
@@ -478,10 +498,11 @@ class PricingGenerator
     /**
      * @param PricingContext $context
      * @param FinalPrice $fp
+     * @param array $calculationOrders
      */
-    private function applyModifiers(PricingContext $context, FinalPrice $fp): void
+    private function applyModifiers(PricingContext $context, FinalPrice $fp, array $calculationOrders = []): void
     {
-        (new ModifierRateCalculator())->compute($context, $fp);
+        (new ModifierRateCalculator())->compute($context, $fp, $calculationOrders);
     }
 
     /**
