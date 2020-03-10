@@ -7,24 +7,72 @@ use Aptenex\Upp\Calculation\AdjustmentAmount;
 class Modifier extends AbstractControlItem implements ControlItemInterface
 {
 
-    const TYPE_TAX = 'tax';
-    const TYPE_BOOKING_FEE = 'booking_fee';
-    const TYPE_MODIFIER = 'modifier';
-    const TYPE_CLEANING = 'cleaning';
-	const TYPE_DISCOUNT = 'discount';
-    const TYPE_CARD_FEE = 'card_fee';
-    const TYPE_TOURISM_TAX = 'tourism_tax';
-    const TYPE_EXTRA_GUEST_FEE = 'extra_guest_fee';
-    const TYPE_BASE_PRICE_FEE = 'base_price_fee';
-    const TYPE_GENERAL_FEE = 'general_fee';
-    const TYPE_SERVICE_CHARGE = 'service_charge';
-    const TYPE_DESTINATION_FEE = 'destination_fee';
-    const TYPE_RESORT_FEE = 'resort_fee';
-    const TYPE_ENERGY_FEE = 'energy_fee';
+    public const TYPE_MODIFIER = 'modifier';
+
+    public const TYPE_BASE_PRICE_FEE = 'base_price_fee';
+    public const TYPE_EXTRA_GUEST_FEE = 'extra_guest_fee';
+
+    public const TYPE_DISCOUNT = 'discount';
+
+    public const TYPE_HOST_FEE = 'host_fee';
+    public const TYPE_GENERAL_FEE = 'general_fee';
+    public const TYPE_TOURISM_TAX = 'tourism_tax';
+    public const TYPE_DESTINATION_FEE = 'destination_fee';
+    public const TYPE_ENERGY_FEE = 'energy_fee';
+
+    public const TYPE_BOOKING_FEE = 'booking_fee';
+    public const TYPE_SERVICE_CHARGE = 'service_charge';
+    public const TYPE_RESORT_FEE = 'resort_fee';
+
+    public const TYPE_CLEANING = 'cleaning';
+
+    public const TYPE_CARD_FEE = 'card_fee';
+
+    public const TYPE_TAX = 'tax';
 
     public static $priceGroupBaseTypes = [
         self::TYPE_EXTRA_GUEST_FEE,
         self::TYPE_BASE_PRICE_FEE
+    ];
+
+    public const CALCULATION_ORDER_BASE_PRICE = 'CALCULATION_ORDER_BASE_PRICE';
+    public const CALCULATION_ORDER_DISCOUNTS = 'CALCULATION_ORDER_DISCOUNTS';
+    public const CALCULATION_ORDER_EXTRAS_FEES = 'CALCULATION_ORDER_EXTRAS_FEES';
+    public const CALCULATION_ORDER_MANAGEMENT_FEES = 'CALCULATION_ORDER_MANAGEMENT_FEES';
+    public const CALCULATION_ORDER_CLEANING = 'CALCULATION_ORDER_CLEANING';
+    public const CALCULATION_ORDER_TOTAL = 'CALCULATION_ORDER_TOTAL';
+    public const CALCULATION_ORDER_TAX = 'CALCULATION_ORDER_TAX';
+
+    public static $modifierCalculationOrder = [
+        self::CALCULATION_ORDER_BASE_PRICE => [
+            self::TYPE_EXTRA_GUEST_FEE,
+            self::TYPE_BASE_PRICE_FEE,
+            self::TYPE_MODIFIER
+        ],
+        self::CALCULATION_ORDER_DISCOUNTS  => [
+            self::TYPE_DISCOUNT
+        ],
+        self::CALCULATION_ORDER_EXTRAS_FEES => [
+            self::TYPE_HOST_FEE,
+            self::TYPE_GENERAL_FEE,
+            self::TYPE_TOURISM_TAX,
+            self::TYPE_DESTINATION_FEE,
+            self::TYPE_ENERGY_FEE,
+        ],
+        self::CALCULATION_ORDER_MANAGEMENT_FEES => [
+            self::TYPE_BOOKING_FEE,
+            self::TYPE_SERVICE_CHARGE,
+            self::TYPE_RESORT_FEE
+        ],
+        self::CALCULATION_ORDER_CLEANING => [
+            self::TYPE_CLEANING
+        ],
+        self::CALCULATION_ORDER_TOTAL => [
+            self::TYPE_CARD_FEE
+        ],
+        self::CALCULATION_ORDER_TAX => [
+            self::TYPE_TAX
+        ]
     ];
 
     /**
@@ -46,6 +94,22 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
      * @var bool
      */
     protected $priceGroup = AdjustmentAmount::PRICE_GROUP_TOTAL; // Default
+
+    /**
+     * @return null|string
+     */
+    public function getCalculationOrderFromType(): ?string
+    {
+        foreach(self::$modifierCalculationOrder as $calculationOrder => $modifierTypes) {
+            foreach($modifierTypes as $type) {
+                if ($type === $this->getType()) {
+                    return $calculationOrder;
+                }
+            }
+        }
+
+        return null;
+    }
 
     /**
      * @return string
@@ -151,7 +215,7 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
         $hasValidDateRangeCondition = false;
         $hasValidBookingDaysCondition = false;
 
-        foreach($this->getConditions() as $condition) {
+        foreach ($this->getConditions() as $condition) {
             if ($condition->getType() === Condition::TYPE_DISTRIBUTION) {
                 continue;
             }
@@ -198,10 +262,10 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
     public function __toArray(): array
     {
         return array_replace(parent::__toArray(), [
-            'type'           => $this->getType(),
-            'splitMethod'    => $this->getSplitMethod(),
-            'hidden'         => $this->isHidden(),
-            'priceGroup'     => $this->getPriceGroup()
+            'type'        => $this->getType(),
+            'splitMethod' => $this->getSplitMethod(),
+            'hidden'      => $this->isHidden(),
+            'priceGroup'  => $this->getPriceGroup()
         ]);
     }
 
