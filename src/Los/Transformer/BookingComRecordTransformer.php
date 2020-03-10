@@ -10,6 +10,7 @@ class BookingComRecordTransformer extends ArrayRecordTransformer
 
     public function generateLosRecordString($record, TransformOptions $options): string
     {
+        // The format for BCOM. 
         return vsprintf('%s,%s,%s,%s,%s,%s', [
             $record['date'],
             $record['guest'],
