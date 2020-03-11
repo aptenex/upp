@@ -11,6 +11,8 @@
     },
     "require": {
         "php": ">=7.1",
+        "ext-bcmath" : "*",
+        "ext-json" : "*",
         "moneyphp/money": "3.2.1",
         "solaris/php-moon-phase": "1.1.*",
         "symfony/validator": "^3.2",
@@ -21,10 +23,8 @@
     "require-dev" : {
         "roave/security-advisories": "dev-master",
         "phpunit/phpunit": "^6.2",
-        "symfony/var-dumper": "^4.3@dev",
-        "ext-bcmath" : "*",
-        "ext-pthreads" : "*",
-        "ext-json" : "*"
+        "symfony/var-dumper": "^4.3@dev"
+
     },
     "scripts": {
         "test": "vendor/phpunit/phpunit/phpunit -c src/phpunit.xml.dist"
