@@ -11,6 +11,9 @@
     },
     "require": {
         "php": ">=7.1",
+        "ext-bcmath" : "*",
+        "ext-pthreads" : "*",
+        "ext-json" : "*",
         "moneyphp/money": "3.2.1",
         "solaris/php-moon-phase": "1.1.*",
         "symfony/validator": "^3.2",

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Translation\TestTranslator;
 use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Los\LosOptions;
-use Aptenex\Upp\Los\LosGenerator;
+use Aptenex\Upp\Los\Generator\LosGenerator;
 use Aptenex\Upp\Los\LosRecordMerger;
 use Aptenex\Upp\Los\Auto\Autoloader;
 use Aptenex\Upp\Los\Threaded\LosGeneratorTask;

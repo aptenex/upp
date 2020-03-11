@@ -6,7 +6,7 @@ use Aptenex\Upp\Exception\CannotGenerateLosException;
 use Aptenex\Upp\Los\LosRecords;
 use Aptenex\Upp\Parser\Structure\PricingConfig;
 use Aptenex\Upp\Los\Lookup\LookupDirectorInterface;
-use Aptenex\Upp\Los\LosGenerator;
+use Aptenex\Upp\Los\Generator\LosGenerator;
 use Aptenex\Upp\Los\LosOptions;
 
 /**
@@ -45,11 +45,11 @@ class LosGeneratorTask extends \Threaded
     private $recordResults;
 
     /**
-     * @param LosGenerator $generator
-     * @param LosOptions $options
+     * @param LosGenerator            $generator
+     * @param LosOptions              $options
      * @param LookupDirectorInterface $ld
-     * @param PricingConfig $config
-     * @param array $results
+     * @param PricingConfig           $config
+     * @param array                   $results
      */
     public function __construct(
         LosGenerator $generator,

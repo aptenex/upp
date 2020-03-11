@@ -45,11 +45,18 @@ class LosOptions
     private $maximumStayRateLength = 30;
 
     /**
-     * Whether to brute force the generation and not to take into account availability & other factors etc
+     * Whether to brute force the generation and avoid optimizing on change over, and minimum stays
      *
      * @var bool
      */
-    private $forceFullGeneration = false;
+    private $forceFullGeneration = true;
+    
+    /**
+     * Whether to brute force the generation and calculate availabilitiues
+     *
+     * @var bool
+     */
+    private $forceAllAvailabilitiesGeneration = true;
     
     /**
      * Wether all debugging/exception notices can be included in with the LosRecords. This is useful for knowing why specific dates may fail to calculate.
@@ -258,6 +265,7 @@ class LosOptions
             'defaultMinStay' => $this->getDefaultMinStay(),
             'defaultMaxStay' => $this->getDefaultMaxStay(),
             'forceFullGeneration'   => $this->isForceFullGeneration(),
+            'forceAllAvailabilitiesGeneration' => $this->isForceAllAvailabilitiesGeneration(),
             'forceDebugOnDate' => $this->getForceDebugOnDate(),
             'debugMode' => $this->isDebugMode(),
             'pricingContextMode' => $this->getPricingContextCalculationMode()
@@ -319,6 +327,22 @@ class LosOptions
     public function hasBookingDate(): bool
     {
         return $this->bookingDate instanceof \DateTime;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function isForceAllAvailabilitiesGeneration(): bool
+    {
+        return $this->forceAllAvailabilitiesGeneration;
+    }
+    
+    /**
+     * @param bool $forceAllAvailabilitiesGeneration
+     */
+    public function setForceAllAvailabilitiesGeneration(bool $forceAllAvailabilitiesGeneration): void
+    {
+        $this->forceAllAvailabilitiesGeneration = $forceAllAvailabilitiesGeneration;
     }
     
 }

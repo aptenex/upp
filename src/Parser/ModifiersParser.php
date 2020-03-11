@@ -93,7 +93,7 @@ class ModifiersParser
         $m->setHidden(ArrayAccess::get('hidden', $modifierData, false));
         $m->setPriceGroup(ArrayAccess::get('priceGroup', $modifierData, AdjustmentAmount::PRICE_GROUP_TOTAL));
         $m->setSplitMethod(ArrayAccess::get('splitMethod', $modifierData, SplitMethod::ON_TOTAL));
-
+        $m->setId(ArrayAccess::get('id', $modifierData, null));
         $m->setDescription(ArrayAccess::getOrException(
             'description',
             $modifierData,
