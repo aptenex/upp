@@ -25,7 +25,7 @@ use DateInterval;
 
 class LosGenerator implements LosGeneratorInterface
 {
-
+    public const MAX_EXCEPTIONS = 50;
     /**
      * @var Upp
      */
@@ -53,7 +53,7 @@ class LosGenerator implements LosGeneratorInterface
     {
         $forcedDebugExceptions = $exceptions = [];
         $cc = null;
-
+        
         foreach ($pricingConfig->getCurrencyConfigs() as $ccItem) {
             if ($ccItem->getCurrency() === $options->getCurrency()) {
                 $cc = $ccItem;
@@ -67,7 +67,6 @@ class LosGenerator implements LosGeneratorInterface
                 ['currency' => $options->getCurrency()]
             );
         }
-
         $losRecords = new LosRecords($cc->getCurrency());
         $losRecords->getMetrics()->startTiming();
         // TODO:
@@ -90,8 +89,7 @@ class LosGenerator implements LosGeneratorInterface
 
         $losRecords->getMetrics()->setMaxPotentialRuns($maxOccupancy * $days * $options->getMaximumStayRateLength());
 
-        $range = DateUtils::getDateRangeInclusive($options->getStartDate(), $options->getEndDate());
-
+       
         $guestModifierCount = 0;
         $perGuestChangesAt = 0;
         $guestModifierCondition = null;
@@ -109,7 +107,8 @@ class LosGenerator implements LosGeneratorInterface
             // Only set if only 1 guest modifier
             $perGuestChangesAt = $guestModifierCondition->getMinimum();
         }
-
+    
+        $range = DateUtils::getDateRangeInclusive($options->getStartDate(), $options->getEndDate());
         foreach ($range as $date) {
             // If the base date is not available then skip it
             if (!$options->isForceAllAvailabilitiesGeneration() &&
@@ -258,25 +257,27 @@ class LosGenerator implements LosGeneratorInterface
 
                         try {
                             $losRecords->getMetrics()->setTimesRan($losRecords->getMetrics()->getTimesRan() + 1);
+                            
                             $fp = $this->upp->generatePrice($pc, $pricingConfig);
-
                             $rates[] = MoneyUtils::getConvertedAmount($fp->getTotal());
                             $baseRates[] = MoneyUtils::getConvertedAmount($fp->getBasePrice());
                         } catch (CannotMatchRequestedDatesException|InvalidPriceException|BaseException $ex) {
                             $rates[] = 0;
                             $baseRates[] = 0;
-
                             $args = [];
-
                             if ($ex instanceof BaseException) {
                                 $args = $ex->getArgs();
                             }
-
+                            
+                            printf("[%' 12s][%' 3s]  %4d",  $pc->getArrivalDate(), $pc->getNoNights(),  (memory_get_usage(true) /  1024 / 1024)); echo  PHP_EOL;
+    
+    
                             if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                 $forcedDebugExceptions[] = (new DebugException($ex->getCode(), $ex->getMessage(), $ex->getFile(), $ex->getLine(), $args))->toArray();
-                            } else if ($options->isDebugMode()) {
+                            } else if ($options->isDebugMode() && count($exceptions) < Diagnostics::MAX_ALLOWED_DEBUGGING_ITEMS) {
                                 $exceptions[] = (new DebugException($ex->getCode(), $ex->getMessage(), $ex->getFile(), $ex->getLine(), $args))->toArray();
                             }
+                            
                         }
 
                     }
@@ -287,7 +288,7 @@ class LosGenerator implements LosGeneratorInterface
                     }
 
                     $previousRateSet = $rates;
-                    $previousBaseRateSet = $baseRates;
+                    // $previousBaseRateSet = $baseRates;
                 }
 				
                 // We do not need to use the baseRates, because of the strategy modes.
@@ -296,16 +297,19 @@ class LosGenerator implements LosGeneratorInterface
                     $g,
                     $previousRateSet
                 );
+                
+                // $previousRateSet = true; // We set to true. (Testing).
             }
         }
 
         $losRecords->getMetrics()->finishTiming();
         $exceptions = array_slice($exceptions, 0, Diagnostics::MAX_ALLOWED_DEBUGGING_ITEMS);
-
+        
+        if (!empty($forcedDebugExceptions)) {
+            $losRecords->setDebug($forcedDebugExceptions);
+        }
         if ($options->isDebugMode()) {
             $losRecords->setDebug(array_merge($forcedDebugExceptions, $exceptions));
-        } elseif (!empty($forcedDebugExceptions)) {
-            $losRecords->setDebug($forcedDebugExceptions);
         }
         // Save the options that were used to generate this LOS.
         $losRecords->setBuildOptions($options);
