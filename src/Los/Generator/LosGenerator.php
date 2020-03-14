@@ -268,10 +268,7 @@ class LosGenerator implements LosGeneratorInterface
                             if ($ex instanceof BaseException) {
                                 $args = $ex->getArgs();
                             }
-                            
-                            printf("[%' 12s][%' 3s]  %4d",  $pc->getArrivalDate(), $pc->getNoNights(),  (memory_get_usage(true) /  1024 / 1024)); echo  PHP_EOL;
-    
-    
+
                             if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                 $forcedDebugExceptions[] = (new DebugException($ex->getCode(), $ex->getMessage(), $ex->getFile(), $ex->getLine(), $args))->toArray();
                             } else if ($options->isDebugMode() && count($exceptions) < Diagnostics::MAX_ALLOWED_DEBUGGING_ITEMS) {
