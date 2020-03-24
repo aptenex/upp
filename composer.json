@@ -5,17 +5,16 @@
     "license": "proprietary",
     "autoload": {
         "psr-4": {
-            "": "src/",
             "Aptenex\\Upp\\" : "src/"
         }
     },
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "moneyphp/money": "3.2.1",
         "solaris/php-moon-phase": "1.1.*",
-        "symfony/validator": "^3.2",
-        "symfony/event-dispatcher" : "^3.2",
-        "symfony/translation": "^3.2",
+        "symfony/validator": ">3.2",
+        "symfony/event-dispatcher" : ">3.2",
+        "symfony/translation": ">3.2",
         "spatie/period": "^1.1.1"
     },
     "require-dev" : {
