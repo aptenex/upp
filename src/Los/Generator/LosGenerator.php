@@ -1,6 +1,6 @@
 <?php /** @noinspection NotOptimalIfConditionsInspection */
 
-namespace Aptenex\Upp\Los;
+namespace Aptenex\Upp\Los\Generator;
 
 require 'vendor/autoload.php';
 
@@ -8,6 +8,8 @@ use Aptenex\Upp\Exception\LosAvailabiltitySkippedException;
 use Aptenex\Upp\Exception\LosChangeoverSkippedException;
 use Aptenex\Upp\Los\Debug\DebugException;
 use Aptenex\Upp\Los\Debug\Diagnostics;
+use Aptenex\Upp\Los\LosOptions;
+use Aptenex\Upp\Los\LosRecords;
 use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\DateUtils;
 use Aptenex\Upp\Util\MoneyUtils;
@@ -21,9 +23,9 @@ use Aptenex\Upp\Exception\CannotGenerateLosException;
 use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
 use DateInterval;
 
-class LosGenerator
+class LosGenerator implements LosGeneratorInterface
 {
-
+    public const MAX_EXCEPTIONS = 50;
     /**
      * @var Upp
      */
@@ -51,7 +53,7 @@ class LosGenerator
     {
         $forcedDebugExceptions = $exceptions = [];
         $cc = null;
-
+        
         foreach ($pricingConfig->getCurrencyConfigs() as $ccItem) {
             if ($ccItem->getCurrency() === $options->getCurrency()) {
                 $cc = $ccItem;
@@ -65,7 +67,6 @@ class LosGenerator
                 ['currency' => $options->getCurrency()]
             );
         }
-
         $losRecords = new LosRecords($cc->getCurrency());
         $losRecords->getMetrics()->startTiming();
         // TODO:
@@ -88,8 +89,7 @@ class LosGenerator
 
         $losRecords->getMetrics()->setMaxPotentialRuns($maxOccupancy * $days * $options->getMaximumStayRateLength());
 
-        $range = DateUtils::getDateRangeInclusive($options->getStartDate(), $options->getEndDate());
-
+       
         $guestModifierCount = 0;
         $perGuestChangesAt = 0;
         $guestModifierCondition = null;
@@ -107,29 +107,30 @@ class LosGenerator
             // Only set if only 1 guest modifier
             $perGuestChangesAt = $guestModifierCondition->getMinimum();
         }
-
+    
+        $range = DateUtils::getDateRangeInclusive($options->getStartDate(), $options->getEndDate());
         foreach ($range as $date) {
             // If the base date is not available then skip it
-            if (!$options->isForceFullGeneration()) {
-                if ($ld->getAvailabilityLookup()->isAvailable($date) === false) {
-                    // We need to know if we are forcing a debug on this.
-                    if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
-                        $ex = new LosAvailabiltitySkippedException(sprintf('No Availability for %s', $date));
-                        $ex->setArgs(['date' => $date]);
-                        $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
-                    }
-                    continue;
+            if (!$options->isForceAllAvailabilitiesGeneration() &&
+                $ld->getAvailabilityLookup()->isAvailable($date) === false) {
+                // We need to know if we are forcing a debug on this.
+                if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
+                    $ex = new LosAvailabiltitySkippedException(sprintf('No Availability for %s', $date));
+                    $ex->setArgs(['date' => $date]);
+                    $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                 }
-
-                // We need to see if we can arrive on this date - if not then skip
-                if ($ld->getChangeoverLookup()->canArrive($date) === false) {
-                    if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
-                        $ex = new LosChangeoverSkippedException(sprintf('Not an accepted changeover for %s', $date));
-                        $ex->setArgs(['date' => $date]);
-                        $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
-                    }
-                    continue;
+                continue;
+            }
+    
+    
+            // We need to see if we can arrive on this date - if not then skip
+            if ( ! $options->isForceFullGeneration() && $ld->getChangeoverLookup()->canArrive($date) === false) {
+                if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
+                    $ex = new LosChangeoverSkippedException(sprintf('Not an accepted changeover for %s', $date));
+                    $ex->setArgs(['date' => $date]);
+                    $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                 }
+                continue;
             }
 
             // Perform generation per date up to the designated max stay or pad it
@@ -175,25 +176,27 @@ class LosGenerator
                             $p = $departureDate;
                         }
                         
-                        if (!$options->isForceFullGeneration()) {
-                            
-                            
+                        
+                        if(!$options->isForceAllAvailabilitiesGeneration()){
                             if ($hasBlockedAvailability === false && !$ld->getAvailabilityLookup()->isAvailable($p)) {
                                 $hasBlockedAvailability = true;
-
+        
                                 if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                     $ex = new LosAvailabiltitySkippedException('Cannot generate prices after blocked availability');
                                     $ex->setArgs(['arrival' => $date, 'departure' => $departureDate, 'stayLength' => $i]);
                                     $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
                                 }
                             }
-
+    
                             if ($hasBlockedAvailability) {
                                 $rates[] = 0;
                                 $baseRates[] = 0;
-
+        
                                 continue;
                             }
+                        }
+                        
+                        if (!$options->isForceFullGeneration()) {
 
                             if ($i < $minStay) {
                                 $rates[] = 0;
@@ -220,19 +223,20 @@ class LosGenerator
 
                                 continue; // No generation
                             }
-
-                            if (!$ld->getAvailabilityLookup()->isAvailable($p)) {
-                                $rates[] = 0;
-                                $baseRates[] = 0;
-
-                                if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
-                                    $ex = new LosAvailabiltitySkippedException(sprintf('Availability lookup failed for availability on %s with departure of %s', $p, $departureDate));
-                                    $ex->setArgs(['date' => $date, 'availableDate' => $departureDate]);
-                                    $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
-                                }
-
-                                continue;
-                            }
+                            
+// I CAN"T SEE HOW THIS DOES ANYTHING? REMOVING FOR NOW..
+//                            if (!$ld->getAvailabilityLookup()->isAvailable($p)) {
+//                                $rates[] = 0;
+//                                $baseRates[] = 0;
+//
+//                                if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
+//                                    $ex = new LosAvailabiltitySkippedException(sprintf('Availability lookup failed for availability on %s with departure of %s', $p, $departureDate));
+//                                    $ex->setArgs(['date' => $date, 'availableDate' => $departureDate]);
+//                                    $forcedDebugExceptions[] = $ex->toDebugExceptionArray();
+//                                }
+//
+//                                continue;
+//                            }
 
                             if (!$ld->getChangeoverLookup()->canDepart($departureDate)) {
                                 $rates[] = 0;
@@ -253,25 +257,24 @@ class LosGenerator
 
                         try {
                             $losRecords->getMetrics()->setTimesRan($losRecords->getMetrics()->getTimesRan() + 1);
+                            
                             $fp = $this->upp->generatePrice($pc, $pricingConfig);
-
                             $rates[] = MoneyUtils::getConvertedAmount($fp->getTotal());
                             $baseRates[] = MoneyUtils::getConvertedAmount($fp->getBasePrice());
                         } catch (CannotMatchRequestedDatesException|InvalidPriceException|BaseException $ex) {
                             $rates[] = 0;
                             $baseRates[] = 0;
-
                             $args = [];
-
                             if ($ex instanceof BaseException) {
                                 $args = $ex->getArgs();
                             }
 
                             if ($this->isForcedDateDebug($date, $options->getForceDebugOnDate())) {
                                 $forcedDebugExceptions[] = (new DebugException($ex->getCode(), $ex->getMessage(), $ex->getFile(), $ex->getLine(), $args))->toArray();
-                            } else if ($options->isDebugMode()) {
+                            } else if ($options->isDebugMode() && count($exceptions) < Diagnostics::MAX_ALLOWED_DEBUGGING_ITEMS) {
                                 $exceptions[] = (new DebugException($ex->getCode(), $ex->getMessage(), $ex->getFile(), $ex->getLine(), $args))->toArray();
                             }
+                            
                         }
 
                     }
@@ -282,7 +285,7 @@ class LosGenerator
                     }
 
                     $previousRateSet = $rates;
-                    $previousBaseRateSet = $baseRates;
+                    // $previousBaseRateSet = $baseRates;
                 }
 				
                 // We do not need to use the baseRates, because of the strategy modes.
@@ -291,16 +294,19 @@ class LosGenerator
                     $g,
                     $previousRateSet
                 );
+                
+                // $previousRateSet = true; // We set to true. (Testing).
             }
         }
 
         $losRecords->getMetrics()->finishTiming();
         $exceptions = array_slice($exceptions, 0, Diagnostics::MAX_ALLOWED_DEBUGGING_ITEMS);
-
+        
+        if (!empty($forcedDebugExceptions)) {
+            $losRecords->setDebug($forcedDebugExceptions);
+        }
         if ($options->isDebugMode()) {
             $losRecords->setDebug(array_merge($forcedDebugExceptions, $exceptions));
-        } elseif (!empty($forcedDebugExceptions)) {
-            $losRecords->setDebug($forcedDebugExceptions);
         }
         // Save the options that were used to generate this LOS.
         $losRecords->setBuildOptions($options);
@@ -327,12 +333,6 @@ class LosGenerator
         return false;
     }
 
-    /**
-     * @param PricingConfig $config
-     */
-    private function removeMandatoryFeesAndTaxes(PricingConfig $config): void
-    {
-    }
 
     /**
      * @return Upp

@@ -10,6 +10,8 @@
     },
     "require": {
         "php": ">=7.2",
+        "ext-bcmath" : "*",
+        "ext-json" : "*",
         "moneyphp/money": "3.2.1",
         "solaris/php-moon-phase": "1.1.*",
         "symfony/validator": ">3.2",

@@ -35,12 +35,11 @@ class ConfigUtils
             if (!isset($cc['modifiers'])) {
                 continue;
             }
-
-            $newModifiers = array_map(function ($mo) {
+            $newModifiers = array_map(
+                static function ($mo) {
                 /** @var Modifier $mo */
                 return $mo->__toArray();
             }, (new ModifiersParser())->parse($cc['modifiers'], $so));
-
             $newConfig['data'][$indexCc]['modifiers'] = $newModifiers;
         }
 

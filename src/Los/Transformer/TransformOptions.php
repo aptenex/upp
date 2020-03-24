@@ -8,8 +8,9 @@ use Money\Exchange;
 class TransformOptions
 {
 
-    const PRICE_RETURN_TYPE_TOTAL = 'RETURN_TOTAL';
-    const PRICE_RETURN_TYPE_BASE = 'RETURN_BASE';
+    public const PRICE_RETURN_TYPE_TOTAL = 'RETURN_TOTAL';
+    public const PRICE_RETURN_TYPE_BASE  = 'RETURN_BASE';
+    
     /**
      * @var int
      */
@@ -54,7 +55,14 @@ class TransformOptions
      * @var bool
      */
     private $indexRecordsByDate = false;
-
+    
+    
+    /**
+     * @var bool
+     */
+    private $skipEmptyLosRecordsFromTransformation = true;
+    
+    
     /**
      * @return int
      */
@@ -199,5 +207,21 @@ class TransformOptions
     {
         $this->indexRecordsByDate = $indexRecordsByDate;
     }
-
+    
+    /**
+     * @return bool
+     */
+    public function isSkipEmptyLosRecordsFromTransformation(): bool
+    {
+        return $this->skipEmptyLosRecordsFromTransformation;
+    }
+    
+    /**
+     * @param bool $skipEmptyLosRecordsFromTransformation
+     */
+    public function setSkipEmptyLosRecordsFromTransformation(bool $skipEmptyLosRecordsFromTransformation): void
+    {
+        $this->skipEmptyLosRecordsFromTransformation = $skipEmptyLosRecordsFromTransformation;
+    }
+    
 }
