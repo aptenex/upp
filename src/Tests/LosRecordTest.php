@@ -4,14 +4,11 @@ namespace Tests;
 
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Los\Transformer\ElasticSearchTransformer;
-use Money\Currency;
-use Money\Exchange\FixedExchange;
-use Money\Exchange\SwapExchange;
 use Pool;
 use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\DateUtils;
 use PHPUnit\Framework\TestCase;
-use Translation\TestTranslator;
+use Aptenex\Upp\Translation\TestTranslator;
 use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Los\LosOptions;
 use Aptenex\Upp\Los\Generator\LosGenerator;

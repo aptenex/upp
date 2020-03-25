@@ -10,7 +10,7 @@ use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\MoneyUtils;
 use Money\Money;
 use PHPUnit\Framework\TestCase;
-use Translation\TestTranslator;
+use Aptenex\Upp\Translation\TestTranslator;
 
 class ModifierCalculationSourceFeatureTest extends TestCase
 {

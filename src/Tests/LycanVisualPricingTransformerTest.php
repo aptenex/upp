@@ -5,7 +5,7 @@ namespace Tests;
 use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\TestUtils;
 use PHPUnit\Framework\TestCase;
-use Translation\TestTranslator;
+use Aptenex\Upp\Translation\TestTranslator;
 use Aptenex\Upp\Parser\Structure\StructureOptions;
 use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
 use Aptenex\Upp\Transformer\LycanVisualPricingTransformer;

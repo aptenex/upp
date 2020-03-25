@@ -1,6 +1,6 @@
 <?php
 
-namespace Builder;
+namespace Aptenex\Upp\Builder;
 
 class BuildResult
 {

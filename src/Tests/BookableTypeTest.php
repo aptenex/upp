@@ -7,7 +7,7 @@ use Aptenex\Upp\Upp;
 use PHPUnit\Framework\TestCase;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Parser\Structure\Period;
-use Translation\TestTranslator;
+use Aptenex\Upp\Translation\TestTranslator;
 
 class BookableTypeTest extends TestCase
 {

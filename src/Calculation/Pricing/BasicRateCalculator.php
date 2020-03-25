@@ -66,8 +66,9 @@ class BasicRateCalculator
                 $singleMonthAllocation = $rateAmount->allocateTo(30);
 
                 $nights = array_values($period->getMatchedNights());
+                $nightCount = \count($nights);
 
-                for ($i = 0; $i < count($nights); $i++) {
+                for ($i = 0; $i < $nightCount; $i++) {
                     /** @var Night $night */
                     $night = $nights[$i];
 
@@ -79,9 +80,25 @@ class BasicRateCalculator
                 }
 
             } else {
+                $rConfig = $period->getControlItemConfig()->getRate();
+                $daysOfWeekConfig = $rConfig->hasDaysOfWeek() ? $rConfig->getDaysOfWeek() : null;
+
                 // Nightly? That means the rate amount is nightly - apply to every night
                 foreach($period->getMatchedNights() as $key => $night) {
                     $night->setCost($rateAmount);
+
+                    $day = \strtolower($night->getDate()->format('N'));
+
+                    if (
+                        $daysOfWeekConfig !== null &&
+                        $daysOfWeekConfig->getDayConfigByDay($day) !== null
+                    ) {
+                        $dc = $daysOfWeekConfig->getDayConfigByDay($day);
+
+                        if ($dc->hasAmount()) {
+                            $night->setCost(MoneyUtils::fromString($dc->getAmount(), $fp->getCurrency()));
+                        }
+                    }
                 }
             }
         }

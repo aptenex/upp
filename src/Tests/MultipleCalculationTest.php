@@ -5,7 +5,7 @@ namespace Aptenex\Upp\Tests;
 use Aptenex\Upp\Parser\Structure\PricingConfig;
 use Aptenex\Upp\Transformer\LycanVisualPricingTransformer;
 use Aptenex\Upp\Upp;
-use Translation\TestTranslator;
+use Aptenex\Upp\Translation\TestTranslator;
 use PHPUnit\Framework\TestCase;
 use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Context\PricingContext;

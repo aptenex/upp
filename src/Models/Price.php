@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Models;
 
+use Aptenex\Upp\Parser\Structure\SplitMethod;
 use Money\Money;
 use Aptenex\Upp\Exception\Error;
 use Aptenex\Upp\Util\ArrayUtils;
@@ -144,6 +145,18 @@ class Price
     public function getTotal()
     {
         return $this->total;
+    }
+
+    /**
+     * @return Money
+     */
+    public function getTotalWithoutDamageDeposit()
+    {
+        if ($this->getDamageDepositSplitMethod() === SplitMethod::ON_ARRIVAL) {
+            return $this->getTotal();
+        }
+
+        return $this->getTotal()->subtract($this->getDamageDeposit());
     }
 
     /**
@@ -389,6 +402,7 @@ class Price
             'basePrice'                => MoneyUtils::getConvertedAmount($this->getBasePrice()),
             'basePriceTaxable'         => MoneyUtils::getConvertedAmount($this->getBasePriceTaxable()),
             'damageDeposit'            => MoneyUtils::getConvertedAmount($this->getDamageDeposit()),
+            'totalWithoutDamageDeposit' => MoneyUtils::getConvertedAmount($this->getTotalWithoutDamageDeposit()),
             'damageDepositSplitMethod' => $this->getDamageDepositSplitMethod(),
             'bookableType'             => $this->getBookableType(),
             'adjustments'              => $this->getAdjustmentsArray(),

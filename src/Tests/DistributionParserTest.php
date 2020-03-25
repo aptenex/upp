@@ -6,7 +6,7 @@ use Aptenex\Upp\Parser\Structure\Modifier;
 use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\ConfigUtils;
 use Aptenex\Upp\Util\TestUtils;
-use Translation\TestTranslator;
+use Aptenex\Upp\Translation\TestTranslator;
 use PHPUnit\Framework\TestCase;
 use Aptenex\Upp\Exception\InvalidPricingConfigException;
 use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;

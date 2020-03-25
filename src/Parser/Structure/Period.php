@@ -114,20 +114,6 @@ class Period extends AbstractControlItem implements ControlItemInterface
     }
 
     /**
-     * @return DateCondition|null
-     */
-    public function getDateCondition()
-    {
-        foreach($this->getConditions() as $con) {
-            if ($con->getType() === Condition::TYPE_DATE) {
-                return $con;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * @return array
      */
     public function __toArray()

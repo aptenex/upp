@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Parser\Structure;
 
+use Aptenex\Upp\Parser\Structure\DaysOfWeek\DaysOfWeek;
 use Doctrine\Common\Annotations\Annotation\Required;
 
 class Rate
@@ -45,9 +46,14 @@ class Rate
     protected $strategy;
 
     /**
+     * @var DaysOfWeek|null
+     */
+    protected $daysOfWeek;
+
+    /**
      * @var string
      */
-    protected $calculationOperand = Operand::OP_ADDITION;
+    protected $calculationOperator = Operator::OP_ADDITION;
 
     /**
      *
@@ -71,21 +77,41 @@ class Rate
     /**
      * @return string
      */
-    public function getCalculationOperand()
+    public function getCalculationOperator()
     {
-        return $this->calculationOperand;
+        return $this->calculationOperator;
     }
 
     /**
-     * @param string $calculationOperand
+     * @param string $calculationOperator
      */
-    public function setCalculationOperand($calculationOperand)
+    public function setCalculationOperator($calculationOperator)
     {
-        if (!in_array($calculationOperand, Operand::getMathList(), true)) {
-            $calculationOperand = Operand::OP_ADDITION;
+        if (!in_array($calculationOperator, Operator::getMathList(), true)) {
+            $calculationOperator = Operator::OP_ADDITION;
         }
 
-        $this->calculationOperand = $calculationOperand;
+        $this->calculationOperator = $calculationOperator;
+    }
+
+    /**
+     * @deprecated Use getCalculationOperator()
+     *
+     * @return string
+     */
+    public function getCalculationOperand()
+    {
+        return $this->getCalculationOperator();
+    }
+
+    /**
+     * @deprecated Use setCalculationOperator()
+     *
+     * @param string $calculationOperator
+     */
+    public function setCalculationOperand($calculationOperator)
+    {
+        $this->setCalculationOperator($calculationOperator);
     }
 
     /**
@@ -239,6 +265,30 @@ class Rate
     }
 
     /**
+     * @return DaysOfWeek
+     */
+    public function getDaysOfWeek(): DaysOfWeek
+    {
+        return $this->daysOfWeek;
+    }
+
+    /**
+     * @param DaysOfWeek|null $daysOfWeek
+     */
+    public function setDaysOfWeek(?DaysOfWeek $daysOfWeek): void
+    {
+        $this->daysOfWeek = $daysOfWeek;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDaysOfWeek(): bool
+    {
+        return $this->daysOfWeek instanceof DaysOfWeek;
+    }
+
+    /**
      * @return array
      */
     public function __toArray()
@@ -252,7 +302,8 @@ class Rate
             'applicableTaxes'    => $this->getApplicableTaxes(),
             'calculationMethod'  => $this->getCalculationMethod(),
             'calculationOperand' => $this->getCalculationOperand(),
-            'strategy'           => $this->getStrategy() ? $this->getStrategy()->__toArray() : null
+            'daysOfWeek'         => $this->hasDaysOfWeek() ? $this->getDaysOfWeek()->__toArray(): null,
+            'strategy'           => $this->getStrategy() ? $this->getStrategy()->__toArray() : null,
         ];
     }
 

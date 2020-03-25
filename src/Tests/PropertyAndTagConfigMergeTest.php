@@ -5,7 +5,7 @@ namespace Tests;
 use Aptenex\Upp\Builder\PricingConfigBuilder;
 use Aptenex\Upp\Upp;
 use PHPUnit\Framework\TestCase;
-use Translation\TestTranslator;
+use Aptenex\Upp\Translation\TestTranslator;
 use Aptenex\Upp\Parser\Structure\StructureOptions;
 use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
 

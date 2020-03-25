@@ -1,6 +1,6 @@
 <?php
 
-namespace Parser\ExternalConfig;
+namespace Aptenex\Upp\Parser\ExternalConfig;
 
 use Aptenex\Upp\Parser\ExternalConfig\ExternalCommandInterface;
 use Aptenex\Upp\Parser\Structure\PricingConfig;

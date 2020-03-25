@@ -1,6 +1,6 @@
 <?php
 
-namespace Los\Modifier;
+namespace Aptenex\Upp\Los\Modifier;
 
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Parser\Structure\Modifier;

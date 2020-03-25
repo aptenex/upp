@@ -222,7 +222,7 @@
                 "type": "weekly",
                 "strategy": {
                   "partialWeekAlteration": {
-                    "calculationMethod": "fixed",
+                    "calculationMethod": "percentage",
                     "brackets": [
                       {
                         "night": 1,
@@ -234,7 +234,7 @@
                       },
                       {
                         "night": 3,
-                        "amount": 300
+                        "amount": 0.6
                       },
                       {
                         "night": 4,
@@ -307,7 +307,7 @@
         },
         "tests": {
           "noNights": 10,
-          "finalPrice": 61425,
+          "finalPrice": 52920,
           "nightPrices": {
             "2016-04-05": 5000,
             "2016-04-06": 5000,
@@ -316,9 +316,9 @@
             "2016-04-09": 5000,
             "2016-04-10": 5000,
             "2016-04-11": 5000,
-            "2016-04-12": 10000,
-            "2016-04-13": 10000,
-            "2016-04-14": 10000
+            "2016-04-12": 7000,
+            "2016-04-13": 7000,
+            "2016-04-14": 7000
           }
         }
       }

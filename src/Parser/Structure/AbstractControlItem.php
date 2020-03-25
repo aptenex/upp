@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Parser\Structure;
 
+use Aptenex\Upp\Parser\Structure\Condition\DateCondition;
 use Aptenex\Upp\Util\ArrayUtils;
 use Symfony\Component\Validator\Constraints\Valid;
 
@@ -145,6 +146,20 @@ abstract class AbstractControlItem implements ControlItemInterface
     public function setRate($rate)
     {
         $this->rate = $rate;
+    }
+
+    /**
+     * @return DateCondition|null
+     */
+    public function getDateCondition()
+    {
+        foreach($this->getConditions() as $con) {
+            if ($con->getType() === Condition::TYPE_DATE) {
+                return $con;
+            }
+        }
+
+        return null;
     }
 
     /**

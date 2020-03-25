@@ -3,7 +3,7 @@
 namespace Aptenex\Upp\Tests;
 
 use Aptenex\Upp\Upp;
-use Translation\TestTranslator;
+use Aptenex\Upp\Translation\TestTranslator;
 use PHPUnit\Framework\TestCase;
 use Aptenex\Upp\Transformer\RentivoTransformer;
 use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;

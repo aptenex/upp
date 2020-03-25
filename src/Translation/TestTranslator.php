@@ -1,6 +1,6 @@
 <?php
 
-namespace Translation;
+namespace Aptenex\Upp\Translation;
 
 use Symfony\Component\Translation\TranslatorInterface;
 

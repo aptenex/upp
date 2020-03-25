@@ -13,7 +13,7 @@ use Aptenex\Upp\Parser\Structure\StructureOptions;
 use Aptenex\Upp\Parser\Resolver\ResolverInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Aptenex\Upp\Exception\InvalidPricingConfigException;
-use Translation\TestTranslator;
+use Aptenex\Upp\Translation\TestTranslator;
 
 class Upp
 {

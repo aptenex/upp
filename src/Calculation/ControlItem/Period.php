@@ -2,7 +2,31 @@
 
 namespace Aptenex\Upp\Calculation\ControlItem;
 
-class Period extends AbstractControlItem implements ControlItemInterface
+use Aptenex\Upp\Parser\Structure\DaysOfWeek\DayConfig;
+
+class Period extends AbstractControlItem
 {
+
+    public function getDayOfWeekConfigForStartDate(): ?DayConfig
+    {
+        /** @var \Aptenex\Upp\Parser\Structure\Period $config */
+        $config = $this->getControlItemConfig();
+
+        if (!$config->getRate()->hasDaysOfWeek()) {
+            return null;
+        }
+
+        $arrivalDay = $this->getMatchedNights()[0]->getDate();
+
+        $daysOfWeek = $config->getRate()->getDaysOfWeek();
+
+        $dayConfig = $daysOfWeek->getDayConfigByDay(\strtolower($arrivalDay->format('N')));
+
+        if ($dayConfig === null) {
+            return null;
+        }
+
+        return $dayConfig;
+    }
 
 }

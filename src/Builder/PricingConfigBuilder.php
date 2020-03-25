@@ -2,7 +2,7 @@
 
 namespace Aptenex\Upp\Builder;
 
-use Builder\BuildResult;
+use Aptenex\Upp\Builder\BuildResult;
 
 class PricingConfigBuilder
 {

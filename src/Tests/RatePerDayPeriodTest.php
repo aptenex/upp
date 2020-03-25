@@ -15,10 +15,10 @@ use Aptenex\Upp\Parser\Structure\StructureOptions;
 use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
 use Aptenex\Upp\Parser\ExternalConfig\ExternalCommandDirector;
 
-class NightlyTariffOverrideTest extends TestCase
+class RatePerDayPeriodTest extends TestCase
 {
 
-    private static $json1 = '{
+    private $json1 = '{
       "name": "Pricing",
       "schema": "property-pricing",
       "version": "0.0.1",
@@ -43,12 +43,13 @@ class NightlyTariffOverrideTest extends TestCase
               "priority": 500,
               "conditionOperand": "AND",
               "bookableType": null,
+              "minimumNights": 2,
               "conditions": [
                 {
                   "type": "date",
                   "modifyRatePerUnit": false,
-                  "startDate": "2017-06-26",
-                  "endDate": "2020-06-30",
+                  "startDate": "2017-01-01",
+                  "endDate": "2030-12-31",
                   "arrivalDays": [],
                   "departureDays": []
                 }
@@ -57,7 +58,47 @@ class NightlyTariffOverrideTest extends TestCase
                 "type": "nightly",
                 "amount": 250,
                 "calculationMethod": "fixed",
-                "calculationOperand": "equals"
+                "calculationOperator": "equals",
+                "daysOfWeek": {
+                    "calculationMethod": "fixed",
+                    "days": {
+                        "monday": {
+                            "amount": 0,
+                            "changeover": "ARRIVAL_OR_DEPARTURE",
+                            "minimumNights": null
+                        },
+                        "tuesday": {
+                            "amount": null,
+                            "changeover": "ARRIVAL_OR_DEPARTURE",
+                            "minimumNights": null
+                        },
+                        "wednesday": {
+                            "amount": 0,
+                            "changeover": "ARRIVAL_OR_DEPARTURE",
+                            "minimumNights": null
+                        },
+                        "thursday": {
+                            "amount": 0,
+                            "changeover": "ARRIVAL_OR_DEPARTURE",
+                            "minimumNights": null
+                        },
+                        "friday": {
+                            "amount": 300,
+                            "changeover": "ARRIVAL_ONLY",
+                            "minimumNights": 3
+                        },
+                        "saturday": {
+                            "amount": 300,
+                            "changeover": "NONE",
+                            "minimumNights": 3
+                        },
+                        "sunday": {
+                            "amount": 300,
+                            "changeover": "DEPARTURE_ONLY",
+                            "minimumNights": 3
+                        }
+                    }
+                }
               }
             }
           ],
@@ -66,7 +107,7 @@ class NightlyTariffOverrideTest extends TestCase
       ]
     }';
 
-    public function testSuccessfulOverride()
+    public function testDaysOfWeekSuccessful()
     {
         $upp = new Upp(
             new HashMapPricingResolver(),
@@ -77,29 +118,19 @@ class NightlyTariffOverrideTest extends TestCase
         $defaults->setDaysRequiredInAdvanceForBooking(1);
 
         $options = new StructureOptions();
-        $options->setExternalCommandDirector(new ExternalCommandDirector([
-            new NightlyTariffOverrideCommand(125)
-        ]));
-
         $context = new PricingContext();
         $context->setCurrency('GBP');
         $context->setBookingDate('2017-05-01');
-        $context->setArrivalDate('2017-06-26');
-        $context->setDepartureDate('2017-06-30');
+        $context->setArrivalDate('2017-05-10');
+        $context->setDepartureDate('2017-05-21');
         $context->setGuests(3);
 
-        $config = $upp->parsePricingConfig(json_decode(self::$json1, true), $options);
+        $config = $upp->parsePricingConfig(json_decode($this->json1, true), $options);
 
         $pricing = $upp->generatePrice($context, $config);
 
         $this->assertInstanceOf(FinalPrice::class, $pricing);
-        $this->assertSame(500.0, MoneyUtils::getConvertedAmount($pricing->getTotal()));
-
-        $configWithoutOverride = $upp->parsePricingConfig(json_decode(self::$json1, true), new StructureOptions());
-        $pricingWithoutOverride = $upp->generatePrice($context, $configWithoutOverride);
-
-        $this->assertInstanceOf(FinalPrice::class, $pricingWithoutOverride);
-        $this->assertSame(1000.0, MoneyUtils::getConvertedAmount($pricingWithoutOverride->getTotal()));
+        $this->assertSame(2750.0, MoneyUtils::getConvertedAmount($pricing->getTotal()));
     }
 
 }

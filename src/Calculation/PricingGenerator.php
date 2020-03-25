@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Calculation;
 
+use Money\Money;
 use Aptenex\Upp\Calculation\Condition\Evaluator;
 use Aptenex\Upp\Calculation\ControlItem\Modifier;
 use Aptenex\Upp\Calculation\ControlItem\Period;
@@ -10,7 +11,6 @@ use Aptenex\Upp\Calculation\Pricing\DamageDepositCalculator;
 use Aptenex\Upp\Calculation\Pricing\ExtraAmountCalculator;
 use Aptenex\Upp\Calculation\Pricing\ModifierRateCalculator;
 use Aptenex\Upp\Calculation\Pricing\PetsCalculator;
-use Aptenex\Upp\Calculation\Pricing\Rate;
 use Aptenex\Upp\Calculation\Pricing\Strategy\DaysOfWeekAlterationStrategy;
 use Aptenex\Upp\Calculation\Pricing\Strategy\ExtraMonthsAlterationStrategy;
 use Aptenex\Upp\Calculation\Pricing\Strategy\ExtraNightsAlterationStrategy;
@@ -20,11 +20,9 @@ use Aptenex\Upp\Calculation\Pricing\TaxesCalculator;
 use Aptenex\Upp\Calculation\SplitAmount\GuestSplitOverview;
 use Aptenex\Upp\Calculation\SplitAmount\SplitAmountProcessor;
 use Aptenex\Upp\Context\PricingContext;
-use Aptenex\Upp\Exception\BaseException;
 use Aptenex\Upp\Exception\CannotBookDatesException;
 use Aptenex\Upp\Exception\CannotMatchRequestedDatesException;
 use Aptenex\Upp\Exception\Error;
-use Aptenex\Upp\Exception\ErrorHandler;
 use Aptenex\Upp\Exception\InvalidPriceException;
 use Aptenex\Upp\Helper\LanguageTools;
 use Aptenex\Upp\Helper\MoneyTools;
@@ -35,15 +33,14 @@ use Aptenex\Upp\Parser\Structure\SplitMethod;
 use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Util\ExceptionUtils;
 use Aptenex\Upp\Util\MoneyUtils;
-use Los\Modifier\ModifierExtractor;
-use Money\Money;
+use Aptenex\Upp\Los\Modifier\ModifierExtractor;
 
 class PricingGenerator
 {
 
     /**
      * @param PricingContext $context
-     * @param PricingConfig  $config
+     * @param PricingConfig $config
      *
      * @return FinalPrice
      * @throws CannotMatchRequestedDatesException
@@ -56,8 +53,7 @@ class PricingGenerator
         $useModifierCalculationOrder = $fp
             ->getCurrencyConfigUsed()
             ->getDefaults()
-            ->isModifiersUseCategorizedCalculationOrder()
-        ;
+            ->isModifiersUseCategorizedCalculationOrder();
 
         // First lets evaluate if we can even generate a price due to things like booking too close to arrival
         // In the future we will set the bookable field to be false but for now throw an exception as its the most
@@ -76,10 +72,9 @@ class PricingGenerator
         // This will iterate through the Days and assign each day their respective cost using the (calculated?) nightly
         // rate. This does not include any fancy progressive discounts etc and no modifiers are included yet
 
-        $this->calculateBasicPrice($fp);
+        $this->calculateTariffPrice($fp);
 
         $this->applyPeriodStrategyAlterations($context, $fp);
-
         $this->applyWeeklyPeriodCrossoverAlterations($context, $fp);
 
         $this->calculateBasePrice($fp);
@@ -130,7 +125,7 @@ class PricingGenerator
 
     /**
      * @param PricingContext $context
-     * @param FinalPrice     $fp
+     * @param FinalPrice $fp
      *
      * @throws InvalidPriceException
      */
@@ -170,7 +165,7 @@ class PricingGenerator
         if ($defaults->hasDaysRequiredInAdvanceForBooking()) {
             // There is a limit now that we need to evaluate
 
-            $daysInterval = sprintf("P%sD", (int)$defaults->getDaysRequiredInAdvanceForBooking());
+            $daysInterval = sprintf("P%sD", (int) $defaults->getDaysRequiredInAdvanceForBooking());
             $earliestBookableDay = (clone $context->getBookingDateObj())->add(new \DateInterval($daysInterval));
 
             $arrivalDate = (clone $context->getArrivalDateObj());
@@ -191,7 +186,7 @@ class PricingGenerator
             $listingKey = 'listing.maxOccupancy';
             if (ArrayUtils::hasNestedArrayValue($listingKey, $schema)) {
 
-                $maxOccupancy = (int)ArrayUtils::getNestedArrayValue($listingKey, $schema);
+                $maxOccupancy = (int) ArrayUtils::getNestedArrayValue($listingKey, $schema);
                 if ($context->getGuests() > $maxOccupancy) {
                     ExceptionUtils::handleError($fp, Error::TYPE_EXCEEDS_MAX_OCCUPANCY, $maxOccupancy);
                 }
@@ -202,7 +197,7 @@ class PricingGenerator
 
     /**
      * @param PricingContext $context
-     * @param FinalPrice     $fp
+     * @param FinalPrice $fp
      */
     private function applyPeriodStrategyAlterations($context, $fp)
     {
@@ -227,7 +222,7 @@ class PricingGenerator
 
     /**
      * @param PricingContext $context
-     * @param FinalPrice     $fp
+     * @param FinalPrice $fp
      */
     private function applyWeeklyPeriodCrossoverAlterations($context, $fp): void
     {
@@ -248,7 +243,7 @@ class PricingGenerator
         $periodsUsed = 1;
         $currentPeriod = null;
 
-        foreach(array_values($fp->getStay()->getNights()) as $count => $night) {
+        foreach (array_values($fp->getStay()->getNights()) as $count => $night) {
             /** @var Night $night */
             $periodConfig = $night->getPeriodControlItem();
             $periodControl = $periodConfig->getControlItemConfig();
@@ -273,10 +268,10 @@ class PricingGenerator
 
                 if (!isset($periodsUsedPerWeek[$currentWeek][$periodConfig->getId()])) {
                     $periodsUsedPerWeek[$currentWeek][$periodConfig->getId()] = [
-                        'period' => $periodConfig,
+                        'period'        => $periodConfig,
                         'nightsMatched' => 1,
-                        'totalCost' => clone $night->getCost(),
-                        'nights' => [
+                        'totalCost'     => clone $night->getCost(),
+                        'nights'        => [
                             $night
                         ]
                     ];
@@ -300,7 +295,7 @@ class PricingGenerator
             // We now need to go through each week, determine if the periods used per week is greater than 1
             // If it is, then we need to pro-rata each week
 
-            foreach($periodsUsedPerWeek as $weekNumber => $periods) {
+            foreach ($periodsUsedPerWeek as $weekNumber => $periods) {
                 // Skip any week that only had one period used, so we should realistically
                 // only be running the code below once for the week where the periods cross over
                 // unless the date range crosses 3 periods, then there should be two
@@ -313,7 +308,7 @@ class PricingGenerator
                 // There may only be one week, so we need to get the total nights
                 $totalNightsForThisWeek = $fp->getStay()->getNoNights() < 7 ? $fp->getStay()->getNoNights() : 7;
 
-                foreach($periods as $period) {
+                foreach ($periods as $period) {
 
                     // We now need to find what % of the week is comprised of the total nights for this week
                     $percentageOfWeek = round($period['nightsMatched'] / $totalNightsForThisWeek, 2);
@@ -325,7 +320,7 @@ class PricingGenerator
 
                     $allocated = $totalProRataed->allocateTo($period['nightsMatched']);
 
-                    foreach($period['nights'] as $nI => $night) {
+                    foreach ($period['nights'] as $nI => $night) {
                         $night->setCost($allocated[$nI]);
                     }
                 }
@@ -337,11 +332,9 @@ class PricingGenerator
     /**
      * @param FinalPrice $fp
      */
-    private function calculateBasicPrice(FinalPrice $fp)
+    private function calculateTariffPrice(FinalPrice $fp)
     {
         (new BasicRateCalculator())->compute($fp);
-
-        $this->calculateBasePrice($fp);
     }
 
     /**
@@ -507,7 +500,7 @@ class PricingGenerator
 
     /**
      * @param PricingContext $context
-     * @param FinalPrice     $fp
+     * @param FinalPrice $fp
      */
     private function evaluatePeriods(PricingContext $context, FinalPrice $fp): void
     {
@@ -557,7 +550,7 @@ class PricingGenerator
 
     /**
      * @param PricingContext $context
-     * @param FinalPrice     $fp
+     * @param FinalPrice $fp
      */
     private function evaluateModifiers(PricingContext $context, FinalPrice $fp): void
     {
@@ -638,7 +631,7 @@ class PricingGenerator
 
         if (!empty($notMatched)) {
             throw (new CannotMatchRequestedDatesException(LanguageTools::trans('NO_PERIOD_MATCHED')))
-                   ->setArgs(['notMatched' => $notMatched]);
+                ->setArgs(['notMatched' => $notMatched]);
         }
     }
 
@@ -672,8 +665,8 @@ class PricingGenerator
         // The previous functionality was to get the arrival day period and use that minimum nights
         // to either error or continue. The new functionality will error out if the period with the
         // highest minimum nights is matched and not met.
-		
-		// @todo Sam to turn into an option on the defaults on pricingConfig so specify if we should use highest min nights from a period range
+
+        // @todo Sam to turn into an option on the defaults on pricingConfig so specify if we should use highest min nights from a period range
         $useHighestMinimumNights = false;
         if ($useHighestMinimumNights) {
             $minimumNights = 0;
@@ -699,20 +692,12 @@ class PricingGenerator
         } else {
             foreach ($fp->getStay()->getPeriodsUsed() as $period) {
                 if ($period->containsArrivalDayInMatchedNights()) {
-
                     // Minimum Nights
+                    /** @var Period $period */
+                    $minimumNights = (new MinimumNightsCalculator())->calculateMinimumNights($defaults, $period);
+                    // We also need to check if there is a dayOfWeek config option
 
-                    $minimumNights = null;
-
-                    if ($defaults->hasMinimumNights()) {
-                        $minimumNights = $defaults->getMinimumNights();
-                    }
-
-                    if ($period->getControlItemConfig()->hasMinimumNights()) {
-                        $minimumNights = $period->getControlItemConfig()->getMinimumNights();
-                    }
-
-                    if (!empty($minimumNights) && $minimumNights > $fp->getStay()->getNoNights()) {
+                    if ($minimumNights !== null && $minimumNights > $fp->getStay()->getNoNights()) {
                         $cmEx = new CannotMatchRequestedDatesException(LanguageTools::trans('MINIMUM_NIGHTS', [
                             '%minimumNights%'  => $minimumNights,
                             '%selectedNights%' => $fp->getStay()->getNoNights()
@@ -721,6 +706,7 @@ class PricingGenerator
                         ExceptionUtils::handleErrorException($cmEx, $fp, Error::TYPE_MIN_STAY_NOT_MET, $minimumNights);
                     }
 
+                    break;
                 }
             }
         }
@@ -913,7 +899,7 @@ class PricingGenerator
     }
 
     /**
-     * @param int       $balanceDaysBeforeArrival
+     * @param int $balanceDaysBeforeArrival
      * @param \DateTime $arrivalDate
      *
      * @return \DateTime
