@@ -302,6 +302,7 @@ class Rate
             'applicableTaxes'    => $this->getApplicableTaxes(),
             'calculationMethod'  => $this->getCalculationMethod(),
             'calculationOperand' => $this->getCalculationOperand(),
+            'calculationOperator' => $this->getCalculationOperator(),
             'daysOfWeek'         => $this->hasDaysOfWeek() ? $this->getDaysOfWeek()->__toArray(): null,
             'strategy'           => $this->getStrategy() ? $this->getStrategy()->__toArray() : null,
         ];

@@ -82,15 +82,23 @@ class DaysOfWeek
      */
     public function getDayConfigByDay(string $day): ?DayConfig
     {
+        if ($this->days === null) {
+            return null;
+        }
+
         return $this->days[\strtolower($day)] ?? null;
     }
 
     public function __toArray(): array
     {
-        $days = [];
+        $days = null;
 
-        foreach($this->getDays() as $day) {
-            $days[$day->getDay()] = $day->__toArray();
+        if (\is_array($this->days)) {
+            $days = [];
+
+            foreach ($this->getDays() as $day) {
+                $days[$day->getDay()] = $day->__toArray();
+            }
         }
 
         return [
