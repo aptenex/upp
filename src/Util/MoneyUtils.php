@@ -15,6 +15,21 @@ class MoneyUtils
     private static $moneyParser;
     private static $moneyFormatter;
 
+    /**
+     * @param $percentage
+     *
+     * @return float
+     */
+    public static function normalizePercentage($percentage): float
+    {
+        // Anything above or equal to 2 is considered someone entering the % in as 0 - 100 instead of a decimal
+        if ($percentage >= 2) {
+            return $percentage / 100;
+        }
+
+        return (float) $percentage;
+    }
+
     public static function getCurrency($currency)
     {
         if ($currency instanceof Currency) {

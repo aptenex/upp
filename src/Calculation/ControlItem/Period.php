@@ -20,7 +20,7 @@ class Period extends AbstractControlItem
 
         $daysOfWeek = $config->getRate()->getDaysOfWeek();
 
-        $dayConfig = $daysOfWeek->getDayConfigByDay(\strtolower($arrivalDay->format('N')));
+        $dayConfig = $daysOfWeek->getDayConfigByDay(\strtolower($arrivalDay->format('l')));
 
         if ($dayConfig === null) {
             return null;

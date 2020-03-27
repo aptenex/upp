@@ -87,7 +87,7 @@ class BasicRateCalculator
                 foreach($period->getMatchedNights() as $key => $night) {
                     $night->setCost($rateAmount);
 
-                    $day = \strtolower($night->getDate()->format('N'));
+                    $day = \strtolower($night->getDate()->format('l'));
 
                     if (
                         $daysOfWeekConfig !== null &&
@@ -96,7 +96,14 @@ class BasicRateCalculator
                         $dc = $daysOfWeekConfig->getDayConfigByDay($day);
 
                         if ($dc->hasAmount()) {
-                            $night->setCost(MoneyUtils::fromString($dc->getAmount(), $fp->getCurrency()));
+
+                            $amount = $dc->getAmount();
+
+                            if ($daysOfWeekConfig->getCalculationMethod() === Rate::METHOD_PERCENTAGE) {
+                                $amount = MoneyUtils::getConvertedAmount($rateAmount->multiply(MoneyUtils::normalizePercentage($amount)));
+                            }
+
+                            $night->setCost(MoneyUtils::fromString($amount, $fp->getCurrency()));
                         }
                     }
                 }
