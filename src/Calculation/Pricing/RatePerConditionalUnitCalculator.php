@@ -10,6 +10,7 @@ use Aptenex\Upp\Calculation\AdjustmentAmount;
 use Aptenex\Upp\Calculation\ControlItem\Modifier;
 use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
 use Aptenex\Upp\Parser\Structure\Operand;
+use Aptenex\Upp\Parser\Structure\Operator;
 use Aptenex\Upp\Util\MoneyUtils;
 use Money\Money;
 
@@ -301,21 +302,21 @@ class RatePerConditionalUnitCalculator
 
             case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_EXTRAS_FEES:
                 return $fp->getBasePrice()->add($this->calculatePreviousAdjustmentsTotal($fp, [
-                    \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE
-                ]));
+                    \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE,
+                ], true));
 
             case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_MANAGEMENT_FEES:
                 return $fp->getBasePrice()->add($this->calculatePreviousAdjustmentsTotal($fp, [
                     \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_EXTRAS_FEES,
                     \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE
-                ]));
+                ], true));
 
             case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_CLEANING:
                 return $fp->getBasePrice()->add($this->calculatePreviousAdjustmentsTotal($fp, [
                     \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_EXTRAS_FEES,
                     \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE,
                     \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_MANAGEMENT_FEES
-                ]));
+                ], true));
 
             case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TOTAL:
                 return $fp->getBasePrice()->add($this->calculatePreviousAdjustmentsTotal($fp, [
@@ -343,7 +344,7 @@ class RatePerConditionalUnitCalculator
                 continue;
             }
 
-            if ($adj->getOperand() === Operand::OP_ADDITION) {
+            if ($adj->getOperand() === Operator::OP_ADDITION) {
                 /** @var \Aptenex\Upp\Parser\Structure\Modifier $adjModifierConfig */
                 $adjModifierConfig = $adj->getControlItem()->getControlItemConfig();
 
@@ -351,7 +352,7 @@ class RatePerConditionalUnitCalculator
                     $amount = $amount->add($adj->getAmount());
                 }
 
-            } else if ($includeDiscounts && $adj->getOperand() === Operand::OP_SUBTRACTION) {
+            } else if ($includeDiscounts && $adj->getOperand() === Operator::OP_SUBTRACTION) {
                 $amount = $amount->subtract($adj->getAmount());
             }
         }

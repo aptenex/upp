@@ -226,6 +226,22 @@ class Price
     }
 
     /**
+     * @param string $description
+     *
+     * @return AdjustmentAmount
+     */
+    public function getAdjustmentByDescription(string $description): ?AdjustmentAmount
+    {
+        foreach($this->adjustments as $adjustment) {
+            if ($adjustment->getDescription() === $description) {
+                return $adjustment;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param AdjustmentAmount[] $adjustments
      */
     public function setAdjustments($adjustments)
