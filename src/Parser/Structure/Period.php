@@ -3,6 +3,7 @@
 namespace Aptenex\Upp\Parser\Structure;
 
 use Aptenex\Upp\Parser\Structure\Condition\DateCondition;
+use Aptenex\Upp\Parser\Structure\DaysOfWeek\DayConfig;
 
 class Period extends AbstractControlItem implements ControlItemInterface
 {
@@ -111,6 +112,23 @@ class Period extends AbstractControlItem implements ControlItemInterface
     public function hasBookableType()
     {
         return !empty($this->bookableType);
+    }
+
+    public function getDayOfWeekConfigForStartDate(\DateTime $date): ?DayConfig
+    {
+        if (!$this->getRate()->hasDaysOfWeek()) {
+            return null;
+        }
+
+        $daysOfWeek = $this->getRate()->getDaysOfWeek();
+
+        $dayConfig = $daysOfWeek->getDayConfigByDay(\strtolower($date->format('l')));
+
+        if ($dayConfig === null) {
+            return null;
+        }
+
+        return $dayConfig;
     }
 
     /**

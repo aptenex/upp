@@ -2,28 +2,28 @@
 
 namespace Aptenex\Upp\Calculation;
 
-use Aptenex\Upp\Parser\Structure\Defaults;
 use Aptenex\Upp\Parser\Structure\Period;
+use Aptenex\Upp\Parser\Structure\Defaults;
+use Aptenex\Upp\Parser\Structure\ControlItemInterface;
 
 class MinimumNightsCalculator
 {
 
-    public function calculateMinimumNights(Defaults $defaults, \Aptenex\Upp\Calculation\ControlItem\Period $period): ?int
+    public function calculateMinimumNights(Defaults $defaults, ControlItemInterface $period, \DateTime $dateForDayOfWeek): ?int
     {
+        /** @var Period $period */
+
         $minimumNightPotentialValues = [];
 
         if ($defaults->hasMinimumNights()) {
             $minimumNightPotentialValues[] = (int)$defaults->getMinimumNights();
         }
 
-        /** @var Period $config */
-        $config = $period->getControlItemConfig();
-
-        if ($config->hasMinimumNights()) {
-            $minimumNightPotentialValues[] = (int)$config->getMinimumNights();
+        if ($period->hasMinimumNights()) {
+            $minimumNightPotentialValues[] = (int)$period->getMinimumNights();
         }
 
-        $dayOfWeekConfig = $period->getDayOfWeekConfigForStartDate();
+        $dayOfWeekConfig = $period->getDayOfWeekConfigForStartDate($dateForDayOfWeek);
 
         if ($dayOfWeekConfig !== null && $dayOfWeekConfig->hasMinimumNights()) {
             $minimumNightPotentialValues[] = (int) $dayOfWeekConfig->getMinimumNights();
@@ -31,6 +31,5 @@ class MinimumNightsCalculator
 
         return \array_pop($minimumNightPotentialValues);
     }
-
 
 }

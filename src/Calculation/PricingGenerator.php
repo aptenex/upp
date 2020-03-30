@@ -694,7 +694,11 @@ class PricingGenerator
                 if ($period->containsArrivalDayInMatchedNights()) {
                     // Minimum Nights
                     /** @var Period $period */
-                    $minimumNights = (new MinimumNightsCalculator())->calculateMinimumNights($defaults, $period);
+                    $minimumNights = (new MinimumNightsCalculator())->calculateMinimumNights(
+                        $defaults,
+                        $period->getControlItemConfig(),
+                        $period->getFirstMatchedNight()->getDate()
+                    );
                     // We also need to check if there is a dayOfWeek config option
 
                     if ($minimumNights !== null && $minimumNights > $fp->getStay()->getNoNights()) {

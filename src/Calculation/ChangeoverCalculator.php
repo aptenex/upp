@@ -2,18 +2,21 @@
 
 namespace Aptenex\Upp\Calculation;
 
+use Aptenex\Upp\Parser\Structure\ControlItemInterface;
+use Aptenex\Upp\Parser\Structure\Period;
+
 class ChangeoverCalculator
 {
 
-    public function getArrivalDays(\Aptenex\Upp\Calculation\ControlItem\ControlItemInterface $controlItem): array
+    public function getArrivalDays(ControlItemInterface $controlItem): array
     {
-        $ciConfig = $controlItem->getControlItemConfig();
+        /** @var Period $controlItem */
 
-        if ($ciConfig->getRate()->hasDaysOfWeek()) {
-            return $ciConfig->getRate()->getDaysOfWeek()->getArrivalChangeoverList();
+        if ($controlItem->getRate()->hasDaysOfWeek()) {
+            return $controlItem->getRate()->getDaysOfWeek()->getArrivalChangeoverList();
         }
 
-        $dateCon = $ciConfig->getDateCondition();
+        $dateCon = $controlItem->getDateCondition();
 
         if ($dateCon !== null) {
             return $dateCon->getArrivalDays();
@@ -22,15 +25,15 @@ class ChangeoverCalculator
         return [];
     }
 
-    public function getDepartureDays(\Aptenex\Upp\Calculation\ControlItem\ControlItemInterface $controlItem): array
+    public function getDepartureDays(ControlItemInterface $controlItem): array
     {
-        $ciConfig = $controlItem->getControlItemConfig();
+        /** @var Period $controlItem */
 
-        if ($ciConfig->getRate()->hasDaysOfWeek()) {
-            return $ciConfig->getRate()->getDaysOfWeek()->getDepartureChangeoverList();
+        if ($controlItem->getRate()->hasDaysOfWeek()) {
+            return $controlItem->getRate()->getDaysOfWeek()->getDepartureChangeoverList();
         }
 
-        $dateCon = $ciConfig->getDateCondition();
+        $dateCon = $controlItem->getDateCondition();
 
         if ($dateCon !== null) {
             return $dateCon->getDepartureDays();

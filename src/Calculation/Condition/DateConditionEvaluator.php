@@ -58,8 +58,8 @@ class DateConditionEvaluator extends BaseEvaluator implements ConditionEvaluatio
 
         $changeoverCalculator = new ChangeoverCalculator();
 
-        $arrivalDaysList = $changeoverCalculator->getArrivalDays($controlItem);
-        $departureDaysList = $changeoverCalculator->getDepartureDays($controlItem);
+        $arrivalDaysList = $changeoverCalculator->getArrivalDays($controlItem->getControlItemConfig());
+        $departureDaysList = $changeoverCalculator->getDepartureDays($controlItem->getControlItemConfig());
 
         if (!empty($arrivalDaysList) && $controlItem->containsArrivalDayInMatchedNights()) {
             $arrivalDay = strtolower($context->getArrivalDateObj()->format('l'));

@@ -620,7 +620,7 @@ class ModifierCalculationSourceFeatureTest extends TestCase
         $lastAdjustment = \count($price2->getAdjustments()) - 1;
         $lastAdjustmentAmount = $price2->getAdjustments()[$lastAdjustment]->getAmount();
 
-        $this->assertSame(1.36, MoneyUtils::getConvertedAmount($lastAdjustmentAmount));
+        $this->assertSame(1.35, MoneyUtils::getConvertedAmount($lastAdjustmentAmount));
     }
 
     /**
