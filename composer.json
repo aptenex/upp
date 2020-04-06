@@ -14,9 +14,9 @@
         "ext-json" : "*",
         "moneyphp/money": "3.2.1",
         "solaris/php-moon-phase": "1.1.*",
-        "symfony/validator": ">3.2",
-        "symfony/event-dispatcher" : ">3.2",
-        "symfony/translation": ">3.2",
+        "symfony/validator": "3.4",
+        "symfony/event-dispatcher" : "^3.4",
+        "symfony/translation": "^3.4",
         "spatie/period": "^1.1.1"
     },
     "require-dev" : {
