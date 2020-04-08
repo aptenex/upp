@@ -261,7 +261,7 @@ class LycanVisualPricingTransformer implements TransformerInterface
             $value = $enas->getNightlyValue(
                 $i + 1,
                 0,
-                $baseNightAmount,
+                (float) $baseNightAmount, // Convert in-case it is null
                 $bracketDayValueMap,
                 $activeStrategy
             );
