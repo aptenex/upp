@@ -10321,7 +10321,7 @@
                       },
                       {
                         "night": "3",
-                        "amount": 13849,
+                        "amount": 0,
                         "days": [],
                         "matchAmount": 0,
                         "damageDepositOverride": null,
@@ -10332,7 +10332,7 @@
                           },
                           {
                             "guests": "3",
-                            "amount": 17932
+                            "amount": 0
                           }
                         ]
                       },
@@ -10451,6 +10451,60 @@
             "2020-04-09": 466075,
             "2020-04-10": 466075,
             "2020-04-11": 466075
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2020-04-08",
+          "departureDate": "2020-04-11",
+          "bookingDate": "2020-04-01",
+          "guests": 1,
+          "currency": "THB"
+        },
+        "tests": {
+          "noNights": 3,
+          "finalPrice": 0,
+          "nightPrices": {
+            "2020-04-08": 0,
+            "2020-04-09": 0,
+            "2020-04-10": 0
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2020-04-08",
+          "departureDate": "2020-04-11",
+          "bookingDate": "2020-04-01",
+          "guests": 3,
+          "currency": "THB"
+        },
+        "tests": {
+          "noNights": 3,
+          "finalPrice": 0,
+          "nightPrices": {
+            "2020-04-08": 0,
+            "2020-04-09": 0,
+            "2020-04-10": 0
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2020-04-08",
+          "departureDate": "2020-04-11",
+          "bookingDate": "2020-04-01",
+          "guests": 2,
+          "currency": "THB"
+        },
+        "tests": {
+          "noNights": 3,
+          "finalPrice": 1473700,
+          "nightPrices": {
+            "2020-04-08": 491234,
+            "2020-04-09": 491233,
+            "2020-04-10": 491233
           }
         }
       }
