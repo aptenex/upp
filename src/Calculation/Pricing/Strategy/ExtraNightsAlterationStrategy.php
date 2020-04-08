@@ -5,6 +5,7 @@ namespace Aptenex\Upp\Calculation\Pricing\Strategy;
 use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
 use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Context\PricingContext;
+use Aptenex\Upp\Exception\InvalidPriceException;
 use Aptenex\Upp\Exception\InvalidPricingConfigException;
 use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\ExtraNightsAlteration;
@@ -80,42 +81,77 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
         }
 
         // Now we need to loop through and evaluate based on the present options
-        // Let's get some various figures early on though
 
-        foreach($matchedNightsList as $nightIndex => $night) {
-            $nightNum = $nightIndex + 1;
+        if ($extraNightsAlteration->isNightsMatchedOverridesPrice()) {
 
-            $value = $this->getNightlyValue(
-                $nightNum,
+            /*
+             * This new option ( > 2020-04-08) will get the last matched night and use its value to set all
+             * the periods nights even if it is 0 (which would be used for LOS pricing meaning it is unavailable
+             */
+
+            $nightValue = $this->getFinalNightValue(
+                \count($matchedNightsList),
                 $context->getGuests(),
-                MoneyUtils::getConvertedAmount($night->getCost()),
                 $bracketDayValueMap,
                 $extraNightsAlteration
             );
 
-            if ($value !== null) {
+
+            if ($nightValue === null) {
+                throw new InvalidPriceException('Failed to locate final price for lastMatchedNightIsFinal lookup');
+            }
+
+            $monetaryFinal = MoneyUtils::fromString($nightValue, $fp->getCurrency());
+
+            // We need to allocate this final amount to all nights
+            $allocatedNights = $monetaryFinal->allocateTo(\count($matchedNightsList));
+
+            foreach($matchedNightsList as $nightIndex => $night) {
                 $night->addStrategy($extraNightsAlteration);
+                $night->setCost($allocatedNights[$nightIndex]);
+            }
 
-                $moneyValue = MoneyUtils::fromString($value, $night->getCost()->getCurrency());
+        } else {
 
-                switch ($extraNightsAlteration->getCalculationOperator()) {
+            /*
+             * Standard UPP functionality (< 2020-04-08)
+             */
 
-                    case Operator::OP_ADDITION:
+            foreach($matchedNightsList as $nightIndex => $night) {
+                $nightNum = $nightIndex + 1;
 
-                        $night->setCost($night->getCost()->add($moneyValue));
+                $value = $this->getNightlyValue(
+                    $nightNum,
+                    $context->getGuests(),
+                    MoneyUtils::getConvertedAmount($night->getCost()),
+                    $bracketDayValueMap,
+                    $extraNightsAlteration
+                );
 
-                        break;
+                if ($value !== null) {
+                    $night->addStrategy($extraNightsAlteration);
 
-                    case Operator::OP_SUBTRACTION:
+                    $moneyValue = MoneyUtils::fromString($value, $night->getCost()->getCurrency());
 
-                        $night->setCost($night->getCost()->subtract($moneyValue));
+                    switch ($extraNightsAlteration->getCalculationOperator()) {
 
-                        break;
+                        case Operator::OP_ADDITION:
 
-                    case Operator::OP_EQUALS:
-                    default:
-                        $night->setCost($moneyValue);
+                            $night->setCost($night->getCost()->add($moneyValue));
 
+                            break;
+
+                        case Operator::OP_SUBTRACTION:
+
+                            $night->setCost($night->getCost()->subtract($moneyValue));
+
+                            break;
+
+                        case Operator::OP_EQUALS:
+                        default:
+                            $night->setCost($moneyValue);
+
+                    }
                 }
             }
         }
@@ -174,7 +210,38 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
         return (float) $monetaryAmount;
     }
 
-    private function getGuestValue(int $guestNum, $guestBracket, $default = 0)
+    /**
+     * @param int $nightNum
+     * @param int $guestNum
+     * @param array $bracketDayValueMap
+     * @param ExtraNightsAlteration $strategy
+     *
+     * @return float|null
+     */
+    public function getFinalNightValue(int $nightNum, int $guestNum, array $bracketDayValueMap, ExtraNightsAlteration $strategy): ?float
+    {
+        $lastMatchedBracket = $bracketDayValueMap[$nightNum] ?? null;
+
+        if ($lastMatchedBracket === null) {
+            return null;
+        }
+
+        $rate = null;
+
+        if ($guestNum > 0 && $strategy->isEnablePerGuestPerNight()) {
+            $rate = $this->getGuestValue($guestNum, $lastMatchedBracket);
+        } else {
+            $rate = $bracketDayValueMap[$nightNum];
+        }
+
+        if ($rate === null) {
+            return null;
+        }
+
+        return (float) $rate;
+    }
+
+    private function getGuestValue(int $guestNum, $guestBracket)
     {
         if (isset($guestBracket[(string) $guestNum])) {
             return $guestBracket[(string) $guestNum];
@@ -184,7 +251,7 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
             return $guestBracket['_default'];
         }
 
-        throw new InvalidPricingConfigException('No default value specified on the guest bracket mapping');
+        return null;
     }
 
     public function postAlter(PricingContext $context, ControlItemInterface $controlItem, FinalPrice $fp)

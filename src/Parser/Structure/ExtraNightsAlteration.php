@@ -31,6 +31,11 @@ class ExtraNightsAlteration implements PeriodStrategy
     private $enablePerGuestPerNight = false;
 
     /**
+     * @var bool
+     */
+    private $nightsMatchedOverridesPrice = false;
+
+    /**
      * @var array
      */
     private $brackets = [];
@@ -132,6 +137,22 @@ class ExtraNightsAlteration implements PeriodStrategy
     }
 
     /**
+     * @return bool
+     */
+    public function isNightsMatchedOverridesPrice(): bool
+    {
+        return $this->nightsMatchedOverridesPrice;
+    }
+
+    /**
+     * @param bool $nightsMatchedOverridesPrice
+     */
+    public function setNightsMatchedOverridesPrice($nightsMatchedOverridesPrice): void
+    {
+        $this->nightsMatchedOverridesPrice = (bool) $nightsMatchedOverridesPrice;
+    }
+
+    /**
      * @return array
      */
     public function __toArray()
@@ -143,6 +164,7 @@ class ExtraNightsAlteration implements PeriodStrategy
             'applyToTotal'                  => $this->isApplyToTotal(),
             'makePreviousNightsSameRate'    => $this->isMakePreviousNightsSameRate(),
             'enablePerGuestPerNight'        => $this->isEnablePerGuestPerNight(),
+            'nightsMatchedOverridesPrice'   => $this->isNightsMatchedOverridesPrice(),
             'brackets'                      => $this->getBrackets()
         ];
     }

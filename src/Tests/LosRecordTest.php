@@ -64,6 +64,7 @@ class LosRecordTest extends TestCase
         ';
 
     public const PARSED_CONFIG_BOOKINGCOM_LOS_BRACKETS_TEST = 'bookingcom-los-guest-brackets-test';
+    public const PARSED_CONFIG_BOOKINGCOM_LOS_BRACKETS_TEST_WITH_OVERRIDES_PRICE = 'bookingcom-los-guest-brackets-test-with-nightsMatchedOverridesPrice';
 
     public function testBookingComLosGuestBrackets()
     {
@@ -112,6 +113,54 @@ class LosRecordTest extends TestCase
         $output = json_encode($transformer->transform($losRecords, $options), JSON_PRETTY_PRINT);
 
         $this->assertStringEqualsFile(__DIR__ . '/Resources/los_bookingcom_guest_brackets.txt', $output);
+    }
+
+    public function testBookingComLosGuestBracketsWithMatchedNightsOverridesPrice()
+    {
+        $test = TestUtils::getPriceTestByKey(
+            json_decode(file_get_contents(__DIR__ . '/Resources/test-configs.json'), true),
+            self::PARSED_CONFIG_BOOKINGCOM_LOS_BRACKETS_TEST_WITH_OVERRIDES_PRICE
+        );
+
+        $config = $test['config'];
+
+        $schema = json_decode($this->openSchemaData, true);
+
+        $upp = new Upp(
+            new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $test, [])),
+            new TestTranslator()
+        );
+
+        $losGenerator = new LosGenerator($upp);
+
+        $losOptions = new LosOptions(
+            'THB',
+            new \DateTime('2020-04-08'),
+            new \DateTime('2020-04-20')
+        );
+
+        $losOptions->setBookingDate(new \DateTime('2020-04-01'));
+
+        $losOptions->setDefaultMaxStay(7);
+        $losOptions->setForceFullGeneration(true);
+
+        // The test rates are generated without a fee that is always applied. This option should remove these
+        $losOptions->setPricingContextCalculationMode([PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES]);
+
+        $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
+        $parsed = $upp->parsePricingConfig($config, new StructureOptions());
+
+        $losRecords = $losGenerator->generateLosRecords($losOptions, $ld, $parsed);
+
+        $options = new TransformOptions();
+
+        $options->setBcomRoomId(1);
+        $options->setBcomRateId(1);
+
+        $transformer = new BookingComRecordTransformer();
+        $output = json_encode($transformer->transform($losRecords, $options), JSON_PRETTY_PRINT);
+
+        $this->assertStringEqualsFile(__DIR__ . '/Resources/los_bookingcom_guest_brackets_overrides_price.txt', $output);
     }
 
     public function testLosRecords()

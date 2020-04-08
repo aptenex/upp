@@ -29,7 +29,19 @@ class ExtraNightsAllocationParser extends BaseChildParser
         $p->setApplyToTotal(ArrayAccess::get('applyToTotal', $data, false));
         $p->setMakePreviousNightsSameRate(ArrayAccess::get('makePreviousNightsSameRate', $data, true));
         $p->setEnablePerGuestPerNight(ArrayAccess::get('enablePerGuestPerNight', $data, false));
+        $p->setNightsMatchedOverridesPrice(ArrayAccess::get('nightsMatchedOverridesPrice', $data, false));
         $p->setCalculationMethod(ArrayAccess::get('calculationMethod', $data, Rate::METHOD_FIXED));
+
+        // Certain fields can't be enabled together as they don't make sense
+        if ($p->isNightsMatchedOverridesPrice()) {
+            $p->setApplyToTotal(false);
+            $p->setMakePreviousNightsSameRate(false);
+
+            // Cannot be percentage based when it is the final price
+            $p->setCalculationMethod(Rate::METHOD_FIXED);
+        } else if ($p->isMakePreviousNightsSameRate() === false) {
+            $p->setApplyToTotal(false); // This requires make previous nights to be enabled
+        }
 
         if (ArrayAccess::has('calculationOperator', $data)) {
             $p->setCalculationOperator(ArrayAccess::get('calculationOperator', $data, Operator::OP_EQUALS));
