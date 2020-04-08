@@ -44,11 +44,11 @@ class BracketsTest extends TestCase
                 'night'  => '1-3',
                 'guests' => [
                     [
-                        'count' => '2',
+                        'guests' => '2',
                         'amount' => 60,
                     ],
                     [
-                        'count' => '3+',
+                        'guests' => '3+',
                         'amount' => 70,
                     ]
                 ],
@@ -58,11 +58,11 @@ class BracketsTest extends TestCase
                 'night'  => '4-8',
                 'guests' => [
                     [
-                        'count' => '2',
+                        'guests' => '2',
                         'amount' => 80,
                     ],
                     [
-                        'count' => '3+',
+                        'guests' => '3+',
                         'amount' => 90,
                     ]
                 ],

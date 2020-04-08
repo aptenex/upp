@@ -153,7 +153,7 @@ class BracketsEvaluator
 
             $expandedGuests = [];
             if (isset($item['guests']) && $item['guests'] !== null && !empty($item['guests'])) {
-                $expandedGuests = $this->expandRawBrackets($item['guests'], 'count', $guests, false);
+                $expandedGuests = $this->expandRawBrackets($item['guests'], 'guests', $guests, false);
             }
 
             $expandedGuests['_default'] = $defaultAmount;
