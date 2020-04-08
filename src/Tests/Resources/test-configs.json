@@ -9958,5 +9958,268 @@
         }
       }
     ]
+  },
+  {
+    "name": "THB BookingCom LOS Test with Brackets and Guest Brackets",
+    "key": "bookingcom-los-guest-brackets-test",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "THB",
+          "defaults": {
+            "damageDeposit": 0,
+            "damageDepositCalculationMethod": "fixed",
+            "perPetPerStay": 0,
+            "perPetPerNight": 0,
+            "perPetSplitMethod": "ON_TOTAL",
+            "minimumNights": 0,
+            "maximumNights": 7,
+            "balanceDaysBeforeArrival": 0,
+            "depositSplitPercentage": 0,
+            "daysRequiredInAdvanceForBooking": 0,
+            "bookableType": "instant_bookable",
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "modifiersUseCategorizedCalculationOrder": false,
+            "damageDepositSplitMethod": "ON_TOTAL"
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "description": "Initial",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-04-07",
+                  "endDate": "2021-04-06",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "1",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": null,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "enablePerGuestPerNight": true,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1",
+                        "amount": 4794,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "2",
+                            "amount": 5327
+                          },
+                          {
+                            "guests": "3",
+                            "amount": 6214
+                          }
+                        ]
+                      },
+                      {
+                        "night": "2",
+                        "amount": 9233,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "2",
+                            "amount": 10298
+                          },
+                          {
+                            "guests": "3",
+                            "amount": 12251
+                          }
+                        ]
+                      },
+                      {
+                        "night": "3",
+                        "amount": 13849,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "2",
+                            "amount": 14737
+                          },
+                          {
+                            "guests": "3",
+                            "amount": 17932
+                          }
+                        ]
+                      },
+                      {
+                        "night": "4",
+                        "amount": 18287,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "2",
+                            "amount": 18643
+                          },
+                          {
+                            "guests": "3",
+                            "amount": 22726
+                          }
+                        ]
+                      },
+                      {
+                        "night": "5",
+                        "amount": 21660,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "2",
+                            "amount": 22016
+                          },
+                          {
+                            "guests": "3",
+                            "amount": 25212
+                          }
+                        ]
+                      },
+                      {
+                        "night": "6",
+                        "amount": 24857,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "2",
+                            "amount": 25212
+                          },
+                          {
+                            "guests": "3",
+                            "amount": 31958
+                          }
+                        ]
+                      },
+                      {
+                        "night": "7",
+                        "amount": 28052,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "2",
+                            "amount": 28407
+                          },
+                          {
+                            "guests": "3",
+                            "amount": 35864
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "extra_guest_fee",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "priceGroup": "total",
+              "description": "Guest 2 (1 Night)",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "nights",
+                  "modifyRatePerUnit": false,
+                  "minimum": 1,
+                  "maximum": 1
+                },
+                {
+                  "type": "guests",
+                  "modifyRatePerUnit": false,
+                  "minimum": 2,
+                  "maximum": 2
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 533,
+                "calculationMethod": "fixed",
+                "calculationOperand": "addition",
+                "applicableTaxes": [],
+                "daysOfWeek": null
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2020-04-08",
+          "departureDate": "2020-04-12",
+          "bookingDate": "2020-04-01",
+          "guests": 1,
+          "currency": "THB"
+        },
+        "tests": {
+          "noNights": 4,
+          "finalPrice": 4616300,
+          "nightPrices": {
+            "2020-04-08": 479400,
+            "2020-04-09": 923300,
+            "2020-04-10": 1384900,
+            "2020-04-11": 1828700
+          }
+        }
+      },
+      {
+        "context": {
+          "arrivalDate": "2020-04-08",
+          "departureDate": "2020-04-12",
+          "bookingDate": "2020-04-01",
+          "guests": 2,
+          "currency": "THB"
+        },
+        "tests": {
+          "noNights": 4,
+          "finalPrice": 4900500,
+          "nightPrices": {
+            "2020-04-08": 532700,
+            "2020-04-09": 1029800,
+            "2020-04-10": 1473700,
+            "2020-04-11": 1864300
+          }
+        }
+      }
+    ]
   }
 ]
