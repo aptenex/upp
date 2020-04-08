@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Aptenex\Upp\Parser\Structure\PricingConfig;
 use PHPUnit\Framework\TestCase;
 use Aptenex\Upp\Parser\ModifiersParser;
 use Aptenex\Upp\Parser\Structure\StructureOptions;

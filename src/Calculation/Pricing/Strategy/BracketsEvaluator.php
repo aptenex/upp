@@ -38,14 +38,19 @@ class BracketsEvaluator
      *
      * @param array $brackets
      * @param int $nights
+     * @param int|null $guests
      * @return null|array
      */
-    public function retrieveExtraNightsDiscountValues($brackets, $nights)
+    public function retrieveExtraNightsDiscountValues($brackets, $nights, int $guests = null): ?array
     {
         $nights = (int) $nights;
 
         // First we want to expand the brackets into just nights so we can sort them into order (incase they are not)
-        $expandedBrackets = $this->expandBrackets($brackets, $nights);
+        if ($guests === null) {
+            $expandedBrackets = $this->expandBrackets($brackets, $nights);
+        } else {
+            $expandedBrackets = $this->expandBracketsWithGuests($brackets, $nights, $guests);
+        }
 
         $matched = [];
 
@@ -64,7 +69,7 @@ class BracketsEvaluator
      * @param int $nights
      * @return bool
      */
-    public function hasAtLeastOneMatch($brackets, $nights)
+    public function hasAtLeastOneMatch($brackets, $nights): bool
     {
         return $this->retrieveValue($brackets, $nights) !== null;
     }
@@ -78,14 +83,17 @@ class BracketsEvaluator
      */
     public function matchesCondition($condition, $nights, $exactMatch = false)
     {
-        $nights = (int) $nights;
+        return $this->matchConditionRaw($condition, $nights, $exactMatch);
+    }
 
+    public function matchConditionRaw($condition, $matchField, $exactMatch = false)
+    {
         if (strpos($condition, '+') !== false) {
             preg_match("/\d*/", $condition, $output);
 
             // Since this could be eg 7+ and nights=10 if nights is greater to or equal then it matches
 
-            if (count($output) === 1 && $nights >= ((int) $output[0])) {
+            if (count($output) === 1 && $matchField >= ((int) $output[0])) {
                 return true;
             }
         }
@@ -96,7 +104,7 @@ class BracketsEvaluator
             if (count($output) === 3) {
                 $min = (int) $output[1];
                 $max = (int) $output[2];
-                if ($nights >= $min && $nights <= $max) {
+                if ($matchField >= $min && $matchField <= $max) {
                     return true;
                 }
             }
@@ -104,17 +112,14 @@ class BracketsEvaluator
 
         // If the condition is simply a number like 5 then do the simple check
         if ($exactMatch) {
-            if (is_numeric($condition) && (int) $condition === $nights) {
+            if (is_numeric($condition) && (int) $condition === $matchField) {
                 return true;
             }
         } else {
-            if (is_numeric($condition) && (int) $condition <= $nights) {
+            if (is_numeric($condition) && (int) $condition <= $matchField) {
                 return true;
             }
-
         }
-
-        return false;
     }
 
     /**
@@ -126,20 +131,55 @@ class BracketsEvaluator
      */
     public function expandBrackets(array $brackets, $nights, $includeAllData = false)
     {
-        $en = [];
+        return $this->expandRawBrackets($brackets, 'night', $nights, $includeAllData);
+    }
+
+    /**
+     *
+     *
+     * @param array $brackets
+     * @param int   $nights
+     * @param int   $guests
+     *
+     * @return array
+     */
+    public function expandBracketsWithGuests(array $brackets, $nights, $guests)
+    {
+        $nightsExpanded = $this->expandBrackets($brackets, $nights, true);
+
+        // Now we need to loop through each one of these brackets and then expand the guest brackets
+        foreach($nightsExpanded as $night => $item) {
+            $defaultAmount = $nightsExpanded[$night]['amount'];
+
+            $expandedGuests = [];
+            if (isset($item['guests']) && $item['guests'] !== null && !empty($item['guests'])) {
+                $expandedGuests = $this->expandRawBrackets($item['guests'], 'count', $guests, false);
+            }
+
+            $expandedGuests['_default'] = $defaultAmount;
+            $nightsExpanded[$night] = $expandedGuests;
+        }
+
+
+        return $nightsExpanded;
+    }
+
+    private function expandRawBrackets(array $brackets, string $bracketField, int $fieldMaxCount, $includeAllData = false): array
+    {
+        $e = [];
 
         foreach($brackets as $item) {
-            $bracket = $item['night'];
+            $bracket = $item[$bracketField];
             $value = $includeAllData ? $item : $item['amount'];
 
             if (strpos($bracket, '+') !== false) {
                 preg_match("/\d*/", $bracket, $output);
 
                 if (count($output) === 1) {
-                    $nightStart = (int) $output[0];
+                    $bracketFieldStart = (int) $output[0];
                     // lets expand until the matched nights so we dont go too far
-                    for ($i = $nightStart; $i <= $nights; $i++) {
-                        $en[$i] = $value;
+                    for ($i = $bracketFieldStart; $i <= $fieldMaxCount; $i++) {
+                        $e[$i] = $value;
                     }
                 }
             } else if (strpos($bracket, '-') !== false) {
@@ -150,27 +190,31 @@ class BracketsEvaluator
                     $max = (int) $output[2];
 
                     for ($i = $min; $i <= $max; $i++) {
-                        $en[$i] = $value;
+                        $e[$i] = $value;
                     }
                 }
             } else if (is_numeric($bracket)) {
-                $en[(int) $bracket] = $value;
+                $e[(int) $bracket] = $value;
             }
+        }
+
+        if (empty($e)) {
+            return [];
         }
 
         // Sort the array
-        ksort($en);
+        ksort($e);
 
         // This will fill the rest of the nights with the highest number
-        if (count($en) < $nights) {
-            $value = array_values($en)[count($en) - 1];
-            $highestNum = array_keys($en)[count($en) - 1];
-            for ($i = $highestNum; $i <= $nights; $i++) {
-                $en[$i] = $value;
+        if (count($e) < $fieldMaxCount) {
+            $value = array_values($e)[count($e) - 1];
+            $highestNum = array_keys($e)[count($e) - 1];
+            for ($i = $highestNum; $i <= $fieldMaxCount; $i++) {
+                $e[$i] = $value;
             }
         }
 
-        return $en;
+        return $e;
     }
 
 }

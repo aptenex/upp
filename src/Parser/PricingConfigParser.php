@@ -57,7 +57,7 @@ class PricingConfigParser
             $data
         );
 
-        $ccp = new CurrencyConfigParser($this);
+        $ccp = new CurrencyConfigParser($this, $pc);
 
         $ccp->parse($pc, ArrayAccess::getOrException('data', $data, InvalidPricingConfigException::class, "No 'data' object exists"));
 
@@ -79,5 +79,7 @@ class PricingConfigParser
     {
         return $this->options;
     }
+
+
 
 }

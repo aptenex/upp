@@ -8,7 +8,7 @@ use Aptenex\Upp\Parser\Structure\Rate;
 use Aptenex\Upp\Parser\Structure\Operand;
 use Aptenex\Upp\Exception\InvalidPricingConfigException;
 
-class RateParser
+class RateParser extends BaseChildParser
 {
 
     /**
@@ -35,10 +35,10 @@ class RateParser
         $r->setTaxable(ArrayAccess::get('taxable', $data, false));
         $r->setApplicableTaxes(ArrayAccess::get('applicableTaxes', $data, []));
 
-        $r->setStrategy((new RateStrategyParser())->parse(ArrayAccess::get('strategy', $data, null)));
+        $r->setStrategy((new RateStrategyParser($this->getConfig()))->parse(ArrayAccess::get('strategy', $data, null)));
 
         if (ArrayAccess::has('daysOfWeek', $data) && ArrayAccess::get('daysOfWeek', $data, null) !== null) {
-            $r->setDaysOfWeek((new DaysOfWeekParser())->parse(ArrayAccess::get('daysOfWeek', $data, null)));
+            $r->setDaysOfWeek((new DaysOfWeekParser($this->getConfig()))->parse(ArrayAccess::get('daysOfWeek', $data, null)));
         }
 
         return $r;

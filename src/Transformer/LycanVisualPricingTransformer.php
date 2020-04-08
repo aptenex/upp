@@ -260,13 +260,14 @@ class LycanVisualPricingTransformer implements TransformerInterface
 
             $value = $enas->getNightlyValue(
                 $i + 1,
+                0,
                 $baseNightAmount,
                 $bracketDayValueMap,
                 $activeStrategy
             );
 
             if ($value !== null) {
-                switch ($activeStrategy->getCalculationOperand()) {
+                switch ($activeStrategy->getCalculationOperator()) {
                     case Operand::OP_ADDITION:
                         $baseNightAmount += $value;
 
@@ -297,12 +298,12 @@ class LycanVisualPricingTransformer implements TransformerInterface
             $bracketAmount = $rate->getAmount() * $bracketAmount;
         }
 
-        if ($activeStrategy->getCalculationOperand() === Operand::OP_SUBTRACTION) {
+        if ($activeStrategy->getCalculationOperator() === Operand::OP_SUBTRACTION) {
             // We actually need to subtract this off the rate
             $bracketAmount = $rate->getAmount() - $bracketAmount;
-        } else if ($activeStrategy->getCalculationOperand() === Operand::OP_ADDITION) {
+        } else if ($activeStrategy->getCalculationOperator() === Operand::OP_ADDITION) {
             $bracketAmount = $rate->getAmount() + $bracketAmount;
-        } else if ($activeStrategy->getCalculationOperand() === Operand::OP_EQUALS) {
+        } else if ($activeStrategy->getCalculationOperator() === Operand::OP_EQUALS) {
             $bracketAmount = $bracketAmount;
         }
 

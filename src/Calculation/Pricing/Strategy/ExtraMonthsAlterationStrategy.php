@@ -6,7 +6,7 @@ use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\Rate;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Calculation\FinalPrice;
-use Aptenex\Upp\Parser\Structure\Operand;
+use Aptenex\Upp\Parser\Structure\Operator;
 use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
 use Aptenex\Upp\Util\ArrayUtils;
 
@@ -109,7 +109,7 @@ class ExtraMonthsAlterationStrategy implements PriceAlterationInterface
                 continue; // Skip
             }
 
-            if (is_null($rate)) {
+            if ($rate === null) {
                 continue; // Do not alter if there is no match...
             }
 
@@ -136,21 +136,21 @@ class ExtraMonthsAlterationStrategy implements PriceAlterationInterface
 
             $night->addStrategy($extraMonthsAlteration);
 
-            switch ($extraMonthsAlteration->getCalculationOperand()) {
+            switch ($extraMonthsAlteration->getCalculationOperator()) {
 
-                case Operand::OP_ADDITION:
+                case Operator::OP_ADDITION:
 
                     $night->setCost($night->getCost()->add($nightRate));
 
                     break;
 
-                case Operand::OP_SUBTRACTION:
+                case Operator::OP_SUBTRACTION:
 
                     $night->setCost($night->getCost()->subtract($nightRate));
 
                     break;
 
-                case Operand::OP_EQUALS:
+                case Operator::OP_EQUALS:
                 default:
                     $night->setCost($nightRate);
 
@@ -165,7 +165,7 @@ class ExtraMonthsAlterationStrategy implements PriceAlterationInterface
         // Now we need to override shit
         // First lets deal with damage deposit
         if (
-            !is_null($lastMatchingBracket) &&
+            $lastMatchingBracket !== null &&
             isset($lastMatchingBracket['damageDepositOverride']) &&
             !empty($lastMatchingBracket['damageDepositOverride'])
         ) {
@@ -190,11 +190,11 @@ class ExtraMonthsAlterationStrategy implements PriceAlterationInterface
     {
         $rateConfig = $controlItem->getControlItemConfig()->getRate();
 
-        if (is_null($rateConfig->getStrategy())) {
+        if ($rateConfig->getStrategy() === null) {
             return;
         }
 
-        if (is_null($rateConfig->getStrategy()->getExtraMonthsAlteration())) {
+        if ($rateConfig->getStrategy()->getExtraMonthsAlteration() === null) {
             return;
         }
 
@@ -212,7 +212,7 @@ class ExtraMonthsAlterationStrategy implements PriceAlterationInterface
             // We need to find out the last matched bracket amount
             $monthlyAmount = $controlItem->getControlItemConfig()->getRate()->getAmount();
 
-            if (!is_null($lastMatchedBracket) && isset($lastMatchedBracket['amount'])) {
+            if ($lastMatchedBracket !== null && isset($lastMatchedBracket['amount'])) {
                 $monthlyAmount = $extraMonthsAlteration->getNumberOfMonthsDeposit() * (float)$lastMatchedBracket['amount'];
             }
 

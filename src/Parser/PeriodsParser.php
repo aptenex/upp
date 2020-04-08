@@ -7,7 +7,7 @@ use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\Operand;
 use Aptenex\Upp\Parser\Structure\Period;
 
-class PeriodsParser
+class PeriodsParser extends BaseChildParser
 {
 
     /**
@@ -47,9 +47,9 @@ class PeriodsParser
             Operand::getConditionalList()
         ));
 
-        $p->setConditions((new ConditionsParser())->parse(ArrayAccess::get('conditions', $periodData, [])));
+        $p->setConditions((new ConditionsParser($this->getConfig()))->parse(ArrayAccess::get('conditions', $periodData, [])));
 
-        $p->setRate((new RateParser())->parse(ArrayAccess::getOrException(
+        $p->setRate((new RateParser($this->getConfig()))->parse(ArrayAccess::getOrException(
             'rate',
             $periodData,
             InvalidPricingConfigException::class,

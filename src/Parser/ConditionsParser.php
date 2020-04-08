@@ -5,8 +5,9 @@ namespace Aptenex\Upp\Parser;
 use Aptenex\Upp\Exception\InvalidPricingConfigException;
 use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\Condition;
+use Aptenex\Upp\Parser\Structure\PricingConfig;
 
-class ConditionsParser
+class ConditionsParser extends BaseChildParser
 {
 
     /**
@@ -81,6 +82,21 @@ class ConditionsParser
 
                 $c->setMinimum(ArrayAccess::get('minimum', $conditionData, null));
                 $c->setMaximum(ArrayAccess::get('maximum', $conditionData, null));
+
+                // we need to update this flag to show what is the lowest minimum for the guest count
+                // as this will be used for los generation to determine when to increment the
+                // occupancy count, getting an accurate figure for this will save a lot of pricing iterations
+
+                $gmFlag = PricingConfig::FLAG_HAS_PER_GUEST_MODIFIER;
+                if (!$this->getConfig()->hasFlag($gmFlag)) {
+                    $this->getConfig()->addFlag($gmFlag, (int) $c->getMinimum());
+                } else {
+                    // Flag has already been set once so we need to check and update if applicable
+                    $currentMin = $this->getConfig()->getFlag($gmFlag);
+                    if ($c->getMinimum() > $currentMin) {
+                        $this->getConfig()->setFlag($gmFlag, (int) $c->getMinimum()); // Update
+                    }
+                }
 
                 break;
 

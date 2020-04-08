@@ -89,23 +89,25 @@ class LosGenerator implements LosGeneratorInterface
 
         $losRecords->getMetrics()->setMaxPotentialRuns($maxOccupancy * $days * $options->getMaximumStayRateLength());
 
-       
-        $guestModifierCount = 0;
-        $perGuestChangesAt = 0;
-        $guestModifierCondition = null;
-        foreach ($cc->getModifiers() as $modifierItem) {
-            foreach ($modifierItem->getConditions() as $conditionItem) {
-                if ($conditionItem->getType() === Condition::TYPE_GUESTS) {
-                    /** @var Condition\GuestsCondition $conditionItem */
-                    $guestModifierCount++;
-                    $guestModifierCondition = $conditionItem;
-                }
-            }
-        }
+        $hasDynamicGuestPricing =
+            $pricingConfig->hasFlag(PricingConfig::FLAG_HAS_PER_GUEST_PERIOD_STRATEGY) ||
+            $pricingConfig->hasFlag(PricingConfig::FLAG_HAS_PER_GUEST_MODIFIER)
+        ;
 
-        if ($guestModifierCount === 1 && $guestModifierCondition !== null) {
-            // Only set if only 1 guest modifier
-            $perGuestChangesAt = $guestModifierCondition->getMinimum();
+        $perGuestChangesAt = 0;
+        if ($hasDynamicGuestPricing) {
+            // Find the minimum from these two flags
+            $minsCheck = [];
+
+            if ($pricingConfig->hasFlag(PricingConfig::FLAG_HAS_PER_GUEST_PERIOD_STRATEGY)) {
+                $minsCheck[] = (int) $pricingConfig->getFlag(PricingConfig::FLAG_HAS_PER_GUEST_PERIOD_STRATEGY);
+            }
+
+            if ($pricingConfig->hasFlag(PricingConfig::FLAG_HAS_PER_GUEST_MODIFIER)) {
+                $minsCheck[] = (int) $pricingConfig->getFlag(PricingConfig::FLAG_HAS_PER_GUEST_MODIFIER);
+            }
+
+            $perGuestChangesAt = min($minsCheck);
         }
     
         $range = DateUtils::getDateRangeInclusive($options->getStartDate(), $options->getEndDate());
@@ -154,7 +156,7 @@ class LosGenerator implements LosGeneratorInterface
                 $rates = [];
                 $baseRates = [];
 
-                if (($g >= $perGuestChangesAt && $guestModifierCondition !== null) || $previousRateSet === null || $options->isForceFullGeneration()) {
+                if (($g >= $perGuestChangesAt && $hasDynamicGuestPricing) || $previousRateSet === null || $options->isForceFullGeneration()) {
                     // Because we start on 1 we need to add 1 (this can be done with an LTE operator
 
                     $hasBlockedAvailability = false;

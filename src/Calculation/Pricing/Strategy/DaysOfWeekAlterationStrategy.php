@@ -2,12 +2,11 @@
 
 namespace Aptenex\Upp\Calculation\Pricing\Strategy;
 
-use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
-use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Calculation\Night;
 use Aptenex\Upp\Context\PricingContext;
+use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Parser\Structure\Rate;
-use Money\Money;
+use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
 
 class DaysOfWeekAlterationStrategy implements PriceAlterationInterface
 {
@@ -18,11 +17,11 @@ class DaysOfWeekAlterationStrategy implements PriceAlterationInterface
         $extraNights = $matchedNights % 7;
         $rateConfig = $controlItem->getControlItemConfig()->getRate();
 
-        if (is_null($rateConfig->getStrategy())) {
+        if ($rateConfig->getStrategy() === null) {
             return false;
         }
 
-        if (is_null($rateConfig->getStrategy()->getDaysOfWeekAlteration())) {
+        if ($rateConfig->getStrategy()->getDaysOfWeekAlteration() === null) {
             return false;
         }
 
@@ -85,7 +84,7 @@ class DaysOfWeekAlterationStrategy implements PriceAlterationInterface
         foreach($applicableNights as $night) {
             $dayBracket = $findDayBracket(strtolower($night->getDate()->format("l")), $dowa->getBrackets());
 
-            if (is_null($dayBracket)) {
+            if ($dayBracket === null) {
                 continue;
             }
 
@@ -108,7 +107,7 @@ class DaysOfWeekAlterationStrategy implements PriceAlterationInterface
                 // We can actually apply the per unit price now to the matched nights
 
                 if ($dowa->getCalculationMethod() === Rate::METHOD_PERCENTAGE) {
-                    $bracketAmount = \Aptenex\Upp\Util\MoneyUtils::fromString(($rateConfig->getAmount() * $dayBracket['amount']), $fp->getCurrency());
+                    $bracketAmount = \Aptenex\Upp\Util\MoneyUtils::fromString($rateConfig->getAmount() * $dayBracket['amount'], $fp->getCurrency());
                 } else {
                     $bracketAmount = \Aptenex\Upp\Util\MoneyUtils::fromString($dayBracket['amount'], $fp->getCurrency());
                 }

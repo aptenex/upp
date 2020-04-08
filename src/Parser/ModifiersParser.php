@@ -11,7 +11,7 @@ use Aptenex\Upp\Parser\Structure\Operand;
 use Aptenex\Upp\Parser\Structure\SplitMethod;
 use Aptenex\Upp\Parser\Structure\StructureOptions;
 
-class ModifiersParser
+class ModifiersParser extends BaseChildParser
 {
 
     /**
@@ -110,9 +110,9 @@ class ModifiersParser
             Operand::getConditionalList()
         ));
 
-        $m->setConditions((new ConditionsParser())->parse(ArrayAccess::get('conditions', $modifierData, [])));
+        $m->setConditions((new ConditionsParser($this->getConfig()))->parse(ArrayAccess::get('conditions', $modifierData, [])));
 
-        $m->setRate((new RateParser())->parse(ArrayAccess::getOrException(
+        $m->setRate((new RateParser($this->getConfig()))->parse(ArrayAccess::getOrException(
             'rate',
             $modifierData,
             InvalidPricingConfigException::class,

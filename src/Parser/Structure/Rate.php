@@ -127,7 +127,7 @@ class Rate
      */
     public function setBasePriceOnly($basePriceOnly)
     {
-        $this->basePriceOnly = (bool)$basePriceOnly;
+        $this->basePriceOnly = (bool) $basePriceOnly;
     }
 
     /**
@@ -294,17 +294,17 @@ class Rate
     public function __toArray()
     {
         return [
-            'type'               => $this->getType(),
-            'amount'             => $this->getAmount(),
-            'taxable'            => $this->isTaxable(),
-            'damageDeposit'      => $this->getDamageDeposit(),
-            'basePriceOnly'      => $this->isBasePriceOnly(),
-            'applicableTaxes'    => $this->getApplicableTaxes(),
-            'calculationMethod'  => $this->getCalculationMethod(),
-            'calculationOperand' => $this->getCalculationOperand(),
+            'type'                => $this->getType(),
+            'amount'              => $this->getAmount(),
+            'taxable'             => $this->isTaxable(),
+            'damageDeposit'       => $this->getDamageDeposit(),
+            'basePriceOnly'       => $this->isBasePriceOnly(),
+            'applicableTaxes'     => $this->getApplicableTaxes(),
+            'calculationMethod'   => $this->getCalculationMethod(),
+            'calculationOperand'  => $this->getCalculationOperand(),
             'calculationOperator' => $this->getCalculationOperator(),
-            'daysOfWeek'         => $this->hasDaysOfWeek() ? $this->getDaysOfWeek()->__toArray(): null,
-            'strategy'           => $this->getStrategy() ? $this->getStrategy()->__toArray() : null,
+            'daysOfWeek'          => $this->hasDaysOfWeek() ? $this->getDaysOfWeek()->__toArray() : null,
+            'strategy'            => $this->getStrategy() ? $this->getStrategy()->__toArray() : null,
         ];
     }
 

@@ -56,7 +56,7 @@ class DaysOfWeekAlteration implements PeriodStrategy
     /**
      * @return string
      */
-    public function getCalculationOperand()
+    public function getCalculationOperator()
     {
         return $this->calculationOperand;
     }
@@ -64,7 +64,7 @@ class DaysOfWeekAlteration implements PeriodStrategy
     /**
      * @param string $calculationOperand
      */
-    public function setCalculationOperand($calculationOperand)
+    public function setCalculationOperator($calculationOperand)
     {
         $this->calculationOperand = $calculationOperand;
     }
@@ -148,7 +148,7 @@ class DaysOfWeekAlteration implements PeriodStrategy
     {
         return [
             'calculationMethod'        => $this->getCalculationMethod(),
-            'calculationOperand'       => $this->getCalculationOperand(),
+            'calculationOperand'       => $this->getCalculationOperator(),
             'unmatchedNightAmount'     => $this->getUnmatchedNightAmount(),
             'allowPartialMatch'        => $this->isAllowPartialMatch(),
             'useWeeklyPriceIfExceeded' => $this->isUseWeeklyPriceIfExceeded(),

@@ -6,7 +6,7 @@ use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
 use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Calculation\Night;
 use Aptenex\Upp\Context\PricingContext;
-use Aptenex\Upp\Parser\Structure\Operand;
+use Aptenex\Upp\Parser\Structure\Operator;
 use Aptenex\Upp\Parser\Structure\Rate;
 use Money\Money;
 
@@ -30,11 +30,11 @@ class PartialWeekAlterationStrategy implements PriceAlterationInterface
 
         $rateConfig = $controlItem->getControlItemConfig()->getRate();
 
-        if (is_null($rateConfig->getStrategy())) {
+        if ($rateConfig->getStrategy() === null) {
             return false;
         }
 
-        if (is_null($rateConfig->getStrategy()->getPartialWeekAlteration())) {
+        if ($rateConfig->getStrategy()->getPartialWeekAlteration() === null) {
             return false;
         }
 
@@ -44,11 +44,11 @@ class PartialWeekAlterationStrategy implements PriceAlterationInterface
 
         $weekOvercharge = $controlItem->getControlItemConfig()->getRate()->getStrategy()->getPartialWeekAlteration();
 
-        if (!is_null($weekOvercharge->getMinimumWeekCount()) && $weeks < $weekOvercharge->getMinimumWeekCount()) {
+        if ($weekOvercharge->getMinimumWeekCount() !== null && $weeks < $weekOvercharge->getMinimumWeekCount()) {
             return false; // If weeks below the minimum skip
         }
 
-        if (!is_null($weekOvercharge->getMaximumWeekCount()) && $weeks >= $weekOvercharge->getMaximumWeekCount()) {
+        if ($weekOvercharge->getMaximumWeekCount() !== null && $weeks >= $weekOvercharge->getMaximumWeekCount()) {
             return false;
         }
 
@@ -74,7 +74,7 @@ class PartialWeekAlterationStrategy implements PriceAlterationInterface
 
         $bracketsValue = $be->retrieveValue($weekOvercharge->getBrackets(), $bracketsExtraNights, true);
 
-        if (is_null($bracketsValue)) {
+        if ($bracketsValue === null) {
             return; // Do not alter as we have no valid bracket
         }
 
@@ -105,21 +105,21 @@ class PartialWeekAlterationStrategy implements PriceAlterationInterface
 
             $night->addStrategy($weekOvercharge);
 
-            switch ($weekOvercharge->getCalculationOperand()) {
+            switch ($weekOvercharge->getCalculationOperator()) {
 
-                case Operand::OP_ADDITION:
+                case Operator::OP_ADDITION:
 
                     $night->setCost($night->getCost()->add($newNightlyValues[$counter]));
 
                     break;
 
-                case Operand::OP_SUBTRACTION:
+                case Operator::OP_SUBTRACTION:
 
                     $night->setCost($night->getCost()->subtract($newNightlyValues[$counter]));
 
                     break;
 
-                case Operand::OP_EQUALS:
+                case Operator::OP_EQUALS:
                 default:
                     $night->setCost($newNightlyValues[$counter]);
 

@@ -29,12 +29,12 @@ interface PeriodStrategy
     /**
      * @return string
      */
-    public function getCalculationOperand();
+    public function getCalculationOperator();
 
     /**
      * @param string $calculationOperand
      */
-    public function setCalculationOperand($calculationOperand);
+    public function setCalculationOperator($calculationOperand);
 
     /**
      * @return array

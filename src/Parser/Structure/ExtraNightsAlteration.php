@@ -18,12 +18,17 @@ class ExtraNightsAlteration implements PeriodStrategy
     /**
      * @var string
      */
-    private $calculationOperand = Operand::OP_EQUALS;
+    private $calculationOperator = Operator::OP_EQUALS;
 
     /**
      * @var bool
      */
     private $makePreviousNightsSameRate = true;
+
+    /**
+     * @var bool
+     */
+    private $enablePerGuestPerNight = false;
 
     /**
      * @var array
@@ -65,17 +70,17 @@ class ExtraNightsAlteration implements PeriodStrategy
     /**
      * @return string
      */
-    public function getCalculationOperand()
+    public function getCalculationOperator()
     {
-        return $this->calculationOperand;
+        return $this->calculationOperator;
     }
 
     /**
-     * @param string $calculationOperand
+     * @param string $calculationOperator
      */
-    public function setCalculationOperand($calculationOperand)
+    public function setCalculationOperator($calculationOperator)
     {
-        $this->calculationOperand = $calculationOperand;
+        $this->calculationOperator = $calculationOperator;
     }
 
     /**
@@ -92,6 +97,22 @@ class ExtraNightsAlteration implements PeriodStrategy
     public function setMakePreviousNightsSameRate($makePreviousNightsSameRate)
     {
         $this->makePreviousNightsSameRate = $makePreviousNightsSameRate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnablePerGuestPerNight(): bool
+    {
+        return $this->enablePerGuestPerNight;
+    }
+
+    /**
+     * @param bool $enablePerGuestPerNight
+     */
+    public function setEnablePerGuestPerNight($enablePerGuestPerNight): void
+    {
+        $this->enablePerGuestPerNight = (bool) $enablePerGuestPerNight;
     }
 
     /**
@@ -116,11 +137,13 @@ class ExtraNightsAlteration implements PeriodStrategy
     public function __toArray()
     {
         return [
-            'calculationMethod'          => $this->getCalculationMethod(),
-            'calculationOperand'         => $this->getCalculationOperand(),
-            'applyToTotal'               => $this->isApplyToTotal(),
-            'makePreviousNightsSameRate' => $this->isMakePreviousNightsSameRate(),
-            'brackets'                   => $this->getBrackets()
+            'calculationMethod'             => $this->getCalculationMethod(),
+            'calculationOperand'            => $this->getCalculationOperator(),
+            'calculationOperator'           => $this->getCalculationOperator(),
+            'applyToTotal'                  => $this->isApplyToTotal(),
+            'makePreviousNightsSameRate'    => $this->isMakePreviousNightsSameRate(),
+            'enablePerGuestPerNight'        => $this->isEnablePerGuestPerNight(),
+            'brackets'                      => $this->getBrackets()
         ];
     }
 

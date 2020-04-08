@@ -49,7 +49,7 @@ class PartialWeekAlteration implements PeriodStrategy
     /**
      * @return string
      */
-    public function getCalculationOperand()
+    public function getCalculationOperator()
     {
         return $this->calculationOperand;
     }
@@ -57,7 +57,7 @@ class PartialWeekAlteration implements PeriodStrategy
     /**
      * @param string $calculationOperand
      */
-    public function setCalculationOperand($calculationOperand)
+    public function setCalculationOperator($calculationOperand)
     {
         $this->calculationOperand = $calculationOperand;
     }
@@ -121,7 +121,7 @@ class PartialWeekAlteration implements PeriodStrategy
     {
         return [
             'calculationMethod'        => $this->getCalculationMethod(),
-            'calculationOperand'       => $this->getCalculationOperand(),
+            'calculationOperand'       => $this->getCalculationOperator(),
             'minimumWeekCount'         => $this->getMinimumWeekCount(),
             'maximumWeekCount'         => $this->getMaximumWeekCount(),
             'brackets'                 => $this->getBrackets()

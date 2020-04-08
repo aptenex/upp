@@ -5,12 +5,12 @@ namespace Aptenex\Upp\Calculation\Pricing\Strategy;
 use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
 use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Context\PricingContext;
+use Aptenex\Upp\Exception\InvalidPricingConfigException;
 use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\ExtraNightsAlteration;
-use Aptenex\Upp\Parser\Structure\Operand;
+use Aptenex\Upp\Parser\Structure\Operator;
 use Aptenex\Upp\Parser\Structure\Rate;
 use Aptenex\Upp\Util\MoneyUtils;
-use Money\Money;
 
 class ExtraNightsAlterationStrategy implements PriceAlterationInterface
 {
@@ -40,6 +40,9 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
 
         $be = new BracketsEvaluator();
 
+        // Even if this has per guest per night enabled, we always match on the night first,
+        // so this does not even matter if the guests array exists or not
+
         if (!$be->hasAtLeastOneMatch($extraNightsAlteration->getBrackets(), $matchedNightsCount)) {
             return false;
         }
@@ -62,7 +65,11 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
 
         $be = new BracketsEvaluator();
 
-        $bracketDayValueMap = $be->retrieveExtraNightsDiscountValues($extraNightsAlteration->getBrackets(), $matchedNightsCount);
+        $bracketDayValueMap = $be->retrieveExtraNightsDiscountValues(
+            $extraNightsAlteration->getBrackets(),
+            $matchedNightsCount,
+            $extraNightsAlteration->isEnablePerGuestPerNight() ? $context->getGuests() : null
+        );
 
         // We need to sort this in case a lower bracket is added after a high one with
         // extraNightsAlterationStrategyUseGlobalNights being enabled as this causes issues
@@ -80,6 +87,7 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
 
             $value = $this->getNightlyValue(
                 $nightNum,
+                $context->getGuests(),
                 MoneyUtils::getConvertedAmount($night->getCost()),
                 $bracketDayValueMap,
                 $extraNightsAlteration
@@ -90,21 +98,21 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
 
                 $moneyValue = MoneyUtils::fromString($value, $night->getCost()->getCurrency());
 
-                switch ($extraNightsAlteration->getCalculationOperand()) {
+                switch ($extraNightsAlteration->getCalculationOperator()) {
 
-                    case Operand::OP_ADDITION:
+                    case Operator::OP_ADDITION:
 
                         $night->setCost($night->getCost()->add($moneyValue));
 
                         break;
 
-                    case Operand::OP_SUBTRACTION:
+                    case Operator::OP_SUBTRACTION:
 
                         $night->setCost($night->getCost()->subtract($moneyValue));
 
                         break;
 
-                    case Operand::OP_EQUALS:
+                    case Operator::OP_EQUALS:
                     default:
                         $night->setCost($moneyValue);
 
@@ -116,12 +124,15 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
 
     /**
      * @param int $nightNum
+     * @param int $guestNum
      * @param float $baseNightlyCost
      * @param array $bracketDayValueMap
      * @param ExtraNightsAlteration $strategy
+     *
      * @return float|null
+     * @throws InvalidPricingConfigException
      */
-    public function getNightlyValue(int $nightNum, float $baseNightlyCost, array $bracketDayValueMap, ExtraNightsAlteration $strategy): ?float
+    public function getNightlyValue(int $nightNum, int $guestNum, float $baseNightlyCost, array $bracketDayValueMap, ExtraNightsAlteration $strategy): ?float
     {
         $lastBracketValue = ArrayAccess::getLastElement($bracketDayValueMap);
 
@@ -132,10 +143,20 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
             return null;
         }
 
+        $rate = null;
+
         if ($strategy->isMakePreviousNightsSameRate()) {
-            $rate = $lastBracketValue;
+            if ($strategy->isEnablePerGuestPerNight() && $guestNum > 0) {
+                $rate = $this->getGuestValue($guestNum, $lastBracketValue);
+            } else {
+                $rate = $lastBracketValue;
+            }
         } else if (array_key_exists($nightNum, $bracketDayValueMap)) {
-            $rate = $bracketDayValueMap[$nightNum];
+            if ($strategy->isEnablePerGuestPerNight() && $guestNum > 0) {
+                $rate = $this->getGuestValue($guestNum, $bracketDayValueMap[$nightNum]);
+            } else {
+                $rate = $bracketDayValueMap[$nightNum];
+            }
         } else {
             return null; // Skip
         }
@@ -151,6 +172,19 @@ class ExtraNightsAlterationStrategy implements PriceAlterationInterface
         }
 
         return (float) $monetaryAmount;
+    }
+
+    private function getGuestValue(int $guestNum, $guestBracket, $default = 0)
+    {
+        if (isset($guestBracket[(string) $guestNum])) {
+            return $guestBracket[(string) $guestNum];
+        }
+
+        if (isset($guestBracket['_default'])) {
+            return $guestBracket['_default'];
+        }
+
+        throw new InvalidPricingConfigException('No default value specified on the guest bracket mapping');
     }
 
     public function postAlter(PricingContext $context, ControlItemInterface $controlItem, FinalPrice $fp)

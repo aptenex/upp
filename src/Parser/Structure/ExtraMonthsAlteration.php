@@ -75,7 +75,7 @@ class ExtraMonthsAlteration implements PeriodStrategy
     /**
      * @return string
      */
-    public function getCalculationOperand()
+    public function getCalculationOperator()
     {
         return $this->calculationOperand;
     }
@@ -83,7 +83,7 @@ class ExtraMonthsAlteration implements PeriodStrategy
     /**
      * @param string $calculationOperand
      */
-    public function setCalculationOperand($calculationOperand)
+    public function setCalculationOperator($calculationOperand)
     {
         $this->calculationOperand = $calculationOperand;
     }
@@ -159,7 +159,7 @@ class ExtraMonthsAlteration implements PeriodStrategy
     {
         return [
             'calculationMethod'          => $this->getCalculationMethod(),
-            'calculationOperand'         => $this->getCalculationOperand(),
+            'calculationOperand'         => $this->getCalculationOperator(),
             'applyToTotal'               => $this->isApplyToTotal(),
             'makePreviousMonthsSameRate' => $this->isMakePreviousMonthsSameRate(),
             'extraNightsRate'            => $this->getExtraNightsRate(),

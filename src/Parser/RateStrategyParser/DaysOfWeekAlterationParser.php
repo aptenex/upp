@@ -3,11 +3,13 @@
 namespace Aptenex\Upp\Parser\RateStrategyParser;
 
 use Aptenex\Upp\Helper\ArrayAccess;
+use Aptenex\Upp\Parser\BaseChildParser;
 use Aptenex\Upp\Parser\Structure\DaysOfWeekAlteration;
 use Aptenex\Upp\Parser\Structure\Operand;
+use Aptenex\Upp\Parser\Structure\Operator;
 use Aptenex\Upp\Parser\Structure\Rate;
 
-class DaysOfWeekAlterationParser
+class DaysOfWeekAlterationParser extends BaseChildParser
 {
 
     /**
@@ -24,7 +26,14 @@ class DaysOfWeekAlterationParser
         $p = new DaysOfWeekAlteration();
 
         $p->setCalculationMethod(ArrayAccess::get('calculationMethod', $data, Rate::METHOD_FIXED));
-        $p->setCalculationOperand(ArrayAccess::get('calculationOperand', $data, Operand::OP_EQUALS));
+
+        if (ArrayAccess::has('calculationOperator', $data)) {
+            $p->setCalculationOperator(ArrayAccess::get('calculationOperator', $data, Operator::OP_EQUALS));
+        } else {
+            // Deprecated
+            $p->setCalculationOperator(ArrayAccess::get('calculationOperand', $data, Operator::OP_EQUALS));
+        }
+
         $p->setAllowPartialMatch(ArrayAccess::get('allowPartialMatch', $data, true));
         $p->setUseWeeklyPriceIfExceeded(ArrayAccess::get('useWeeklyPriceIfExceeded', $data, true));
         $p->setUnmatchedNightAmount(ArrayAccess::get('unmatchedNightAmount', $data, null));

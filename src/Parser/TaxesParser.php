@@ -7,7 +7,7 @@ use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\Rate;
 use Aptenex\Upp\Parser\Structure\Tax;
 
-class TaxesParser
+class TaxesParser extends BaseChildParser
 {
 
     /**

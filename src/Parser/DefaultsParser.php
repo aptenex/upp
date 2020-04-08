@@ -8,7 +8,7 @@ use Aptenex\Upp\Parser\Structure\Period;
 use Aptenex\Upp\Parser\Structure\Rate;
 use Aptenex\Upp\Parser\Structure\SplitMethod;
 
-class DefaultsParser
+class DefaultsParser extends BaseChildParser
 {
 
     /**

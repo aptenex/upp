@@ -10,7 +10,7 @@ use Aptenex\Upp\Parser\Structure\Rate;
 use Aptenex\Upp\Parser\Structure\Operand;
 use Aptenex\Upp\Exception\InvalidPricingConfigException;
 
-class DaysOfWeekParser
+class DaysOfWeekParser extends BaseChildParser
 {
 
     /**

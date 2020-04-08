@@ -3,6 +3,7 @@
 namespace Aptenex\Upp\Parser\Structure;
 
 use Aptenex\Upp\Exception\BaseException;
+use Aptenex\Upp\Util\ArrayUtils;
 use Symfony\Component\Validator\Constraints\Valid;
 
 /**
@@ -10,6 +11,9 @@ use Symfony\Component\Validator\Constraints\Valid;
  */
 class PricingConfig
 {
+
+    public const FLAG_HAS_PER_GUEST_MODIFIER = 'HAS_PER_GUEST_MODIFIER';
+    public const FLAG_HAS_PER_GUEST_PERIOD_STRATEGY = 'HAS_PER_GUEST_PERIOD_STRATEGY';
 
     /**
      * @var string
@@ -42,6 +46,11 @@ class PricingConfig
      * @var array
      */
     private $rawConfig;
+
+    /**
+     * @var string[]
+     */
+    private $flags = [];
 
     /**
      * @param string $name
@@ -148,6 +157,55 @@ class PricingConfig
     }
 
     /**
+     * @return string[]
+     */
+    public function getFlags(): array
+    {
+        return $this->flags;
+    }
+
+    /**
+     * @param string $flag
+     *
+     * @return bool
+     */
+    public function hasFlag(string $flag): bool
+    {
+        return array_key_exists($flag, $this->flags);
+    }
+
+    /**
+     * @param string $flag
+     * @return array|mixed
+     */
+    public function getFlag(string $flag)
+    {
+        return ArrayUtils::getNestedArrayValue($flag, $this->flags, null);
+    }
+
+    /**
+     * @param string $flag
+     * @param mixed $flagData
+     */
+    public function addFlag(string $flag, $flagData): void
+    {
+        if ($this->hasFlag($flag)) {
+            return;
+        }
+
+        $this->flags[$flag] = $flagData;
+    }
+
+    /**
+     * @param string $flag
+     * @param mixed $flagData
+     */
+    public function setFlag(string $flag, $flagData): void
+    {
+        $this->flags[$flag] = $flagData;
+    }
+
+    /**
      * @return array
      */
     public function __toArray(): array
@@ -163,6 +221,7 @@ class PricingConfig
             'version' => $this->getVersion(),
             'schema'  => $this->getSchema(),
             'meta'    => $this->getMeta(),
+            'flags'   => $this->getFlags(),
             'data'    => $ccs
         ];
     }

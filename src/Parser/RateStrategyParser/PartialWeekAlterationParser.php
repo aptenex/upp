@@ -3,11 +3,13 @@
 namespace Aptenex\Upp\Parser\RateStrategyParser;
 
 use Aptenex\Upp\Helper\ArrayAccess;
+use Aptenex\Upp\Parser\BaseChildParser;
 use Aptenex\Upp\Parser\Structure\Operand;
+use Aptenex\Upp\Parser\Structure\Operator;
 use Aptenex\Upp\Parser\Structure\PartialWeekAlteration;
 use Aptenex\Upp\Parser\Structure\Rate;
 
-class PartialWeekAlterationParser
+class PartialWeekAlterationParser extends BaseChildParser
 {
 
     /**
@@ -26,7 +28,14 @@ class PartialWeekAlterationParser
         $p->setMinimumWeekCount(ArrayAccess::get('minimumWeekCount', $data, 0));
         $p->setMaximumWeekCount(ArrayAccess::get('maximumWeekCount', $data, null));
         $p->setCalculationMethod(ArrayAccess::get('calculationMethod', $data, Rate::METHOD_FIXED));
-        $p->setCalculationOperand(ArrayAccess::get('calculationOperand', $data, Operand::OP_EQUALS));
+
+        if (ArrayAccess::has('calculationOperator', $data)) {
+            $p->setCalculationOperator(ArrayAccess::get('calculationOperator', $data, Operator::OP_EQUALS));
+        } else {
+            // Deprecated
+            $p->setCalculationOperator(ArrayAccess::get('calculationOperand', $data, Operator::OP_EQUALS));
+        }
+
         $p->setBrackets(ArrayAccess::get('brackets', $data, []));
 
         if (empty($p->getBrackets())) {
