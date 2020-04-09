@@ -38,6 +38,7 @@ class ExtraNightsAllocationParser extends BaseChildParser
             $p->setMakePreviousNightsSameRate(false);
 
             // Cannot be percentage based when it is the final price
+            $p->setCalculationOperator(Operator::OP_EQUALS); // This should not even be used with this code path
             $p->setCalculationMethod(Rate::METHOD_FIXED);
         } else if ($p->isMakePreviousNightsSameRate() === false) {
             $p->setApplyToTotal(false); // This requires make previous nights to be enabled
