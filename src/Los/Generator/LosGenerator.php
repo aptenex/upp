@@ -261,6 +261,32 @@ class LosGenerator implements LosGeneratorInterface
                             $losRecords->getMetrics()->setTimesRan($losRecords->getMetrics()->getTimesRan() + 1);
                             
                             $fp = $this->upp->generatePrice($pc, $pricingConfig);
+
+                            /*
+                             * We have an edge case where IF there are two periods matched,
+                             * and the second period has a total value of zero then we should generate
+                             * an invalid price exception to set the rate to zero.
+                             */
+                            if (\count($fp->getStay()->getPeriodsUsed()) > 1) {
+                                $startPeriod = $fp->getStay()->getPeriodWithArrivalDay();
+
+                                foreach($fp->getStay()->getPeriodsUsed() as $index => $usedPeriod) {
+                                    if ($startPeriod->getId() === $usedPeriod->getId()) {
+                                        continue; // Skip the first period
+                                    }
+
+                                    $usedTotal = MoneyUtils::newMoney(0, $fp->getCurrency());
+                                    foreach($usedPeriod->getMatchedNights() as $night) {
+                                        $usedTotal = $usedTotal->add($night->getCost());
+                                    }
+
+                                    // The non-start period is zero
+                                    if ($usedTotal->isZero()) {
+                                        throw new InvalidPriceException('Cannot generate price when non-arrival periods total sum of nights is zero');
+                                    }
+                                }
+                            }
+
                             $rates[] = MoneyUtils::getConvertedAmount($fp->getTotal());
                             $baseRates[] = MoneyUtils::getConvertedAmount($fp->getBasePrice());
                         } catch (CannotMatchRequestedDatesException|InvalidPriceException|BaseException $ex) {

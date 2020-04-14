@@ -10408,6 +10408,106 @@
                   }
                 }
               }
+            },
+            {
+              "description": "Step 2",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-05-01",
+                  "endDate": "2020-05-31",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "7",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": null,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applicableTaxes": [],
+                "daysOfWeek": {
+                  "calculationMethod": "fixed",
+                  "days": {
+                    "monday": {
+                      "day": "monday",
+                      "amount": null,
+                      "changeover": "NONE",
+                      "minimumNights": null
+                    },
+                    "tuesday": {
+                      "day": "tuesday",
+                      "amount": null,
+                      "changeover": "NONE",
+                      "minimumNights": null
+                    },
+                    "wednesday": {
+                      "day": "wednesday",
+                      "amount": null,
+                      "changeover": "NONE",
+                      "minimumNights": null
+                    },
+                    "thursday": {
+                      "day": "thursday",
+                      "amount": null,
+                      "changeover": "NONE",
+                      "minimumNights": null
+                    },
+                    "friday": {
+                      "day": "friday",
+                      "amount": null,
+                      "changeover": "NONE",
+                      "minimumNights": null
+                    },
+                    "saturday": {
+                      "day": "saturday",
+                      "amount": null,
+                      "changeover": "ARRIVAL_OR_DEPARTURE",
+                      "minimumNights": null
+                    },
+                    "sunday": {
+                      "day": "sunday",
+                      "amount": null,
+                      "changeover": "NONE",
+                      "minimumNights": null
+                    }
+                  }
+                },
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": false,
+                    "makePreviousNightsSameRate": false,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": true,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "7",
+                        "amount": 28096.5,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "2",
+                            "amount": 28455
+                          },
+                          {
+                            "guests": "3",
+                            "amount": 35613
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
             }
           ],
           "modifiers": []
