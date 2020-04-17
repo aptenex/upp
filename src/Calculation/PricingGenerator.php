@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Calculation;
 
+use Aptenex\Upp\Parser\Structure\Defaults;
 use Money\Money;
 use Aptenex\Upp\Calculation\Condition\Evaluator;
 use Aptenex\Upp\Calculation\ControlItem\Modifier;
@@ -504,6 +505,8 @@ class PricingGenerator
      */
     private function evaluatePeriods(PricingContext $context, FinalPrice $fp): void
     {
+        $defaults = $fp->getCurrencyConfigUsed()->getDefaults();
+
         foreach ($fp->getCurrencyConfigUsed()->getPeriods() as $period) {
 
             $cp = new Period($fp);
@@ -533,8 +536,15 @@ class PricingGenerator
                         continue;
                     }
 
-                    // If the stay's day date exists in this condition collection set then add it..
-                    if (!array_key_exists($date, $conSet->getMatchedDates())) {
+                    // Determine if this is the arrival day
+                    // Figure out the period selection strategy and set the options
+                    $isArrivalDay = $context->getArrivalDate() === $date;
+                    $isArrivalExclusive = $defaults->getPeriodSelectionStrategy() === Defaults::PERIOD_SELECTION_STRATEGY_ARRIVAL_EXCLUSIVE;
+                    $isMatchAll = $isArrivalDay && $isArrivalExclusive;
+
+
+                    // Only check for if the date is within the period IF isMatchAll is false
+                    if ($isMatchAll === false && !array_key_exists($date, $conSet->getMatchedDates())) {
                         continue;
                     }
 

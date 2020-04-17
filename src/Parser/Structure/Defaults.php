@@ -5,6 +5,9 @@ namespace Aptenex\Upp\Parser\Structure;
 class Defaults
 {
 
+    public const PERIOD_SELECTION_STRATEGY_DEFAULT = 'DEFAULT';
+    public const PERIOD_SELECTION_STRATEGY_ARRIVAL_EXCLUSIVE = 'ARRIVAL_EXCLUSIVE';
+
     /**
      * @var string|null
      */
@@ -79,6 +82,11 @@ class Defaults
      * @var boolean|null
      */
     protected $modifiersUseCategorizedCalculationOrder = false;
+
+    /**
+     * @var string|null
+     */
+    protected $periodSelectionStrategy = self::PERIOD_SELECTION_STRATEGY_DEFAULT;
 
     /**
      * @return bool
@@ -374,6 +382,22 @@ class Defaults
     public function setModifiersUseCategorizedCalculationOrder(?bool $modifiersUseCategorizedCalculationOrder): void
     {
         $this->modifiersUseCategorizedCalculationOrder = $modifiersUseCategorizedCalculationOrder;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPeriodSelectionStrategy(): ?string
+    {
+        return $this->periodSelectionStrategy;
+    }
+
+    /**
+     * @param string|null $periodSelectionStrategy
+     */
+    public function setPeriodSelectionStrategy(?string $periodSelectionStrategy): void
+    {
+        $this->periodSelectionStrategy = $periodSelectionStrategy;
     }
 
     /**

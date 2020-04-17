@@ -34,6 +34,8 @@ class DefaultsParser extends BaseChildParser
         $d->setMinimumNights(ArrayAccess::get('minimumNights', $defaults, null));
         $d->setMaximumNights(ArrayAccess::get('maximumNights', $defaults, null));
 
+        $d->setPeriodSelectionStrategy(ArrayAccess::get('periodSelectionStrategy', $defaults, Defaults::PERIOD_SELECTION_STRATEGY_DEFAULT));
+
         $d->setBalanceDaysBeforeArrival(ArrayAccess::get('balanceDaysBeforeArrival', $defaults, null));
         $d->setDepositSplitPercentage(ArrayAccess::get('depositSplitPercentage', $defaults, null));
 
