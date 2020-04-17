@@ -531,6 +531,9 @@ class PricingGenerator
                 // If all days have been taken up then cancel the period condition evaluation as we have
                 // all that we need
 
+                $captureBegun = false;
+                $isArrivalExclusive = $defaults->getPeriodSelectionStrategy() === Defaults::PERIOD_SELECTION_STRATEGY_ARRIVAL_EXCLUSIVE;
+
                 foreach ($fp->getStay()->getNights() as $date => $day) {
                     if ($day->hasPeriodControlItem()) {
                         continue;
@@ -539,17 +542,19 @@ class PricingGenerator
                     // Determine if this is the arrival day
                     // Figure out the period selection strategy and set the options
                     $isArrivalDay = $context->getArrivalDate() === $date;
-                    $isArrivalExclusive = $defaults->getPeriodSelectionStrategy() === Defaults::PERIOD_SELECTION_STRATEGY_ARRIVAL_EXCLUSIVE;
                     $isMatchAll = $isArrivalDay && $isArrivalExclusive;
 
+                    if ($isMatchAll) {
+                        $captureBegun = true;
+                    }
 
-                    // Only check for if the date is within the period IF isMatchAll is false
-                    if ($isMatchAll === false && !array_key_exists($date, $conSet->getMatchedDates())) {
+                    // Only check for if the date is within the period if a capture hasn't begun
+                    // Otherwise we want to capture all dates into the arrival period
+                    if (!array_key_exists($date, $conSet->getMatchedDates()) && $captureBegun === false) {
                         continue;
                     }
 
-                    $day->setPeriodControlItem($conSet->getMatchedDates()[$date]->getControlItem());
-
+                    $day->setPeriodControlItem($cp);
                     $cp->addMatchedNight($day);
                     $fp->getStay()->addPeriodsUsed($cp);
                 }
