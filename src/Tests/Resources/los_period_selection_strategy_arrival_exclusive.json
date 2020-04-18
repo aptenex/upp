@@ -1,0 +1,247 @@
+{
+  "name": "Pricing",
+  "schema": "property-pricing",
+  "version": "0.0.1",
+  "meta": [],
+  "data": [
+    {
+      "currency": "THB",
+      "defaults": {
+        "damageDeposit": 0,
+        "damageDepositCalculationMethod": "fixed",
+        "perPetPerStay": 0,
+        "perPetPerNight": 0,
+        "perPetSplitMethod": "ON_TOTAL",
+        "minimumNights": 0,
+        "maximumNights": 7,
+        "balanceDaysBeforeArrival": 0,
+        "depositSplitPercentage": 0,
+        "daysRequiredInAdvanceForBooking": 0,
+        "bookableType": "instant_bookable",
+        "periodSelectionStrategy": "ARRIVAL_EXCLUSIVE",
+        "extraNightAlterationStrategyUseGlobalNights": false,
+        "modifiersUseCategorizedCalculationOrder": false,
+        "damageDepositSplitMethod": "ON_TOTAL"
+      },
+      "taxes": [],
+      "periods": [
+        {
+          "description": "Initial season",
+          "priority": 500,
+          "conditionOperand": "AND",
+          "conditions": [
+            {
+              "type": "date",
+              "modifyRatePerUnit": false,
+              "startDate": "2020-04-07",
+              "endDate": "2020-04-30",
+              "arrivalDays": [],
+              "departureDays": []
+            }
+          ],
+          "minimumNights": "4",
+          "bookableType": null,
+          "rate": {
+            "type": "nightly",
+            "amount": null,
+            "calculationMethod": "fixed",
+            "calculationOperand": "equals",
+            "applicableTaxes": [],
+            "daysOfWeek": null,
+            "strategy": {
+              "extraNightsAlteration": {
+                "applyToTotal": false,
+                "makePreviousNightsSameRate": false,
+                "enablePerGuestPerNight": false,
+                "nightsMatchedOverridesPrice": true,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "brackets": [
+                  {
+                    "night": "4",
+                    "amount": 12073,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  },
+                  {
+                    "night": "5",
+                    "amount": 14204,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  },
+                  {
+                    "night": "6",
+                    "amount": 15979,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  },
+                  {
+                    "night": "7",
+                    "amount": 17400,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "description": "Step 2",
+          "priority": 500,
+          "conditionOperand": "AND",
+          "conditions": [
+            {
+              "type": "date",
+              "modifyRatePerUnit": false,
+              "startDate": "2020-05-01",
+              "endDate": "2020-05-31",
+              "arrivalDays": [],
+              "departureDays": []
+            }
+          ],
+          "minimumNights": "3",
+          "bookableType": null,
+          "rate": {
+            "type": "nightly",
+            "amount": 0,
+            "calculationMethod": "fixed",
+            "calculationOperand": "equals",
+            "applicableTaxes": [],
+            "daysOfWeek": null,
+            "strategy": {
+              "extraNightsAlteration": {
+                "applyToTotal": false,
+                "makePreviousNightsSameRate": false,
+                "enablePerGuestPerNight": false,
+                "nightsMatchedOverridesPrice": true,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "brackets": [
+                  {
+                    "night": "3",
+                    "amount": 9843,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  },
+                  {
+                    "night": "4",
+                    "amount": 12169,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  },
+                  {
+                    "night": "5",
+                    "amount": 14317,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  },
+                  {
+                    "night": "6",
+                    "amount": 16106,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  },
+                  {
+                    "night": "7",
+                    "amount": 11,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "description": "Initial season (Duplicate)",
+          "priority": 500,
+          "conditionOperand": "AND",
+          "conditions": [
+            {
+              "type": "date",
+              "modifyRatePerUnit": false,
+              "startDate": "2020-06-01",
+              "endDate": "2021-04-06",
+              "arrivalDays": [],
+              "departureDays": []
+            }
+          ],
+          "minimumNights": "4",
+          "bookableType": null,
+          "rate": {
+            "type": "nightly",
+            "amount": null,
+            "calculationMethod": "fixed",
+            "calculationOperand": "equals",
+            "applicableTaxes": [],
+            "daysOfWeek": null,
+            "strategy": {
+              "extraNightsAlteration": {
+                "applyToTotal": false,
+                "makePreviousNightsSameRate": false,
+                "enablePerGuestPerNight": false,
+                "nightsMatchedOverridesPrice": true,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "brackets": [
+                  {
+                    "night": "4",
+                    "amount": 12073,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  },
+                  {
+                    "night": "5",
+                    "amount": 14204,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  },
+                  {
+                    "night": "6",
+                    "amount": 15979,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  },
+                  {
+                    "night": "7",
+                    "amount": 17400,
+                    "days": [],
+                    "matchAmount": 0,
+                    "damageDepositOverride": null,
+                    "guests": []
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "modifiers": []
+    }
+  ]
+}

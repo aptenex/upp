@@ -211,6 +211,48 @@ class LosRecordTest extends TestCase
         $this->assertStringEqualsFile(__DIR__ . '/Resources/los_bookingcom_guest_brackets_multiple_season_stop.txt', $output);
     }
 
+    public function testPeriodSelectionStrategyArrivalExclusiveGeneratesCorrectLos()
+    {
+        $config = json_decode(file_get_contents(__DIR__ . '/Resources/los_period_selection_strategy_arrival_exclusive.json'), true);
+        $schema = json_decode($this->openSchemaData, true);
+
+        $upp = new Upp(
+            new HashMapPricingResolver(),
+            new TestTranslator()
+        );
+
+        $losGenerator = new LosGenerator($upp);
+
+        $losOptions = new LosOptions(
+            'THB',
+            new \DateTime('2020-04-20'),
+            new \DateTime('2020-05-20')
+        );
+
+        $losOptions->setBookingDate(new \DateTime('2020-04-01'));
+
+        $losOptions->setDefaultMaxStay(7);
+        $losOptions->setForceFullGeneration(true);
+
+        // The test rates are generated without a fee that is always applied. This option should remove these
+        $losOptions->setPricingContextCalculationMode([PricingContext::CALCULATION_MODE_LOS_EXCLUDE_MANDATORY_FEES_AND_TAXES]);
+
+        $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
+        $parsed = $upp->parsePricingConfig($config, new StructureOptions());
+
+        $losRecords = $losGenerator->generateLosRecords($losOptions, $ld, $parsed);
+
+        $options = new TransformOptions();
+
+        $options->setBcomRoomId(1);
+        $options->setBcomRateId(1);
+
+        $transformer = new BookingComRecordTransformer();
+        $output = json_encode($transformer->transform($losRecords, $options), JSON_PRETTY_PRINT);
+
+        $this->assertStringEqualsFile(__DIR__ . '/Resources/los_period_selection_strategy_arrival_exclusive.generated.txt', $output);
+    }
+
     public function testLosRecords()
     {
         $rentalSchemaData = '
