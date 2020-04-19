@@ -50,7 +50,7 @@ class ArrayRecordTransformer extends BaseRecordTransformer
                 }
                 // If we reach the END of the guest range and the hash still has not changed -
                 // we need to add at least one entry!
-                if ($isLastGuestEntry &&
+                if ($options->isRestrictSameGuestRatesToSingleOccupancy() && $isLastGuestEntry &&
                     $this->previousHashGuestLookaheadSatisfied($previousSingleRecord, $singleRecord, $firstLookahead, $index) ){
                     
                     $maxGuestCountForSameHash = $singleRecord['guest']; // Skip
