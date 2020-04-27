@@ -62,6 +62,15 @@ class TransformOptions
      */
     private $skipEmptyLosRecordsFromTransformation = true;
     
+    /**
+     * Basically on some LOS builds if the occupancy counts for 1, 2,3,4 guests is the same.
+     * We only need to send the 4 guests. We can take the highest occupancy count and ONLY send that.
+     * However, with something like BCOM, we DO NOT want this to be used, because otherwise, old rates when changes
+     * will not be removed. BCOM LOS updates are not document replacements, they merge.
+     * @var bool
+     */
+    private $restrictSameGuestRatesToSingleOccupancy = true;
+    
     
     /**
      * @return int
@@ -222,6 +231,22 @@ class TransformOptions
     public function setSkipEmptyLosRecordsFromTransformation(bool $skipEmptyLosRecordsFromTransformation): void
     {
         $this->skipEmptyLosRecordsFromTransformation = $skipEmptyLosRecordsFromTransformation;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function isRestrictSameGuestRatesToSingleOccupancy(): bool
+    {
+        return $this->restrictSameGuestRatesToSingleOccupancy;
+    }
+    
+    /**
+     * @param bool $restrictSameGuestRatesToSingleOccupancy
+     */
+    public function setRestrictSameGuestRatesToSingleOccupancy(bool $restrictSameGuestRatesToSingleOccupancy): void
+    {
+        $this->restrictSameGuestRatesToSingleOccupancy = $restrictSameGuestRatesToSingleOccupancy;
     }
     
 }
