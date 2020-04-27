@@ -5,7 +5,6 @@ namespace Aptenex\Upp\Util;
 use Aptenex\Upp\Money\RentivoCurrencies;
 use Money\Money;
 use Money\Currency;
-use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;
 use Money\Formatter\IntlMoneyFormatter;
 use Money\Formatter\DecimalMoneyFormatter;
