@@ -2,10 +2,10 @@
 
 namespace Aptenex\Upp\Models;
 
+use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\SplitMethod;
 use Money\Money;
 use Aptenex\Upp\Exception\Error;
-use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Util\MoneyUtils;
 use Aptenex\Upp\Calculation\Stay;
 use Aptenex\Upp\Exception\ErrorHandler;

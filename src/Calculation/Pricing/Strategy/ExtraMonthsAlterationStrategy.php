@@ -8,7 +8,6 @@ use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Parser\Structure\Operator;
 use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
-use Aptenex\Upp\Util\ArrayUtils;
 
 class ExtraMonthsAlterationStrategy implements PriceAlterationInterface
 {
