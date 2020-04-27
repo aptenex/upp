@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Tests;
 
+use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\PricingConfig;
 use Aptenex\Upp\Transformer\LycanVisualPricingTransformer;
 use Aptenex\Upp\Upp;
@@ -44,7 +45,7 @@ class MultipleCalculationTest extends TestCase
             self::$currentTestName = $priceConfig['name'];
 
             $upp = new Upp(
-                new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $priceConfig, [])),
+                new HashMapPricingResolver(ArrayAccess::get('mixins', $priceConfig, [])),
                 new TestTranslator()
             );
 
@@ -83,7 +84,7 @@ class MultipleCalculationTest extends TestCase
             if (isset($priceConfig['priceTests'])) {
                 foreach($priceConfig['priceTests'] as $index => $pTest) {
 
-                    if (ArrayUtils::hasNestedArrayValue('parseOptions', $pTest)) {
+                    if (ArrayAccess::has('parseOptions', $pTest)) {
                         foreach($pTest['parseOptions'] as $key => $value) {
                             $setter = sprintf('set%s', ucfirst($key));
                             $structureOptions->$setter($value);

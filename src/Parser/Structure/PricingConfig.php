@@ -3,7 +3,7 @@
 namespace Aptenex\Upp\Parser\Structure;
 
 use Aptenex\Upp\Exception\BaseException;
-use Aptenex\Upp\Util\ArrayUtils;
+use Aptenex\Upp\Helper\ArrayAccess;
 use Symfony\Component\Validator\Constraints\Valid;
 
 /**
@@ -180,7 +180,7 @@ class PricingConfig
      */
     public function getFlag(string $flag)
     {
-        return ArrayUtils::getNestedArrayValue($flag, $this->flags, null);
+        return ArrayAccess::get($flag, $this->flags, null);
     }
 
     /**

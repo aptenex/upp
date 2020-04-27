@@ -201,7 +201,7 @@ class ExtraMonthsAlterationStrategy implements PriceAlterationInterface
         $extraMonthsAlteration = $rateConfig->getStrategy()->getExtraMonthsAlteration();
 
         $stratData = $controlItem->getRate()->getStrategyData();
-        $lastMatchedBracket = ArrayUtils::getNestedArrayValue('lastMatchedBracket', $stratData);
+        $lastMatchedBracket = ArrayAccess::get('lastMatchedBracket', $stratData);
 
         // Now we can deal with the deposit override
         if (

@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Aptenex\Upp\Context\PricingContext;
+use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Los\Transformer\BookingComRecordTransformer;
 use Aptenex\Upp\Los\Transformer\ElasticSearchTransformer;
 use Aptenex\Upp\Util\TestUtils;
@@ -78,7 +79,7 @@ class LosRecordTest extends TestCase
         $schema = json_decode($this->openSchemaData, true);
 
         $upp = new Upp(
-            new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $test, [])),
+            new HashMapPricingResolver(ArrayAccess::get('mixins', $test, [])),
             new TestTranslator()
         );
 
@@ -127,7 +128,7 @@ class LosRecordTest extends TestCase
         $schema = json_decode($this->openSchemaData, true);
 
         $upp = new Upp(
-            new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $test, [])),
+            new HashMapPricingResolver(ArrayAccess::get('mixins', $test, [])),
             new TestTranslator()
         );
 
@@ -175,7 +176,7 @@ class LosRecordTest extends TestCase
         $schema = json_decode($this->openSchemaData, true);
 
         $upp = new Upp(
-            new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $test, [])),
+            new HashMapPricingResolver(ArrayAccess::get('mixins', $test, [])),
             new TestTranslator()
         );
 
@@ -415,7 +416,7 @@ class LosRecordTest extends TestCase
         $pricing = json_decode($pricingConfig, true);
 
         $upp = new Upp(
-            new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $pricing, [])),
+            new HashMapPricingResolver(ArrayAccess::get('mixins', $pricing, [])),
             new TestTranslator()
         );
 
@@ -611,7 +612,7 @@ class LosRecordTest extends TestCase
         $pricing = json_decode($pricingConfig, true);
 
         $upp = new Upp(
-            new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $pricing, [])),
+            new HashMapPricingResolver(ArrayAccess::get('mixins', $pricing, [])),
             new TestTranslator()
         );
 
@@ -895,7 +896,7 @@ class LosRecordTest extends TestCase
         $pricing = json_decode($pricingConfig, true);
 
         $upp = new Upp(
-            new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $pricing, [])),
+            new HashMapPricingResolver(ArrayAccess::get('mixins', $pricing, [])),
             new TestTranslator()
         );
 
@@ -1100,7 +1101,7 @@ class LosRecordTest extends TestCase
         $pricing = json_decode($pricingConfig, true);
 
         $upp = new Upp(
-            new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $pricing, [])),
+            new HashMapPricingResolver(ArrayAccess::get('mixins', $pricing, [])),
             new TestTranslator()
         );
 
@@ -1359,7 +1360,7 @@ class LosRecordTest extends TestCase
         $pricing = json_decode($pricingConfig, true);
 
         $upp = new Upp(
-            new HashMapPricingResolver(ArrayUtils::getNestedArrayValue('mixins', $pricing, [])),
+            new HashMapPricingResolver(ArrayAccess::get('mixins', $pricing, [])),
             new TestTranslator()
         );
 

@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Util;
 
+use Aptenex\Upp\Money\RentivoCurrencies;
 use Money\Money;
 use Money\Currency;
 use Money\Currencies\ISOCurrencies;
@@ -50,7 +51,7 @@ class MoneyUtils
     public static function fromString($amount, $currency): Money
     {
         if (self::$moneyParser === null) {
-            self::$moneyParser = new DecimalMoneyParser(new ISOCurrencies());
+            self::$moneyParser = new DecimalMoneyParser(new RentivoCurrencies());
         }
     
         $currency = self::getCurrency($currency);
@@ -91,7 +92,7 @@ class MoneyUtils
     public static function getConvertedAmount(Money $money): float
     {
         if (self::$moneyFormatter === null) {
-            self::$moneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
+            self::$moneyFormatter = new DecimalMoneyFormatter(new RentivoCurrencies());
         }
 
         return (float) self::$moneyFormatter->format($money);
@@ -106,7 +107,7 @@ class MoneyUtils
     public static function formatMoney($money, $locale = 'en_GB'): string
     {
         $i = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
-        $f = new IntlMoneyFormatter($i, new ISOCurrencies());
+        $f = new IntlMoneyFormatter($i, new RentivoCurrencies());
 
         return $f->format($money);
     }

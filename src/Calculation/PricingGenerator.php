@@ -185,9 +185,9 @@ class PricingGenerator
         if ($context->hasRentalSchemaData()) {
             $schema = $context->getRentalSchemaData();
             $listingKey = 'listing.maxOccupancy';
-            if (ArrayUtils::hasNestedArrayValue($listingKey, $schema)) {
+            if (ArrayAccess::has($listingKey, $schema)) {
 
-                $maxOccupancy = (int) ArrayUtils::getNestedArrayValue($listingKey, $schema);
+                $maxOccupancy = (int) ArrayAccess::get($listingKey, $schema);
                 if ($context->getGuests() > $maxOccupancy) {
                     ExceptionUtils::handleError($fp, Error::TYPE_EXCEEDS_MAX_OCCUPANCY, $maxOccupancy);
                 }
