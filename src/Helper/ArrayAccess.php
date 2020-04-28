@@ -202,10 +202,10 @@ class ArrayAccess
 
     /**
      * @param string $key
-     * @param mixed $value
-     * @param array $array
+     * @param mixed  $value
+     * @param array  $array
      *
-     * @return array mixed
+     * @return mixed
      */
     public static function set($key, $value, &$array)
     {
@@ -243,7 +243,7 @@ class ArrayAccess
 
             if (is_array($filter) && !empty($filter)) {
                 foreach ($filter as $explode) {
-                    self::setNestedArrayValue($explode, $value[$explode], $explodedInnerDot);
+                    self::set($explode, $value[$explode], $explodedInnerDot);
                     // $array[] = $explodedInnerDot;
                     $value = $explodedInnerDot + $value;
                     unset($value[$explode]);
