@@ -106,7 +106,7 @@ class Price
             $this->basePriceTaxable = MoneyUtils::newMoney(0, $this->getCurrency());
             $this->damageDeposit = MoneyUtils::newMoney(0, $this->getCurrency());
         }
-
+        $this->setXID(Uuid::uuid4());
         $this->stay = new Stay($contextUsed);
         $this->splitDetails = new GuestSplitOverview();
         $this->errors = new ErrorHandler();
