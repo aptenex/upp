@@ -13,6 +13,7 @@ use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Parser\Structure\Period;
 use Aptenex\Upp\Calculation\AdjustmentAmount;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Aptenex\Upp\Calculation\SplitAmount\GuestSplitOverview;
@@ -20,12 +21,12 @@ use Aptenex\Upp\Calculation\SplitAmount\GuestSplitOverview;
 class Price
 {
     /**
-     * @var string
+     * @var UuidInterface
      * This value is intended to be auto generated and allows you to assign a TrackingID to the response.
      * The ID can then be used in future quotes, reservations to know which quote generated the reservation for purposes of matching up sessions.
      * x-id = '0000-0000...' etc
      */
-    private $xID = null;
+    private $xID;
     
     /**
      * @var Money
@@ -520,17 +521,17 @@ class Price
     }
     
     /**
-     * @return string
+     * @return  UuidInterface
      */
-    public function getXID(): string
+    public function getXID(): UuidInterface
     {
         return $this->xID;
     }
     
     /**
-     * @param string $xID
+     * @param UuidInterface $xID
      */
-    public function setXID(string $xID): void
+    public function setXID(UuidInterface $xID): void
     {
         $this->xID = $xID;
     }
