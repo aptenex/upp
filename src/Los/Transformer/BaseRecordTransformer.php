@@ -3,9 +3,8 @@
 namespace Aptenex\Upp\Los\Transformer;
 
 use Aptenex\Upp\Los\LosRecords;
-use Aptenex\Upp\Util\MoneyUtils;
+use Aptenex\Upp\Money\RentivoCurrencies;
 use Money\Converter;
-use Money\Currencies\ISOCurrencies;
 use Money\Exchange;
 
 abstract class BaseRecordTransformer implements RecordTransformerInterface
@@ -77,7 +76,7 @@ abstract class BaseRecordTransformer implements RecordTransformerInterface
         if ( ! $options->getExchange() instanceof Exchange) {
             return $rates;
         }
-        $converter = new Converter(new ISOCurrencies(), $options->getExchange());
+        $converter = new Converter(new RentivoCurrencies(), $options->getExchange());
         $conversionRatio = $options->getExchange()->quote($options->getSourceCurrency(), $options->getTargetCurrency())->getConversionRatio();
         
         foreach ($rates as &$rate) {

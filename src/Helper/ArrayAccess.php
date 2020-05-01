@@ -108,9 +108,13 @@ class ArrayAccess
      */
     public static function get($key, $array, $default = null)
     {
-        if (is_null($key)) return $array;
+        if ($key === null) {
+            return $array;
+        }
 
-        if (isset($array[$key])) return $array[$key];
+        if (isset($array[$key])) {
+            return $array[$key];
+        }
 
         foreach (explode('.', $key) as $segment) {
             if (!is_array($array) || !array_key_exists($segment, $array)) {
@@ -177,9 +181,13 @@ class ArrayAccess
      */
     public static function has($key, $array)
     {
-        if (empty($array) || is_null($key)) return false;
+        if (empty($array) || $key === null) {
+            return false;
+        }
 
-        if (array_key_exists($key, $array)) return true;
+        if (array_key_exists($key, $array)) {
+            return true;
+        }
 
         foreach (explode('.', $key) as $segment) {
             if (!is_array($array) || !array_key_exists($segment, $array)) {
@@ -194,14 +202,16 @@ class ArrayAccess
 
     /**
      * @param string $key
-     * @param mixed $value
-     * @param array $array
+     * @param mixed  $value
+     * @param array  $array
      *
-     * @return array mixed
+     * @return mixed
      */
     public static function set($key, $value, &$array)
     {
-        if (is_null($key)) return $array = $value;
+        if ($key === null) {
+            return $array = $value;
+        }
 
         $keys = explode('.', $key);
 
@@ -213,13 +223,40 @@ class ArrayAccess
             // values at the correct depth. Then we'll keep digging into the array.
 
             if (!isset($array[$key]) || !is_array($array[$key])) {
-                $array[$key] = [];
+                if ('[]' === $key) {
+                    $array[] = [];
+                } else {
+                    $array[$key] = [];
+                }
             }
 
-            $array =& $array[$key];
+            $array = &$array[$key];
         }
 
-        $array[array_shift($keys)] = $value;
+        // If the value is an array and the value contains dot notation
+        // We should also attempt to expand on that. (But only to a depth of one).
+        if (is_array($value)) {
+            $keysOfValues = array_keys($value);
+            $filter = array_filter($keysOfValues, static function ($item) {
+                return false !== strpos($item, '.');
+            });
+
+            if (is_array($filter) && !empty($filter)) {
+                foreach ($filter as $explode) {
+                    self::set($explode, $value[$explode], $explodedInnerDot);
+                    // $array[] = $explodedInnerDot;
+                    $value = $explodedInnerDot + $value;
+                    unset($value[$explode]);
+                }
+            }
+        }
+
+        $key = array_shift($keys);
+        if ('[]' === $key) {
+            $array[] = $value;
+        } else {
+            $array[$key] = $value;
+        }
 
         return $array;
     }
@@ -230,25 +267,23 @@ class ArrayAccess
      */
     public static function remove($keys, &$array)
     {
-        $original =& $array;
+        $original = &$array;
 
         foreach ((array) $keys as $key) {
             $parts = explode('.', $key);
 
             while (count($parts) > 1) {
-
                 $part = array_shift($parts);
 
                 if (isset($array[$part]) && is_array($array[$part])) {
-                    $array =& $array[$part];
+                    $array = &$array[$part];
                 }
-
             }
 
             unset($array[array_shift($parts)]);
 
             // clean up after each pass
-            $array =& $original;
+            $array = &$original;
         }
     }
 

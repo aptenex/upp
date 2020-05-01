@@ -2,6 +2,8 @@
 
 namespace Aptenex\Upp\Util;
 
+use Aptenex\Upp\Helper\ArrayAccess;
+
 /**
  * Class ArrayUtils
  *
@@ -142,6 +144,8 @@ class ArrayUtils
     }
 
     /**
+     * @deprecated Use ArrayAccess::get() instead
+     *
      * @param string $key
      * @param array $array
      * @param null $default
@@ -150,22 +154,12 @@ class ArrayUtils
      */
     public static function getNestedArrayValue($key, $array, $default = null)
     {
-        if (is_null($key)) return $array;
-
-        if (isset($array[$key])) return $array[$key];
-
-        foreach (explode('.', $key) as $segment) {
-            if (!is_array($array) || !array_key_exists($segment, $array)) {
-                return $default;
-            }
-
-            $array = $array[$segment];
-        }
-
-        return $array;
+        return ArrayAccess::get($key, $array, $default);
     }
 
     /**
+     * @deprecated Use ArrayAccess::has() instead
+     *
      * @param string $key
      * @param array $array
      *
@@ -173,22 +167,12 @@ class ArrayUtils
      */
     public static function hasNestedArrayValue($key, $array)
     {
-        if (empty($array) || is_null($key)) return false;
-
-        if (array_key_exists($key, $array)) return true;
-
-        foreach (explode('.', $key) as $segment) {
-            if (!is_array($array) || !array_key_exists($segment, $array)) {
-                return false;
-            }
-
-            $array = $array[$segment];
-        }
-
-        return true;
+        return ArrayAccess::has($key, $array);
     }
 
     /**
+     * @deprecated Use ArrayAccess::set() instead
+     *
      * @param string $key
      * @param mixed $value
      * @param array $array
@@ -197,55 +181,18 @@ class ArrayUtils
      */
     public static function setNestedArrayValue($key, $value, &$array)
     {
-        if (is_null($key)) return $array = $value;
-
-        $keys = explode('.', $key);
-
-        while (count($keys) > 1) {
-            $key = array_shift($keys);
-
-            // If the key doesn't exist at this depth, we will just create an empty array
-            // to hold the next value, allowing us to create the arrays to hold final
-            // values at the correct depth. Then we'll keep digging into the array.
-
-            if (!isset($array[$key]) || !is_array($array[$key])) {
-                $array[$key] = [];
-            }
-
-            $array =& $array[$key];
-        }
-
-        $array[array_shift($keys)] = $value;
-
-        return $array;
+        return ArrayAccess::set($key, $value, $array);
     }
 
     /**
+     * @deprecated Use ArrayAccess::remove() instead
+     *
      * @param string|array $keys
      * @param array $array
      */
     public static function removeNestedArrayKey($keys, &$array)
     {
-        $original =& $array;
-
-        foreach ((array) $keys as $key) {
-            $parts = explode('.', $key);
-
-            while (count($parts) > 1) {
-
-                $part = array_shift($parts);
-
-                if (isset($array[$part]) && is_array($array[$part])) {
-                    $array =& $array[$part];
-                }
-
-            }
-
-            unset($array[array_shift($parts)]);
-
-            // clean up after each pass
-            $array =& $original;
-        }
+        ArrayAccess::remove($keys, $array);
     }
 
     /**
@@ -297,7 +244,7 @@ class ArrayUtils
 
                 $rawDataField = $pipedParts[0];
 
-                $value = ArrayUtils::getNestedArrayValue($rawDataField, $rawData);
+                $value = self::get($rawDataField, $rawData);
 
                 if (!is_null($value)) {
                     // Go through the rest of the piped parts and see if they are functions
@@ -320,10 +267,10 @@ class ArrayUtils
                     }
                 }
 
-                ArrayUtils::setNestedArrayValue($newFieldKey, $value, $nd);
+                self::set($newFieldKey, $value, $nd);
             } else if (is_callable($rawDataField)) {
                 $callbackResult = $rawDataField($rawData);
-                ArrayUtils::setNestedArrayValue($newFieldKey, $callbackResult, $nd);
+                self::set($newFieldKey, $callbackResult, $nd);
             } else if (is_array($rawDataField)) {
                 // Gotta read config option
                 switch ($rawDataField['type']) {
@@ -333,34 +280,34 @@ class ArrayUtils
                             $default = $rawDataField['default'];
                         }
 
-                        $result = ArrayUtils::getNestedArrayValue($rawDataField['field'], $rawData, $default);
+                        $result = self::get($rawDataField['field'], $rawData, $default);
 
                         // Cast if not default
                         if ($result !== $default) {
                             $result = (string) $result;
                         }
 
-                        ArrayUtils::setNestedArrayValue($newFieldKey, $result, $nd);
+                        self::set($newFieldKey, $result, $nd);
                         break;
 
                     case 'date':
                         $date = null;
-                        $dateString = ArrayUtils::getNestedArrayValue($rawDataField['field'], $rawData);
+                        $dateString = self::get($rawDataField['field'], $rawData);
                         if (DateUtils::isValidDate($dateString)) {
                             $date = (new \DateTime($dateString))->format("Y-m-d");
                         }
 
-                        ArrayUtils::setNestedArrayValue($newFieldKey, $date, $nd);
+                        self::set($newFieldKey, $date, $nd);
                         break;
                         
                     case 'country':
-                        $value = ArrayUtils::getNestedArrayValue($rawDataField['field'], $rawData);
+                        $value = self::get($rawDataField['field'], $rawData);
                         
                         if (!is_null($value)) {
                             if (strlen($value) === 2) {
                                 $value = strtoupper($value);
                             } else {
-                                $reversedMap = array_flip(ArrayUtils::getCountryMapISO2ToName());
+                                $reversedMap = array_flip(self::getCountryMapISO2ToName());
                                 $countryName = ucwords($value);
 
                                 if (strtolower($value) === 'usa') {
@@ -378,7 +325,7 @@ class ArrayUtils
                         }
                         
 
-                        ArrayUtils::setNestedArrayValue($newFieldKey, $value, $nd);
+                        self::set($newFieldKey, $value, $nd);
                         break;
                         
                     case 'int':
@@ -387,14 +334,14 @@ class ArrayUtils
                             $default = $rawDataField['default'];
                         }
 
-                        $result = ArrayUtils::getNestedArrayValue($rawDataField['field'], $rawData, $default);
+                        $result = self::get($rawDataField['field'], $rawData, $default);
 
                         // Cast if not default
                         if ($result !== $default) {
                             $result = (int) $result;
                         }
 
-                        ArrayUtils::setNestedArrayValue($newFieldKey, $result, $nd);
+                        self::set($newFieldKey, $result, $nd);
                         break;
 
                     case 'float':
@@ -403,20 +350,20 @@ class ArrayUtils
                             $default = $rawDataField['default'];
                         }
 
-                        $result = ArrayUtils::getNestedArrayValue($rawDataField['field'], $rawData, $default);
+                        $result = self::get($rawDataField['field'], $rawData, $default);
 
                         // Cast if not default
                         if ($result !== $default) {
                             $result = (float) $result;
                         }
 
-                        ArrayUtils::setNestedArrayValue($newFieldKey, $result, $nd);
+                        self::set($newFieldKey, $result, $nd);
                         break;
 
                     case 'custom':
                         $fieldData = null;
                         if (isset($rawDataField['field'])) {
-                            $fieldData = ArrayUtils::getNestedArrayValue($rawDataField['field'], $rawData);
+                            $fieldData = self::get($rawDataField['field'], $rawData);
                         }
 
                         $callbackResult = $rawDataField['callback'](
@@ -424,12 +371,12 @@ class ArrayUtils
                             $rawData
                         );
 
-                        ArrayUtils::setNestedArrayValue($newFieldKey, $callbackResult, $nd);
+                        self::set($newFieldKey, $callbackResult, $nd);
                         break;
                 }
 
             } else {
-                ArrayUtils::setNestedArrayValue($newFieldKey, null, $nd);
+                self::set($newFieldKey, null, $nd);
             }
         }
 
@@ -729,451 +676,6 @@ class ArrayUtils
             'YE' => 'Yemen',
             'ZM' => 'Zambia',
             'ZW' => 'Zimbabwe',
-        ];
-    }
-
-    public static function getFontAwesomeIcons()
-    {
-        return [
-            'fa-glass' => 'Glass',
-            'fa-music' => 'Music',
-            'fa-search' => 'Search',
-            'fa-envelope-o' => 'Envelope O',
-            'fa-heart' => 'Heart',
-            'fa-star' => 'Star',
-            'fa-star-o' => 'Star O',
-            'fa-user' => 'User',
-            'fa-film' => 'Film',
-            'fa-th-large' => 'Th Large',
-            'fa-th' => 'Th',
-            'fa-th-list' => 'Th List',
-            'fa-check' => 'Check',
-            'fa-times' => 'Times',
-            'fa-search-plus' => 'Search Plus',
-            'fa-search-minus' => 'Search Minus',
-            'fa-power-off' => 'Power Off',
-            'fa-signal' => 'Signal',
-            'fa-cog' => 'Cog',
-            'fa-trash-o' => 'Trash O',
-            'fa-home' => 'Home',
-            'fa-file-o' => 'File O',
-            'fa-clock-o' => 'Clock O',
-            'fa-road' => 'Road',
-            'fa-download' => 'Download',
-            'fa-arrow-circle-o-down' => 'Arrow Circle O Down',
-            'fa-arrow-circle-o-up' => 'Arrow Circle O Up',
-            'fa-inbox' => 'Inbox',
-            'fa-play-circle-o' => 'Play Circle O',
-            'fa-repeat' => 'Repeat',
-            'fa-refresh' => 'Refresh',
-            'fa-list-alt' => 'List Alt',
-            'fa-lock' => 'Lock',
-            'fa-flag' => 'Flag',
-            'fa-headphones' => 'Headphones',
-            'fa-volume-off' => 'Volume Off',
-            'fa-volume-down' => 'Volume Down',
-            'fa-volume-up' => 'Volume Up',
-            'fa-qrcode' => 'Qrcode',
-            'fa-barcode' => 'Barcode',
-            'fa-tag' => 'Tag',
-            'fa-tags' => 'Tags',
-            'fa-book' => 'Book',
-            'fa-bookmark' => 'Bookmark',
-            'fa-print' => 'Print',
-            'fa-camera' => 'Camera',
-            'fa-font' => 'Font',
-            'fa-bold' => 'Bold',
-            'fa-italic' => 'Italic',
-            'fa-text-height' => 'Text Height',
-            'fa-text-width' => 'Text Width',
-            'fa-align-left' => 'Align Left',
-            'fa-align-center' => 'Align Center',
-            'fa-align-right' => 'Align Right',
-            'fa-align-justify' => 'Align Justify',
-            'fa-list' => 'List',
-            'fa-outdent' => 'Outdent',
-            'fa-indent' => 'Indent',
-            'fa-video-camera' => 'Video Camera',
-            'fa-picture-o' => 'Picture O',
-            'fa-pencil' => 'Pencil',
-            'fa-map-marker' => 'Map Marker',
-            'fa-adjust' => 'Adjust',
-            'fa-tint' => 'Tint',
-            'fa-pencil-square-o' => 'Pencil Square O',
-            'fa-share-square-o' => 'Share Square O',
-            'fa-check-square-o' => 'Check Square O',
-            'fa-arrows' => 'Arrows',
-            'fa-step-backward' => 'Step Backward',
-            'fa-fast-backward' => 'Fast Backward',
-            'fa-backward' => 'Backward',
-            'fa-play' => 'Play',
-            'fa-pause' => 'Pause',
-            'fa-stop' => 'Stop',
-            'fa-forward' => 'Forward',
-            'fa-fast-forward' => 'Fast Forward',
-            'fa-step-forward' => 'Step Forward',
-            'fa-eject' => 'Eject',
-            'fa-chevron-left' => 'Chevron Left',
-            'fa-chevron-right' => 'Chevron Right',
-            'fa-plus-circle' => 'Plus Circle',
-            'fa-minus-circle' => 'Minus Circle',
-            'fa-times-circle' => 'Times Circle',
-            'fa-check-circle' => 'Check Circle',
-            'fa-question-circle' => 'Question Circle',
-            'fa-info-circle' => 'Info Circle',
-            'fa-crosshairs' => 'Crosshairs',
-            'fa-times-circle-o' => 'Times Circle O',
-            'fa-check-circle-o' => 'Check Circle O',
-            'fa-ban' => 'Ban',
-            'fa-arrow-left' => 'Arrow Left',
-            'fa-arrow-right' => 'Arrow Right',
-            'fa-arrow-up' => 'Arrow Up',
-            'fa-arrow-down' => 'Arrow Down',
-            'fa-share' => 'Share',
-            'fa-expand' => 'Expand',
-            'fa-compress' => 'Compress',
-            'fa-plus' => 'Plus',
-            'fa-minus' => 'Minus',
-            'fa-asterisk' => 'Asterisk',
-            'fa-exclamation-circle' => 'Exclamation Circle',
-            'fa-gift' => 'Gift',
-            'fa-leaf' => 'Leaf',
-            'fa-fire' => 'Fire',
-            'fa-eye' => 'Eye',
-            'fa-eye-slash' => 'Eye Slash',
-            'fa-exclamation-triangle' => 'Exclamation Triangle',
-            'fa-plane' => 'Plane',
-            'fa-calendar' => 'Calendar',
-            'fa-random' => 'Random',
-            'fa-comment' => 'Comment',
-            'fa-magnet' => 'Magnet',
-            'fa-chevron-up' => 'Chevron Up',
-            'fa-chevron-down' => 'Chevron Down',
-            'fa-retweet' => 'Retweet',
-            'fa-shopping-cart' => 'Shopping Cart',
-            'fa-folder' => 'Folder',
-            'fa-folder-open' => 'Folder Open',
-            'fa-arrows-v' => 'Arrows V',
-            'fa-arrows-h' => 'Arrows H',
-            'fa-bar-chart-o' => 'Bar Chart O',
-            'fa-twitter-square' => 'Twitter Square',
-            'fa-facebook-square' => 'Facebook Square',
-            'fa-camera-retro' => 'Camera Retro',
-            'fa-key' => 'Key',
-            'fa-cogs' => 'Cogs',
-            'fa-comments' => 'Comments',
-            'fa-thumbs-o-up' => 'Thumbs O Up',
-            'fa-thumbs-o-down' => 'Thumbs O Down',
-            'fa-star-half' => 'Star Half',
-            'fa-heart-o' => 'Heart O',
-            'fa-sign-out' => 'Sign Out',
-            'fa-linkedin-square' => 'Linkedin Square',
-            'fa-thumb-tack' => 'Thumb Tack',
-            'fa-external-link' => 'External Link',
-            'fa-sign-in' => 'Sign In',
-            'fa-trophy' => 'Trophy',
-            'fa-github-square' => 'Github Square',
-            'fa-upload' => 'Upload',
-            'fa-lemon-o' => 'Lemon O',
-            'fa-phone' => 'Phone',
-            'fa-square-o' => 'Square O',
-            'fa-bookmark-o' => 'Bookmark O',
-            'fa-phone-square' => 'Phone Square',
-            'fa-twitter' => 'Twitter',
-            'fa-facebook' => 'Facebook',
-            'fa-github' => 'Github',
-            'fa-unlock' => 'Unlock',
-            'fa-credit-card' => 'Credit Card',
-            'fa-rss' => 'Rss',
-            'fa-hdd-o' => 'Hdd O',
-            'fa-bullhorn' => 'Bullhorn',
-            'fa-bell' => 'Bell',
-            'fa-certificate' => 'Certificate',
-            'fa-hand-o-right' => 'Hand O Right',
-            'fa-hand-o-left' => 'Hand O Left',
-            'fa-hand-o-up' => 'Hand O Up',
-            'fa-hand-o-down' => 'Hand O Down',
-            'fa-arrow-circle-left' => 'Arrow Circle Left',
-            'fa-arrow-circle-right' => 'Arrow Circle Right',
-            'fa-arrow-circle-up' => 'Arrow Circle Up',
-            'fa-arrow-circle-down' => 'Arrow Circle Down',
-            'fa-globe' => 'Globe',
-            'fa-wrench' => 'Wrench',
-            'fa-tasks' => 'Tasks',
-            'fa-filter' => 'Filter',
-            'fa-briefcase' => 'Briefcase',
-            'fa-arrows-alt' => 'Arrows Alt',
-            'fa-users' => 'Users',
-            'fa-link' => 'Link',
-            'fa-cloud' => 'Cloud',
-            'fa-flask' => 'Flask',
-            'fa-scissors' => 'Scissors',
-            'fa-files-o' => 'Files O',
-            'fa-paperclip' => 'Paperclip',
-            'fa-floppy-o' => 'Floppy O',
-            'fa-square' => 'Square',
-            'fa-bars' => 'Bars',
-            'fa-list-ul' => 'List Ul',
-            'fa-list-ol' => 'List Ol',
-            'fa-strikethrough' => 'Strikethrough',
-            'fa-underline' => 'Underline',
-            'fa-table' => 'Table',
-            'fa-magic' => 'Magic',
-            'fa-truck' => 'Truck',
-            'fa-pinterest' => 'Pinterest',
-            'fa-pinterest-square' => 'Pinterest Square',
-            'fa-google-plus-square' => 'Google Plus Square',
-            'fa-google-plus' => 'Google Plus',
-            'fa-money' => 'Money',
-            'fa-caret-down' => 'Caret Down',
-            'fa-caret-up' => 'Caret Up',
-            'fa-caret-left' => 'Caret Left',
-            'fa-caret-right' => 'Caret Right',
-            'fa-columns' => 'Columns',
-            'fa-sort' => 'Sort',
-            'fa-sort-desc' => 'Sort Desc',
-            'fa-sort-asc' => 'Sort Asc',
-            'fa-envelope' => 'Envelope',
-            'fa-linkedin' => 'Linkedin',
-            'fa-undo' => 'Undo',
-            'fa-gavel' => 'Gavel',
-            'fa-tachometer' => 'Tachometer',
-            'fa-comment-o' => 'Comment O',
-            'fa-comments-o' => 'Comments O',
-            'fa-bolt' => 'Bolt',
-            'fa-sitemap' => 'Sitemap',
-            'fa-umbrella' => 'Umbrella',
-            'fa-clipboard' => 'Clipboard',
-            'fa-lightbulb-o' => 'Lightbulb O',
-            'fa-exchange' => 'Exchange',
-            'fa-cloud-download' => 'Cloud Download',
-            'fa-cloud-upload' => 'Cloud Upload',
-            'fa-user-md' => 'User Md',
-            'fa-stethoscope' => 'Stethoscope',
-            'fa-suitcase' => 'Suitcase',
-            'fa-bell-o' => 'Bell O',
-            'fa-coffee' => 'Coffee',
-            'fa-cutlery' => 'Cutlery',
-            'fa-file-text-o' => 'File Text O',
-            'fa-building-o' => 'Building O',
-            'fa-hospital-o' => 'Hospital O',
-            'fa-ambulance' => 'Ambulance',
-            'fa-medkit' => 'Medkit',
-            'fa-fighter-jet' => 'Fighter Jet',
-            'fa-beer' => 'Beer',
-            'fa-h-square' => 'H Square',
-            'fa-plus-square' => 'Plus Square',
-            'fa-angle-double-left' => 'Angle Double Left',
-            'fa-angle-double-right' => 'Angle Double Right',
-            'fa-angle-double-up' => 'Angle Double Up',
-            'fa-angle-double-down' => 'Angle Double Down',
-            'fa-angle-left' => 'Angle Left',
-            'fa-angle-right' => 'Angle Right',
-            'fa-angle-up' => 'Angle Up',
-            'fa-angle-down' => 'Angle Down',
-            'fa-desktop' => 'Desktop',
-            'fa-laptop' => 'Laptop',
-            'fa-tablet' => 'Tablet',
-            'fa-mobile' => 'Mobile',
-            'fa-circle-o' => 'Circle O',
-            'fa-quote-left' => 'Quote Left',
-            'fa-quote-right' => 'Quote Right',
-            'fa-spinner' => 'Spinner',
-            'fa-circle' => 'Circle',
-            'fa-reply' => 'Reply',
-            'fa-github-alt' => 'Github Alt',
-            'fa-folder-o' => 'Folder O',
-            'fa-folder-open-o' => 'Folder Open O',
-            'fa-smile-o' => 'Smile O',
-            'fa-frown-o' => 'Frown O',
-            'fa-meh-o' => 'Meh O',
-            'fa-gamepad' => 'Gamepad',
-            'fa-keyboard-o' => 'Keyboard O',
-            'fa-flag-o' => 'Flag O',
-            'fa-flag-checkered' => 'Flag Checkered',
-            'fa-terminal' => 'Terminal',
-            'fa-code' => 'Code',
-            'fa-reply-all' => 'Reply All',
-            'fa-star-half-o' => 'Star Half O',
-            'fa-location-arrow' => 'Location Arrow',
-            'fa-crop' => 'Crop',
-            'fa-code-fork' => 'Code Fork',
-            'fa-chain-broken' => 'Chain Broken',
-            'fa-question' => 'Question',
-            'fa-info' => 'Info',
-            'fa-exclamation' => 'Exclamation',
-            'fa-superscript' => 'Superscript',
-            'fa-subscript' => 'Subscript',
-            'fa-eraser' => 'Eraser',
-            'fa-puzzle-piece' => 'Puzzle Piece',
-            'fa-microphone' => 'Microphone',
-            'fa-microphone-slash' => 'Microphone Slash',
-            'fa-shield' => 'Shield',
-            'fa-calendar-o' => 'Calendar O',
-            'fa-fire-extinguisher' => 'Fire Extinguisher',
-            'fa-rocket' => 'Rocket',
-            'fa-maxcdn' => 'Maxcdn',
-            'fa-chevron-circle-left' => 'Chevron Circle Left',
-            'fa-chevron-circle-right' => 'Chevron Circle Right',
-            'fa-chevron-circle-up' => 'Chevron Circle Up',
-            'fa-chevron-circle-down' => 'Chevron Circle Down',
-            'fa-html5' => 'Html5',
-            'fa-css3' => 'Css3',
-            'fa-anchor' => 'Anchor',
-            'fa-unlock-alt' => 'Unlock Alt',
-            'fa-bullseye' => 'Bullseye',
-            'fa-ellipsis-h' => 'Ellipsis H',
-            'fa-ellipsis-v' => 'Ellipsis V',
-            'fa-rss-square' => 'Rss Square',
-            'fa-play-circle' => 'Play Circle',
-            'fa-ticket' => 'Ticket',
-            'fa-minus-square' => 'Minus Square',
-            'fa-minus-square-o' => 'Minus Square O',
-            'fa-level-up' => 'Level Up',
-            'fa-level-down' => 'Level Down',
-            'fa-check-square' => 'Check Square',
-            'fa-pencil-square' => 'Pencil Square',
-            'fa-external-link-square' => 'External Link Square',
-            'fa-share-square' => 'Share Square',
-            'fa-compass' => 'Compass',
-            'fa-caret-square-o-down' => 'Caret Square O Down',
-            'fa-caret-square-o-up' => 'Caret Square O Up',
-            'fa-caret-square-o-right' => 'Caret Square O Right',
-            'fa-eur' => 'Eur',
-            'fa-gbp' => 'Gbp',
-            'fa-usd' => 'Usd',
-            'fa-inr' => 'Inr',
-            'fa-jpy' => 'Jpy',
-            'fa-rub' => 'Rub',
-            'fa-krw' => 'Krw',
-            'fa-btc' => 'Btc',
-            'fa-file' => 'File',
-            'fa-file-text' => 'File Text',
-            'fa-sort-alpha-asc' => 'Sort Alpha Asc',
-            'fa-sort-alpha-desc' => 'Sort Alpha Desc',
-            'fa-sort-amount-asc' => 'Sort Amount Asc',
-            'fa-sort-amount-desc' => 'Sort Amount Desc',
-            'fa-sort-numeric-asc' => 'Sort Numeric Asc',
-            'fa-sort-numeric-desc' => 'Sort Numeric Desc',
-            'fa-thumbs-up' => 'Thumbs Up',
-            'fa-thumbs-down' => 'Thumbs Down',
-            'fa-youtube-square' => 'Youtube Square',
-            'fa-youtube' => 'Youtube',
-            'fa-xing' => 'Xing',
-            'fa-xing-square' => 'Xing Square',
-            'fa-youtube-play' => 'Youtube Play',
-            'fa-dropbox' => 'Dropbox',
-            'fa-stack-overflow' => 'Stack Overflow',
-            'fa-instagram' => 'Instagram',
-            'fa-flickr' => 'Flickr',
-            'fa-adn' => 'Adn',
-            'fa-bitbucket' => 'Bitbucket',
-            'fa-bitbucket-square' => 'Bitbucket Square',
-            'fa-tumblr' => 'Tumblr',
-            'fa-tumblr-square' => 'Tumblr Square',
-            'fa-long-arrow-down' => 'Long Arrow Down',
-            'fa-long-arrow-up' => 'Long Arrow Up',
-            'fa-long-arrow-left' => 'Long Arrow Left',
-            'fa-long-arrow-right' => 'Long Arrow Right',
-            'fa-apple' => 'Apple',
-            'fa-windows' => 'Windows',
-            'fa-android' => 'Android',
-            'fa-linux' => 'Linux',
-            'fa-dribbble' => 'Dribbble',
-            'fa-skype' => 'Skype',
-            'fa-foursquare' => 'Foursquare',
-            'fa-trello' => 'Trello',
-            'fa-female' => 'Female',
-            'fa-male' => 'Male',
-            'fa-gittip' => 'Gittip',
-            'fa-sun-o' => 'Sun O',
-            'fa-moon-o' => 'Moon O',
-            'fa-archive' => 'Archive',
-            'fa-bug' => 'Bug',
-            'fa-vk' => 'Vk',
-            'fa-weibo' => 'Weibo',
-            'fa-renren' => 'Renren',
-            'fa-pagelines' => 'Pagelines',
-            'fa-stack-exchange' => 'Stack Exchange',
-            'fa-arrow-circle-o-right' => 'Arrow Circle O Right',
-            'fa-arrow-circle-o-left' => 'Arrow Circle O Left',
-            'fa-caret-square-o-left' => 'Caret Square O Left',
-            'fa-dot-circle-o' => 'Dot Circle O',
-            'fa-wheelchair' => 'Wheelchair',
-            'fa-vimeo-square' => 'Vimeo Square',
-            'fa-try' => 'Try',
-            'fa-plus-square-o' => 'Plus Square O',
-            'fa-space-shuttle' => 'Space Shuttle',
-            'fa-slack' => 'Slack',
-            'fa-envelope-square' => 'Envelope Square',
-            'fa-wordpress' => 'Wordpress',
-            'fa-openid' => 'Openid',
-            'fa-university' => 'University',
-            'fa-graduation-cap' => 'Graduation Cap',
-            'fa-yahoo' => 'Yahoo',
-            'fa-google' => 'Google',
-            'fa-reddit' => 'Reddit',
-            'fa-reddit-square' => 'Reddit Square',
-            'fa-stumbleupon-circle' => 'Stumbleupon Circle',
-            'fa-stumbleupon' => 'Stumbleupon',
-            'fa-delicious' => 'Delicious',
-            'fa-digg' => 'Digg',
-            'fa-pied-piper' => 'Pied Piper',
-            'fa-pied-piper-alt' => 'Pied Piper Alt',
-            'fa-drupal' => 'Drupal',
-            'fa-joomla' => 'Joomla',
-            'fa-language' => 'Language',
-            'fa-fax' => 'Fax',
-            'fa-building' => 'Building',
-            'fa-child' => 'Child',
-            'fa-paw' => 'Paw',
-            'fa-spoon' => 'Spoon',
-            'fa-cube' => 'Cube',
-            'fa-cubes' => 'Cubes',
-            'fa-behance' => 'Behance',
-            'fa-behance-square' => 'Behance Square',
-            'fa-steam' => 'Steam',
-            'fa-steam-square' => 'Steam Square',
-            'fa-recycle' => 'Recycle',
-            'fa-car' => 'Car',
-            'fa-taxi' => 'Taxi',
-            'fa-tree' => 'Tree',
-            'fa-spotify' => 'Spotify',
-            'fa-deviantart' => 'Deviantart',
-            'fa-soundcloud' => 'Soundcloud',
-            'fa-database' => 'Database',
-            'fa-file-pdf-o' => 'File Pdf O',
-            'fa-file-word-o' => 'File Word O',
-            'fa-file-excel-o' => 'File Excel O',
-            'fa-file-powerpoint-o' => 'File Powerpoint O',
-            'fa-file-image-o' => 'File Image O',
-            'fa-file-archive-o' => 'File Archive O',
-            'fa-file-audio-o' => 'File Audio O',
-            'fa-file-video-o' => 'File Video O',
-            'fa-file-code-o' => 'File Code O',
-            'fa-vine' => 'Vine',
-            'fa-codepen' => 'Codepen',
-            'fa-jsfiddle' => 'Jsfiddle',
-            'fa-life-ring' => 'Life Ring',
-            'fa-circle-o-notch' => 'Circle O Notch',
-            'fa-rebel' => 'Rebel',
-            'fa-empire' => 'Empire',
-            'fa-git-square' => 'Git Square',
-            'fa-git' => 'Git',
-            'fa-hacker-news' => 'Hacker News',
-            'fa-tencent-weibo' => 'Tencent Weibo',
-            'fa-qq' => 'Qq',
-            'fa-weixin' => 'Weixin',
-            'fa-paper-plane' => 'Paper Plane',
-            'fa-paper-plane-o' => 'Paper Plane O',
-            'fa-history' => 'History',
-            'fa-circle-thin' => 'Circle Thin',
-            'fa-header' => 'Header',
-            'fa-paragraph' => 'Paragraph',
-            'fa-sliders' => 'Sliders',
-            'fa-share-alt' => 'Share Alt',
-            'fa-share-alt-square' => 'Share Alt Square',
-            'fa-bomb' => 'Bomb',
         ];
     }
 

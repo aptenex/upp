@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Calculation;
 
+use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\Defaults;
 use Money\Money;
 use Aptenex\Upp\Calculation\Condition\Evaluator;
@@ -31,7 +32,6 @@ use Aptenex\Upp\Parser\Structure\Operand;
 use Aptenex\Upp\Parser\Structure\PartialWeekAlteration;
 use Aptenex\Upp\Parser\Structure\PricingConfig;
 use Aptenex\Upp\Parser\Structure\SplitMethod;
-use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Util\ExceptionUtils;
 use Aptenex\Upp\Util\MoneyUtils;
 use Aptenex\Upp\Los\Modifier\ModifierExtractor;
@@ -185,9 +185,9 @@ class PricingGenerator
         if ($context->hasRentalSchemaData()) {
             $schema = $context->getRentalSchemaData();
             $listingKey = 'listing.maxOccupancy';
-            if (ArrayUtils::hasNestedArrayValue($listingKey, $schema)) {
+            if (ArrayAccess::has($listingKey, $schema)) {
 
-                $maxOccupancy = (int) ArrayUtils::getNestedArrayValue($listingKey, $schema);
+                $maxOccupancy = (int) ArrayAccess::get($listingKey, $schema);
                 if ($context->getGuests() > $maxOccupancy) {
                     ExceptionUtils::handleError($fp, Error::TYPE_EXCEEDS_MAX_OCCUPANCY, $maxOccupancy);
                 }

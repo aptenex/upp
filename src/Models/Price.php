@@ -2,10 +2,10 @@
 
 namespace Aptenex\Upp\Models;
 
+use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Parser\Structure\SplitMethod;
 use Money\Money;
 use Aptenex\Upp\Exception\Error;
-use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Util\MoneyUtils;
 use Aptenex\Upp\Calculation\Stay;
 use Aptenex\Upp\Exception\ErrorHandler;
@@ -478,14 +478,14 @@ class Price
         $this->stay = new Stay($this->getContextUsed());
 
         $this->splitDetails = new GuestSplitOverview();
-        if (ArrayUtils::hasNestedArrayValue('splitDetails.deposit', $data)) {
+        if (ArrayAccess::has('splitDetails.deposit', $data)) {
             $sdData = $data['splitDetails'];
 
             $sdObject = $this->getSplitDetails();
 
             $sdObject->setDeposit(MoneyUtils::fromString($sdData['deposit']['amount'], $data['currency']));
 
-            $sdObject->setDepositCalculationType(ArrayUtils::getNestedArrayValue(
+            $sdObject->setDepositCalculationType(ArrayAccess::get(
                 'deposit.calculationType',
                 $sdData,
                 GuestSplitOverview::DEPOSIT_CALCULATION_TYPE_DEFAULT

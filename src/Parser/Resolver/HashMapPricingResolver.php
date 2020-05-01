@@ -2,9 +2,9 @@
 
 namespace Aptenex\Upp\Parser\Resolver;
 
-use Aptenex\Upp\Util\ArrayUtils;
+use Aptenex\Upp\Helper\ArrayAccess;
 
-class HashMapPricingResolver extends BasePricingResolver implements ResolverInterface
+class HashMapPricingResolver extends BasePricingResolver
 {
 
     /**
@@ -31,7 +31,7 @@ class HashMapPricingResolver extends BasePricingResolver implements ResolverInte
      */
     public function resolveMixin($key)
     {
-        return ArrayUtils::getNestedArrayValue($key, $this->hashMap);
+        return ArrayAccess::get($key, $this->hashMap);
     }
 
 }

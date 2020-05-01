@@ -8,7 +8,6 @@ use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Calculation\FinalPrice;
 use Aptenex\Upp\Parser\Structure\Operator;
 use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
-use Aptenex\Upp\Util\ArrayUtils;
 
 class ExtraMonthsAlterationStrategy implements PriceAlterationInterface
 {
@@ -201,7 +200,7 @@ class ExtraMonthsAlterationStrategy implements PriceAlterationInterface
         $extraMonthsAlteration = $rateConfig->getStrategy()->getExtraMonthsAlteration();
 
         $stratData = $controlItem->getRate()->getStrategyData();
-        $lastMatchedBracket = ArrayUtils::getNestedArrayValue('lastMatchedBracket', $stratData);
+        $lastMatchedBracket = ArrayAccess::get('lastMatchedBracket', $stratData);
 
         // Now we can deal with the deposit override
         if (
