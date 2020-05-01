@@ -12,6 +12,7 @@ use Aptenex\Upp\Exception\ErrorHandler;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Parser\Structure\Period;
 use Aptenex\Upp\Calculation\AdjustmentAmount;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Aptenex\Upp\Calculation\SplitAmount\GuestSplitOverview;
