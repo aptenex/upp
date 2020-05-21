@@ -4,6 +4,7 @@ namespace Aptenex\Upp\Calculation;
 
 use Aptenex\Upp\Parser\Structure\ControlItemInterface;
 use Aptenex\Upp\Parser\Structure\Period;
+use Aptenex\Upp\Parser\Structure\Rate;
 
 class ChangeoverCalculator
 {
@@ -12,7 +13,8 @@ class ChangeoverCalculator
     {
         /** @var Period $controlItem */
 
-        if ($controlItem->getRate()->hasDaysOfWeek()) {
+        // Only nightly supported for new days of week
+        if ($controlItem->getRate()->hasDaysOfWeek() && $controlItem->getRate()->getType() === Rate::TYPE_NIGHTLY) {
             return $controlItem->getRate()->getDaysOfWeek()->getArrivalChangeoverList();
         }
 
@@ -29,7 +31,8 @@ class ChangeoverCalculator
     {
         /** @var Period $controlItem */
 
-        if ($controlItem->getRate()->hasDaysOfWeek()) {
+        // Only nightly supported for new days of week
+        if ($controlItem->getRate()->hasDaysOfWeek() && $controlItem->getRate()->getType() === Rate::TYPE_NIGHTLY) {
             return $controlItem->getRate()->getDaysOfWeek()->getDepartureChangeoverList();
         }
 

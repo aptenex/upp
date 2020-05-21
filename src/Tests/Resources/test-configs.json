@@ -10609,5 +10609,255 @@
         }
       }
     ]
+  },
+  {
+    "name": "Italian Breaks nightly -> weekly period change still uses nightly brackets changeover days",
+    "key": "ib-nightly-weekly-change-uses-nightly-strategy-changeover",
+    "description": "",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "EUR",
+          "defaults": {
+            "minimumNights": 7,
+            "maximumNights": null,
+            "perPetPerStay": 0,
+            "perPetPerNight": 0,
+            "perPetSplitMethod": "ON_TOTAL",
+            "damageDeposit": 1000,
+            "bookableType": "instant_bookable",
+            "damageDepositCalculationMethod": "fixed",
+            "damageDepositSplitMethod": "ON_ARRIVAL",
+            "daysRequiredInAdvanceForBooking": 4,
+            "balanceDaysBeforeArrival": 60,
+            "depositSplitPercentage": 30,
+            "periodSelectionStrategy": "DEFAULT",
+            "extraNightAlterationStrategyUseGlobalNights": true,
+            "partialWeekAlterationStrategyUseGlobalNights": false,
+            "modifiersUseCategorizedCalculationOrder": false
+          },
+          "taxes": [],
+          "periods": [
+            {
+              "id": 4,
+              "description": "2020",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "inverse": false,
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-07-25",
+                  "endDate": "2020-08-21",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "rate": {
+                "type": "weekly",
+                "amount": 4361,
+                "taxable": false,
+                "damageDeposit": null,
+                "basePriceOnly": false,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "calculationOperator": "equals",
+                "daysOfWeek": {
+                  "calculationMethod": "fixed",
+                  "days": {
+                    "monday": {
+                      "day": "monday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "NONE"
+                    },
+                    "tuesday": {
+                      "day": "tuesday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "NONE"
+                    },
+                    "wednesday": {
+                      "day": "wednesday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "NONE"
+                    },
+                    "thursday": {
+                      "day": "thursday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "NONE"
+                    },
+                    "friday": {
+                      "day": "friday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "NONE"
+                    },
+                    "saturday": {
+                      "day": "saturday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "ARRIVAL_OR_DEPARTURE"
+                    },
+                    "sunday": {
+                      "day": "sunday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "NONE"
+                    }
+                  }
+                },
+                "strategy": null
+              },
+              "minimumNights": 7,
+              "bookableType": "instant_bookable"
+            },
+            {
+              "id": 5,
+              "description": "2020",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "inverse": false,
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-08-22",
+                  "endDate": "2020-08-28",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "rate": {
+                "type": "weekly",
+                "amount": 700,
+                "taxable": false,
+                "damageDeposit": null,
+                "basePriceOnly": false,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "calculationOperator": "equals",
+                "daysOfWeek": {
+                  "calculationMethod": "fixed",
+                  "days": {
+                    "monday": {
+                      "day": "monday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "NONE"
+                    },
+                    "tuesday": {
+                      "day": "tuesday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "NONE"
+                    },
+                    "wednesday": {
+                      "day": "wednesday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "NONE"
+                    },
+                    "thursday": {
+                      "day": "thursday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "NONE"
+                    },
+                    "friday": {
+                      "day": "friday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "NONE"
+                    },
+                    "saturday": {
+                      "day": "saturday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "ARRIVAL_OR_DEPARTURE"
+                    },
+                    "sunday": {
+                      "day": "sunday",
+                      "amount": null,
+                      "minimumNights": null,
+                      "changeover": "NONE"
+                    }
+                  }
+                },
+                "strategy": null
+              },
+              "minimumNights": 3,
+              "bookableType": "instant_bookable"
+            },
+            {
+              "id": 6,
+              "description": "2020",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "inverse": false,
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-08-29",
+                  "endDate": "2020-09-18",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "rate": {
+                "type": "weekly",
+                "amount": 3051,
+                "taxable": false,
+                "damageDeposit": null,
+                "basePriceOnly": false,
+                "applicableTaxes": [],
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "calculationOperator": "equals",
+                "daysOfWeek": null,
+                "strategy": null
+              },
+              "minimumNights": 7,
+              "bookableType": "instant_bookable"
+            }
+          ],
+          "modifiers": []
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2020-08-25",
+          "departureDate": "2020-08-30",
+          "bookingDate": "2020-04-01",
+          "guests": 1,
+          "currency": "EUR"
+        },
+        "tests": {
+          "noNights": 5,
+          "finalPrice": 83586,
+          "nightPrices": {
+            "2020-08-25": 10000,
+            "2020-08-26": 10000,
+            "2020-08-27": 10000,
+            "2020-08-28": 10000,
+
+            "2020-08-29": 43586
+          }
+        }
+      }
+    ]
   }
 ]

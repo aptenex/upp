@@ -20,6 +20,10 @@ class BracketsEvaluator
         $nights = (int) $nights;
 
         foreach($brackets as $item) {
+            if (!\is_array($item)) {
+                continue;
+            }
+
             $condition = $item['night'];
             $value = $item['amount'];
 
