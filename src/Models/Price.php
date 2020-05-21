@@ -12,13 +12,22 @@ use Aptenex\Upp\Exception\ErrorHandler;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Parser\Structure\Period;
 use Aptenex\Upp\Calculation\AdjustmentAmount;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Aptenex\Upp\Calculation\SplitAmount\GuestSplitOverview;
 
 class Price
 {
-
+    /**
+     * @var UuidInterface
+     * This value is intended to be auto generated and allows you to assign a TrackingID to the response.
+     * The ID can then be used in future quotes, reservations to know which quote generated the reservation for purposes of matching up sessions.
+     * x-id = '0000-0000...' etc
+     */
+    private $xID;
+    
     /**
      * @var Money
      */
@@ -99,7 +108,7 @@ class Price
             $this->basePriceTaxable = MoneyUtils::newMoney(0, $this->getCurrency());
             $this->damageDeposit = MoneyUtils::newMoney(0, $this->getCurrency());
         }
-
+        $this->setXID(Uuid::uuid4());
         $this->stay = new Stay($contextUsed);
         $this->splitDetails = new GuestSplitOverview();
         $this->errors = new ErrorHandler();
@@ -412,6 +421,7 @@ class Price
     public function __toArray()
     {
         return [
+            'XID'                     => $this->getXID(),
             'currency'                 => $this->getCurrency(),
             'description'              => !empty($this->getContextUsed()->getDescription()) ? $this->getContextUsed()->getDescription() : null,
             'total'                    => MoneyUtils::getConvertedAmount($this->getTotal()),
@@ -509,5 +519,21 @@ class Price
 
         return $this;
     }
-
+    
+    /**
+     * @return  UuidInterface
+     */
+    public function getXID(): UuidInterface
+    {
+        return $this->xID;
+    }
+    
+    /**
+     * @param UuidInterface $xID
+     */
+    public function setXID(UuidInterface $xID): void
+    {
+        $this->xID = $xID;
+    }
+    
 }

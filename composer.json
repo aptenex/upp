@@ -17,7 +17,8 @@
         "symfony/validator": "^3.4",
         "symfony/event-dispatcher" : "^3.4",
         "symfony/translation": "^3.4",
-        "spatie/period": "^1.1.1"
+        "spatie/period": "^1.1.1",
+        "ramsey/uuid": "^4.0@dev"
     },
     "require-dev" : {
         "roave/security-advisories": "dev-master",
