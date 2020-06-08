@@ -17,11 +17,18 @@ class NightlyTariffOverrideCommand implements ExternalCommandInterface
     private $nightlyTariff;
 
     /**
-     * @param float $nightlyTariff
+     * @var bool
      */
-    public function __construct($nightlyTariff)
+    private $removeDiscountModifiers;
+
+    /**
+     * @param float $nightlyTariff
+     * @param bool $removeDiscountModifiers
+     */
+    public function __construct($nightlyTariff, $removeDiscountModifiers = true)
     {
         $this->nightlyTariff = $nightlyTariff;
+        $this->removeDiscountModifiers = $removeDiscountModifiers;
     }
 
     /**
@@ -50,6 +57,20 @@ class NightlyTariffOverrideCommand implements ExternalCommandInterface
 
         foreach ($config->getCurrencyConfigs() as $cConfig) {
             $cConfig->setPeriods([$newPeriod], false);
+
+            if ($this->removeDiscountModifiers) {
+                $newModifiers = [];
+
+                foreach($cConfig->getModifiers() as $modifier) {
+                    if ($modifier->isDiscount()) {
+                        continue;
+                    }
+
+                    $newModifiers[] = $modifier;
+                }
+
+                $cConfig->setModifiers($newModifiers);
+            }
         }
     }
 

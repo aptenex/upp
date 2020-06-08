@@ -183,6 +183,11 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
         return in_array($this->getType(), self::$priceGroupBaseTypes, true);
     }
 
+    public function isDiscount(): bool
+    {
+        return $this->getRate()->getCalculationOperand() === Operand::OP_SUBTRACTION;
+    }
+
     public function satisfiesSpecialDiscountCriteria(): bool
     {
         if ($this->getType() !== self::TYPE_DISCOUNT && $this->getType() !== self::TYPE_MODIFIER) {
