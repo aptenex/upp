@@ -78,6 +78,7 @@ class PricingGenerator
         $this->applyPeriodStrategyAlterations($context, $fp);
         $this->applyWeeklyPeriodCrossoverAlterations($context, $fp);
 
+        // Calculate the base price for the modifiers to be able to calculate off
         $this->calculateBasePrice($fp);
 
         // If we are using the calculationOrder (turned on in defaults) to have categorized modifiers which
@@ -93,7 +94,25 @@ class PricingGenerator
             $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TOTAL]);
             $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TAX]);
         } else {
-            $this->applyModifiers($context, $fp);
+
+            $this->applyModifiers(
+                $context,
+                $fp,
+                [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_DISCOUNTS],
+                [AdjustmentAmount::PRICE_GROUP_BASE]
+            );
+
+            // Re-calculate after on base discounts have been processed
+            $this->calculateBasePrice($fp);
+
+            // Process the rest
+            $this->applyModifiers($context, $fp, [], [
+                AdjustmentAmount::PRICE_GROUP_TOTAL,
+                AdjustmentAmount::PRICE_GROUP_ARRIVAL,
+                AdjustmentAmount::PRICE_GROUP_BASE_NON_TAXABLE,
+                AdjustmentAmount::PRICE_GROUP_HIDDEN_ON_BASE,
+                AdjustmentAmount::PRICE_GROUP_NONE,
+            ]);
         }
 
         $this->calculateExtras($fp);
@@ -493,10 +512,11 @@ class PricingGenerator
      * @param PricingContext $context
      * @param FinalPrice $fp
      * @param array $calculationOrders
+     * @param array $priceGroups
      */
-    private function applyModifiers(PricingContext $context, FinalPrice $fp, array $calculationOrders = []): void
+    private function applyModifiers(PricingContext $context, FinalPrice $fp, array $calculationOrders = [], array $priceGroups = []): void
     {
-        (new ModifierRateCalculator())->compute($context, $fp, $calculationOrders);
+        (new ModifierRateCalculator())->compute($context, $fp, $calculationOrders, $priceGroups);
     }
 
     /**

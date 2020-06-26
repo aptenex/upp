@@ -60,7 +60,7 @@ interface ControlItemInterface
     public function setMatchedNights($matchedDays);
 
     /**
-     * @return \Aptenex\Upp\Parser\Structure\Period
+     * @return \Aptenex\Upp\Parser\Structure\Period|\Aptenex\Upp\Parser\Structure\Modifier
      */
     public function getControlItemConfig();
 

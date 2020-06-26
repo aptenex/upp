@@ -38,6 +38,10 @@ class MultipleCalculationTest extends TestCase
                 continue;
             }
 
+            if (!isset($priceConfig['key']) || $priceConfig['key'] !== 'wrs-on_base-discounts') {
+                continue;
+            }
+
             $structureOptions = new StructureOptions();
 
             self::$currentTestName = $priceConfig['name'];
@@ -145,8 +149,6 @@ class MultipleCalculationTest extends TestCase
 
         if ($pricing->getErrors()->hasErrors()) {
             $this->setName($this->getCurrentTestName($priceConfig, $index, 'No Errors', $testNamePrefix));
-
-            var_dump($pricing->getErrors()->getErrors());
 
             $this->assertFalse($pricing->getErrors()->hasErrors(), 'Pricing has errors');
         }
