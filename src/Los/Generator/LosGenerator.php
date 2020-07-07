@@ -60,13 +60,14 @@ class LosGenerator implements LosGeneratorInterface
                 break;
             }
         }
-
+        
         if ($cc === null) {
             throw CannotGenerateLosException::withArgs(
                 'Provided currency does not exist in PricingConfig',
                 ['currency' => $options->getCurrency()]
             );
         }
+        
         $losRecords = new LosRecords($cc->getCurrency());
         $losRecords->getMetrics()->startTiming();
         // TODO:
@@ -259,9 +260,15 @@ class LosGenerator implements LosGeneratorInterface
 
                         try {
                             $losRecords->getMetrics()->setTimesRan($losRecords->getMetrics()->getTimesRan() + 1);
-                            
+                            // We are NOT actually generating pricing. This is  DRY RUN to get expected iterations required.
+                            if($options->getIterationCountOnly()){
+                                $rates[] = 100 * $i;
+                                $baseRates[] = 100 * $i;
+                                continue;
+                            }
+    
                             $fp = $this->upp->generatePrice($pc, $pricingConfig);
-
+    
                             /*
                              * We have an edge case where IF there are two periods matched,
                              * and the second period has a total value of zero then we should generate

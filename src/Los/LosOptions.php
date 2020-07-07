@@ -66,6 +66,13 @@ class LosOptions
     private $debugMode = false;
     
     /**
+     * This allows us to return a fake FP response, whcih doesn't even generate any pricing.
+     * We use this to know how many iterations are going to be required to calculate the price.
+     * @var bool
+     */
+    private $iterationCountOnly = false;
+    
+    /**
      * Supports ISO8601 date.
      * {date} OR
      * {date},{occupancy} OR
@@ -343,6 +350,22 @@ class LosOptions
     public function setForceAllAvailabilitiesGeneration(bool $forceAllAvailabilitiesGeneration): void
     {
         $this->forceAllAvailabilitiesGeneration = $forceAllAvailabilitiesGeneration;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function getIterationCountOnly() : bool
+    {
+        return $this->iterationCountOnly;
+    }
+    
+    /**
+     * @param mixed $iterationCountOnly
+     */
+    public function setIterationCountOnly($iterationCountOnly): void
+    {
+        $this->iterationCountOnly = $iterationCountOnly;
     }
     
 }
