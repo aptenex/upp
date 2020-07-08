@@ -65,7 +65,7 @@ class PricingGenerator
 
         $this->evaluatePeriods($context, $fp);
         $this->validateDaysMatched($fp);
-        $this->runPostEvaluationOnValidPeriods($fp);
+        $this->runPostEvaluationOnValidPeriods($context, $fp);
 
         $this->evaluateModifiers($context, $fp);
 
@@ -671,11 +671,14 @@ class PricingGenerator
     }
 
     /**
+     * @param PricingContext $context
      * @param FinalPrice $fp
      */
-    private function runPostEvaluationOnValidPeriods(FinalPrice $fp): void
+    private function runPostEvaluationOnValidPeriods(PricingContext $context, FinalPrice $fp): void
     {
-        $this->performMinimumNightsCheck($fp);
+        if ($context->isTestMode() === false) {
+            $this->performMinimumNightsCheck($fp);
+        }
 
         // Loop through any failures and report back
         foreach ($fp->getStay()->getPeriodsUsed() as $period) {
