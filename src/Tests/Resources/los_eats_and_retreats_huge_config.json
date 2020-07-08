@@ -1,0 +1,1704 @@
+[
+    {
+        "key" : "eatsandretreats-los-large-calculation-test",
+        "name": "Large LOS Calculations Required 01",
+        "description": "testing out that iteration counts perform correctly",
+        "config": {
+            "name": "Pricing",
+            "schema": "property-pricing",
+            "version": "0.0.1",
+            "meta": [],
+            "data": [
+                {
+                    "currency": "USD",
+                    "defaults": {
+                        "balanceDaysBeforeArrival": 42,
+                        "damageDeposit": "0",
+                        "damageDepositCalculationMethod": "fixed",
+                        "damageDepositSplitMethod": "ON_DEPOSIT",
+                        "daysRequiredInAdvanceForBooking": 2,
+                        "depositSplitPercentage": "NULL",
+                        "extraNightAlterationStrategyUseGlobalNights": false,
+                        "minimumNights": 2
+                    },
+                    "modifiers": [
+                        {
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "maximum": 13,
+                                    "minimum": 13,
+                                    "modifyRatePerUnit": true,
+                                    "type": "guests"
+                                },
+                                {
+                                    "maximum": null,
+                                    "minimum": 0,
+                                    "modifyRatePerUnit": true,
+                                    "type": "nights"
+                                }
+                            ],
+                            "description": "Extra Guests",
+                            "hidden": false,
+                            "rate": {
+                                "amount": 59,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "addition",
+                                "type": "adjustment"
+                            },
+                            "splitMethod": "ON_TOTAL",
+                            "type": "modifier"
+                        },
+                        {
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "dates": [
+                                        {
+                                            "end": "2020-08-31",
+                                            "start": "2020-07-01"
+                                        },
+                                        {
+                                            "end": "2020-09-25",
+                                            "start": "2020-09-01"
+                                        },
+                                        {
+                                            "end": "2020-10-07",
+                                            "start": "2020-09-26"
+                                        },
+                                        {
+                                            "end": "2020-12-10",
+                                            "start": "2020-10-08"
+                                        },
+                                        {
+                                            "end": "2020-12-17",
+                                            "start": "2020-12-11"
+                                        },
+                                        {
+                                            "end": "2021-02-10",
+                                            "start": "2021-01-11"
+                                        },
+                                        {
+                                            "end": "2021-02-17",
+                                            "start": "2021-02-11"
+                                        },
+                                        {
+                                            "end": "2021-04-02",
+                                            "start": "2021-02-18"
+                                        },
+                                        {
+                                            "end": "2021-04-20",
+                                            "start": "2021-04-03"
+                                        },
+                                        {
+                                            "end": "2021-06-30",
+                                            "start": "2021-04-21"
+                                        },
+                                        {
+                                            "end": "2021-08-31",
+                                            "start": "2021-07-01"
+                                        },
+                                        {
+                                            "end": "2021-09-24",
+                                            "start": "2021-09-01"
+                                        },
+                                        {
+                                            "end": "2021-10-07",
+                                            "start": "2021-09-25"
+                                        },
+                                        {
+                                            "end": "2021-12-12",
+                                            "start": "2021-10-08"
+                                        },
+                                        {
+                                            "end": "2021-12-17",
+                                            "start": "2021-12-13"
+                                        },
+                                        {
+                                            "end": "2020-08-31",
+                                            "start": "2020-07-01"
+                                        },
+                                        {
+                                            "end": "2020-09-25",
+                                            "start": "2020-09-01"
+                                        },
+                                        {
+                                            "end": "2020-10-07",
+                                            "start": "2020-09-26"
+                                        },
+                                        {
+                                            "end": "2020-12-10",
+                                            "start": "2020-10-08"
+                                        },
+                                        {
+                                            "end": "2020-12-17",
+                                            "start": "2020-12-11"
+                                        },
+                                        {
+                                            "end": "2021-02-10",
+                                            "start": "2021-01-11"
+                                        },
+                                        {
+                                            "end": "2021-02-17",
+                                            "start": "2021-02-11"
+                                        },
+                                        {
+                                            "end": "2021-04-02",
+                                            "start": "2021-02-18"
+                                        },
+                                        {
+                                            "end": "2021-04-20",
+                                            "start": "2021-04-03"
+                                        },
+                                        {
+                                            "end": "2021-06-30",
+                                            "start": "2021-04-21"
+                                        },
+                                        {
+                                            "end": "2021-08-31",
+                                            "start": "2021-07-01"
+                                        },
+                                        {
+                                            "end": "2021-09-24",
+                                            "start": "2021-09-01"
+                                        },
+                                        {
+                                            "end": "2021-10-07",
+                                            "start": "2021-09-25"
+                                        },
+                                        {
+                                            "end": "2021-12-12",
+                                            "start": "2021-10-08"
+                                        },
+                                        {
+                                            "end": "2021-12-17",
+                                            "start": "2021-12-13"
+                                        },
+                                        {
+                                            "end": "2020-08-31",
+                                            "start": "2020-07-01"
+                                        },
+                                        {
+                                            "end": "2020-09-25",
+                                            "start": "2020-09-01"
+                                        },
+                                        {
+                                            "end": "2020-10-07",
+                                            "start": "2020-09-26"
+                                        },
+                                        {
+                                            "end": "2020-12-10",
+                                            "start": "2020-10-08"
+                                        },
+                                        {
+                                            "end": "2020-12-17",
+                                            "start": "2020-12-11"
+                                        },
+                                        {
+                                            "end": "2021-02-10",
+                                            "start": "2021-01-11"
+                                        },
+                                        {
+                                            "end": "2021-02-17",
+                                            "start": "2021-02-11"
+                                        },
+                                        {
+                                            "end": "2021-04-02",
+                                            "start": "2021-02-18"
+                                        },
+                                        {
+                                            "end": "2021-04-20",
+                                            "start": "2021-04-03"
+                                        },
+                                        {
+                                            "end": "2021-06-30",
+                                            "start": "2021-04-21"
+                                        },
+                                        {
+                                            "end": "2021-08-31",
+                                            "start": "2021-07-01"
+                                        },
+                                        {
+                                            "end": "2021-09-24",
+                                            "start": "2021-09-01"
+                                        },
+                                        {
+                                            "end": "2021-10-07",
+                                            "start": "2021-09-25"
+                                        },
+                                        {
+                                            "end": "2021-12-12",
+                                            "start": "2021-10-08"
+                                        },
+                                        {
+                                            "end": "2021-12-17",
+                                            "start": "2021-12-13"
+                                        }
+                                    ],
+                                    "strategy": "STRATEGY_MATCH",
+                                    "type": "multi_date"
+                                },
+                                {
+                                    "inverse": false,
+                                    "maximum": 28,
+                                    "minimum": 0,
+                                    "modifyRatePerUnit": false,
+                                    "type": "booking_days"
+                                }
+                            ],
+                            "description": "Last Minute 20 Discount",
+                            "hidden": false,
+                            "rate": {
+                                "amount": 0.2,
+                                "applicableTaxes": [],
+                                "calculationMethod": "percentage",
+                                "calculationOperand": "subtraction",
+                                "taxable": false,
+                                "type": "adjustment"
+                            },
+                            "splitMethod": "ON_TOTAL",
+                            "type": "modifier"
+                        },
+                        {
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "dates": [
+                                        {
+                                            "end": "2020-08-31",
+                                            "start": "2020-07-01"
+                                        },
+                                        {
+                                            "end": "2020-09-25",
+                                            "start": "2020-09-01"
+                                        },
+                                        {
+                                            "end": "2020-10-07",
+                                            "start": "2020-09-26"
+                                        },
+                                        {
+                                            "end": "2020-12-10",
+                                            "start": "2020-10-08"
+                                        },
+                                        {
+                                            "end": "2020-12-17",
+                                            "start": "2020-12-11"
+                                        },
+                                        {
+                                            "end": "2021-02-10",
+                                            "start": "2021-01-11"
+                                        },
+                                        {
+                                            "end": "2021-02-17",
+                                            "start": "2021-02-11"
+                                        },
+                                        {
+                                            "end": "2021-04-02",
+                                            "start": "2021-02-18"
+                                        },
+                                        {
+                                            "end": "2021-04-20",
+                                            "start": "2021-04-03"
+                                        },
+                                        {
+                                            "end": "2021-06-30",
+                                            "start": "2021-04-21"
+                                        },
+                                        {
+                                            "end": "2021-08-31",
+                                            "start": "2021-07-01"
+                                        },
+                                        {
+                                            "end": "2021-09-24",
+                                            "start": "2021-09-01"
+                                        },
+                                        {
+                                            "end": "2021-10-07",
+                                            "start": "2021-09-25"
+                                        },
+                                        {
+                                            "end": "2021-12-12",
+                                            "start": "2021-10-08"
+                                        },
+                                        {
+                                            "end": "2021-12-17",
+                                            "start": "2021-12-13"
+                                        },
+                                        {
+                                            "end": "2020-08-31",
+                                            "start": "2020-07-01"
+                                        },
+                                        {
+                                            "end": "2020-09-25",
+                                            "start": "2020-09-01"
+                                        },
+                                        {
+                                            "end": "2020-10-07",
+                                            "start": "2020-09-26"
+                                        },
+                                        {
+                                            "end": "2020-12-10",
+                                            "start": "2020-10-08"
+                                        },
+                                        {
+                                            "end": "2020-12-17",
+                                            "start": "2020-12-11"
+                                        },
+                                        {
+                                            "end": "2021-02-10",
+                                            "start": "2021-01-11"
+                                        },
+                                        {
+                                            "end": "2021-02-17",
+                                            "start": "2021-02-11"
+                                        },
+                                        {
+                                            "end": "2021-04-02",
+                                            "start": "2021-02-18"
+                                        },
+                                        {
+                                            "end": "2021-04-20",
+                                            "start": "2021-04-03"
+                                        },
+                                        {
+                                            "end": "2021-06-30",
+                                            "start": "2021-04-21"
+                                        },
+                                        {
+                                            "end": "2021-08-31",
+                                            "start": "2021-07-01"
+                                        },
+                                        {
+                                            "end": "2021-09-24",
+                                            "start": "2021-09-01"
+                                        },
+                                        {
+                                            "end": "2021-10-07",
+                                            "start": "2021-09-25"
+                                        },
+                                        {
+                                            "end": "2021-12-12",
+                                            "start": "2021-10-08"
+                                        },
+                                        {
+                                            "end": "2021-12-17",
+                                            "start": "2021-12-13"
+                                        },
+                                        {
+                                            "end": "2020-08-31",
+                                            "start": "2020-07-01"
+                                        },
+                                        {
+                                            "end": "2020-09-25",
+                                            "start": "2020-09-01"
+                                        },
+                                        {
+                                            "end": "2020-10-07",
+                                            "start": "2020-09-26"
+                                        },
+                                        {
+                                            "end": "2020-12-10",
+                                            "start": "2020-10-08"
+                                        },
+                                        {
+                                            "end": "2020-12-17",
+                                            "start": "2020-12-11"
+                                        },
+                                        {
+                                            "end": "2021-02-10",
+                                            "start": "2021-01-11"
+                                        },
+                                        {
+                                            "end": "2021-02-17",
+                                            "start": "2021-02-11"
+                                        },
+                                        {
+                                            "end": "2021-04-02",
+                                            "start": "2021-02-18"
+                                        },
+                                        {
+                                            "end": "2021-04-20",
+                                            "start": "2021-04-03"
+                                        },
+                                        {
+                                            "end": "2021-06-30",
+                                            "start": "2021-04-21"
+                                        },
+                                        {
+                                            "end": "2021-08-31",
+                                            "start": "2021-07-01"
+                                        },
+                                        {
+                                            "end": "2021-09-24",
+                                            "start": "2021-09-01"
+                                        },
+                                        {
+                                            "end": "2021-10-07",
+                                            "start": "2021-09-25"
+                                        },
+                                        {
+                                            "end": "2021-12-12",
+                                            "start": "2021-10-08"
+                                        },
+                                        {
+                                            "end": "2021-12-17",
+                                            "start": "2021-12-13"
+                                        }
+                                    ],
+                                    "strategy": "STRATEGY_MATCH",
+                                    "type": "multi_date"
+                                },
+                                {
+                                    "inverse": false,
+                                    "minimum": 120,
+                                    "modifyRatePerUnit": false,
+                                    "type": "booking_days"
+                                }
+                            ],
+                            "description": "Early Bird 15 Discount",
+                            "hidden": false,
+                            "rate": {
+                                "amount": 0.15,
+                                "applicableTaxes": [],
+                                "calculationMethod": "percentage",
+                                "calculationOperand": "subtraction",
+                                "taxable": false,
+                                "type": "adjustment"
+                            },
+                            "splitMethod": "ON_TOTAL",
+                            "type": "modifier"
+                        }
+                    ],
+                    "periods": [
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-08-31",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-07-01",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1118,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-09-25",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-09-01",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 942,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-10-07",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-09-26",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1118,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-12-10",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-10-08",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 942,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-12-17",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-12-11",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "High Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1301,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-01-10",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-12-18",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Peak Season",
+                            "minimumNights": 7,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 2354,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-02-10",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-01-11",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1118,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-02-17",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-02-11",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Chinese New Year",
+                            "minimumNights": 5,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1301,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-04-02",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-02-18",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1118,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-04-20",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-04-03",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Easter",
+                            "minimumNights": 5,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1301,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-06-30",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-04-21",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 942,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-08-31",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-07-01",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1118,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-09-24",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-09-01",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 942,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-10-07",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-09-25",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1118,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-12-12",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-10-08",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 942,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-12-17",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-12-13",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1118,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-12-31",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-12-18",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Peak Season",
+                            "minimumNights": 7,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 2354,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-08-31",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-07-01",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1312,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-09-25",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-09-01",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1130,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-10-07",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-09-26",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1312,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-12-10",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-10-08",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1130,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-12-17",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-12-11",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "High Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1501,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-01-10",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-12-18",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Peak Season",
+                            "minimumNights": 7,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 2472,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-02-10",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-01-11",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1312,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-02-17",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-02-11",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Chinese New Year",
+                            "minimumNights": 5,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1501,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-04-02",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-02-18",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1312,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-04-20",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-04-03",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Easter",
+                            "minimumNights": 5,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1501,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-06-30",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-04-21",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1130,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-08-31",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-07-01",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1312,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-09-24",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-09-01",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1130,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-10-07",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-09-25",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1312,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-12-12",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-10-08",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1130,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-12-17",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-12-13",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1312,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-12-31",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-12-18",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Peak Season",
+                            "minimumNights": 7,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 2472,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-08-31",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-07-01",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1483,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-09-25",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-09-01",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1318,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-10-07",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-09-26",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1483,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-12-10",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-10-08",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1318,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2020-12-17",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-12-11",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "High Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1654,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-01-10",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2020-12-18",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Peak Season",
+                            "minimumNights": 7,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 2648,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-02-10",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-01-11",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1483,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-02-17",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-02-11",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Chinese New Year",
+                            "minimumNights": 5,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1654,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-04-02",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-02-18",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1483,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-04-20",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-04-03",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Easter",
+                            "minimumNights": 5,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1654,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-06-30",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-04-21",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1318,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-08-31",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-07-01",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1483,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-09-24",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-09-01",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1318,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-10-07",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-09-25",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1483,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-12-12",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-10-08",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Low Season",
+                            "minimumNights": 2,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1318,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-12-17",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-12-13",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Shoulder Season",
+                            "minimumNights": 3,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 1483,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        },
+                        {
+                            "bookableType": null,
+                            "conditionOperand": "AND",
+                            "conditions": [
+                                {
+                                    "arrivalDays": [],
+                                    "departureDays": [],
+                                    "endDate": "2021-12-31",
+                                    "modifyRatePerUnit": false,
+                                    "startDate": "2021-12-18",
+                                    "type": "date"
+                                }
+                            ],
+                            "description": "Peak Season",
+                            "minimumNights": 7,
+                            "priority": 500,
+                            "rate": {
+                                "amount": 2648,
+                                "applicableTaxes": [],
+                                "calculationMethod": "fixed",
+                                "calculationOperand": "equals",
+                                "type": "nightly"
+                            }
+                        }
+                    ],
+                    "taxes": []
+                }
+            ]
+        }
+    }
+]
