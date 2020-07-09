@@ -31,7 +31,7 @@ class ModifierExtractor
                 return true; // Any hidden ones are supported
             }
 
-            if ($modifier->getRate()->getCalculationOperand() === 'subtraction') {
+            if ($modifier->isDiscount()) {
                 return true; // Discounts always supported since it will be part of base price
             }
 
