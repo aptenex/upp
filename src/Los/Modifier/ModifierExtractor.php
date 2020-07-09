@@ -34,6 +34,10 @@ class ModifierExtractor
             if ($modifier->isDiscount()) {
                 return true; // Discounts always supported since it will be part of base price
             }
+            
+            if($modifier->getRate()->getType() === 'discount'){
+                return true; // Discounts always supported since it will be part of base price
+            }
 
             if (empty($modifier->getConditions())) {
                 return false; // Mandatory, non-hidden modifiers are NOT supported
