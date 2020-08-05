@@ -189,14 +189,13 @@ class AvailabilityUtils
         ];
     }
 
-    // This function split sequence to array['YYYY','NNN','QQ']
-
     /**
      * Takes an array with parameters startDatum: \DateTime|YYYY-MM-DD, sequence: String
-     * and converts it into an array of sequences
+     * and converts it into an array of sequences - array['YYYY','NNN','QQ']
      *
      * @param $set
      * @return array
+     * @throws \Exception
      */
     public static function extractRanges($set): array
     {
@@ -279,7 +278,9 @@ class AvailabilityUtils
     }
 
     /**
-     * this method return dateranges with type without intersection.
+     * This method return date ranges with type without intersection.
+     *
+     * Expected format for $set = ['startDatum' => 'YYYY-MM-DD', 'sequence' => 'YYNNNNNNYYY...']
      *
      * @param $set
      * @param bool $dateStrings Return an array of date strings instead
@@ -456,7 +457,7 @@ class AvailabilityUtils
         return implode($splice);
     }
 
-    public static function canocaliseSequences($collection): array
+    public static function canocaliseSequences($collection): ?array
     {
         $minDate = null;
         // When canonicalising, we don't want to allow any dates earlier than today through..
