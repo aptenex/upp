@@ -4,7 +4,16 @@ namespace Aptenex\Upp\Parser\Structure;
 
 class Tax
 {
-
+    
+    // These Enums are not currently in use. We added them such that when we add flat fees for Taxes
+    // They already exist and can be used.
+    // const METHOD_FIXED = 'fixed'; THERE IS NO SUCH THING AS A FLAT TAX - IT DOES NOT EXIST.
+    const METHOD_PERCENTAGE = 'percentage';
+    const METHOD_FLAT_PER_GUEST = 'flat_per_guest';
+    const METHOD_FLAT_PER_NIGHT = 'flat_per_night';
+    const METHOD_FLAT_PER_GUEST_PER_NIGHT = 'flat_per_guest_per_night';
+    
+    
     public const TYPE_TAX = 'TYPE_TAX';
     public const TYPE_VAT = 'TYPE_VAT';
     public const TYPE_CITY_TAX = 'TYPE_CITY_TAX';
