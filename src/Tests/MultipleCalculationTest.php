@@ -38,10 +38,6 @@ class MultipleCalculationTest extends TestCase
                 continue;
             }
 
-            if (!isset($priceConfig['key']) || $priceConfig['key'] !== 'wrs-on_base-discounts') {
-                continue;
-            }
-
             $structureOptions = new StructureOptions();
 
             self::$currentTestName = $priceConfig['name'];

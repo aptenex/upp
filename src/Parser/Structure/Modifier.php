@@ -185,7 +185,7 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
 
     public function isDiscount(): bool
     {
-        return $this->getRate()->getCalculationOperand() === Operand::OP_SUBTRACTION;
+        return strtoupper($this->getRate()->getCalculationOperator()) === strtoupper(Operator::OP_SUBTRACTION);
     }
 
     public function satisfiesSpecialDiscountCriteria(): bool

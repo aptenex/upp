@@ -75,7 +75,7 @@ class TransformOptions
     /**
      * @return int
      */
-    public function getBcomRoomId(): int
+    public function getBcomRoomId(): ?int
     {
         return $this->bcomRoomId;
     }
@@ -93,7 +93,7 @@ class TransformOptions
     /**
      * @return int
      */
-    public function getBcomRateId(): int
+    public function getBcomRateId(): ?int
     {
         return $this->bcomRateId;
     }
@@ -111,7 +111,7 @@ class TransformOptions
     /**
      * @return string
      */
-    public function getPriceReturnType(): string
+    public function getPriceReturnType(): ?string
     {
         return $this->priceReturnType;
     }
@@ -147,7 +147,7 @@ class TransformOptions
     /**
      * @return Exchange
      */
-    public function getExchange(): Exchange
+    public function getExchange(): ?Exchange
     {
         return $this->exchange;
     }
