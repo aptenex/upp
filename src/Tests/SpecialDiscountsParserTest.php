@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Aptenex\Upp\Parser\Structure\PricingConfig;
+use Aptenex\Upp\Transformer\SpecialDiscountTransformer;
 use PHPUnit\Framework\TestCase;
 use Aptenex\Upp\Parser\ModifiersParser;
 use Aptenex\Upp\Parser\Structure\StructureOptions;
@@ -74,6 +75,27 @@ class SpecialDiscountsParserTest extends TestCase
         foreach($modifiers as $modifier) {
             $this->assertTrue($modifier->satisfiesSpecialDiscountCriteria());
         }
+    }
+
+    public function testTransformSpecialDiscounts(): void
+    {
+        $discounts = json_decode(file_get_contents(__DIR__ . '/Resources/special-discounts.json'), true);
+
+        $structureOptions = new StructureOptions();
+
+        $sdParser = new ModifiersParser();
+
+        $modifiers = $sdParser->parse($discounts, $structureOptions);
+
+        $spt = new SpecialDiscountTransformer();
+
+        $result = $spt->transformSpecialDiscounts($modifiers);
+
+        $this->assertCount(1, $result);
+
+        dump(array_map(function ($item) {
+            return $item->__toArray();
+        }, $result));exit;
     }
 
 }

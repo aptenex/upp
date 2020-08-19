@@ -1,0 +1,53 @@
+[
+  {
+    "id": null,
+    "description": "10% Early Bird",
+    "priority": null,
+    "conditionOperand": "AND",
+    "conditions": [
+      {
+        "type": "booking_days",
+        "inverse": false,
+        "modifyRatePerUnit": false,
+        "minimum": 120,
+        "maximum": null
+      },
+      {
+        "type": "date",
+        "inverse": false,
+        "modifyRatePerUnit": false,
+        "startDate": "2020-09-01",
+        "endDate": "2021-01-08",
+        "arrivalDays": [],
+        "departureDays": []
+      },
+      {
+        "type": "distribution",
+        "inverse": false,
+        "modifyRatePerUnit": false,
+        "distributionChannels": [
+          "homeaway",
+          "rentivo",
+          "bookingcom"
+        ]
+      }
+    ],
+    "rate": {
+      "type": "adjustment",
+      "amount": 0.1,
+      "taxable": false,
+      "damageDeposit": 0,
+      "basePriceOnly": false,
+      "applicableTaxes": [],
+      "calculationMethod": "percentage",
+      "calculationOperand": "subtraction",
+      "calculationOperator": "subtraction",
+      "daysOfWeek": null,
+      "strategy": null
+    },
+    "type": "discount",
+    "splitMethod": "ON_TOTAL",
+    "hidden": false,
+    "priceGroup": "total"
+  }
+]
