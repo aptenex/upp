@@ -58,12 +58,12 @@
                     if ($singleRecord['rateHash'] === $computedEmptyHash && $options->isSkipEmptyLosRecordsFromTransformation()) {
                         continue;
                     }
-                    if($options->isRestrictSameGuestRatesToSingleOccupancy() && !isset($optimisedArrivalDateRates[$singleRecord['rateHash']]) || !$options->isRestrictSameGuestRatesToSingleOccupancy()) {
+                    if(($options->isRestrictSameGuestRatesToSingleOccupancy() && !isset($optimisedArrivalDateRates[$singleRecord['rateHash']])) || !$options->isRestrictSameGuestRatesToSingleOccupancy()) {
                         $optimisedArrivalDateRates[$singleRecord['rateHash']] = $this->generateLosRecordString($singleRecord, $options);
                     }
-                    
-                    $previousSingleRecord = $singleRecord;
+          
                 }
+                /** @noinspection SlowArrayOperationsInLoopInspection */
                 $data = array_merge($data, array_reverse($optimisedArrivalDateRates));
                 
             }
