@@ -8,13 +8,15 @@ use Doctrine\Common\Annotations\Annotation\Required;
 class Rate
 {
 
-    const METHOD_FIXED = 'fixed';
-    const METHOD_PERCENTAGE = 'percentage';
+    public const METHOD_FIXED      = 'fixed';
+    public const METHOD_PERCENTAGE = 'percentage';
+    
+    
 
-    const TYPE_WEEKLY = 'weekly';
-    const TYPE_NIGHTLY = 'nightly';
-    const TYPE_MONTHLY = 'monthly';
-    const TYPE_ADJUSTMENT = 'adjustment';
+    public const TYPE_WEEKLY     = 'weekly';
+    public const TYPE_NIGHTLY    = 'nightly';
+    public const TYPE_MONTHLY    = 'monthly';
+    public const TYPE_ADJUSTMENT = 'adjustment';
 
     /**
      * @Required()

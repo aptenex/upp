@@ -59,6 +59,16 @@ class AdjustmentAmount
      * @var Money
      */
     private $amount;
+    
+    /**
+     * One of UnitBasis enums.
+     * The purpose is to allow us to specify how this extra amount is calculated.
+     * For instance, per person per night, per reservation.
+     * The basis does not need to be used in any calculations once the amount has been set and is entirely informative
+     * once the AdjustmentAmount.amount has been set.
+     * @var string|null
+     */
+    private $unitBasis;
 
     /**
      * @var string
@@ -276,6 +286,23 @@ class AdjustmentAmount
 	{
 		$this->amount = $amount;
 	}
+    
+    /**
+     * @return null|string
+     */
+    public function getUnitBasis(): ?string
+    {
+        return $this->unitBasis;
+    }
+    
+    /**
+     * @param null|string $unitBasis
+     */
+    public function setUnitBasis(?string $unitBasis): void
+    {
+        $this->unitBasis = $unitBasis;
+    }
+	
     
     /**
      * @return string|null
