@@ -2,6 +2,7 @@
 
 namespace Aptenex\Upp\Calculation;
 
+use Aptenex\Upp\Parser\Structure\UnitBasis;
 use Aptenex\Upp\Util\MoneyUtils;
 use Aptenex\Upp\Calculation\ControlItem\ControlItemInterface;
 use Aptenex\Upp\Parser\Structure\Operand;
@@ -263,12 +264,13 @@ class AdjustmentAmount
     /**
      * @return array
      */
-    public function __toArray()
+    public function __toArray(): array
     {
         return [
             'type'               => $this->getType(),
             'priceGroup'         => $this->getPriceGroup(),
             'amount'             => MoneyUtils::getConvertedAmount($this->getAmount()),
+            'unitBasis'          => $this->getUnitBasis() ?? UnitBasis::PER_RESERVATION,
             'hidden'             => $this->isHidden(),
             'identifier'         => $this->getIdentifier(),
             'description'        => $this->getDescription(),
