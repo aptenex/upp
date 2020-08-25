@@ -65,8 +65,47 @@ class LosRecordIterationCountNoCalculationTest extends TestCase
         ';
 
     public const PARSED_CONFIG_EATS_AND_RETREATS_TEST = 'eatsandretreats-los-large-calculation-test';
+    public const PARSED_CONFIG_EATS_AND_RETREATS_BANKHOA_TEST = 'eatsandretreats-los-baan-khoa';
     
 
+//    public function testCalculatesFinalStayPrice(){
+//        $test = TestUtils::getPriceTestByKey(
+//            json_decode(file_get_contents(__DIR__ . '/Resources/los_eats_and_retreats_baan_khoa.json'), true),
+//            self::PARSED_CONFIG_EATS_AND_RETREATS_BANKHOA_TEST
+//        );
+//        $config = $test['config'];
+//
+//        $schema = json_decode($this->openSchemaData, true);
+//
+//        $upp = new Upp(
+//            new HashMapPricingResolver(ArrayAccess::get('mixins', $test, [])),
+//            new TestTranslator()
+//        );
+//
+//        $losGenerator = new LosGenerator($upp);
+//
+//        $losOptions = new LosOptions(
+//            'USD',
+//            new \DateTime('2020-08-27'),
+//            new \DateTime('2020-09-06')
+//        );
+//        $losOptions->setIterationCountOnly(false);
+//        $losOptions->setBookingDate(new \DateTime('2020-04-01'));
+//
+//        $losOptions->setDefaultMaxStay(30);
+//        $losOptions->setForceFullGeneration(true);
+//        $losOptions->setForceAllAvailabilitiesGeneration(true);
+//
+//        // The test rates are generated without a fee that is always applied. This option should remove these
+//        $losOptions->setPricingContextCalculationMode([PricingContext::CALCULATION_MODE_LOS_EXCLUDE_DAMAGE_DEPOSIT]);
+//        $ld = LookupDirectorFactory::newFromRentalData($schema, $losOptions);
+//        $parsed = $upp->parsePricingConfig($config, new StructureOptions());
+//
+//        $losRecords = $losGenerator->generateLosRecords($losOptions, $ld, $parsed);
+//
+//        $this->assertEquals($losRecords->getMetrics()->getMaxPotentialRuns(), 98730);
+//    }
+    
     public function testIterationCount()
     {
         $test = TestUtils::getPriceTestByKey(
