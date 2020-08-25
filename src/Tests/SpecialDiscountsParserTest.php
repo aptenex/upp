@@ -92,10 +92,6 @@ class SpecialDiscountsParserTest extends TestCase
         $result = $spt->transformSpecialDiscounts($modifiers);
 
         $this->assertCount(1, $result);
-
-        dump(array_map(function ($item) {
-            return $item->__toArray();
-        }, $result));exit;
     }
 
 }
