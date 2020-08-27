@@ -1,0 +1,1099 @@
+[
+    {
+        "key" : "eatsandretreats-los-baan-khoa",
+        "name": "Large LOS Calculations Required 01",
+        "description": "testing final stay is calculated correctly",
+        "config": {
+            "name": "Pricing",
+            "schema": "property-pricing",
+            "version": "0.0.1",
+            "meta": [],
+            "data": [
+                    {
+                            "currency": "USD",
+                            "defaults": {
+                                "balanceDaysBeforeArrival": 45,
+                                "bookableType": "instant_bookable",
+                                "damageDeposit": 0,
+                                "damageDepositCalculationMethod": "fixed",
+                                "damageDepositSplitMethod": "ON_DEPOSIT",
+                                "daysRequiredInAdvanceForBooking": 2,
+                                "depositSplitPercentage": 30,
+                                "extraNightAlterationStrategyUseGlobalNights": false,
+                                "maximumNights": "",
+                                "minimumNights": 0,
+                                "modifiersUseCategorizedCalculationOrder": false,
+                                "partialWeekAlterationStrategyUseGlobalNights": false,
+                                "perPetPerNight": 0,
+                                "perPetPerStay": 0,
+                                "perPetSplitMethod": "ON_TOTAL",
+                                "periodSelectionStrategy": "DEFAULT"
+                            },
+                            "modifiers": [
+                                {
+                                    "conditionOperand": "AND",
+                                    "conditions": [],
+                                    "description": "Service Charge",
+                                    "hidden": false,
+                                    "id": null,
+                                    "priceGroup": "total",
+                                    "priority": null,
+                                    "rate": {
+                                        "amount": 0.1,
+                                        "applicableTaxes": [
+                                            "ce55e959-dfec-4b00-b958-563259c07f41"
+                                        ],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "percentage",
+                                        "calculationOperand": "addition",
+                                        "calculationOperator": "addition",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": null,
+                                        "taxable": true,
+                                        "type": "adjustment"
+                                    },
+                                    "splitMethod": "ON_TOTAL",
+                                    "type": "service_charge"
+                                },
+                                {
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2019-12-20",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2020-09-01",
+                                            "type": "date"
+                                        },
+                                        {
+                                            "inverse": false,
+                                            "maximum": null,
+                                            "minimum": 12,
+                                            "modifyRatePerUnit": false,
+                                            "type": "nights"
+                                        },
+                                        {
+                                            "inverse": false,
+                                            "maximum": 119,
+                                            "minimum": 21,
+                                            "modifyRatePerUnit": false,
+                                            "type": "booking_days"
+                                        },
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-12-20",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2021-01-09",
+                                            "type": "date"
+                                        },
+                                        {
+                                            "distributionChannels": [
+                                                "homeaway",
+                                                "rentivo",
+                                                "bookingcom"
+                                            ],
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "type": "distribution"
+                                        }
+                                    ],
+                                    "description": "Long stays 12 days -10%",
+                                    "hidden": false,
+                                    "id": null,
+                                    "priceGroup": "base",
+                                    "priority": null,
+                                    "rate": {
+                                        "amount": 0.1,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "percentage",
+                                        "calculationOperand": "subtraction",
+                                        "calculationOperator": "subtraction",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": null,
+                                        "taxable": false,
+                                        "type": "adjustment"
+                                    },
+                                    "splitMethod": "ON_TOTAL",
+                                    "type": "discount"
+                                },
+                                {
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "inverse": false,
+                                            "maximum": 20,
+                                            "minimum": null,
+                                            "modifyRatePerUnit": false,
+                                            "type": "booking_days"
+                                        },
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-01-08",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2020-09-01",
+                                            "type": "date"
+                                        },
+                                        {
+                                            "distributionChannels": [
+                                                "homeaway",
+                                                "rentivo",
+                                                "bookingcom"
+                                            ],
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "type": "distribution"
+                                        }
+                                    ],
+                                    "description": "Last minute",
+                                    "hidden": false,
+                                    "id": null,
+                                    "priceGroup": "base",
+                                    "priority": null,
+                                    "rate": {
+                                        "amount": 0.15,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "percentage",
+                                        "calculationOperand": "subtraction",
+                                        "calculationOperator": "subtraction",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": null,
+                                        "taxable": false,
+                                        "type": "adjustment"
+                                    },
+                                    "splitMethod": "ON_TOTAL",
+                                    "type": "discount"
+                                },
+                                {
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "inverse": false,
+                                            "maximum": null,
+                                            "minimum": 120,
+                                            "modifyRatePerUnit": false,
+                                            "type": "booking_days"
+                                        },
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-01-08",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2020-09-01",
+                                            "type": "date"
+                                        },
+                                        {
+                                            "distributionChannels": [
+                                                "homeaway",
+                                                "rentivo",
+                                                "bookingcom"
+                                            ],
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "type": "distribution"
+                                        }
+                                    ],
+                                    "description": "10% Early Bird",
+                                    "hidden": false,
+                                    "id": null,
+                                    "priceGroup": "total",
+                                    "priority": null,
+                                    "rate": {
+                                        "amount": 0.1,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "percentage",
+                                        "calculationOperand": "subtraction",
+                                        "calculationOperator": "subtraction",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": null,
+                                        "taxable": false,
+                                        "type": "adjustment"
+                                    },
+                                    "splitMethod": "ON_TOTAL",
+                                    "type": "discount"
+                                },
+                                {
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2020-08-31",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2020-06-15",
+                                            "type": "date"
+                                        },
+                                        {
+                                            "distributionChannels": [
+                                                "homeaway",
+                                                "rentivo"
+                                            ],
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "type": "distribution"
+                                        }
+                                    ],
+                                    "description": "Summer 2020 50% off",
+                                    "hidden": false,
+                                    "id": null,
+                                    "priceGroup": "base",
+                                    "priority": null,
+                                    "rate": {
+                                        "amount": 0.5,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "percentage",
+                                        "calculationOperand": "subtraction",
+                                        "calculationOperator": "subtraction",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": null,
+                                        "taxable": false,
+                                        "type": "adjustment"
+                                    },
+                                    "splitMethod": "ON_TOTAL",
+                                    "type": "discount"
+                                }
+                            ],
+                            "periods": [
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2020-09-24",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2020-04-20",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "Low Season",
+                                    "id": 2171,
+                                    "minimumNights": "1",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 950,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": {
+                                            "extraNightsAlteration": {
+                                                "applyToTotal": true,
+                                                "brackets": [
+                                                    {
+                                                        "amount": 950,
+                                                        "damageDepositOverride": null,
+                                                        "days": [],
+                                                        "guests": [
+                                                            {
+                                                                "amount": 650,
+                                                                "guests": "1-6"
+                                                            },
+                                                            {
+                                                                "amount": 750,
+                                                                "guests": "7-8"
+                                                            },
+                                                            {
+                                                                "amount": 850,
+                                                                "guests": "9-10"
+                                                            },
+                                                            {
+                                                                "amount": 950,
+                                                                "guests": "11-12"
+                                                            },
+                                                            {
+                                                                "amount": 1000,
+                                                                "guests": "13"
+                                                            },
+                                                            {
+                                                                "amount": 1050,
+                                                                "guests": "14"
+                                                            }
+                                                        ],
+                                                        "matchAmount": 0,
+                                                        "night": "1+"
+                                                    }
+                                                ],
+                                                "calculationMethod": "fixed",
+                                                "calculationOperand": "equals",
+                                                "calculationOperator": "equals",
+                                                "enablePerGuestPerNight": true,
+                                                "makePreviousNightsSameRate": true,
+                                                "nightsMatchedOverridesPrice": false
+                                            }
+                                        },
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2020-10-07",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2020-09-25",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "High Season",
+                                    "id": 2172,
+                                    "minimumNights": "4",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 1150,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": null,
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2020-12-19",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2020-10-08",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "Low Season",
+                                    "id": 2173,
+                                    "minimumNights": "2",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 950,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": {
+                                            "extraNightsAlteration": {
+                                                "applyToTotal": true,
+                                                "brackets": [
+                                                    {
+                                                        "amount": 950,
+                                                        "damageDepositOverride": null,
+                                                        "days": [],
+                                                        "guests": [
+                                                            {
+                                                                "amount": 650,
+                                                                "guests": "1-6"
+                                                            },
+                                                            {
+                                                                "amount": 750,
+                                                                "guests": "7-8"
+                                                            },
+                                                            {
+                                                                "amount": 850,
+                                                                "guests": "9-10"
+                                                            },
+                                                            {
+                                                                "amount": 950,
+                                                                "guests": "11-12"
+                                                            },
+                                                            {
+                                                                "amount": 1000,
+                                                                "guests": "13"
+                                                            },
+                                                            {
+                                                                "amount": 1050,
+                                                                "guests": "14"
+                                                            }
+                                                        ],
+                                                        "matchAmount": 0,
+                                                        "night": "1+"
+                                                    }
+                                                ],
+                                                "calculationMethod": "fixed",
+                                                "calculationOperand": "equals",
+                                                "calculationOperator": "equals",
+                                                "enablePerGuestPerNight": true,
+                                                "makePreviousNightsSameRate": true,
+                                                "nightsMatchedOverridesPrice": false
+                                            }
+                                        },
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-01-06",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2020-12-20",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "Peak Season",
+                                    "id": 2174,
+                                    "minimumNights": "7",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 1725,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": null,
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-02-06",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2021-01-07",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "Mid Season",
+                                    "id": 2175,
+                                    "minimumNights": "3",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 1150,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": {
+                                            "extraNightsAlteration": {
+                                                "applyToTotal": true,
+                                                "brackets": [
+                                                    {
+                                                        "amount": 1150,
+                                                        "damageDepositOverride": null,
+                                                        "days": [],
+                                                        "guests": [
+                                                            {
+                                                                "amount": 850,
+                                                                "guests": "1-6"
+                                                            },
+                                                            {
+                                                                "amount": 950,
+                                                                "guests": "7-8"
+                                                            },
+                                                            {
+                                                                "amount": 1050,
+                                                                "guests": "9-10"
+                                                            },
+                                                            {
+                                                                "amount": 1150,
+                                                                "guests": "11-12"
+                                                            },
+                                                            {
+                                                                "amount": 1200,
+                                                                "guests": "13"
+                                                            },
+                                                            {
+                                                                "amount": 1250,
+                                                                "guests": "14"
+                                                            }
+                                                        ],
+                                                        "matchAmount": 0,
+                                                        "night": "1+"
+                                                    }
+                                                ],
+                                                "calculationMethod": "fixed",
+                                                "calculationOperand": "equals",
+                                                "calculationOperator": "equals",
+                                                "enablePerGuestPerNight": true,
+                                                "makePreviousNightsSameRate": true,
+                                                "nightsMatchedOverridesPrice": false
+                                            }
+                                        },
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-02-20",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2021-02-07",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "High Season  ",
+                                    "id": 2176,
+                                    "minimumNights": "5",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 1250,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": null,
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-03-26",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2021-02-21",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "Mid Season",
+                                    "id": 2177,
+                                    "minimumNights": "3",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 1150,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": {
+                                            "extraNightsAlteration": {
+                                                "applyToTotal": true,
+                                                "brackets": [
+                                                    {
+                                                        "amount": 1150,
+                                                        "damageDepositOverride": null,
+                                                        "days": [],
+                                                        "guests": [
+                                                            {
+                                                                "amount": 850,
+                                                                "guests": "1-6"
+                                                            },
+                                                            {
+                                                                "amount": 950,
+                                                                "guests": "7-8"
+                                                            },
+                                                            {
+                                                                "amount": 1050,
+                                                                "guests": "9-10"
+                                                            },
+                                                            {
+                                                                "amount": 1150,
+                                                                "guests": "11-12"
+                                                            },
+                                                            {
+                                                                "amount": 1200,
+                                                                "guests": "13"
+                                                            },
+                                                            {
+                                                                "amount": 1250,
+                                                                "guests": "14"
+                                                            }
+                                                        ],
+                                                        "matchAmount": 0,
+                                                        "night": "1+"
+                                                    }
+                                                ],
+                                                "calculationMethod": "fixed",
+                                                "calculationOperand": "equals",
+                                                "calculationOperator": "equals",
+                                                "enablePerGuestPerNight": true,
+                                                "makePreviousNightsSameRate": true,
+                                                "nightsMatchedOverridesPrice": false
+                                            }
+                                        },
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-04-18",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2021-03-27",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "High Season  ",
+                                    "id": 2178,
+                                    "minimumNights": "5",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 1250,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": null,
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-07-02",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2021-04-19",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "Low Season",
+                                    "id": 2179,
+                                    "minimumNights": "2",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 950,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": {
+                                            "extraNightsAlteration": {
+                                                "applyToTotal": true,
+                                                "brackets": [
+                                                    {
+                                                        "amount": 950,
+                                                        "damageDepositOverride": null,
+                                                        "days": [],
+                                                        "guests": [
+                                                            {
+                                                                "amount": 650,
+                                                                "guests": "1-6"
+                                                            },
+                                                            {
+                                                                "amount": 750,
+                                                                "guests": "7-8"
+                                                            },
+                                                            {
+                                                                "amount": 850,
+                                                                "guests": "9-10"
+                                                            },
+                                                            {
+                                                                "amount": 950,
+                                                                "guests": "11-12"
+                                                            },
+                                                            {
+                                                                "amount": 1000,
+                                                                "guests": "13"
+                                                            },
+                                                            {
+                                                                "amount": 1050,
+                                                                "guests": "14"
+                                                            }
+                                                        ],
+                                                        "matchAmount": 0,
+                                                        "night": "1+"
+                                                    }
+                                                ],
+                                                "calculationMethod": "fixed",
+                                                "calculationOperand": "equals",
+                                                "calculationOperator": "equals",
+                                                "enablePerGuestPerNight": true,
+                                                "makePreviousNightsSameRate": true,
+                                                "nightsMatchedOverridesPrice": false
+                                            }
+                                        },
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-08-28",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2021-07-03",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "Mid Season",
+                                    "id": 2180,
+                                    "minimumNights": "3",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 1150,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": {
+                                            "extraNightsAlteration": {
+                                                "applyToTotal": true,
+                                                "brackets": [
+                                                    {
+                                                        "amount": 1150,
+                                                        "damageDepositOverride": null,
+                                                        "days": [],
+                                                        "guests": [
+                                                            {
+                                                                "amount": 850,
+                                                                "guests": "1-6"
+                                                            },
+                                                            {
+                                                                "amount": 950,
+                                                                "guests": "7-8"
+                                                            },
+                                                            {
+                                                                "amount": 1050,
+                                                                "guests": "9-10"
+                                                            },
+                                                            {
+                                                                "amount": 1150,
+                                                                "guests": "11-12"
+                                                            },
+                                                            {
+                                                                "amount": 1200,
+                                                                "guests": "13"
+                                                            },
+                                                            {
+                                                                "amount": 1250,
+                                                                "guests": "14"
+                                                            }
+                                                        ],
+                                                        "matchAmount": 0,
+                                                        "night": "1+"
+                                                    }
+                                                ],
+                                                "calculationMethod": "fixed",
+                                                "calculationOperand": "equals",
+                                                "calculationOperator": "equals",
+                                                "enablePerGuestPerNight": true,
+                                                "makePreviousNightsSameRate": true,
+                                                "nightsMatchedOverridesPrice": false
+                                            }
+                                        },
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-09-30",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2021-08-29",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "Low Season",
+                                    "id": 2181,
+                                    "minimumNights": "2",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 950,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": {
+                                            "extraNightsAlteration": {
+                                                "applyToTotal": true,
+                                                "brackets": [
+                                                    {
+                                                        "amount": 950,
+                                                        "damageDepositOverride": null,
+                                                        "days": [],
+                                                        "guests": [
+                                                            {
+                                                                "amount": 650,
+                                                                "guests": "1-6"
+                                                            },
+                                                            {
+                                                                "amount": 750,
+                                                                "guests": "7-8"
+                                                            },
+                                                            {
+                                                                "amount": 850,
+                                                                "guests": "9-10"
+                                                            },
+                                                            {
+                                                                "amount": 950,
+                                                                "guests": "11-12"
+                                                            },
+                                                            {
+                                                                "amount": 1000,
+                                                                "guests": "13"
+                                                            },
+                                                            {
+                                                                "amount": 1050,
+                                                                "guests": "14"
+                                                            }
+                                                        ],
+                                                        "matchAmount": 0,
+                                                        "night": "1+"
+                                                    }
+                                                ],
+                                                "calculationMethod": "fixed",
+                                                "calculationOperand": "equals",
+                                                "calculationOperator": "equals",
+                                                "enablePerGuestPerNight": true,
+                                                "makePreviousNightsSameRate": true,
+                                                "nightsMatchedOverridesPrice": false
+                                            }
+                                        },
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-10-09",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2021-10-01",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "High Season ",
+                                    "id": 2182,
+                                    "minimumNights": "4",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 1250,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": null,
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2021-12-21",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2021-10-10",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "Low Season",
+                                    "id": 2183,
+                                    "minimumNights": "2",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 950,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": {
+                                            "extraNightsAlteration": {
+                                                "applyToTotal": true,
+                                                "brackets": [
+                                                    {
+                                                        "amount": 950,
+                                                        "damageDepositOverride": null,
+                                                        "days": [],
+                                                        "guests": [
+                                                            {
+                                                                "amount": 650,
+                                                                "guests": "1-6"
+                                                            },
+                                                            {
+                                                                "amount": 750,
+                                                                "guests": "7-8"
+                                                            },
+                                                            {
+                                                                "amount": 850,
+                                                                "guests": "9-10"
+                                                            },
+                                                            {
+                                                                "amount": 950,
+                                                                "guests": "11-12"
+                                                            },
+                                                            {
+                                                                "amount": 1000,
+                                                                "guests": "13"
+                                                            },
+                                                            {
+                                                                "amount": 1050,
+                                                                "guests": "14"
+                                                            }
+                                                        ],
+                                                        "matchAmount": 0,
+                                                        "night": "1+"
+                                                    }
+                                                ],
+                                                "calculationMethod": "fixed",
+                                                "calculationOperand": "equals",
+                                                "calculationOperator": "equals",
+                                                "enablePerGuestPerNight": true,
+                                                "makePreviousNightsSameRate": true,
+                                                "nightsMatchedOverridesPrice": false
+                                            }
+                                        },
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                },
+                                {
+                                    "bookableType": null,
+                                    "conditionOperand": "AND",
+                                    "conditions": [
+                                        {
+                                            "arrivalDays": [],
+                                            "departureDays": [],
+                                            "endDate": "2022-01-07",
+                                            "inverse": false,
+                                            "modifyRatePerUnit": false,
+                                            "startDate": "2021-12-22",
+                                            "type": "date"
+                                        }
+                                    ],
+                                    "description": "Peak Season",
+                                    "id": 2184,
+                                    "minimumNights": "7",
+                                    "priority": 500,
+                                    "rate": {
+                                        "amount": 1750,
+                                        "applicableTaxes": [],
+                                        "basePriceOnly": false,
+                                        "calculationMethod": "fixed",
+                                        "calculationOperand": "equals",
+                                        "calculationOperator": "equals",
+                                        "damageDeposit": 0,
+                                        "daysOfWeek": null,
+                                        "strategy": null,
+                                        "taxable": false,
+                                        "type": "nightly"
+                                    }
+                                }
+                            ],
+                            "taxes": [
+                                {
+                                    "amount": 0.07,
+                                    "calculationMethod": "percentage",
+                                    "description": null,
+                                    "extrasWhitelist": [],
+                                    "includeBasePrice": true,
+                                    "includeExtras": true,
+                                    "name": "VAT",
+                                    "type": "TYPE_VAT",
+                                    "uuid": "ce55e959-dfec-4b00-b958-563259c07f41"
+                                }
+                            ]
+                        }
+                    ]
+        }
+    }
+]
