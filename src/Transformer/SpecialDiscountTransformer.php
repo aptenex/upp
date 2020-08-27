@@ -74,13 +74,23 @@ class SpecialDiscountTransformer
     {
         if ($item->getCategory() === SpecialDiscountItem::DISCOUNT_CATEGORY_DAYS_BEFORE_ARRIVAL) {
 
-            if ($item->getMinimumDaysBeforeArrival() !== null && $item->getMaximumDaysBeforeArrival() === null) {
+
+            $min = (int) $item->getMinimumDaysBeforeArrival();
+            $max = (int) $item->getMaximumDaysBeforeArrival();
+
+            if (
+                $min > 0 &&
+                $max === 0
+            ) {
                 $item->setClassification(SpecialDiscountItem::DISCOUNT_CLASSIFICATION_EARLY_BIRD);
 
                 return;
             }
 
-            if ($item->getMinimumDaysBeforeArrival() === null && $item->getMaximumDaysBeforeArrival() !== null) {
+            if (
+                $min === 0 &&
+                $max > 0
+            ) {
                 $item->setClassification(SpecialDiscountItem::DISCOUNT_CLASSIFICATION_LAST_MINUTE);
 
                 return;
