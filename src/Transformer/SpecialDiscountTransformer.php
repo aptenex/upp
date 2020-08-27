@@ -8,7 +8,6 @@ use Aptenex\Upp\Parser\Structure\Condition\BookingDaysCondition;
 use Aptenex\Upp\Parser\Structure\Condition\DateCondition;
 use Aptenex\Upp\Parser\Structure\Condition\MultiDateCondition;
 use Aptenex\Upp\Parser\Structure\Modifier;
-use Aptenex\Upp\Parser\Structure\Rate;
 use Aptenex\Upp\Util\NumberUtils;
 
 class SpecialDiscountTransformer
@@ -66,7 +65,28 @@ class SpecialDiscountTransformer
 
         $item->setDateRanges($ranges);
 
+        $this->applyClassificationIfValid($item);
+
         return $item;
+    }
+
+    private function applyClassificationIfValid(SpecialDiscountItem $item): void
+    {
+        if ($item->getCategory() === SpecialDiscountItem::DISCOUNT_CATEGORY_DAYS_BEFORE_ARRIVAL) {
+
+            if ($item->getMinimumDaysBeforeArrival() !== null && $item->getMaximumDaysBeforeArrival() === null) {
+                $item->setClassification(SpecialDiscountItem::DISCOUNT_CLASSIFICATION_EARLY_BIRD);
+
+                return;
+            }
+
+            if ($item->getMinimumDaysBeforeArrival() === null && $item->getMaximumDaysBeforeArrival() !== null) {
+                $item->setClassification(SpecialDiscountItem::DISCOUNT_CLASSIFICATION_LAST_MINUTE);
+
+                return;
+            }
+
+        }
     }
 
 }
