@@ -12,7 +12,15 @@ class SpecialDiscountItem
     public const OPERAND_TYPE_FIXED = 'FIXED';
     public const OPERAND_TYPE_PERCENTAGE = 'PERCENTAGE';
 
+    public const DISCOUNT_CLASSIFICATION_EARLY_BIRD = 'EARLY_BIRD';
+    public const DISCOUNT_CLASSIFICATION_LAST_MINUTE = 'LAST_MINUTE';
+
     public const DISCOUNT_CATEGORY_DAYS_BEFORE_ARRIVAL = 'DAYS_BEFORE_ARRIVAL';
+
+    /**
+     * @var string|null
+     */
+    protected $classification;
 
     /**
      * @var string|null
@@ -161,6 +169,22 @@ class SpecialDiscountItem
         $this->maximumDaysBeforeArrival = $maximumDaysBeforeArrival;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getClassification(): ?string
+    {
+        return $this->classification;
+    }
+
+    /**
+     * @param string|null $classification
+     */
+    public function setClassification(?string $classification): void
+    {
+        $this->classification = $classification;
+    }
+
     public function __toArray()
     {
         $data = [
@@ -168,6 +192,7 @@ class SpecialDiscountItem
             'amount' => $this->getAmount(),
             'type' => $this->getType(),
             'category' => $this->getCategory(),
+            'classification' => $this->getClassification(),
             'dateRanges' =>  array_map(function ($item) {
                 return [
                     'startDate' => $item->getStartDate()->format('Y-m-d'),
