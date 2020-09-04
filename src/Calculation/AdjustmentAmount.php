@@ -19,6 +19,7 @@ class AdjustmentAmount
 
     const PRICE_GROUP_TOTAL = 'total';
     const PRICE_GROUP_BASE = 'base';
+    const PRICE_GROUP_BASE_INCLUSIVE = 'base_inclusive'; // base inclusive is used to add items which are NOT calculated on pricing.
     const PRICE_GROUP_BASE_NON_TAXABLE = 'base_non_taxable';
     const PRICE_GROUP_NONE = 'none';
     const PRICE_GROUP_ARRIVAL = 'on_arrival';
@@ -35,6 +36,7 @@ class AdjustmentAmount
     public static $priceGroupMap = [
         self::PRICE_GROUP_TOTAL => 'On Total',
         self::PRICE_GROUP_BASE => 'On Base (taxed & visible)',
+        self::PRICE_GROUP_BASE_INCLUSIVE => 'Included Already on Base (does not apply to price)',
         self::PRICE_GROUP_BASE_NON_TAXABLE => 'On Base (not taxed)',
         self::PRICE_GROUP_HIDDEN_ON_BASE => 'Hidden On Base (hidden from guest)',
         self::PRICE_GROUP_ARRIVAL => 'On Arrival (does not apply to any price)',
@@ -156,7 +158,8 @@ class AdjustmentAmount
             $this->priceGroup = self::PRICE_GROUP_HIDDEN_ON_BASE;
         }
 
-        if ($this->splitMethod === 'ON_ARRIVAL') {
+        if ($this->splitMethod === SplitMethod::ON_ARRIVAL ||
+            $this->priceGroup === self::PRICE_GROUP_BASE_INCLUSIVE) {
             $this->noteOnly = true;
             $this->operand = Operand::OP_NONE;
             $this->priceGroup = self::PRICE_GROUP_ARRIVAL;
