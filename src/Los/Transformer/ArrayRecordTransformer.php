@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection SlowArrayOperationsInLoopInspection */
     
     namespace Aptenex\Upp\Los\Transformer;
     
@@ -32,6 +32,7 @@
             $options->setSourceCurrency(new Currency($records->getCurrency()));
             
             $computedEmptyHash = null;
+            
             foreach ($records->getRecords() as $date => $dateSet) {
                 // We need a lookahead to merge the first guest count if a few guest counts have the same rate
                 // this is because there is no way to compare the first hash to the previous hash on the first one
@@ -58,14 +59,18 @@
                     if ($singleRecord['rateHash'] === $computedEmptyHash && $options->isSkipEmptyLosRecordsFromTransformation()) {
                         continue;
                     }
+                    
                     if(($options->isRestrictSameGuestRatesToSingleOccupancy() && !isset($optimisedArrivalDateRates[$singleRecord['rateHash']])) || !$options->isRestrictSameGuestRatesToSingleOccupancy()) {
-                        $optimisedArrivalDateRates[$singleRecord['rateHash']] = $this->generateLosRecordString($singleRecord, $options);
+                        $optimisedArrivalDateRates[$singleRecord['rateHash']][$singleRecord['guest']] = $this->generateLosRecordString($singleRecord, $options);
                     }
-          
+                    
                 }
-                /** @noinspection SlowArrayOperationsInLoopInspection */
-                $data = array_merge($data, array_reverse($optimisedArrivalDateRates));
                 
+                /** @noinspection SlowArrayOperationsInLoopInspection */
+                $p = array_values( $optimisedArrivalDateRates);
+                $data = array_merge($data, ... array_reverse((array_map(static function($item){
+                    return array_reverse($item);
+                }, $p))));
             }
             return $data;
         }
