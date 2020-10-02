@@ -1,18 +1,16 @@
 <?php
 
-namespace Tests;
+namespace Aptenex\Upp\TestsRetired;
 
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Helper\ArrayAccess;
 use Aptenex\Upp\Los\Transformer\BookingComRecordTransformer;
 use Aptenex\Upp\Los\Transformer\ElasticSearchTransformer;
 use Aptenex\Upp\Util\TestUtils;
-use Pool;
 use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\DateUtils;
 use PHPUnit\Framework\TestCase;
 use Aptenex\Upp\Translation\TestTranslator;
-use Aptenex\Upp\Util\ArrayUtils;
 use Aptenex\Upp\Los\LosOptions;
 use Aptenex\Upp\Los\Generator\LosGenerator;
 use Aptenex\Upp\Los\LosRecordMerger;
@@ -24,7 +22,7 @@ use Aptenex\Upp\Parser\Structure\StructureOptions;
 use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
 use Aptenex\Upp\Los\Transformer\AirbnbRecordTransformer;
 
-class LosRecordTest extends TestCase
+class LosRecordTestRetired extends TestCase
 {
 
     private $openSchemaData = '
@@ -1131,6 +1129,8 @@ class LosRecordTest extends TestCase
         $options = new TransformOptions();
         $transformer = new AirbnbRecordTransformer();
         $output = json_encode($transformer->transform($losRecords, $options), JSON_PRETTY_PRINT);
+
+        $file = __DIR__ . '/Resources/los_test_limited_unit_availability_02.txt';
 
         $this->assertStringEqualsFile(__DIR__ . '/Resources/los_test_limited_unit_availability_02.txt', $output);
     }

@@ -53,6 +53,7 @@ class TaxesParser extends BaseChildParser
         $t->setDescription(ArrayAccess::get('description', $taxData));
 
         $t->setCalculationMethod(ArrayAccess::get('calculationMethod', $taxData, Rate::METHOD_PERCENTAGE));
+        $t->setLongStayExemption(ArrayAccess::get('longStayExemption', $taxData, null));
 
         $t->setIncludeBasePrice(ArrayAccess::get('includeBasePrice', $taxData, true));
 

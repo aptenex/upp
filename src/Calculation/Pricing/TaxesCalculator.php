@@ -9,6 +9,8 @@ use Aptenex\Upp\Helper\MoneyTools;
 use Aptenex\Upp\Parser\Structure\Operand;
 use Aptenex\Upp\Parser\Structure\Rate;
 use Aptenex\Upp\Parser\Structure\SplitMethod;
+use Aptenex\Upp\Parser\Structure\Tax;
+use Aptenex\Upp\Util\MoneyUtils;
 use Money\Money;
 
 class TaxesCalculator
@@ -25,7 +27,11 @@ class TaxesCalculator
 
         foreach($fp->getCurrencyConfigUsed()->getTaxes() as $tax) {
 
-            if ($tax->getCalculationMethod() === Rate::METHOD_FIXED) {
+            if ($tax->hasLongStayExemption() && $fp->getContextUsed()->getNoNights() >= $tax->getLongStayExemption()) {
+                continue;
+            }
+
+            if ($tax->getCalculationMethod() === Tax::METHOD_FIXED) {
                 $adjustment = new AdjustmentAmount(
                     \Aptenex\Upp\Util\MoneyUtils::fromString($tax->getAmount(), $fp->getCurrency()),
                     strtoupper(trim(str_replace(' ', '_', $tax->getName()))),
@@ -38,7 +44,68 @@ class TaxesCalculator
                 );
 
                 $fp->addAdjustment($adjustment);
-            } else if ($tax->getCalculationMethod() === Rate::METHOD_PERCENTAGE) {
+            } else if ($tax->getCalculationMethod() === Tax::METHOD_FLAT_PER_GUEST) {
+
+                $amount = MoneyUtils::fromString($tax->getAmount(), $fp->getCurrency());;
+
+                $guests = $fp->getContextUsed()->getGuests();
+
+                $taxAmount = $amount->multiply($guests);
+
+                $adjustment = new AdjustmentAmount(
+                    $taxAmount,
+                    strtoupper(trim(str_replace(' ', '_', $tax->getName()))),
+                    sprintf("%s%s", $tax->getName(), !empty($tax->getDescription()) ? ' (' . $tax->getDescription() . ')' : ''),
+                    Operand::OP_ADDITION,
+                    AdjustmentAmount::TYPE_TAX,
+                    AdjustmentAmount::PRICE_GROUP_TOTAL,
+                    SplitMethod::ON_TOTAL,
+                    false // Taxes are not hidden
+                );
+
+                $fp->addAdjustment($adjustment);
+            } else if ($tax->getCalculationMethod() === Tax::METHOD_FLAT_PER_NIGHT) {
+
+                $amount = MoneyUtils::fromString($tax->getAmount(), $fp->getCurrency());;
+
+                $nights = $fp->getContextUsed()->getNoNights();
+
+                $taxAmount = $amount->multiply($nights);
+
+                $adjustment = new AdjustmentAmount(
+                    $taxAmount,
+                    strtoupper(trim(str_replace(' ', '_', $tax->getName()))),
+                    sprintf("%s%s", $tax->getName(), !empty($tax->getDescription()) ? ' (' . $tax->getDescription() . ')' : ''),
+                    Operand::OP_ADDITION,
+                    AdjustmentAmount::TYPE_TAX,
+                    AdjustmentAmount::PRICE_GROUP_TOTAL,
+                    SplitMethod::ON_TOTAL,
+                    false // Taxes are not hidden
+                );
+
+                $fp->addAdjustment($adjustment);
+            } else if ($tax->getCalculationMethod() === Tax::METHOD_FLAT_PER_GUEST_PER_NIGHT) {
+
+                $amount = MoneyUtils::fromString($tax->getAmount(), $fp->getCurrency());;
+
+                $guests = $fp->getContextUsed()->getGuests();
+                $nights = $fp->getContextUsed()->getNoNights();
+
+                $taxAmount = $amount->multiply($guests)->multiply($nights);
+
+                $adjustment = new AdjustmentAmount(
+                    $taxAmount,
+                    strtoupper(trim(str_replace(' ', '_', $tax->getName()))),
+                    sprintf("%s%s", $tax->getName(), !empty($tax->getDescription()) ? ' (' . $tax->getDescription() . ')' : ''),
+                    Operand::OP_ADDITION,
+                    AdjustmentAmount::TYPE_TAX,
+                    AdjustmentAmount::PRICE_GROUP_TOTAL,
+                    SplitMethod::ON_TOTAL,
+                    false // Taxes are not hidden
+                );
+
+                $fp->addAdjustment($adjustment);
+            } else if ($tax->getCalculationMethod() === Tax::METHOD_PERCENTAGE) {
                 $calculableAmount = \Aptenex\Upp\Util\MoneyUtils::newMoney(0, $fp->getCurrency());
 
                 if ($tax->isIncludeBasePrice()) {

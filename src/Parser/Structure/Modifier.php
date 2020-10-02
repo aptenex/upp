@@ -4,7 +4,7 @@ namespace Aptenex\Upp\Parser\Structure;
 
 use Aptenex\Upp\Calculation\AdjustmentAmount;
 
-class Modifier extends AbstractControlItem implements ControlItemInterface
+class Modifier extends AbstractControlItem
 {
 
     public const TYPE_MODIFIER = 'modifier';
@@ -173,6 +173,14 @@ class Modifier extends AbstractControlItem implements ControlItemInterface
     public function setPriceGroup(string $priceGroup)
     {
         $this->priceGroup = $priceGroup;
+    }
+
+    public function supportsConditionalPerUnitRates(): bool
+    {
+        return in_array($this->getRate()->getCalculationMethod(), [
+            Rate::METHOD_FIXED,
+            Rate::METHOD_PERCENTAGE
+        ], true);
     }
 
     /**

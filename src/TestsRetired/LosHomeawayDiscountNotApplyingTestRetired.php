@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Aptenex\Upp\TestsRetired;
 
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Helper\ArrayAccess;
@@ -25,7 +25,7 @@ use Aptenex\Upp\Parser\Structure\StructureOptions;
 use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
 use Aptenex\Upp\Los\Transformer\AirbnbRecordTransformer;
 
-class LosHomeawayDiscountNotApplyingTest extends TestCase
+class LosHomeawayDiscountNotApplyingTestRetired extends TestCase
 {
 
     private $losDebugData = '

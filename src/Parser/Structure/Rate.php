@@ -10,8 +10,10 @@ class Rate
 
     public const METHOD_FIXED      = 'fixed';
     public const METHOD_PERCENTAGE = 'percentage';
-    
-    
+
+    public const METHOD_FLAT_PER_GUEST           = 'flat_per_guest';
+    public const METHOD_FLAT_PER_NIGHT           = 'flat_per_night';
+    public const METHOD_FLAT_PER_GUEST_PER_NIGHT = 'flat_per_guest_per_night';
 
     public const TYPE_WEEKLY     = 'weekly';
     public const TYPE_NIGHTLY    = 'nightly';
@@ -97,9 +99,9 @@ class Rate
     }
 
     /**
+     * @return string
      * @deprecated Use getCalculationOperator()
      *
-     * @return string
      */
     public function getCalculationOperand()
     {
@@ -107,9 +109,9 @@ class Rate
     }
 
     /**
+     * @param string $calculationOperator
      * @deprecated Use setCalculationOperator()
      *
-     * @param string $calculationOperator
      */
     public function setCalculationOperand($calculationOperator)
     {
