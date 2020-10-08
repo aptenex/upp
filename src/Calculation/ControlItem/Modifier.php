@@ -2,7 +2,7 @@
 
 namespace Aptenex\Upp\Calculation\ControlItem;
 
-class Modifier extends AbstractControlItem implements ControlItemInterface
+class Modifier extends AbstractControlItem
 {
 
 }

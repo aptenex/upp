@@ -96,4 +96,203 @@ class BasePriceOverrideTest extends TestCase
 
     }
 
+    public function testVillaSumaVatCalculationErrorRegression()
+    {
+        $upp = new Upp(
+            new HashMapPricingResolver(),
+            new TestTranslator()
+        );
+
+        $config = '
+            {
+                "name": "Pricing",
+                "schema": "property-pricing",
+                "version": "0.0.1",
+                "meta": [],
+                "data": [
+                    {
+                        "currency": "USD",
+                        "defaults": {
+                            "damageDeposit": 0,
+                            "damageDepositCalculationMethod": "fixed",
+                            "perPetPerStay": 0,
+                            "perPetPerNight": 0,
+                            "perPetSplitMethod": "ON_TOTAL",
+                            "minimumNights": 0,
+                            "maximumNights": "",
+                            "balanceDaysBeforeArrival": 30,
+                            "depositSplitPercentage": 30,
+                            "daysRequiredInAdvanceForBooking": 0,
+                            "bookableType": "instant_bookable",
+                            "periodSelectionStrategy": "DEFAULT",
+                            "extraNightAlterationStrategyUseGlobalNights": false,
+                            "modifiersUseCategorizedCalculationOrder": true,
+                            "damageDepositSplitMethod": "ON_DEPOSIT"
+                        },
+                        "taxes": [
+                            {
+                                "name": "VAT",
+                                "uuid": "1d4213a8-ee3f-499d-8fef-1d4763668fe4",
+                                "type": "TYPE_VAT",
+                                "amount": 0.07,
+                                "includeBasePrice": true,
+                                "calculationMethod": "percentage"
+                            }
+                        ],
+                        "periods": [],
+                        "modifiers": [
+                            {
+                                "type": "service_charge",
+                                "hidden": false,
+                                "splitMethod": "ON_TOTAL",
+                                "priceGroup": "total",
+                                "description": "Service charge",
+                                "conditionOperand": "AND",
+                                "conditions": [],
+                                "rate": {
+                                    "type": "adjustment",
+                                    "amount": 0.1,
+                                    "calculationMethod": "percentage",
+                                    "calculationOperand": "addition",
+                                    "taxable": true,
+                                    "applicableTaxes": [
+                                        "1d4213a8-ee3f-499d-8fef-1d4763668fe4"
+                                    ],
+                                    "daysOfWeek": null
+                                }
+                            },
+                            {
+                                "type": "discount",
+                                "hidden": false,
+                                "splitMethod": "ON_TOTAL",
+                                "priceGroup": "total",
+                                "description": "Early bird 10%",
+                                "conditionOperand": "AND",
+                                "conditions": [
+                                    {
+                                        "type": "booking_days",
+                                        "modifyRatePerUnit": false,
+                                        "minimum": 180
+                                    }
+                                ],
+                                "rate": {
+                                    "type": "adjustment",
+                                    "amount": 0.1,
+                                    "calculationMethod": "percentage",
+                                    "calculationOperand": "subtraction",
+                                    "applicableTaxes": [],
+                                    "daysOfWeek": null
+                                }
+                            },
+                            {
+                                "type": "discount",
+                                "hidden": false,
+                                "splitMethod": "ON_TOTAL",
+                                "priceGroup": "total",
+                                "description": "Last minute 15%",
+                                "conditionOperand": "AND",
+                                "conditions": [
+                                    {
+                                        "type": "booking_days",
+                                        "modifyRatePerUnit": false,
+                                        "maximum": 30
+                                    }
+                                ],
+                                "rate": {
+                                    "type": "adjustment",
+                                    "amount": 0.15,
+                                    "calculationMethod": "percentage",
+                                    "calculationOperand": "subtraction",
+                                    "applicableTaxes": [],
+                                    "daysOfWeek": null
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "currency": "THB",
+                        "defaults": {
+                            "damageDeposit": 0,
+                            "damageDepositCalculationMethod": "fixed",
+                            "perPetPerStay": 0,
+                            "perPetPerNight": 0,
+                            "perPetSplitMethod": "ON_TOTAL",
+                            "minimumNights": 0,
+                            "maximumNights": "",
+                            "balanceDaysBeforeArrival": 30,
+                            "depositSplitPercentage": 30,
+                            "daysRequiredInAdvanceForBooking": 0,
+                            "bookableType": "instant_bookable",
+                            "periodSelectionStrategy": "DEFAULT",
+                            "extraNightAlterationStrategyUseGlobalNights": false,
+                            "modifiersUseCategorizedCalculationOrder": true,
+                            "damageDepositSplitMethod": "ON_DEPOSIT"
+                        },
+                        "taxes": [
+                            {
+                                "name": "VAT",
+                                "uuid": "4bcdfa5b-e635-47d9-9969-39f7405fbca8",
+                                "type": "TYPE_VAT",
+                                "amount": 0.07,
+                                "includeBasePrice": true,
+                                "calculationMethod": "percentage",
+                                "longStayExemption": ""
+                            }
+                        ],
+                        "periods": [],
+                        "modifiers": [
+                            {
+                                "type": "modifier",
+                                "hidden": false,
+                                "splitMethod": "ON_TOTAL",
+                                "priceGroup": "total",
+                                "description": "Service charge",
+                                "conditionOperand": "AND",
+                                "conditions": [],
+                                "rate": {
+                                    "type": "adjustment",
+                                    "amount": 0.1,
+                                    "calculationMethod": "percentage",
+                                    "calculationOperand": "addition",
+                                    "applicableTaxes": [],
+                                    "daysOfWeek": null
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ';
+
+        $defaults = new Defaults();
+        $defaults->setDaysRequiredInAdvanceForBooking(1);
+
+        $options = new StructureOptions();
+        $options->setExternalCommandDirector(new ExternalCommandDirector([
+            new BasePriceOverrideCommand(44010.2)
+        ]));
+
+        $context = new PricingContext();
+        $context->setCurrency('THB');
+        $context->setBookingDate('2020-10-05');
+        $context->setArrivalDate('2020-11-19');
+        $context->setDepartureDate('2020-11-21');
+        $context->setGuests(13);
+
+        $config = $upp->parsePricingConfig(json_decode($config, true), $options);
+
+        $pricing = $upp->generatePrice($context, $config);
+
+        $this->assertInstanceOf(FinalPrice::class, $pricing);
+        $this->assertSame('4401020', $pricing->getBasePrice()->getAmount());
+
+        foreach($pricing->getAdjustments() as $adjustment) {
+            if ($adjustment->getDescription() === 'Service Charge') {
+                $this->assertSame('440102', $adjustment->getAmount()->getAmount());
+            } else if ($adjustment->getDescription() === 'VAT') {
+                $this->assertSame('308071', $adjustment->getAmount()->getAmount());
+            }
+        }
+    }
+
 }

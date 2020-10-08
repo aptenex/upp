@@ -2,9 +2,12 @@
 
 namespace Aptenex\Upp\Calculation\Pricing;
 
+use Aptenex\Upp\Calculation\AdjustmentAmount;
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Calculation\FinalPrice;
+use Aptenex\Upp\Helper\LanguageTools;
 use Aptenex\Upp\Parser\Structure\Modifier;
+use Aptenex\Upp\Util\MoneyUtils;
 use function in_array;
 
 class ModifierRateCalculator
@@ -37,8 +40,71 @@ class ModifierRateCalculator
                 continue;
             }
 
-            $cuc = new RatePerConditionalUnitCalculator();
-            $cuc->applyConditionalRateModifications($fp, $modifier);
+            if ($modConfig->supportsConditionalPerUnitRates()) {
+                $cuc = new RatePerConditionalUnitCalculator();
+                $cuc->applyConditionalRateModifications($fp, $modifier);
+            } else {
+
+                $amount = MoneyUtils::fromString($modConfig->getRate()->getAmount(), $fp->getCurrency());
+
+                switch ($modConfig->getRate()->getCalculationMethod()) {
+
+                    case \Aptenex\Upp\Parser\Structure\Rate::METHOD_FLAT_PER_GUEST:
+
+                        $adjustmentAmount = $amount->multiply($fp->getContextUsed()->getGuests());
+
+                        $description = vsprintf('%s (%sx %s)', [
+                            $modConfig->getDescription(),
+                            $fp->getContextUsed()->getGuests(),
+                            LanguageTools::transChoice('GUEST_UNIT', $fp->getContextUsed()->getGuests())
+                        ]);
+
+                        break;
+
+                    case \Aptenex\Upp\Parser\Structure\Rate::METHOD_FLAT_PER_NIGHT:
+
+                        $adjustmentAmount = $amount->multiply($fp->getContextUsed()->getNoNights());
+
+                        $description = vsprintf('%s (%sx %s)', [
+                            $modConfig->getDescription(),
+                            $fp->getContextUsed()->getNoNights(),
+                            LanguageTools::transChoice('NIGHT_UNIT', $fp->getContextUsed()->getNoNights())
+                        ]);
+
+                        break;
+
+                    case \Aptenex\Upp\Parser\Structure\Rate::METHOD_FLAT_PER_GUEST_PER_NIGHT:
+
+                        $adjustmentAmount = $amount
+                            ->multiply($fp->getContextUsed()->getGuests())
+                            ->multiply($fp->getContextUsed()->getNoNights())
+                        ;
+
+                        $description = vsprintf('%s (%sx %s, %sx %s)', [
+                            $modConfig->getDescription(),
+                            $fp->getContextUsed()->getGuests(),
+                            LanguageTools::transChoice('GUEST_UNIT', $fp->getContextUsed()->getGuests()),
+                            $fp->getContextUsed()->getNoNights(),
+                            LanguageTools::transChoice('NIGHT_UNIT', $fp->getContextUsed()->getNoNights())
+                        ]);
+
+                        break;
+
+                }
+
+                $fp->addAdjustment(new AdjustmentAmount(
+                    $adjustmentAmount,
+                    strtoupper(trim(str_replace(' ', '_', $description))),
+                    $description,
+                    $modConfig->getRate()->getCalculationOperand(),
+                    AdjustmentAmount::TYPE_MODIFIER,
+                    $modConfig->getPriceGroup(),
+                    $modConfig->getSplitMethod(),
+                    $modConfig->isHidden(),
+                    $modifier
+                ));
+
+            }
         }
     }
 
