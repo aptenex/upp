@@ -30,6 +30,7 @@ class Tax
     public const TYPE_HOTEL_TAX               = 'TYPE_HOTEL_TAX';
     public const TYPE_LODGING_TAX             = 'TYPE_LODGING_TAX';
     public const TYPE_ROOM_TAX                = 'TYPE_ROOM_TAX';
+    public const TYPE_TOURISM_TAX             = 'TYPE_TOURISM_TAX';
     public const TYPE_TRANSIENT_OCCUPANCY_TAX = 'TYPE_TRANSIENT_OCCUPANCY_TAX';
 
     /**
