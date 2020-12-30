@@ -29,12 +29,7 @@ class PeriodsParser extends BaseChildParser
     {
         $p = new Period();
 
-        $p->setDescription(ArrayAccess::getOrException(
-            'description',
-            $periodData,
-            InvalidPricingConfigException::class,
-            sprintf("The 'description' parameter is not set for the period at index %s", $index)
-        ));
+        $p->setDescription(ArrayAccess::get('description', $periodData));
 
         $p->setPriority(ArrayAccess::get('priority', $periodData));
 
