@@ -14,16 +14,16 @@
         "ext-json" : "*",
         "moneyphp/money": "3.2.1",
         "solaris/php-moon-phase": "1.1.*",
-        "symfony/validator": "^3.4|^4.0",
-        "symfony/event-dispatcher" : "^3.4|^4.0",
-        "symfony/translation": "^3.4|^4.0",
+        "symfony/validator": "^3.4|^4.0|^5.0",
+        "symfony/event-dispatcher" : "^3.4|^4.0|^5.0",
+        "symfony/translation": "^3.4|^4.0|^5.0",
         "spatie/period": "^1.1.1",
         "ramsey/uuid": "^4.0@dev"
     },
     "require-dev" : {
         "roave/security-advisories": "dev-master",
         "phpunit/phpunit": "^6.2",
-        "symfony/var-dumper": "^4.3@dev"
+        "symfony/var-dumper": "^4.3@dev|^5.0"
     },
     "scripts": {
         "test": "vendor/phpunit/phpunit/phpunit -c src/phpunit.xml.dist"
