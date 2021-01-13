@@ -45,18 +45,33 @@ class ModifierRateCalculator
                 $cuc->applyConditionalRateModifications($fp, $modifier);
             } else {
 
+                $guests = $fp->getContextUsed()->getGuests();
+
+                // if the current guests go over this level get the difference
+                if (
+                    $modConfig->getRate()->hasApplyOverMinimumGuests() &&
+                    $guests > $modConfig->getRate()->getApplyOverMinimumGuests()
+                ) {
+                    $guests -= $modConfig->getRate()->getApplyOverMinimumGuests();
+                }
+
+                if ($guests <= 0) {
+                    // not enough "apply over" guests, skip
+                    continue;
+                }
+
                 $amount = MoneyUtils::fromString($modConfig->getRate()->getAmount(), $fp->getCurrency());
 
                 switch ($modConfig->getRate()->getCalculationMethod()) {
 
                     case \Aptenex\Upp\Parser\Structure\Rate::METHOD_FLAT_PER_GUEST:
 
-                        $adjustmentAmount = $amount->multiply($fp->getContextUsed()->getGuests());
+                        $adjustmentAmount = $amount->multiply($guests);
 
                         $description = vsprintf('%s (%sx %s)', [
                             $modConfig->getDescription(),
                             $fp->getContextUsed()->getGuests(),
-                            LanguageTools::transChoice('GUEST_UNIT', $fp->getContextUsed()->getGuests())
+                            LanguageTools::transChoice('GUEST_UNIT', $guests)
                         ]);
 
                         break;
@@ -76,14 +91,14 @@ class ModifierRateCalculator
                     case \Aptenex\Upp\Parser\Structure\Rate::METHOD_FLAT_PER_GUEST_PER_NIGHT:
 
                         $adjustmentAmount = $amount
-                            ->multiply($fp->getContextUsed()->getGuests())
+                            ->multiply($guests)
                             ->multiply($fp->getContextUsed()->getNoNights())
                         ;
 
                         $description = vsprintf('%s (%sx %s, %sx %s)', [
                             $modConfig->getDescription(),
                             $fp->getContextUsed()->getGuests(),
-                            LanguageTools::transChoice('GUEST_UNIT', $fp->getContextUsed()->getGuests()),
+                            LanguageTools::transChoice('GUEST_UNIT', $guests),
                             $fp->getContextUsed()->getNoNights(),
                             LanguageTools::transChoice('NIGHT_UNIT', $fp->getContextUsed()->getNoNights())
                         ]);

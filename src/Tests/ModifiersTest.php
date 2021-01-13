@@ -334,4 +334,59 @@ class ModifiersTest extends TestCase
         $this->assertSame('200000', $pricing->getTotal()->getAmount());
     }
 
+    public function testFlatPerGuestPerNightWithMinimumOver()
+    {
+        $upp = new Upp(
+            new HashMapPricingResolver(),
+            new TestTranslator()
+        );
+
+        $defaults = new Defaults();
+        $defaults->setDaysRequiredInAdvanceForBooking(1);
+
+        $options = new StructureOptions();
+        $options->setExternalCommandDirector(new ExternalCommandDirector([
+            new ConfigOverrideCommand([
+                'defaults' => $defaults
+            ])
+        ]));
+
+        $context = new PricingContext();
+        $context->setCurrency('GBP');
+        $context->setBookingDate('2017-05-01');
+        $context->setArrivalDate('2017-06-20');
+        $context->setDepartureDate('2017-06-30');
+        $context->setGuests(6);
+
+        $config = $upp->parsePricingConfig(json_decode(self::$json1, true), $options);
+
+        $json = '[
+            {
+                "type": "modifier",
+                "hidden": false,
+                "splitMethod": "ON_TOTAL",
+                "priceGroup": "total",
+                "description": "New Modifier 1",
+                "conditionOperand": "AND",
+                "conditions": [],
+                "rate": {
+                    "type": "adjustment",
+                    "amount": 50,
+                    "calculationMethod": "flat_per_guest_per_night",
+                    "calculationOperand": "addition",
+                    "applyOverMinimumGuests": 4,
+                    "applicableTaxes": [],
+                    "daysOfWeek": null
+                }
+            }
+        ]';
+
+        $config->getCurrencyConfig('GBP')->setModifiers((new ModifiersParser(null))->parse(json_decode($json, true), new StructureOptions()));
+
+        $pricing = $upp->generatePrice($context, $config);
+
+        // 1100.0
+        $this->assertSame('200000', $pricing->getTotal()->getAmount());
+    }
+
 }

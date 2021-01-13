@@ -42,6 +42,11 @@ class Rate
     /**
      * @var number
      */
+    protected $applyOverMinimumGuests;
+
+    /**
+     * @var number
+     */
     protected $damageDeposit;
 
     /**
@@ -293,22 +298,44 @@ class Rate
     }
 
     /**
+     * @return number
+     */
+    public function getApplyOverMinimumGuests()
+    {
+        return $this->applyOverMinimumGuests;
+    }
+
+    /**
+     * @param number $applyOverMinimumGuests
+     */
+    public function setApplyOverMinimumGuests($applyOverMinimumGuests): void
+    {
+        $this->applyOverMinimumGuests = $applyOverMinimumGuests;
+    }
+
+    public function hasApplyOverMinimumGuests(): bool
+    {
+        return (int) $this->getApplyOverMinimumGuests() > 0;
+    }
+
+    /**
      * @return array
      */
     public function __toArray()
     {
         return [
-            'type'                => $this->getType(),
-            'amount'              => $this->getAmount(),
-            'taxable'             => $this->isTaxable(),
-            'damageDeposit'       => $this->getDamageDeposit(),
-            'basePriceOnly'       => $this->isBasePriceOnly(),
-            'applicableTaxes'     => $this->getApplicableTaxes(),
-            'calculationMethod'   => $this->getCalculationMethod(),
-            'calculationOperand'  => $this->getCalculationOperand(),
-            'calculationOperator' => $this->getCalculationOperator(),
-            'daysOfWeek'          => $this->hasDaysOfWeek() ? $this->getDaysOfWeek()->__toArray() : null,
-            'strategy'            => $this->getStrategy() ? $this->getStrategy()->__toArray() : null,
+            'type'                   => $this->getType(),
+            'amount'                 => $this->getAmount(),
+            'taxable'                => $this->isTaxable(),
+            'damageDeposit'          => $this->getDamageDeposit(),
+            'basePriceOnly'          => $this->isBasePriceOnly(),
+            'applicableTaxes'        => $this->getApplicableTaxes(),
+            'calculationMethod'      => $this->getCalculationMethod(),
+            'calculationOperand'     => $this->getCalculationOperand(),
+            'calculationOperator'    => $this->getCalculationOperator(),
+            'applyOverMinimumGuests' => $this->getApplyOverMinimumGuests(),
+            'daysOfWeek'             => $this->hasDaysOfWeek() ? $this->getDaysOfWeek()->__toArray() : null,
+            'strategy'               => $this->getStrategy() ? $this->getStrategy()->__toArray() : null,
         ];
     }
 

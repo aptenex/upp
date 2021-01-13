@@ -24,6 +24,7 @@ class RateParser extends BaseChildParser
         $r->setDamageDeposit(ArrayAccess::get('damageDeposit', $data, 0));
         $r->setBasePriceOnly(ArrayAccess::get('basePriceOnly', $data, false));
         $r->setCalculationMethod(ArrayAccess::get('calculationMethod', $data, Rate::METHOD_FIXED));
+        $r->setApplyOverMinimumGuests(ArrayAccess::get('applyOverMinimumGuests', $data, Rate::METHOD_FIXED));
 
         // Moving over to the correct name
         if (ArrayAccess::has('calculationOperator', $data)) {
