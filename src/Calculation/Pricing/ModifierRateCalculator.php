@@ -47,18 +47,11 @@ class ModifierRateCalculator
 
                 $guests = $fp->getContextUsed()->getGuests();
 
-                // if the current guests go over this level get the difference
-                if (
-                    $modConfig->getRate()->hasApplyOverMinimumGuests() &&
-                    $guests > $modConfig->getRate()->getApplyOverMinimumGuests()
-                ) {
-                    $guests -= $modConfig->getRate()->getApplyOverMinimumGuests();
+                if ($guests <= $modConfig->getRate()->getApplyOverMinimumGuests()) {
+                    continue; // skip
                 }
 
-                if ($guests <= 0) {
-                    // not enough "apply over" guests, skip
-                    continue;
-                }
+                $guests = $guests - $modConfig->getRate()->getApplyOverMinimumGuests();
 
                 $amount = MoneyUtils::fromString($modConfig->getRate()->getAmount(), $fp->getCurrency());
 
@@ -70,7 +63,7 @@ class ModifierRateCalculator
 
                         $description = vsprintf('%s (%sx %s)', [
                             $modConfig->getDescription(),
-                            $fp->getContextUsed()->getGuests(),
+                            $guests,
                             LanguageTools::transChoice('GUEST_UNIT', $guests)
                         ]);
 
@@ -97,7 +90,7 @@ class ModifierRateCalculator
 
                         $description = vsprintf('%s (%sx %s, %sx %s)', [
                             $modConfig->getDescription(),
-                            $fp->getContextUsed()->getGuests(),
+                            $guests,
                             LanguageTools::transChoice('GUEST_UNIT', $guests),
                             $fp->getContextUsed()->getNoNights(),
                             LanguageTools::transChoice('NIGHT_UNIT', $fp->getContextUsed()->getNoNights())
