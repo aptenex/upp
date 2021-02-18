@@ -14,7 +14,12 @@ class AvailabilityExternal extends Availability
     
     /** @var  string */
     protected $bookingUri;
-    
+
+    /**
+     * This is a web accessible URL to a downloadable PDF or equivalent page with the booking terms.
+     * @var string|null
+     */
+    protected $termsAndConditions;
 
     /**
      * @return array
@@ -72,6 +77,22 @@ class AvailabilityExternal extends Availability
 	{
 		$this->bookingUri = $bookingUri;
 	}
- 
+
+    /**
+     * @return string|null
+     */
+    public function getTermsAndConditions(): ?string
+    {
+        return $this->termsAndConditions;
+    }
+
+    /**
+     * @param string|null $termsAndConditions
+     */
+    public function setTermsAndConditions(?string $termsAndConditions): void
+    {
+        $this->termsAndConditions = $termsAndConditions;
+    }
+
 
 }
