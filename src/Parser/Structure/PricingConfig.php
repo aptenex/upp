@@ -136,15 +136,9 @@ class PricingConfig
 
     /**
      * @param CurrencyConfig[] $currencyConfigs
-     *
-     * @throws BaseException
      */
-    public function setCurrencyConfigs($currencyConfigs)
+    public function setCurrencyConfigs($currencyConfigs): void
     {
-        if (is_array($this->currencyConfigs)) {
-            throw new BaseException("Cannot set currency configs more than once");
-        }
-
         $this->currencyConfigs = $currencyConfigs;
     }
 
