@@ -106,7 +106,7 @@ class PricingGenerator
             $this->calculateBasePrice($fp);
 
             // Process the rest
-            $this->applyModifiers($context, $fp, [], [
+            $this->applyModifiers($context, $fp, null, [
                 AdjustmentAmount::PRICE_GROUP_TOTAL,
                 AdjustmentAmount::PRICE_GROUP_ARRIVAL,
                 AdjustmentAmount::PRICE_GROUP_BASE_NON_TAXABLE,
@@ -511,10 +511,10 @@ class PricingGenerator
     /**
      * @param PricingContext $context
      * @param FinalPrice $fp
-     * @param array $calculationOrders
+     * @param array|null $calculationOrders
      * @param array $priceGroups
      */
-    private function applyModifiers(PricingContext $context, FinalPrice $fp, array $calculationOrders = [], array $priceGroups = []): void
+    private function applyModifiers(PricingContext $context, FinalPrice $fp, ?array $calculationOrders = [], array $priceGroups = []): void
     {
         (new ModifierRateCalculator())->compute($context, $fp, $calculationOrders, $priceGroups);
     }

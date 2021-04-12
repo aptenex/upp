@@ -16,10 +16,10 @@ class ModifierRateCalculator
     /**
      * @param PricingContext $context
      * @param FinalPrice $fp
-     * @param array $calculationOrders
+     * @param array|null $calculationOrders
      * @param array $priceGroups
      */
-    public function compute(PricingContext $context, FinalPrice $fp, array $calculationOrders = [], array $priceGroups = []): void
+    public function compute(PricingContext $context, FinalPrice $fp, ?array $calculationOrders = [], array $priceGroups = []): void
     {
         foreach($fp->getStay()->getModifiersUsed() as $modifier) {
 
@@ -33,11 +33,17 @@ class ModifierRateCalculator
             /** @var Modifier $modifierConfig */
             $modifierConfig = $modifier->getControlItemConfig();
 
-            if (
-                !empty($calculationOrders) &&
-                !in_array($modifierConfig->getCalculationOrderFromType(), $calculationOrders, true)
-            ) {
-                continue;
+            if ($calculationOrders !== null) {
+
+                // no calc orders provided means that this is not stepped and we can calculate as normal
+
+                if (
+                    !empty($calculationOrders) &&
+                    !in_array($modifierConfig->getCalculationOrderFromType(), $calculationOrders, true)
+                ) {
+                    continue;
+                }
+
             }
 
             if ($modConfig->supportsConditionalPerUnitRates()) {
