@@ -86,20 +86,21 @@ class PricingGenerator
         // calculation. If this setting is disabled just apply them all here
 
         if ($useModifierCalculationOrder) {
-            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE]);
-            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_DISCOUNTS]);
-            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_EXTRAS_FEES]);
-            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_MANAGEMENT_FEES]);
-            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_CLEANING]);
-            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TOTAL]);
-            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TAX]);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_BASE_PRICE], [], true);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_DISCOUNTS], [], true);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_EXTRAS_FEES], [], true);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_MANAGEMENT_FEES], [], true);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_CLEANING], [], true);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TOTAL], [], true);
+            $this->applyModifiers($context, $fp, [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TAX], [], true);
         } else {
 
             $this->applyModifiers(
                 $context,
                 $fp,
                 [\Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_DISCOUNTS],
-                [AdjustmentAmount::PRICE_GROUP_BASE]
+                [AdjustmentAmount::PRICE_GROUP_BASE],
+                false
             );
 
             // Re-calculate after on base discounts have been processed
@@ -112,7 +113,7 @@ class PricingGenerator
                 AdjustmentAmount::PRICE_GROUP_BASE_NON_TAXABLE,
                 AdjustmentAmount::PRICE_GROUP_HIDDEN_ON_BASE,
                 AdjustmentAmount::PRICE_GROUP_NONE,
-            ]);
+            ], false);
         }
 
         $this->calculateExtras($fp);
@@ -513,10 +514,11 @@ class PricingGenerator
      * @param FinalPrice $fp
      * @param array|null $calculationOrders
      * @param array $priceGroups
+     * @param bool $isModifierCalculationOrderUsed
      */
-    private function applyModifiers(PricingContext $context, FinalPrice $fp, ?array $calculationOrders = [], array $priceGroups = []): void
+    private function applyModifiers(PricingContext $context, FinalPrice $fp, ?array $calculationOrders = [], array $priceGroups = [], bool $isModifierCalculationOrderUsed = false): void
     {
-        (new ModifierRateCalculator())->compute($context, $fp, $calculationOrders, $priceGroups);
+        (new ModifierRateCalculator())->compute($context, $fp, $calculationOrders, $priceGroups, $isModifierCalculationOrderUsed);
     }
 
     /**

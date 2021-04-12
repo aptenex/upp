@@ -18,8 +18,9 @@ class ModifierRateCalculator
      * @param FinalPrice $fp
      * @param array|null $calculationOrders
      * @param array $priceGroups
+     * @param bool $isModifierCalculationOrderUsed
      */
-    public function compute(PricingContext $context, FinalPrice $fp, ?array $calculationOrders = [], array $priceGroups = []): void
+    public function compute(PricingContext $context, FinalPrice $fp, ?array $calculationOrders = [], array $priceGroups = [], bool $isModifierCalculationOrderUsed = false): void
     {
         foreach($fp->getStay()->getModifiersUsed() as $modifier) {
 
@@ -33,7 +34,7 @@ class ModifierRateCalculator
             /** @var Modifier $modifierConfig */
             $modifierConfig = $modifier->getControlItemConfig();
 
-            if ($calculationOrders !== null) {
+            if ($isModifierCalculationOrderUsed) {
                 // no calc orders provided means that this is not stepped and we can calculate as normal
                 if (
                     !empty($calculationOrders) &&
