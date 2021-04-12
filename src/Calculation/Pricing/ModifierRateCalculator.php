@@ -34,16 +34,13 @@ class ModifierRateCalculator
             $modifierConfig = $modifier->getControlItemConfig();
 
             if ($calculationOrders !== null) {
-
                 // no calc orders provided means that this is not stepped and we can calculate as normal
-
                 if (
                     !empty($calculationOrders) &&
                     !in_array($modifierConfig->getCalculationOrderFromType(), $calculationOrders, true)
                 ) {
                     continue;
                 }
-
             }
 
             if ($modConfig->supportsConditionalPerUnitRates()) {
