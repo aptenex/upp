@@ -32,7 +32,9 @@ class Upp
         $this->resolver = $pricingResolver;
 
         LanguageTools::$translator = $translator;
-        LanguageTools::$translator->setLocale('en'); // Default
+        if (LanguageTools::$translator->getLocale() === null) {
+            LanguageTools::$translator->setLocale('en'); // Default
+        }
     }
 
     /**
