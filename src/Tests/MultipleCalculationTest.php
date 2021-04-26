@@ -42,10 +42,6 @@ class MultipleCalculationTest extends TestCase
 
             self::$currentTestName = $priceConfig['name'];
 
-            if (!isset($priceConfig['key']) || $priceConfig['key'] !== 'wrs_partial_matched_discounts_apply') {
-                continue;
-            }
-
             $upp = new Upp(
                 new HashMapPricingResolver(ArrayAccess::get('mixins', $priceConfig, [])),
                 new TestTranslator()
