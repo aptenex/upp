@@ -55,6 +55,28 @@ class ConditionCollection
     /**
      * @return bool
      */
+    public function isOnlyDateBased(): bool
+    {
+        $only = true;
+
+        foreach($this->getConditions() as $con) {
+            if ($con->getConditionConfig()->getType() === Structure\Condition::TYPE_DISTRIBUTION) {
+                continue; // distribution is ignored
+            }
+
+            if (in_array($con->getConditionConfig()->getType(), Structure\Condition::$dateBasedConditions, true)) {
+                continue;
+            }
+
+            $only = false;
+        }
+
+        return $only;
+    }
+
+    /**
+     * @return bool
+     */
     public function hasOnlyNonUnitBasedConditions()
     {
         $result = true;

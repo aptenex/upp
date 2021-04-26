@@ -54,6 +54,11 @@ class Defaults
     protected $partialWeekAlterationStrategyUseGlobalNights = false;
 
     /**
+     * @var boolean
+     */
+    protected $applyDiscountsToPartialMatches = false;
+
+    /**
      * @var string
      */
     protected $bookableType = Period::BOOKABLE_TYPE_DEFAULT;
@@ -401,6 +406,22 @@ class Defaults
     }
 
     /**
+     * @return bool
+     */
+    public function isApplyDiscountsToPartialMatches(): bool
+    {
+        return $this->applyDiscountsToPartialMatches;
+    }
+
+    /**
+     * @param bool $applyDiscountsToPartialMatches
+     */
+    public function setApplyDiscountsToPartialMatches(bool $applyDiscountsToPartialMatches): void
+    {
+        $this->applyDiscountsToPartialMatches = $applyDiscountsToPartialMatches;
+    }
+
+    /**
      * @return array
      */
     public function __toArray(): array
@@ -416,6 +437,7 @@ class Defaults
             'damageDepositCalculationMethod'               => $this->getDamageDepositCalculationMethod(),
             'damageDepositSplitMethod'                     => $this->getDamageDepositSplitMethod(),
             'daysRequiredInAdvanceForBooking'              => $this->getDaysRequiredInAdvanceForBooking(),
+            'applyDiscountsToPartialMatches'              => $this->isApplyDiscountsToPartialMatches(),
             'balanceDaysBeforeArrival'                     => $this->getBalanceDaysBeforeArrival(),
             'depositSplitPercentage'                       => $this->getDepositSplitPercentage(),
             'periodSelectionStrategy'                      => $this->getPeriodSelectionStrategy(),

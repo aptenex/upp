@@ -48,6 +48,8 @@ class DefaultsParser extends BaseChildParser
 
         $d->setModifiersUseCategorizedCalculationOrder(ArrayAccess::get('modifiersUseCategorizedCalculationOrder', $defaults, false));
 
+        $d->setApplyDiscountsToPartialMatches(ArrayAccess::get('applyDiscountsToPartialMatches', $defaults, false));
+
         return $d;
     }
 

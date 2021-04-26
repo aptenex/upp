@@ -147,14 +147,14 @@ class RatePerConditionalUnitCalculator
      * @param FinalPrice $fp
      * @param Modifier|ControlItemInterface $modifier
      */
-    public function applyConditionalRateModifications(FinalPrice $fp, Modifier $modifier)
+    public function applyConditionalRateModifications(FinalPrice $fp, Modifier $modifier): void
     {
         // We will add these to adjustments...
         /** @var \Aptenex\Upp\Parser\Structure\Modifier $controlItem */
         $controlItem = $modifier->getControlItemConfig();
         $rateConfig = $modifier->getControlItemConfig()->getRate();
 
-        $isModifierDiscount = $rateConfig->getCalculationOperand() === Operand::OP_SUBTRACTION;
+        $isModifierDiscount = $rateConfig->getCalculationOperator() === Operator::OP_SUBTRACTION;
 
         $totalConditions = 0;
         $applyPerUnitConditions = 0;
@@ -164,7 +164,7 @@ class RatePerConditionalUnitCalculator
         if ($rateConfig->getCalculationMethod() === \Aptenex\Upp\Parser\Structure\Rate::METHOD_PERCENTAGE) {
             $amount = $calculationSourceAmount->multiply($rateConfig->getAmount());
         } else {
-            $amount = \Aptenex\Upp\Util\MoneyUtils::fromString($rateConfig->getAmount(), $fp->getCurrency());
+            $amount = MoneyUtils::fromString($rateConfig->getAmount(), $fp->getCurrency());
         }
 
         $description = $controlItem->getDescription();
@@ -175,7 +175,7 @@ class RatePerConditionalUnitCalculator
                 $amount,
                 strtoupper(trim(str_replace(' ', '_', $description))),
                 $description,
-                $rateConfig->getCalculationOperand(),
+                $rateConfig->getCalculationOperator(),
                 AdjustmentAmount::TYPE_MODIFIER,
                 $controlItem->getPriceGroup(),
                 $controlItem->getSplitMethod(),
@@ -251,6 +251,17 @@ class RatePerConditionalUnitCalculator
         } else if ($totalConditions > $applyPerUnitConditions) {
             $finalAdjustmentAmount = $amount;
         } else if ($modifier->getConditions()->hasOnlyNonUnitBasedConditions()) {
+
+            // if this is a date only based discount, check if we need to partially apply it
+            if (
+                $modifier->getConditions()->isOnlyDateBased() &&
+                $fp->getCurrencyConfigUsed()->getDefaults()->isApplyDiscountsToPartialMatches()
+            ) {
+                $totalNights = count($fp->getStay()->getNights());
+                $matchedNightsAmount = count($modifier->getMatchedNights());
+                $amount = $amount->multiply($matchedNightsAmount / $totalNights);
+            }
+
             $finalAdjustmentAmount = $amount;
         }
 
@@ -259,7 +270,7 @@ class RatePerConditionalUnitCalculator
                 $finalAdjustmentAmount,
                 strtoupper(trim(str_replace(' ', '_', $description))),
                 $description,
-                $rateConfig->getCalculationOperand(),
+                $rateConfig->getCalculationOperator(),
                 AdjustmentAmount::TYPE_MODIFIER,
                 $controlItem->getPriceGroup(),
                 $controlItem->getSplitMethod(),
@@ -327,8 +338,6 @@ class RatePerConditionalUnitCalculator
                 ], true));
 
             case \Aptenex\Upp\Parser\Structure\Modifier::CALCULATION_ORDER_TAX:
-                return $fp->getBasePrice();
-
             default:
                 return $fp->getBasePrice();
 

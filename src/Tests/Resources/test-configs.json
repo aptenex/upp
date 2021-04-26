@@ -13016,5 +13016,1321 @@
         }
       }
     ]
+  },
+  {
+    "name": "White Rose Samui Partial Matched Discounts Apply",
+    "key": "wrs_partial_matched_discounts_apply",
+    "description": "Test new default to apply partially matched discounts",
+    "config": {
+      "name": "Pricing",
+      "schema": "property-pricing",
+      "version": "0.0.1",
+      "meta": [],
+      "data": [
+        {
+          "currency": "USD",
+          "defaults": {
+            "damageDeposit": 0,
+            "damageDepositCalculationMethod": "fixed",
+            "perPetPerStay": 0,
+            "perPetPerNight": 0,
+            "perPetSplitMethod": "ON_TOTAL",
+            "minimumNights": 0,
+            "maximumNights": "",
+            "balanceDaysBeforeArrival": 45,
+            "depositSplitPercentage": 30,
+            "applyDiscountsToPartialMatches": true,
+            "daysRequiredInAdvanceForBooking": "1",
+            "bookableType": "enquiry_with_price",
+            "periodSelectionStrategy": "DEFAULT",
+            "extraNightAlterationStrategyUseGlobalNights": false,
+            "modifiersUseCategorizedCalculationOrder": true,
+            "damageDepositSplitMethod": "ON_DEPOSIT"
+          },
+          "taxes": [
+            {
+              "name": "VAT",
+              "uuid": "ce55e959-dfec-4b00-b958-563259c07f41",
+              "type": "TYPE_VAT",
+              "amount": 0.07,
+              "includeBasePrice": true,
+              "calculationMethod": "percentage"
+            }
+          ],
+          "periods": [
+            {
+              "description": "Low Season ",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2020-10-08",
+                  "endDate": "2021-03-26",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "2",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 320,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 320,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-6",
+                            "amount": 200
+                          },
+                          {
+                            "guests": "7-8",
+                            "amount": 260
+                          },
+                          {
+                            "guests": "9-10",
+                            "amount": 320
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 375
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 430
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "High Season  ",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2021-03-27",
+                  "endDate": "2021-04-18",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "2",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 460,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 460,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-10",
+                            "amount": 460
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 510
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 560
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Low Season ",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2021-04-19",
+                  "endDate": "2021-07-02",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "2",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 320,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 320,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-6",
+                            "amount": 200
+                          },
+                          {
+                            "guests": "7-8",
+                            "amount": 260
+                          },
+                          {
+                            "guests": "9-10",
+                            "amount": 320
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 375
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 430
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Mid Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2021-07-03",
+                  "endDate": "2021-08-28",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "2",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 420,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 420,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-6",
+                            "amount": 300
+                          },
+                          {
+                            "guests": "7-8",
+                            "amount": 360
+                          },
+                          {
+                            "guests": "9-10",
+                            "amount": 420
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 475
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 530
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Low Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2021-08-29",
+                  "endDate": "2021-09-30",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "2",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 320,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 320,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-6",
+                            "amount": 200
+                          },
+                          {
+                            "guests": "7-8",
+                            "amount": 260
+                          },
+                          {
+                            "guests": "9-10",
+                            "amount": 320
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 375
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 430
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "High Season ",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2021-10-01",
+                  "endDate": "2021-10-09",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "2",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 460,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 460,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-10",
+                            "amount": 460
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 510
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 560
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Low Season ",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2021-10-10",
+                  "endDate": "2021-12-21",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "2",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 320,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 320,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-6",
+                            "amount": 200
+                          },
+                          {
+                            "guests": "7-8",
+                            "amount": 260
+                          },
+                          {
+                            "guests": "9-10",
+                            "amount": 320
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 375
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 430
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Peak Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2021-12-22",
+                  "endDate": "2022-01-07",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "7",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 630,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 630,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-10",
+                            "amount": 630
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 680
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 730
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Mid Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2022-01-08",
+                  "endDate": "2022-01-29",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "3",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 420,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 420,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-6",
+                            "amount": 300
+                          },
+                          {
+                            "guests": "7-8",
+                            "amount": 360
+                          },
+                          {
+                            "guests": "9-10",
+                            "amount": 420
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 475
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 530
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "High Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2022-01-30",
+                  "endDate": "2022-02-07",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "5",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 460,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 460,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-10",
+                            "amount": 460
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 510
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 560
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Mid Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2022-02-08",
+                  "endDate": "2022-04-03",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "3",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 420,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 420,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-6",
+                            "amount": 300
+                          },
+                          {
+                            "guests": "7-8",
+                            "amount": 360
+                          },
+                          {
+                            "guests": "9-10",
+                            "amount": 420
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 475
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 530
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "High Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2022-04-04",
+                  "endDate": "2022-04-24",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "5",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 460,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 460,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-10",
+                            "amount": 460
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 510
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 560
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Low Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2022-04-25",
+                  "endDate": "2022-07-02",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "2",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 320,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 320,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-6",
+                            "amount": 200
+                          },
+                          {
+                            "guests": "7-8",
+                            "amount": 260
+                          },
+                          {
+                            "guests": "9-10",
+                            "amount": 320
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 375
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 430
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Mid Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2022-07-03",
+                  "endDate": "2022-08-31",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "3",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 420,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 420,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-6",
+                            "amount": 300
+                          },
+                          {
+                            "guests": "7-8",
+                            "amount": 360
+                          },
+                          {
+                            "guests": "9-10",
+                            "amount": 420
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 475
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 530
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Low Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2022-09-01",
+                  "endDate": "2022-09-30",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "2",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 320,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 320,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-6",
+                            "amount": 200
+                          },
+                          {
+                            "guests": "7-8",
+                            "amount": 260
+                          },
+                          {
+                            "guests": "9-10",
+                            "amount": 320
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 375
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 430
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "High Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2022-10-01",
+                  "endDate": "2022-10-07",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "4",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 460,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 460,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-10",
+                            "amount": 460
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 510
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 560
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Low Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2022-10-08",
+                  "endDate": "2022-12-20",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "2",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 320,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 320,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-6",
+                            "amount": 200
+                          },
+                          {
+                            "guests": "7-8",
+                            "amount": 260
+                          },
+                          {
+                            "guests": "9-10",
+                            "amount": 320
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 375
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 430
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "description": "Peak Season",
+              "priority": 500,
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2022-12-21",
+                  "endDate": "2023-01-07",
+                  "arrivalDays": [],
+                  "departureDays": []
+                }
+              ],
+              "minimumNights": "7",
+              "bookableType": null,
+              "rate": {
+                "type": "nightly",
+                "amount": 630,
+                "calculationMethod": "fixed",
+                "calculationOperand": "equals",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null,
+                "strategy": {
+                  "extraNightsAlteration": {
+                    "applyToTotal": true,
+                    "makePreviousNightsSameRate": true,
+                    "enablePerGuestPerNight": true,
+                    "nightsMatchedOverridesPrice": false,
+                    "calculationMethod": "fixed",
+                    "calculationOperand": "equals",
+                    "brackets": [
+                      {
+                        "night": "1+",
+                        "amount": 630,
+                        "days": [],
+                        "matchAmount": 0,
+                        "damageDepositOverride": null,
+                        "guests": [
+                          {
+                            "guests": "1-10",
+                            "amount": 630
+                          },
+                          {
+                            "guests": "11",
+                            "amount": 680
+                          },
+                          {
+                            "guests": "12",
+                            "amount": 730
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "modifiers": [
+            {
+              "type": "service_charge",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "priceGroup": "total",
+              "description": "Service Charge",
+              "conditionOperand": "AND",
+              "conditions": [],
+              "rate": {
+                "type": "adjustment",
+                "amount": 0.1,
+                "calculationMethod": "percentage",
+                "calculationOperand": "addition",
+                "taxable": true,
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [
+                  "ce55e959-dfec-4b00-b958-563259c07f41"
+                ],
+                "daysOfWeek": null
+              }
+            },
+            {
+              "type": "discount",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "priceGroup": "total",
+              "description": "ALL Season 30%",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2021-04-01",
+                  "endDate": "2021-11-30",
+                  "arrivalDays": [],
+                  "departureDays": []
+                },
+                {
+                  "type": "distribution",
+                  "modifyRatePerUnit": false,
+                  "distributionChannels": [
+                    "homeaway",
+                    "rentivo",
+                    "rentalsunited"
+                  ]
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 0.3,
+                "calculationMethod": "percentage",
+                "calculationOperand": "subtraction",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null
+              }
+            },
+            {
+              "type": "modifier",
+              "hidden": false,
+              "splitMethod": "ON_TOTAL",
+              "priceGroup": "total",
+              "description": "ALL seasons BCOM 10%",
+              "conditionOperand": "AND",
+              "conditions": [
+                {
+                  "type": "date",
+                  "modifyRatePerUnit": false,
+                  "startDate": "2021-04-01",
+                  "endDate": "2021-11-30",
+                  "arrivalDays": [],
+                  "departureDays": []
+                },
+                {
+                  "type": "distribution",
+                  "modifyRatePerUnit": false,
+                  "distributionChannels": [
+                    "bookingcom"
+                  ]
+                }
+              ],
+              "rate": {
+                "type": "adjustment",
+                "amount": 0.1,
+                "calculationMethod": "percentage",
+                "calculationOperand": "subtraction",
+                "applyOverMinimumGuests": 0,
+                "applicableTaxes": [],
+                "daysOfWeek": null
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "mixins": [],
+    "priceTests": [
+      {
+        "context": {
+          "arrivalDate": "2021-11-26",
+          "departureDate": "2021-12-04",
+          "bookingDate": "2021-01-01",
+          "guests": 3,
+          "currency": "USD",
+          "distributionChannel": "rentivo"
+        },
+        "tests": {
+          "noNights": 8,
+          "finalPrice": 153010,
+          "nightPrices": {
+            "2021-11-26": 20000,
+            "2021-11-27": 20000,
+            "2021-11-28": 20000,
+            "2021-11-29": 20000,
+            "2021-11-30": 20000,
+            "2021-12-01": 20000,
+            "2021-12-02": 20000,
+            "2021-12-03": 20000
+          }
+        }
+      }
+    ]
   }
 ]
