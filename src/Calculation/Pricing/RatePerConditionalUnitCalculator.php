@@ -255,11 +255,20 @@ class RatePerConditionalUnitCalculator
             // if this is a date only based discount, check if we need to partially apply it
             if (
                 $modifier->getConditions()->isOnlyDateBased() &&
-                $fp->getCurrencyConfigUsed()->getDefaults()->isApplyDiscountsToPartialMatches()
+                $modifier->getControlItemConfig()->getType() === \Aptenex\Upp\Parser\Structure\Modifier::TYPE_DISCOUNT &&
+                $fp->getCurrencyConfigUsed()->getDefaults()->isApplyDiscountsToPartialMatches() &&
+                $modifier->getControlItemConfig()->getRate()->getCalculationMethod() === \Aptenex\Upp\Parser\Structure\Rate::METHOD_PERCENTAGE
             ) {
                 $totalNights = count($fp->getStay()->getNights());
                 $matchedNightsAmount = count($modifier->getMatchedNights());
-                $amount = $amount->multiply($matchedNightsAmount / $totalNights);
+
+                $partialAmount = MoneyUtils::newMoney(0, $fp->getCurrency());
+
+                foreach($modifier->getMatchedNights() as $night) {
+                    $partialAmount = $partialAmount->add($night->getCost()->multiply($modifier->getControlItemConfig()->getRate()->getAmount()));
+                }
+
+                $amount = $partialAmount;
             }
 
             $finalAdjustmentAmount = $amount;
