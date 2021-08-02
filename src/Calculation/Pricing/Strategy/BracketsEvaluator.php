@@ -174,6 +174,10 @@ class BracketsEvaluator
 
         foreach($brackets as $item) {
             $bracket = $item[$bracketField];
+
+            // stripe any spaces or tabs etc
+            $bracket = trim($bracket);
+
             $value = $includeAllData ? $item : $item['amount'];
 
             if (strpos($bracket, '+') !== false) {
