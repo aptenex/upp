@@ -69,6 +69,11 @@ class PricingGenerator
 
         $this->evaluateModifiers($context, $fp);
 
+        if ($fp->getCurrencyConfigUsed()->getDefaults()->isEnablePriorityBasedModifiers()) {
+            $this->filterModifiersBasedOnPriority($context, $fp);
+        }
+
+
         // ACTUAL PRICE CALCULATION STARTS NOW
         // This will iterate through the Days and assign each day their respective cost using the (calculated?) nightly
         // rate. This does not include any fancy progressive discounts etc and no modifiers are included yet
@@ -581,6 +586,69 @@ class PricingGenerator
                     $fp->getStay()->addPeriodsUsed($cp);
                 }
 
+            }
+        }
+    }
+
+    private function filterModifiersBasedOnPriority(PricingContext $context, FinalPrice $fp): void
+    {
+        $newSet = [];
+        $priorityMap = [];
+        $highestPriority = 0;
+
+        // only filter discounts for now
+
+        foreach ($fp->getStay()->getModifiersUsed() as $modifier) {
+            if ($modifier->getControlItemConfig()->getType() !== \Aptenex\Upp\Parser\Structure\Modifier::TYPE_DISCOUNT) {
+                $newSet[] = $modifier;
+                continue;
+            }
+
+            $prio = (int) $modifier->getControlItemConfig()->getPriority();
+
+            if (array_key_exists($prio, $priorityMap) === false) {
+                $priorityMap[$prio] = [];
+            }
+
+            $priorityMap[$prio][] = $modifier;
+
+            // whilst looping determine the highest priority number so we dont need to do a sort at the end
+            if ($prio > $highestPriority) {
+                $highestPriority = $prio;
+            }
+        }
+
+        if (!isset($priorityMap[$highestPriority])) {
+            throw new \RuntimeException('highest priority has to exist');
+        }
+
+        foreach ($priorityMap[$highestPriority] as $item) {
+            /** @var Modifier $item */
+            $newSet[] = $item;
+        }
+
+        // wipe existing
+        $fp->getStay()->setModifiersUsed([]);
+        foreach ($fp->getStay()->getNights() as $night) {
+            $night->setModifierControlItems([]);
+        }
+
+        // re-add the filtered list
+        foreach ($fp->getStay()->getNights() as $night) {
+            foreach ($newSet as $item) {
+                if ($item->isGlobal()) {
+                    $fp->getStay()->addModifiersUsed($item);
+                } else {
+                    $date = $night->getDate()->format("Y-m-d");
+
+                    if (!array_key_exists($date, $item->getMatchedNights())) {
+                        continue;
+                    }
+
+                    $night->addModifierControlItem($item);
+                    $item->addMatchedNight($night);
+                    $fp->getStay()->addModifiersUsed($item);
+                }
             }
         }
     }

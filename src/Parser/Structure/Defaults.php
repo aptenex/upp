@@ -59,6 +59,11 @@ class Defaults
     protected $applyDiscountsToPartialMatches = false;
 
     /**
+     * @var bool
+     */
+    protected $enablePriorityBasedModifiers = false;
+
+    /**
      * @var string
      */
     protected $bookableType = Period::BOOKABLE_TYPE_DEFAULT;
@@ -422,6 +427,22 @@ class Defaults
     }
 
     /**
+     * @return bool
+     */
+    public function isEnablePriorityBasedModifiers(): bool
+    {
+        return $this->enablePriorityBasedModifiers;
+    }
+
+    /**
+     * @param bool $enablePriorityBasedModifiers
+     */
+    public function setEnablePriorityBasedModifiers(bool $enablePriorityBasedModifiers): void
+    {
+        $this->enablePriorityBasedModifiers = $enablePriorityBasedModifiers;
+    }
+
+    /**
      * @return array
      */
     public function __toArray(): array
@@ -437,13 +458,14 @@ class Defaults
             'damageDepositCalculationMethod'               => $this->getDamageDepositCalculationMethod(),
             'damageDepositSplitMethod'                     => $this->getDamageDepositSplitMethod(),
             'daysRequiredInAdvanceForBooking'              => $this->getDaysRequiredInAdvanceForBooking(),
-            'applyDiscountsToPartialMatches'              => $this->isApplyDiscountsToPartialMatches(),
+            'applyDiscountsToPartialMatches'               => $this->isApplyDiscountsToPartialMatches(),
             'balanceDaysBeforeArrival'                     => $this->getBalanceDaysBeforeArrival(),
             'depositSplitPercentage'                       => $this->getDepositSplitPercentage(),
             'periodSelectionStrategy'                      => $this->getPeriodSelectionStrategy(),
             'extraNightAlterationStrategyUseGlobalNights'  => $this->isExtraNightAlterationStrategyUseGlobalNights(),
             'partialWeekAlterationStrategyUseGlobalNights' => $this->isPartialWeekAlterationStrategyUseGlobalNights(),
-            'modifiersUseCategorizedCalculationOrder'      => $this->isModifiersUseCategorizedCalculationOrder()
+            'modifiersUseCategorizedCalculationOrder'      => $this->isModifiersUseCategorizedCalculationOrder(),
+            'enablePriorityBasedModifiers'                 => $this->isEnablePriorityBasedModifiers()
         ];
     }
 
