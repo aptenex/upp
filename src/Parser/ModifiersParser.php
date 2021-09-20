@@ -93,7 +93,7 @@ class ModifiersParser extends BaseChildParser
         $m->setHidden(ArrayAccess::get('hidden', $modifierData, false));
         $m->setPriceGroup(ArrayAccess::get('priceGroup', $modifierData, AdjustmentAmount::PRICE_GROUP_TOTAL));
         $m->setSplitMethod(ArrayAccess::get('splitMethod', $modifierData, SplitMethod::ON_TOTAL));
-        $m->setId(ArrayAccess::get('id', $modifierData, null));
+        $m->setId(ArrayAccess::get('id', $modifierData, md5(random_bytes(10))));
         $m->setDescription(ArrayAccess::getOrException(
             'description',
             $modifierData,
@@ -101,7 +101,7 @@ class ModifiersParser extends BaseChildParser
             sprintf("The 'description' parameter is not set for the period at index %s", $index)
         ));
 
-        $m->setPriority(ArrayAccess::get('priority', $modifierData));
+        $m->setPriority(ArrayAccess::get('priority', $modifierData, 0));
 
         $m->setConditionOperand(ArrayAccess::getViaWhitelist(
             'conditionOperand',

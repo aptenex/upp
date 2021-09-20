@@ -73,7 +73,6 @@ class PricingGenerator
             $this->filterModifiersBasedOnPriority($context, $fp);
         }
 
-
         // ACTUAL PRICE CALCULATION STARTS NOW
         // This will iterate through the Days and assign each day their respective cost using the (calculated?) nightly
         // rate. This does not include any fancy progressive discounts etc and no modifiers are included yet
@@ -618,6 +617,10 @@ class PricingGenerator
             }
         }
 
+        if (empty($priorityMap)) {
+            return; // do not modify anything as priority map is empty
+        }
+
         if (!isset($priorityMap[$highestPriority])) {
             throw new \RuntimeException('highest priority has to exist');
         }
@@ -627,29 +630,29 @@ class PricingGenerator
             $newSet[] = $item;
         }
 
-        // wipe existing
-        $fp->getStay()->setModifiersUsed([]);
-        foreach ($fp->getStay()->getNights() as $night) {
-            $night->setModifierControlItems([]);
-        }
+        $filterFn = static function ($item) use ($newSet) {
+            /** @var Modifier $item */
+            if ($item->getControlItemConfig()->getType() !== \Aptenex\Upp\Parser\Structure\Modifier::TYPE_DISCOUNT) {
+                return true; // keep
+            }
 
-        // re-add the filtered list
-        foreach ($fp->getStay()->getNights() as $night) {
-            foreach ($newSet as $item) {
-                if ($item->isGlobal()) {
-                    $fp->getStay()->addModifiersUsed($item);
-                } else {
-                    $date = $night->getDate()->format("Y-m-d");
-
-                    if (!array_key_exists($date, $item->getMatchedNights())) {
-                        continue;
-                    }
-
-                    $night->addModifierControlItem($item);
-                    $item->addMatchedNight($night);
-                    $fp->getStay()->addModifiersUsed($item);
+            // check if its in the new set...
+            $exists = false;
+            foreach($newSet as $newSetItem) {
+                /** @var Modifier $newSetItem */
+                if ($newSetItem->getControlItemConfig()->getDescription() === $item->getControlItemConfig()->getDescription()) {
+                    $exists = true;
+                    break;
                 }
             }
+
+            return $exists;
+        };
+
+        $fp->getStay()->setModifiersUsed(array_filter($fp->getStay()->getModifiersUsed(), $filterFn));
+
+        foreach ($fp->getStay()->getNights() as $night) {
+            $night->setModifierControlItems(array_filter($night->getModifierControlItems(), $filterFn));
         }
     }
 
