@@ -1,28 +1,29 @@
 <?php
 
-namespace Aptenex\Upp\TestsRetired;
+namespace Aptenex\Upp\Tests;
 
 use Aptenex\Upp\Context\PricingContext;
 use Aptenex\Upp\Helper\ArrayAccess;
+use Aptenex\Upp\Los\Auto\Autoloader;
+use Aptenex\Upp\Los\Generator\LosGenerator;
+use Aptenex\Upp\Los\Lookup\LookupDirectorFactory;
+use Aptenex\Upp\Los\LosOptions;
+use Aptenex\Upp\Los\LosRecordMerger;
+use Aptenex\Upp\Los\Threaded\LosGeneratorTask;
+use Aptenex\Upp\Los\Transformer\AirbnbRecordTransformer;
 use Aptenex\Upp\Los\Transformer\BookingComRecordTransformer;
 use Aptenex\Upp\Los\Transformer\ElasticSearchTransformer;
-use Aptenex\Upp\Util\TestUtils;
+use Aptenex\Upp\Los\Transformer\TransformOptions;
+use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
+use Aptenex\Upp\Parser\Structure\StructureOptions;
+use Aptenex\Upp\TestsRetired\Pool;
+use Aptenex\Upp\Translation\TestTranslator;
 use Aptenex\Upp\Upp;
 use Aptenex\Upp\Util\DateUtils;
+use Aptenex\Upp\Util\TestUtils;
 use PHPUnit\Framework\TestCase;
-use Aptenex\Upp\Translation\TestTranslator;
-use Aptenex\Upp\Los\LosOptions;
-use Aptenex\Upp\Los\Generator\LosGenerator;
-use Aptenex\Upp\Los\LosRecordMerger;
-use Aptenex\Upp\Los\Auto\Autoloader;
-use Aptenex\Upp\Los\Threaded\LosGeneratorTask;
-use Aptenex\Upp\Los\Lookup\LookupDirectorFactory;
-use Aptenex\Upp\Los\Transformer\TransformOptions;
-use Aptenex\Upp\Parser\Structure\StructureOptions;
-use Aptenex\Upp\Parser\Resolver\HashMapPricingResolver;
-use Aptenex\Upp\Los\Transformer\AirbnbRecordTransformer;
 
-class LosRecordTestRetired extends TestCase
+class LosRecordTest extends TestCase
 {
 
     private $openSchemaData = '
@@ -1132,7 +1133,7 @@ class LosRecordTestRetired extends TestCase
 
         $file = __DIR__ . '/Resources/los_test_limited_unit_availability_02.txt';
 
-        $this->assertStringEqualsFile(__DIR__ . '/Resources/los_test_limited_unit_availability_02.txt', $output);
+        $this->assertStringEqualsFile($file, $output);
     }
 
     public function testPthreadsLosRecords()
